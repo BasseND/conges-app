@@ -14,13 +14,19 @@
 
                         <div>
                             <x-input-label for="type" :value="__('Type de congé')" />
-                            <select id="type" name="type" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="annual">Congé annuel</option>
-                                <option value="sick">Congé maladie</option>
-                                <option value="unpaid">Congé sans solde</option>
-                                <option value="other">Autre</option>
+                            <select id="type" name="type" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">Sélectionner un type de congé</option>
+                                <option value="annual" {{ old('type') == 'annual' ? 'selected' : '' }}>Congé annuel</option>
+                                <option value="sick" {{ old('type') == 'sick' ? 'selected' : '' }}>Congé maladie</option>
+                                <option value="unpaid" {{ old('type') == 'unpaid' ? 'selected' : '' }}>Congé sans solde</option>
+                                <option value="other" {{ old('type') == 'other' ? 'selected' : '' }}>Autre</option>
                             </select>
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                            <p class="mt-2 text-sm text-gray-500">
+                                Solde disponible : 
+                                <span class="font-medium" id="annual_balance">{{ auth()->user()->annual_leave_days }} jours</span> de congés annuels, 
+                                <span class="font-medium" id="sick_balance">{{ auth()->user()->sick_leave_days }} jours</span> de congés maladie
+                            </p>
                         </div>
 
                         <div>

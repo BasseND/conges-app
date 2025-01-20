@@ -20,9 +20,18 @@
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                             {{ __('Gestion des utilisateurs') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
+                            {{ __('Gestion des départements') }}
+                        </x-nav-link>
                     @endif
 
-                     <x-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+                        <x-nav-link :href="route('admin.leaves.index')" :active="request()->routeIs('admin.leaves.*')">
+                            {{ __('Validation des congés') }}
+                        </x-nav-link>
+                    @endif
+
+                    <x-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
                         {{ __('Mes congés') }}
                     </x-nav-link>
                     

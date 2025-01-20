@@ -39,12 +39,37 @@
 
                         <div>
                             <x-input-label for="role" :value="__('Rôle')" />
-                            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 <option value="employee" {{ $user->role === 'employee' ? 'selected' : '' }}>Employé</option>
                                 <option value="manager" {{ $user->role === 'manager' ? 'selected' : '' }}>Manager</option>
                                 <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Administrateur</option>
                             </select>
                             <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="department_id" :value="__('Département')" />
+                            <select id="department_id" name="department_id" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">Sélectionner un département</option>
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}" {{ (old('department_id', $user->department_id) == $department->id) ? 'selected' : '' }}>
+                                        {{ $department->name }} ({{ $department->code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('department_id')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="annual_leave_days" :value="__('Jours de congés annuels')" />
+                            <x-text-input id="annual_leave_days" class="block mt-1 w-full" type="number" name="annual_leave_days" :value="old('annual_leave_days', $user->annual_leave_days)" required />
+                            <x-input-error :messages="$errors->get('annual_leave_days')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="sick_leave_days" :value="__('Jours de congés maladie')" />
+                            <x-text-input id="sick_leave_days" class="block mt-1 w-full" type="number" name="sick_leave_days" :value="old('sick_leave_days', $user->sick_leave_days)" required />
+                            <x-input-error :messages="$errors->get('sick_leave_days')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

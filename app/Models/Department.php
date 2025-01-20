@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use App\Models\Leave;
 
 class Department extends Model
 {
@@ -33,13 +32,5 @@ class Department extends Model
     public function employees()
     {
         return $this->hasMany(User::class);
-    }
-
-    /**
-     * Get all leaves for employees in this department.
-     */
-    public function leaves()
-    {
-        return $this->hasManyThrough(Leave::class, User::class);
     }
 }

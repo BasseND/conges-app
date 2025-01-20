@@ -28,7 +28,7 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => ['required', 'in:annual,sick'],
+            'type' => ['required', 'in:annual,sick,unpaid,other'],
             'start_date' => ['required', 'date', 'after_or_equal:today'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'reason' => ['required', 'string', 'min:10'],
@@ -39,7 +39,7 @@ class LeaveController extends Controller
         $end_date = Carbon::parse($request->end_date);
         $duration = $end_date->diffInDays($start_date) + 1;
 
-        // Vérifier le solde de congés
+        // Vérifier le solde de congés uniquement pour les congés annuels et maladie
         $user = auth()->user();
         if ($request->type === 'annual' && $duration > $user->annual_leave_days) {
             return back()->withErrors(['start_date' => 'Solde de congés annuels insuffisant'])->withInput();

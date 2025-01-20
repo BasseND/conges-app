@@ -50,9 +50,20 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
     });
 
-    // Routes pour l'administration (accessibles uniquement aux admins)
-    Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    // Routes pour l'administration
+    Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+        // Routes accessibles uniquement aux administrateurs
+        Route::middleware(['role:admin'])->group(function () {
+            Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+            Route::resource('departments', \App\Http\Controllers\Admin\DepartmentController::class);
+        });
+
+        // Routes accessibles aux administrateurs et managers
+        Route::middleware(['role:admin,manager'])->group(function () {
+            Route::get('leaves', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'index'])->name('leaves.index');
+            Route::put('leaves/{leave}/approve', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'approve'])->name('leaves.approve');
+            Route::put('leaves/{leave}/reject', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'reject'])->name('leaves.reject');
+        });
     });
 
     Route::middleware('role:admin')->group(function () {

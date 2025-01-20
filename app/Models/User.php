@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'employee_id',
         'role',
+        'department_id',
         'annual_leave_days',
         'sick_leave_days',
     ];
@@ -53,6 +54,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function leaves()
     {
         return $this->hasMany(Leave::class);
+    }
+
+    /**
+     * Get the department that the user belongs to.
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
     /**

@@ -53,8 +53,25 @@
                                     @forelse($leaves as $leave)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $leave->type === 'annual' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
-                                                    {{ $leave->type === 'annual' ? 'Congé annuel' : 'Congé maladie' }}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
+                                                    $leave->type === 'annual' ? 'bg-blue-100 text-blue-800' : 
+                                                    ($leave->type === 'sick' ? 'bg-green-100 text-green-800' : 
+                                                    ($leave->type === 'unpaid' ? 'bg-yellow-100 text-yellow-800' : 
+                                                    'bg-gray-100 text-gray-800')) 
+                                                }}">
+                                                    @switch($leave->type)
+                                                        @case('annual')
+                                                            Congé annuel
+                                                            @break
+                                                        @case('sick')
+                                                            Congé maladie
+                                                            @break
+                                                        @case('unpaid')
+                                                            Congé sans solde
+                                                            @break
+                                                        @default
+                                                            Autre
+                                                    @endswitch
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $leave->start_date->format('d/m/Y') }}</td>
