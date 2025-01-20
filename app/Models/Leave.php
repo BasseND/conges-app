@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\LeaveAttachment;
 
 class Leave extends Model
 {
@@ -17,11 +19,15 @@ class Leave extends Model
         'duration',
         'reason',
         'status',
+        'processed_by',
+        'processed_at',
+        'rejection_reason'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'processed_at' => 'datetime'
     ];
 
     /**
@@ -30,6 +36,11 @@ class Leave extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function processedBy()
+    {
+        return $this->belongsTo(User::class, 'processed_by');
     }
 
     public function attachments()

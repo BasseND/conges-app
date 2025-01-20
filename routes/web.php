@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveApprovalController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,49 +38,57 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('password/update', [CustomAuthController::class, 'updatePassword'])->name('password.update');
     Route::post('logout', [CustomAuthController::class, 'logout'])->name('logout');
 
-    // Routes pour la gestion des congés (accessibles à tous les utilisateurs authentifiés)
-    Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/', function () {
+            return view('dashboard');
+        })->name('dashboard');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
         Route::resource('leaves', LeaveController::class);
-        Route::get('leaves/attachment/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
-    });
+        Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
 
-    // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
-    Route::middleware('role:manager,admin')->group(function () {
-        Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
-        Route::put('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
-        Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
-    });
-
-    // Routes pour l'administration
-    Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-        // Routes accessibles uniquement aux administrateurs
-        Route::middleware(['role:admin'])->group(function () {
-            Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-            Route::resource('departments', \App\Http\Controllers\Admin\DepartmentController::class);
+        // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
+        Route::middleware('role:manager,admin')->group(function () {
+            Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
+            Route::put('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
+            Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
         });
 
-        // Routes accessibles aux administrateurs et managers
-        Route::middleware(['role:admin,manager'])->group(function () {
-            Route::get('leaves', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'index'])->name('leaves.index');
-            Route::put('leaves/{leave}/approve', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'approve'])->name('leaves.approve');
-            Route::put('leaves/{leave}/reject', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'reject'])->name('leaves.reject');
+        // Routes pour l'administration
+        Route::prefix('admin')->name('admin.')->group(function () {
+            // Routes accessibles uniquement aux administrateurs
+            Route::middleware(['role:admin'])->group(function () {
+                Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+                Route::resource('departments', \App\Http\Controllers\Admin\DepartmentController::class);
+            });
+
+            // Routes accessibles aux administrateurs et managers
+            Route::middleware(['role:admin,manager'])->group(function () {
+                Route::get('leaves', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'index'])->name('leaves.index');
+                Route::put('leaves/{leave}/approve', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'approve'])->name('leaves.approve');
+                Route::put('leaves/{leave}/reject', [\App\Http\Controllers\Admin\LeaveRequestController::class, 'reject'])->name('leaves.reject');
+            });
         });
-    });
 
-    Route::middleware('role:admin')->group(function () {
-        Route::get('admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
-        
-        Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-        Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-        Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
-    });
+        Route::middleware('role:admin')->group(function () {
+            Route::get('admin/dashboard', function () {
+                return view('admin.dashboard');
+            })->name('admin.dashboard');
+            
+            Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+            Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+            Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+        });
 
-    // Routes pour la gestion du 2FA
-    Route::get('user/two-factor-authentication', function () {
-        return view('auth.two-factor-settings');
-    })->name('two-factor.show');
+        // Routes pour la gestion du 2FA
+        Route::get('user/two-factor-authentication', function () {
+            return view('auth.two-factor-settings');
+        })->name('two-factor.show');
+    });
 });
 
 require __DIR__.'/auth.php';
