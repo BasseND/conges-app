@@ -1,4 +1,4 @@
-@props(['title' => 'Delete Confirmation', 'message' => 'Are you sure you want to delete this item? This action cannot be undone.'])
+@props(['title' => 'Confirmation de suppression', 'message' => 'Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront définitivement supprimées.'])
 
 <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -12,14 +12,14 @@
             <div class="mt-4 flex justify-end space-x-3">
                 <button onclick="hideDeleteModal()"
                         class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                    Cancel
+                    Annuler
                 </button>
                 <form id="deleteForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
                             class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-                        Delete
+                         Confirmer la suppression
                     </button>
                 </form>
             </div>
