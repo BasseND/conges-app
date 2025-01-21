@@ -16,18 +16,34 @@
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
 
-                    @if(auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                            {{ __('Gestion des utilisateurs') }}
+                    {{-- @if (auth()->user()->isAdmin())
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            {{ __('Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
-                            {{ __('Gestion des départements') }}
-                        </x-nav-link>
-                    @endif
+                    @endif --}}
 
-                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
-                        <x-nav-link :href="route('admin.leaves.index')" :active="request()->routeIs('admin.leaves.*')">
-                            {{ __('Validation des congés') }}
+                   
+                   
+
+                    @auth
+                        @if (auth()->user()->role === 'admin')
+                            <x-nav-link :href="route('admin.stats.index')" :active="request()->routeIs('admin.stats.*')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.leaves.index')" :active="request()->routeIs('admin.leaves.*')">
+                                {{ __('Validation des congés') }}
+                            </x-nav-link>
+                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                            {{ __('Gestion des utilisateurs') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
+                                {{ __('Gestion des départements') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
+                    @if (auth()->user()->isManager() )
+                        <x-nav-link :href="route('manager.leaves.index')" :active="request()->routeIs('manager.leaves.*')">
+                            {{ __('Gestion des congés') }}
                         </x-nav-link>
                     @endif
 

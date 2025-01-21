@@ -46,6 +46,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'annual_leave_days' => 'integer',
+        'sick_leave_days' => 'integer'
     ];
 
     /**
@@ -70,5 +72,30 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    public function isManager()
+    {
+        return $this->role === 'manager';
+    }
+
+    /**
+     * Get all employees in the same department.
+     */
+    public function departmentEmployees()
+    {
+        return User::where('department_id', $this->department_id)
+                  ->where('id', '!=', $this->id)
+                  ->where('role', 'employee')
+                  ->get();
+    }
+
+    /**
+     * Check if the user can manage another user's leaves.
+     */
+    public function canManageUserLeaves(User $user): bool
+    {
+        return $this->isAdmin() || 
+               ($this->isManager() && $this->department_id === $user->department_id);
     }
 }

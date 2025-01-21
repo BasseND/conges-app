@@ -11,6 +11,25 @@ class Leave extends Model
 {
     use HasFactory;
 
+    /**
+     * Les statuts possibles pour une demande de congé
+     */
+    const STATUSES = [
+        'pending' => 'En attente',
+        'approved' => 'Approuvé',
+        'rejected' => 'Rejeté'
+    ];
+
+    /**
+     * Les types de congés disponibles
+     */
+    const TYPES = [
+        'annual' => 'Annuel',
+        'sick' => 'Maladie',
+        'unpaid' => 'Sans solde',
+        'other' => 'Autre'
+    ];
+
     protected $fillable = [
         'user_id',
         'type',
@@ -46,5 +65,21 @@ class Leave extends Model
     public function attachments()
     {
         return $this->hasMany(LeaveAttachment::class);
+    }
+
+    /**
+     * Obtenir le libellé du statut
+     */
+    public function getStatusLabelAttribute()
+    {
+        return self::STATUSES[$this->status] ?? $this->status;
+    }
+
+    /**
+     * Obtenir le libellé du type de congé
+     */
+    public function getTypeLabelAttribute()
+    {
+        return self::TYPES[$this->type] ?? $this->type;
     }
 }

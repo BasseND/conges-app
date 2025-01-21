@@ -11,10 +11,8 @@ class LeaveAttachment extends Model
 
     protected $fillable = [
         'leave_id',
-        'filename',
-        'original_filename',
-        'mime_type',
-        'size'
+        'path',
+        'name'
     ];
 
     public function leave()
