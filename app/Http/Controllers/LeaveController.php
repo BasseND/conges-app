@@ -232,4 +232,39 @@ class LeaveController extends Controller
         return redirect()->back()
             ->with('success', 'La demande de congé a été rejetée.');
     }
+
+    /**
+     * Annule une demande de congé
+     */
+    public function destroy(Leave $leave)
+    {
+        \Log::info('Tentative d\'annulation de congé', [
+            'user' => auth()->user()->only(['id', 'name', 'email', 'role']),
+            'leave' => $leave->only(['id', 'user_id', 'status'])
+        ]);
+
+        try {
+            $this->authorize('delete', $leave);
+            
+            // Supprimer les pièces jointes si elles existent
+            foreach ($leave->attachments as $attachment) {
+                Storage::delete($attachment->path);
+                $attachment->delete();
+            }
+
+            // Supprimer la demande
+            $leave->delete();
+
+            return redirect()->route('leaves.index')
+                ->with('success', 'Votre demande de congé a été annulée avec succès.');
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'annulation du congé', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            abort(403, 'Vous n\'avez pas l\'autorisation d\'annuler cette demande de congé.');
+        }
+    }
 }

@@ -42,6 +42,20 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('password/update', [CustomAuthController::class, 'updatePassword'])->name('password.update');
     Route::post('logout', [CustomAuthController::class, 'logout'])->name('logout');
 
+    // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
+    Route::resource('leaves', LeaveController::class);
+    Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
+    Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+    Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+    Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+
+    // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
+    Route::middleware('role:manager,admin')->group(function () {
+        Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
+        Route::put('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
+        Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
+    });
+
     Route::middleware(['auth'])->group(function () {
         Route::get('/', function () {
             return view('dashboard');
@@ -50,17 +64,6 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-        // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
-        Route::resource('leaves', LeaveController::class);
-        Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
-
-        // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
-        Route::middleware('role:manager,admin')->group(function () {
-            Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
-            Route::put('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
-            Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
-        });
 
         // Routes pour la gestion des congés par les managers
         Route::middleware(['auth', 'verified'])->group(function () {
@@ -95,17 +98,6 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             // Routes pour la gestion des départements
             Route::resource('departments', DepartmentController::class);
         });
-
-        Route::middleware('role:admin')->group(function () {
-            Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-            Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-            Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
-        });
-
-        // Routes pour la gestion du 2FA
-        Route::get('user/two-factor-authentication', function () {
-            return view('auth.two-factor-settings');
-        })->name('two-factor.show');
 
     });
 });
