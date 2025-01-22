@@ -66,6 +66,18 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+        // Routes pour les congés
+        Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
+        Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
+        Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+        Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+        Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+        Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+        Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+        Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
+        Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+
         // Routes pour la gestion des congés par les managers
         Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/manager/leaves', [App\Http\Controllers\Manager\LeaveController::class, 'index'])
@@ -77,7 +89,7 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         });
 
         // Routes pour l'administration
-        Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
             // Redirection du tableau de bord vers les statistiques
             Route::redirect('/', '/admin/stats')->name('dashboard');
 
@@ -102,7 +114,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             // Routes pour la gestion des départements
             Route::resource('departments', DepartmentController::class);
 
-            // Routes pour la gestion des équipes
+            // Routes pour les équipes
+            Route::get('/teams/{team}/edit', [TeamController::class, 'edit'])->name('teams.edit');
             Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
             Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
             Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');

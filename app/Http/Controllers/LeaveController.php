@@ -9,6 +9,8 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class LeaveController extends Controller
 {
@@ -19,7 +21,7 @@ class LeaveController extends Controller
     {
         $leaves = Leave::with(['user.department', 'attachments'])
             ->where('user_id', auth()->id())
-            ->latest()
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('leaves.index', compact('leaves'));
@@ -86,7 +88,7 @@ class LeaveController extends Controller
     public function show(Leave $leave)
     {
         $this->authorize('view', $leave);
-        $leave->load(['user.department', 'attachments']);
+        $leave->load(['user.department', 'attachments', 'approver']);
         return view('leaves.show', compact('leave'));
     }
 
@@ -159,84 +161,48 @@ class LeaveController extends Controller
      */
     public function approve(Leave $leave)
     {
-        $this->authorize('manage', $leave);
+        if (!auth()->user()->can('approve-leaves')) {
+            abort(403, 'Vous n\'avez pas l\'autorisation d\'approuver les demandes de congé.');
+        }
 
-        Log::info('Approbation congé', [
-            'leave_id' => $leave->id,
-            'type' => $leave->type,
-            'duration' => $leave->duration,
-            'user_id' => $leave->user_id
-        ]);
-
-        // Mettre à jour le solde de congés de l'utilisateur
-        $user = User::find($leave->user_id);
-        
-        Log::info('Solde avant mise à jour', [
-            'annual_days' => $user->annual_leave_days,
-            'sick_days' => $user->sick_leave_days
-        ]);
-
-        if ($leave->type === 'annual') {
-            if ($user->annual_leave_days < $leave->duration) {
-                return redirect()->back()
-                    ->with('error', 'Le solde de congés annuels est insuffisant.');
-            }
-            $user->annual_leave_days = $user->annual_leave_days - $leave->duration;
-            $user->save();
-
-            Log::info('Solde annuel mis à jour', [
-                'nouveau_solde' => $user->annual_leave_days
-            ]);
-        } elseif ($leave->type === 'sick') {
-            if ($user->sick_leave_days < $leave->duration) {
-                return redirect()->back()
-                    ->with('error', 'Le solde de congés maladie est insuffisant.');
-            }
-            $user->sick_leave_days = $user->sick_leave_days - $leave->duration;
-            $user->save();
-
-            Log::info('Solde maladie mis à jour', [
-                'nouveau_solde' => $user->sick_leave_days
-            ]);
+        if ($leave->status !== 'pending') {
+            return back()->with('error', 'Cette demande a déjà été traitée.');
         }
 
         $leave->update([
             'status' => 'approved',
-            'processed_at' => now(),
-            'processed_by' => auth()->id()
+            'approved_by' => auth()->id(),
+            'approved_at' => now()
         ]);
 
-        // Rafraîchir l'utilisateur pour vérifier les changements
-        $user->refresh();
-        Log::info('Solde final après mise à jour', [
-            'annual_days' => $user->annual_leave_days,
-            'sick_days' => $user->sick_leave_days
-        ]);
-
-        return redirect()->back()
-            ->with('success', 'La demande de congé a été approuvée.');
+        return redirect()->back()->with('success', 'La demande de congé a été approuvée.');
     }
 
     /**
      * Rejette une demande de congé
      */
-    public function reject(Leave $leave, Request $request)
+    public function reject(Request $request, Leave $leave)
     {
-        $this->authorize('manage', $leave);
+        if (!auth()->user()->can('approve-leaves')) {
+            abort(403, 'Vous n\'avez pas l\'autorisation de refuser les demandes de congé.');
+        }
+
+        if ($leave->status !== 'pending') {
+            return back()->with('error', 'Cette demande a déjà été traitée.');
+        }
 
         $validated = $request->validate([
-            'rejection_reason' => 'required|string|min:10'
+            'rejection_reason' => 'required|string|max:500'
         ]);
 
         $leave->update([
             'status' => 'rejected',
-            'processed_at' => now(),
-            'processed_by' => auth()->id(),
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
             'rejection_reason' => $validated['rejection_reason']
         ]);
 
-        return redirect()->back()
-            ->with('success', 'La demande de congé a été rejetée.');
+        return redirect()->back()->with('success', 'La demande de congé a été refusée.');
     }
 
     /**
@@ -244,33 +210,22 @@ class LeaveController extends Controller
      */
     public function destroy(Leave $leave)
     {
-        \Log::info('Tentative d\'annulation de congé', [
-            'user' => auth()->user()->only(['id', 'name', 'email', 'role']),
-            'leave' => $leave->only(['id', 'user_id', 'status'])
-        ]);
+        $this->authorize('delete', $leave);
+
+        if ($leave->status !== 'pending') {
+            return back()->with('error', 'Vous ne pouvez annuler que les demandes en attente.');
+        }
 
         try {
-            $this->authorize('delete', $leave);
-            
-            // Supprimer les pièces jointes si elles existent
-            foreach ($leave->attachments as $attachment) {
-                Storage::delete($attachment->path);
-                $attachment->delete();
-            }
-
-            // Supprimer la demande
-            $leave->delete();
-
-            return redirect()->route('leaves.index')
-                ->with('success', 'Votre demande de congé a été annulée avec succès.');
-
-        } catch (\Exception $e) {
-            \Log::error('Erreur lors de l\'annulation du congé', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+            $leave->update([
+                'status' => 'cancelled',
+                'approved_by' => auth()->id(),
+                'approved_at' => now()
             ]);
 
-            abort(403, 'Vous n\'avez pas l\'autorisation d\'annuler cette demande de congé.');
+            return redirect()->route('leaves.index')->with('success', 'La demande de congé a été annulée.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur est survenue lors de l\'annulation de la demande.');
         }
     }
 
@@ -280,6 +235,11 @@ class LeaveController extends Controller
     public function edit(Leave $leave)
     {
         $this->authorize('update', $leave);
+
+        if ($leave->status !== 'pending') {
+            return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+        }
+
         return view('leaves.edit', compact('leave'));
     }
 
@@ -290,47 +250,55 @@ class LeaveController extends Controller
     {
         $this->authorize('update', $leave);
 
+        if ($leave->status !== 'pending') {
+            return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+        }
+
         $validated = $request->validate([
             'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|string|max:500',
-            'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+            'reason' => 'required|string|min:10',
+            'attachments.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
         ]);
 
-        // Calcul de la durée en jours (en excluant les weekends)
-        $start = \Carbon\Carbon::parse($validated['start_date']);
-        $end = \Carbon\Carbon::parse($validated['end_date']);
+        // Calculer la durée en jours ouvrables
+        $start = Carbon::parse($validated['start_date']);
+        $end = Carbon::parse($validated['end_date']);
         $duration = 0;
 
-        for ($date = $start; $date->lte($end); $date->addDay()) {
+        for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
             if (!$date->isWeekend()) {
                 $duration++;
             }
         }
 
-        $leave->update([
-            'type' => $validated['type'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'reason' => $validated['reason'],
-            'duration' => $duration
-        ]);
+        DB::beginTransaction();
+        try {
+            $leave->update([
+                'type' => $validated['type'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'duration' => $duration,
+                'reason' => $validated['reason']
+            ]);
 
-        // Gérer les pièces jointes
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('leave_attachments');
-                $leave->attachments()->create([
-                    'filename' => $path,
-                    'original_filename' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize()
-                ]);
+            // Gérer les pièces jointes
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('leave-attachments', 'public');
+                    $leave->attachments()->create([
+                        'file_path' => $path,
+                        'file_name' => $file->getClientOriginalName()
+                    ]);
+                }
             }
-        }
 
-        return redirect()->route('leaves.show', $leave)
-            ->with('success', 'Votre demande de congé a été mise à jour avec succès.');
+            DB::commit();
+            return redirect()->route('leaves.show', $leave)->with('success', 'Demande de congé mise à jour avec succès.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Une erreur est survenue lors de la mise à jour de la demande.');
+        }
     }
 }

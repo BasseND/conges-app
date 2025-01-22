@@ -14,9 +14,8 @@ class Department extends Model
 
     protected $fillable = [
         'name',
-        'code',
         'description',
-        'head_id',
+        'head_id'
     ];
 
     /**
@@ -35,14 +34,6 @@ class Department extends Model
         return $this->hasMany(User::class);
     }
 
-    /**
-     * Get the teams in this department.
-     */
-    public function teams()
-    {
-        return $this->hasMany(Team::class);
-    }
-
     public function users()
     {
         return $this->hasMany(User::class);
@@ -50,7 +41,11 @@ class Department extends Model
 
     public function head()
     {
-        return $this->belongsTo(User::class, 'head_id')
-            ->where('role', User::ROLE_DEPARTMENT_HEAD);
+        return $this->belongsTo(User::class, 'head_id');
+    }
+
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
     }
 }

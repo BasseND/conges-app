@@ -22,7 +22,7 @@ return new class extends Migration
 
         Schema::table('users', function (Blueprint $table) {
             // Créer la nouvelle colonne avec une plus grande taille
-            $table->string('role', 20)->after('password');
+            $table->string('role', 50)->after('password');
         });
 
         // Restaurer les rôles
@@ -48,7 +48,7 @@ return new class extends Migration
 
         Schema::table('users', function (Blueprint $table) {
             // Recréer l'ancienne colonne
-            $table->string('role', 10)->after('password');
+            $table->string('role', 20)->after('password');
         });
 
         // Restaurer les rôles

@@ -122,27 +122,32 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('leaves.show', $leave) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Voir</a>
-                                                @can('update', $leave)
-                                                    <a href="{{ route('leaves.edit', $leave) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Modifier</a>
-                                                @endcan
+                                                @if($leave->status === 'pending' && (auth()->user()->id === $leave->user_id || auth()->user()->isAdmin()))
+                                                    <a href="{{ route('leaves.edit', $leave->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+                                                        <i class="fas fa-edit"></i> Modifier
+                                                    </a>
+                                                    <button 
+                                                        x-data
+                                                        x-on:click="$dispatch('show-cancel-modal', { url: '{{ route('leaves.destroy', $leave->id) }}' })"
+                                                        class="text-red-600 hover:text-red-900">
+                                                        <i class="fas fa-trash"></i> Annuler
+                                                    </button>
+                                                @endif
+                                                <a href="{{ route('leaves.show', $leave->id) }}" class="text-blue-600 hover:text-blue-900 ml-2">
+                                                    <i class="fas fa-eye"></i> Voir
+                                                </a>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 @if($leave->status === 'pending')
-                                                    <button type="button" 
+                                                    {{-- <button type="button" 
+                                                        title="Annuler"
                                                         x-data=""
                                                         x-on:click="$dispatch('show-cancel-modal', { url: '{{ route('leaves.destroy', $leave) }}' })"
-                                                        class="text-red-600 dark:text-red-400 hover:text-red-900">
-                                                        Annuler
-                                                    </button>
-
-                                                     <button onclick="showDeleteModal('{{ route('leaves.destroy', $leave) }}')" 
-                                                            class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600">
+                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                         </svg>
-                                                    </button>
-
+                                                    </button> --}}
                                                 @endif
 
 
@@ -166,16 +171,7 @@
 
     
 
-     <x-modals.delete-modal />
-
-    <script>
-        function showDeleteModal(deleteUrl) {
-            const modal = document.getElementById('deleteModal');
-            const deleteForm = document.getElementById('deleteForm');
-            deleteForm.action = deleteUrl;
-            modal.classList.remove('hidden');
-        }
-    </script>
+    
 
 
 </x-app-layout>

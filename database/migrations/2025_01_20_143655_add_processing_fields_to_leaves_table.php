@@ -12,9 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('leaves', function (Blueprint $table) {
-            $table->foreignId('processed_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamp('processed_at')->nullable();
-            $table->text('rejection_reason')->nullable();
+            if (!Schema::hasColumn('leaves', 'processed_by')) {
+                $table->foreignId('processed_by')->nullable()->constrained('users');
+            }
+            if (!Schema::hasColumn('leaves', 'processed_at')) {
+                $table->timestamp('processed_at')->nullable();
+            }
         });
     }
 
@@ -25,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('leaves', function (Blueprint $table) {
             $table->dropForeign(['processed_by']);
-            $table->dropColumn(['processed_by', 'processed_at', 'rejection_reason']);
+            $table->dropColumn(['processed_by', 'processed_at']);
         });
     }
 };

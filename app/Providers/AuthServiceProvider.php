@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\User;
+use App\Models\Leave;
+use App\Policies\LeavePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        Leave::class => LeavePolicy::class,
     ];
 
     /**
@@ -21,6 +24,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::define('approve-leaves', function (User $user) {
+            return $user->isAdmin() || $user->isDepartmentHead();
+        });
+
+        Gate::define('manage-users', function (User $user) {
+            return $user->isAdmin();
+        });
+
+        Gate::define('manage-departments', function (User $user) {
+            return $user->isAdmin();
+        });
     }
 }

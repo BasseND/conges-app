@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Team;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Department;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
@@ -32,22 +33,21 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Création d\'une nouvelle équipe');
-        
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'department_id' => 'required|exists:departments,id',
             'manager_id' => 'required|exists:users,id',
+            'department_id' => 'required|exists:departments,id'
         ]);
 
-        $team = Team::create($request->all());
-        Log::info('Équipe créée avec succès', ['team' => $team->toArray()]);
+        try {
+            DB::transaction(function () use ($validated) {
+                Team::create($validated);
+            });
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Équipe créée avec succès',
-            'team' => $team
-        ]);
+            return redirect()->back()->with('success', 'Équipe créée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de la création de l\'équipe.');
+        }
     }
 
     /**
@@ -61,9 +61,12 @@ class TeamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Team $team)
     {
-        //
+        return response()->json([
+            'name' => $team->name,
+            'manager_id' => $team->manager_id
+        ]);
     }
 
     /**
@@ -71,22 +74,20 @@ class TeamController extends Controller
      */
     public function update(Request $request, Team $team)
     {
-        Log::info('Mise à jour de l\'équipe: ' . $team->id);
-        
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'department_id' => 'required|exists:departments,id',
-            'manager_id' => 'required|exists:users,id',
+            'manager_id' => 'required|exists:users,id'
         ]);
 
-        $team->update($request->all());
-        Log::info('Équipe mise à jour avec succès', ['team' => $team->toArray()]);
+        try {
+            DB::transaction(function () use ($team, $validated) {
+                $team->update($validated);
+            });
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Équipe mise à jour avec succès',
-            'team' => $team
-        ]);
+            return redirect()->back()->with('success', 'Équipe mise à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de la mise à jour de l\'équipe.');
+        }
     }
 
     /**
@@ -94,15 +95,19 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        Log::info('Suppression de l\'équipe: ' . $team->id);
-        
-        $team->delete();
-        Log::info('Équipe supprimée avec succès');
+        try {
+            if ($team->members()->exists()) {
+                return response()->json(['error' => 'Impossible de supprimer une équipe qui contient des membres.'], 422);
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Équipe supprimée avec succès'
-        ]);
+            DB::transaction(function () use ($team) {
+                $team->delete();
+            });
+
+            return response()->json(['success' => 'Équipe supprimée avec succès.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue lors de la suppression de l\'équipe.'], 500);
+        }
     }
 
     public function getManagersByDepartment($departmentId)

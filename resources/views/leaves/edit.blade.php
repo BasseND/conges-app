@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('leaves.update', $leave) }}" enctype="multipart/form-data" class="space-y-6">
+                    <form method="POST" action="{{ route('leaves.update', ['leave' => $leave->id]) }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         @method('PUT')
 
@@ -25,64 +25,47 @@
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
                         </div>
 
-                        <div>
-                            <x-input-label for="start_date" :value="__('Date de début')" />
-                            <x-text-input id="start_date" class="block mt-1 w-full" type="date" name="start_date" :value="old('start_date', $leave->start_date)" required />
-                            <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
-                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <x-input-label for="start_date" :value="__('Date de début')" />
+                                <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block w-full" :value="old('start_date', $leave->start_date)" required />
+                                <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
+                            </div>
 
-                        <div>
-                            <x-input-label for="end_date" :value="__('Date de fin')" />
-                            <x-text-input id="end_date" class="block mt-1 w-full" type="date" name="end_date" :value="old('end_date', $leave->end_date)" required />
-                            <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
+                            <div>
+                                <x-input-label for="end_date" :value="__('Date de fin')" />
+                                <x-text-input id="end_date" name="end_date" type="date" class="mt-1 block w-full" :value="old('end_date', $leave->end_date)" required />
+                                <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
+                            </div>
                         </div>
 
                         <div>
                             <x-input-label for="reason" :value="__('Motif')" />
-                            <textarea id="reason" name="reason" rows="3" class="block mt-1 w-full rounded-md border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('reason', $leave->reason) }}</textarea>
+                            <textarea id="reason" name="reason" rows="4" class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('reason', $leave->reason) }}</textarea>
                             <x-input-error :messages="$errors->get('reason')" class="mt-2" />
                         </div>
 
                         <div>
-                            <x-input-label for="attachments" :value="__('Pièces jointes')" />
-                            <input type="file" id="attachments" name="attachments[]" multiple 
-                                class="block w-full text-sm text-gray-900 dark:text-gray-100
+                            <x-input-label for="attachments" :value="__('Pièces jointes (optionnel)')" />
+                            <input type="file" id="attachments" name="attachments[]" multiple class="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400
                                 file:mr-4 file:py-2 file:px-4
                                 file:rounded-md file:border-0
                                 file:text-sm file:font-semibold
-                                file:bg-indigo-600 file:text-white
-                                hover:file:bg-indigo-700
-                                file:cursor-pointer file:shadow-sm" />
+                                file:bg-indigo-50 file:text-indigo-700
+                                hover:file:bg-indigo-100
+                                dark:file:bg-indigo-900 dark:file:text-indigo-300
+                                dark:hover:file:bg-indigo-800">
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                Formats acceptés : PDF, JPG, JPEG, PNG. Taille maximale : 10 Mo.
+                                Formats acceptés : PDF, DOC, DOCX, JPG, JPEG, PNG (max 2MB)
                             </p>
                             <x-input-error :messages="$errors->get('attachments.*')" class="mt-2" />
-
-                            @if($leave->attachments->count() > 0)
-                                <div class="mt-4">
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">Pièces jointes actuelles :</h4>
-                                    <ul class="mt-2 divide-y divide-gray-200 dark:divide-gray-700">
-                                        @foreach($leave->attachments as $attachment)
-                                            <li class="py-2 flex items-center justify-between">
-                                                <span class="text-sm text-gray-900 dark:text-gray-100">{{ $attachment->original_filename }}</span>
-                                                <a href="{{ route('leaves.download-attachment', ['leave' => $leave->id, 'attachment' => $attachment->id]) }}" 
-                                                   class="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                    Télécharger
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
-                            <a href="{{ route('leaves.show', $leave) }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mr-4">
+                        <div class="flex items-center justify-end gap-4">
+                            <a href="{{ route('leaves.show', $leave) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 {{ __('Annuler') }}
                             </a>
-                            <x-primary-button>
-                                {{ __('Mettre à jour') }}
-                            </x-primary-button>
+                            <x-primary-button>{{ __('Mettre à jour') }}</x-primary-button>
                         </div>
                     </form>
                 </div>

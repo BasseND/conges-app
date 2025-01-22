@@ -12,11 +12,12 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    const ROLE_EMPLOYEE = 'employee';
-    const ROLE_MANAGER = 'manager';
+    // Constantes pour les rôles
     const ROLE_ADMIN = 'admin';
-    const ROLE_HR = 'hr';
     const ROLE_DEPARTMENT_HEAD = 'department_head';
+    const ROLE_EMPLOYEE = 'employee';
+    const ROLE_HR = 'hr';
+    const ROLE_MANAGER = 'manager';
 
     /**
      * The attributes that are mass assignable.
@@ -71,6 +72,30 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Vérifie si l'utilisateur est un administrateur
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est un chef de département
+     */
+    public function isDepartmentHead(): bool
+    {
+        return $this->role === self::ROLE_DEPARTMENT_HEAD;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est un employé
+     */
+    public function isEmployee(): bool
+    {
+        return $this->role === self::ROLE_EMPLOYEE;
+    }
+
+    /**
      * Get the team that the user belongs to.
      */
     public function team()
@@ -89,11 +114,6 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Méthodes de vérification des rôles
      */
-    public function isAdmin()
-    {
-        return $this->role === self::ROLE_ADMIN;
-    }
-
     public function isManager()
     {
         return $this->role === self::ROLE_MANAGER;
@@ -102,11 +122,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isHR()
     {
         return $this->role === self::ROLE_HR;
-    }
-
-    public function isDepartmentHead()
-    {
-        return $this->role === self::ROLE_DEPARTMENT_HEAD;
     }
 
     public function hasAdminAccess()

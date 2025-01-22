@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\LeaveAttachment;
+use Carbon\Carbon;
 
 class Leave extends Model
 {
@@ -40,7 +41,8 @@ class Leave extends Model
         'status',
         'processed_by',
         'processed_at',
-        'rejection_reason'
+        'rejection_reason',
+        'approved_by'
     ];
 
     protected $casts = [
@@ -67,6 +69,11 @@ class Leave extends Model
         return $this->hasMany(LeaveAttachment::class);
     }
 
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
     /**
      * Obtenir le libellé du statut
      */
@@ -81,5 +88,27 @@ class Leave extends Model
     public function getTypeLabelAttribute()
     {
         return self::TYPES[$this->type] ?? $this->type;
+    }
+
+    /**
+     * Get the duration in days (excluding weekends)
+     */
+    public function getDurationDaysAttribute()
+    {
+        if (!$this->start_date || !$this->end_date) {
+            return 0;
+        }
+
+        $start = Carbon::parse($this->start_date);
+        $end = Carbon::parse($this->end_date);
+        $duration = 0;
+
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            if (!$date->isWeekend()) {
+                $duration++;
+            }
+        }
+
+        return $duration;
     }
 }

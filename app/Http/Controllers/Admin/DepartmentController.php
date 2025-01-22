@@ -63,51 +63,53 @@ class DepartmentController extends Controller
 
     public function update(Request $request, Department $department)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('departments')->ignore($department->id)],
-            'code' => ['required', 'string', 'max:10', Rule::unique('departments')->ignore($department->id)],
+        $this->authorize('manage-departments');
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:departments,name,' . $department->id,
             'description' => 'nullable|string|max:1000',
             'head_id' => 'nullable|exists:users,id'
         ]);
 
-        // Si le chef de département change
-        if ($request->filled('head_id')) {
-            // Retirer l'ancien chef s'il existe
-            User::where('department_id', $department->id)
-                ->where('role', User::ROLE_DEPARTMENT_HEAD)
-                ->update(['department_id' => null]);
-
-            // Assigner le nouveau chef
-            User::where('id', $request->head_id)
-                ->update(['department_id' => $department->id]);
-        } else {
-            // Si aucun chef n'est sélectionné, retirer l'ancien chef
-            User::where('department_id', $department->id)
-                ->where('role', User::ROLE_DEPARTMENT_HEAD)
-                ->update(['department_id' => null]);
+        try {
+            $department->update($validated);
+            return redirect()->route('admin.departments.show', $department)
+                ->with('success', 'Département mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur est survenue lors de la mise à jour du département.');
         }
-
-        $department->update($validatedData);
-
-        return redirect()->route('admin.departments.index')
-            ->with('success', 'Département mis à jour avec succès');
     }
 
     public function show(Department $department)
     {
         $department->load(['teams.manager', 'teams.members']);
-        return view('admin.departments.show', compact('department'));
+        
+        $managers = $department->users()
+            ->where('role', 'manager')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.departments.show', [
+            'department' => $department,
+            'managers' => $managers
+        ]);
     }
 
     public function destroy(Department $department)
     {
-        if ($department->employees()->exists()) {
-            return back()->withErrors(['error' => 'Impossible de supprimer ce département car il contient des employés']);
+        $this->authorize('manage-departments');
+
+        try {
+            // Vérifier si le département a des employés
+            if ($department->users()->count() > 0) {
+                return back()->with('error', 'Impossible de supprimer un département qui contient des employés.');
+            }
+
+            $department->delete();
+            return redirect()->route('admin.departments.index')
+                ->with('success', 'Département supprimé avec succès.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur est survenue lors de la suppression du département.');
         }
-
-        $department->delete();
-
-        return redirect()->route('admin.departments.index')
-            ->with('success', 'Département supprimé avec succès');
     }
 }
