@@ -39,8 +39,7 @@ class LeavePolicy
      */
     public function update(User $user, Leave $leave): bool
     {
-        return ($user->id === $leave->user_id && $leave->status === 'pending')
-            || $user->isAdmin();
+        return $user->id === $leave->user_id && $leave->status === 'pending';
     }
 
     /**

@@ -44,7 +44,9 @@
                                             <div class="text-sm font-medium text-gray-900">{{ $department->code }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $department->name }}</div>
+                                            <a href="{{ route('admin.departments.show', $department) }}" class="text-indigo-600 hover:text-indigo-900">
+                                                {{ $department->name }}
+                                            </a>
                                             @if($department->description)
                                                 <div class="text-sm text-gray-500">{{ Str::limit($department->description, 50) }}</div>
                                             @endif

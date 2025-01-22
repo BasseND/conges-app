@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leave;
+use App\Models\LeaveAttachment;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leaves = Leave::where('user_id', auth()->id())
+        $leaves = Leave::with(['user.department', 'attachments'])
+            ->where('user_id', auth()->id())
             ->latest()
             ->paginate(10);
 
@@ -59,18 +61,20 @@ class LeaveController extends Controller
         $leave->user_id = auth()->id();
         $leave->status = 'pending';
         $leave->duration = $duration;
+        $leave->save();
 
+        // Gérer les pièces jointes après avoir sauvegardé la demande
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $path = $file->store('leave_attachments');
                 $leave->attachments()->create([
-                    'path' => $path,
-                    'name' => $file->getClientOriginalName()
+                    'filename' => $path,
+                    'original_filename' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize()
                 ]);
             }
         }
-
-        $leave->save();
 
         return redirect()->route('leaves.index')
             ->with('success', 'Votre demande de congé a été soumise avec succès.');
@@ -82,23 +86,25 @@ class LeaveController extends Controller
     public function show(Leave $leave)
     {
         $this->authorize('view', $leave);
+        $leave->load(['user.department', 'attachments']);
         return view('leaves.show', compact('leave'));
     }
 
     /**
      * Télécharge la pièce jointe d'une demande de congé
      */
-    public function downloadAttachment(Leave $leave)
+    public function downloadAttachment(Leave $leave, LeaveAttachment $attachment)
     {
         $this->authorize('view', $leave);
 
-        if (!$leave->attachment_path || !Storage::exists($leave->attachment_path)) {
+        if (!Storage::exists($attachment->filename)) {
             abort(404, 'Pièce jointe introuvable');
         }
 
         return Storage::download(
-            $leave->attachment_path,
-            $leave->attachment_name
+            $attachment->filename,
+            $attachment->original_filename,
+            ['Content-Type' => $attachment->mime_type]
         );
     }
 
@@ -266,5 +272,65 @@ class LeaveController extends Controller
 
             abort(403, 'Vous n\'avez pas l\'autorisation d\'annuler cette demande de congé.');
         }
+    }
+
+    /**
+     * Affiche le formulaire d'édition d'une demande de congé
+     */
+    public function edit(Leave $leave)
+    {
+        $this->authorize('update', $leave);
+        return view('leaves.edit', compact('leave'));
+    }
+
+    /**
+     * Met à jour une demande de congé
+     */
+    public function update(Request $request, Leave $leave)
+    {
+        $this->authorize('update', $leave);
+
+        $validated = $request->validate([
+            'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required|string|max:500',
+            'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
+        ]);
+
+        // Calcul de la durée en jours (en excluant les weekends)
+        $start = \Carbon\Carbon::parse($validated['start_date']);
+        $end = \Carbon\Carbon::parse($validated['end_date']);
+        $duration = 0;
+
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            if (!$date->isWeekend()) {
+                $duration++;
+            }
+        }
+
+        $leave->update([
+            'type' => $validated['type'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'reason' => $validated['reason'],
+            'duration' => $duration
+        ]);
+
+        // Gérer les pièces jointes
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('leave_attachments');
+                $leave->attachments()->create([
+                    'filename' => $path,
+                    'original_filename' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize()
+                ]);
+            }
+        }
+
+        return redirect()->route('leaves.show', $leave)
+            ->with('success', 'Votre demande de congé a été mise à jour avec succès.');
     }
 }

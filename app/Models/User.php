@@ -12,6 +12,12 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLE_EMPLOYEE = 'employee';
+    const ROLE_MANAGER = 'manager';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_HR = 'hr';
+    const ROLE_DEPARTMENT_HEAD = 'department_head';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,11 +27,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'employee_id',
         'role',
+        'employee_id',
         'department_id',
         'annual_leave_days',
-        'sick_leave_days',
+        'sick_leave_days'
     ];
 
     /**
@@ -46,8 +52,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'annual_leave_days' => 'integer',
-        'sick_leave_days' => 'integer'
     ];
 
     /**
@@ -67,16 +71,47 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the team that the user belongs to.
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * Get the teams managed by the user.
+     */
+    public function managedTeams()
+    {
+        return $this->hasMany(Team::class, 'manager_id');
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role === self::ROLE_ADMIN;
     }
 
     public function isManager()
     {
-        return $this->role === 'manager';
+        return $this->role === self::ROLE_MANAGER;
+    }
+
+    public function isHR()
+    {
+        return $this->role === self::ROLE_HR;
+    }
+
+    public function isDepartmentHead()
+    {
+        return $this->role === self::ROLE_DEPARTMENT_HEAD;
+    }
+
+    public function hasAdminAccess()
+    {
+        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_HR]);
     }
 
     /**

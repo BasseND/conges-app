@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LeaveController as AdminLeaveController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\StatsController;
+use App\Http\Controllers\Admin\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +81,9 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             // Redirection du tableau de bord vers les statistiques
             Route::redirect('/', '/admin/stats')->name('dashboard');
 
+            // Route de test
+            Route::get('/test-teams/{department}', [TeamController::class, 'getTeamsByDepartment']);
+
             // Routes pour les congés
             Route::prefix('leaves')->name('leaves.')->group(function () {
                 Route::get('/', [AdminLeaveController::class, 'index'])->name('index');
@@ -97,6 +101,13 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
 
             // Routes pour la gestion des départements
             Route::resource('departments', DepartmentController::class);
+
+            // Routes pour la gestion des équipes
+            Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
+            Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
+            Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
+            Route::get('/departments/{department}/managers', [TeamController::class, 'getManagersByDepartment'])->name('departments.managers');
+            Route::get('/departments/{department}/teams', [TeamController::class, 'getTeamsByDepartment'])->name('departments.teams');
         });
 
     });

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use App\Models\Team;
 
 class Department extends Model
 {
@@ -15,7 +16,7 @@ class Department extends Model
         'name',
         'code',
         'description',
-        'manager_id',
+        'head_id',
     ];
 
     /**
@@ -32,5 +33,24 @@ class Department extends Model
     public function employees()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Get the teams in this department.
+     */
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function head()
+    {
+        return $this->belongsTo(User::class, 'head_id')
+            ->where('role', User::ROLE_DEPARTMENT_HEAD);
     }
 }

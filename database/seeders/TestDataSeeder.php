@@ -16,19 +16,25 @@ class TestDataSeeder extends Seeder
     {
         // Créer les départements
         $departments = [
-            ['name' => 'Ressources Humaines', 'code' => 'RH'],
-            ['name' => 'Développement', 'code' => 'DEV'],
-            ['name' => 'Marketing', 'code' => 'MKT'],
-            ['name' => 'Finance', 'code' => 'FIN'],
-            ['name' => 'Support', 'code' => 'SUP']
+            [
+                'name' => 'Ressources Humaines',
+                'code' => 'RH',
+                'description' => 'Département des ressources humaines'
+            ],
+            [
+                'name' => 'Informatique',
+                'code' => 'IT',
+                'description' => 'Département informatique'
+            ],
+            [
+                'name' => 'Finance',
+                'code' => 'FIN',
+                'description' => 'Département financier'
+            ]
         ];
 
         foreach ($departments as $dept) {
-            Department::create([
-                'name' => $dept['name'],
-                'code' => $dept['code'],
-                'description' => "Département {$dept['name']}"
-            ]);
+            Department::create($dept);
         }
 
         // Créer un admin
@@ -41,19 +47,19 @@ class TestDataSeeder extends Seeder
             'employee_id' => 'ADM001'
         ]);
 
-        // Créer des managers
+        // Créer des chefs de département
         foreach (Department::all() as $department) {
-            $manager = User::create([
-                'name' => "Manager {$department->name}",
-                'email' => "manager.{$department->id}@example.com",
+            $head = User::create([
+                'name' => "Chef {$department->name}",
+                'email' => "head.{$department->id}@example.com",
                 'password' => Hash::make('password'),
-                'role' => 'manager',
+                'role' => 'department_head',
                 'department_id' => $department->id,
-                'employee_id' => 'MGR' . str_pad($department->id, 3, '0', STR_PAD_LEFT)
+                'employee_id' => 'HDD' . str_pad($department->id, 3, '0', STR_PAD_LEFT)
             ]);
 
-            // Mettre à jour le manager_id du département
-            $department->manager_id = $manager->id;
+            // Mettre à jour le head_id du département
+            $department->head_id = $head->id;
             $department->save();
         }
 
