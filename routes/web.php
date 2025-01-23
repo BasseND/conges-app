@@ -118,6 +118,10 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             Route::get('/teams/{team}/edit', [TeamController::class, 'edit'])->name('teams.edit');
             Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
             Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
+            Route::delete('teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
+
+            Route::post('/teams/{team}/members', [TeamController::class, 'addMembers'])
+                ->name('admin.teams.members.add');
             Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
             Route::get('/departments/{department}/managers', [TeamController::class, 'getManagersByDepartment'])->name('departments.managers');
             Route::get('/departments/{department}/teams', [TeamController::class, 'getTeamsByDepartment'])->name('departments.teams');

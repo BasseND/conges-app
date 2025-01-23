@@ -7,6 +7,8 @@ use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+
 
 class DepartmentController extends Controller
 {
@@ -61,6 +63,15 @@ class DepartmentController extends Controller
         return view('admin.departments.edit', compact('department', 'departmentHeads'));
     }
 
+     public function editOLD(Department $department)
+    {
+        $users = User::where('role', 'manager')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.departments.edit', compact('department', 'users'));
+    }
+
     public function update(Request $request, Department $department)
     {
         $this->authorize('manage-departments');
@@ -80,9 +91,15 @@ class DepartmentController extends Controller
         }
     }
 
-    public function show(Department $department)
+     public function showOLD(Department $department)
     {
         $department->load(['teams.manager', 'teams.members']);
+        
+        // Debug logging
+        foreach ($department->teams as $team) {
+            \Log::info("Team {$team->name} members count: " . $team->members->count());
+            \Log::info("Team {$team->name} members: " . $team->members->pluck('name')->join(', '));
+        }
         
         $managers = $department->users()
             ->where('role', 'manager')
@@ -94,6 +111,47 @@ class DepartmentController extends Controller
             'managers' => $managers
         ]);
     }
+
+    public function show(Department $department)
+    {
+        $department->load(['teams.manager', 'teams.members']);
+        
+        // Debug logging
+        foreach ($department->teams as $team) {
+            \Log::info("Team {$team->name} members count: " . $team->members->count());
+            \Log::info("Team {$team->name} members: " . $team->members->pluck('name')->join(', '));
+        }
+        
+        $managers = $department->users()
+            ->where('role', 'manager')
+            ->orderBy('name')
+            ->get();
+
+        $users = $department->users()
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.departments.show', [
+            'department' => $department,
+            'managers' => $managers,
+            'users' => $users
+        ]);
+    }
+
+    // public function showOLD(Department $department)
+    // {
+    //     $department->load(['teams.manager', 'teams.members']);
+        
+    //     $managers = $department->users()
+    //         ->where('role', 'manager')
+    //         ->orderBy('name')
+    //         ->get();
+
+    //     return view('admin.departments.show', [
+    //         'department' => $department,
+    //         'managers' => $managers
+    //     ]);
+    // }
 
     public function destroy(Department $department)
     {

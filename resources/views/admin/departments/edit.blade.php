@@ -29,12 +29,20 @@
                             <x-input-label for="head_id" :value="__('Chef de département')" />
                             <select id="head_id" name="head_id" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">Sélectionner un chef</option>
-                                @foreach($users as $user)
+                                @foreach($departmentHeads as $user)
                                     <option value="{{ $user->id }}" {{ old('head_id', $department->head_id) == $user->id ? 'selected' : '' }}>
                                         {{ $user->name }}
                                     </option>
                                 @endforeach
-                            </select>
+                            </select> 
+                             {{-- <select id="head_id" name="head_id" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">Sélectionner un chef</option>
+                                @foreach($departmentHeads as $user)
+                                    <option value="{{ $user->id }}" {{ old('head_id', optional($department->head)->id) == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select> --}}
                             <x-input-error :messages="$errors->get('head_id')" class="mt-2" />
                         </div>
 

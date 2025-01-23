@@ -54,6 +54,7 @@
                                 <option value="{{ App\Models\User::ROLE_HR }}" {{ $user->role === App\Models\User::ROLE_HR ? 'selected' : '' }}>Ressources Humaines</option>
                                 <option value="{{ App\Models\User::ROLE_ADMIN }}" {{ $user->role === App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Administrateur</option>
                             </select>
+                            
                             <x-input-error :messages="$errors->get('role')" class="mt-2" />
                         </div>
 

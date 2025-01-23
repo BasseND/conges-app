@@ -32,7 +32,7 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Manager</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chef de Département</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employés</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -52,9 +52,9 @@
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($department->manager)
-                                                <div class="text-sm text-gray-900">{{ $department->manager->name }}</div>
-                                                <div class="text-sm text-gray-500">{{ $department->manager->email }}</div>
+                                            @if($department->head)
+                                                <div class="text-sm text-gray-900">{{ $department->head->name }}</div>
+                                                <div class="text-sm text-gray-500">{{ $department->head->email }}</div>
                                             @else
                                                 <span class="text-sm text-gray-500">Non assigné</span>
                                             @endif

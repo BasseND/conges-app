@@ -98,9 +98,17 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get the team that the user belongs to.
      */
-    public function team()
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
+
+     /**
+     * Get the teams that the user belongs to.
+     */
+    public function teams()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
     }
 
     /**
@@ -147,5 +155,19 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->isAdmin() || 
                ($this->isManager() && $this->department_id === $user->department_id);
+    }
+
+    /**
+     * Get the roles available for the user.
+     */
+    public static function getRoles()
+    {
+        return [
+            self::ROLE_EMPLOYEE => 'Employé',
+            self::ROLE_MANAGER => 'Manager',
+            self::ROLE_ADMIN => 'Administrateur',
+            self::ROLE_HR => 'RH',
+            self::ROLE_DEPARTMENT_HEAD => 'Chef de Département',
+        ];
     }
 }
