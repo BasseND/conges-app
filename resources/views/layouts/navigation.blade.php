@@ -41,8 +41,13 @@
                             </x-nav-link>
                         @endif
                     @endauth
-                    @if (auth()->user()->isManager() )
+                     @if (auth()->user()->isManager() )
                         <x-nav-link :href="route('manager.leaves.index')" :active="request()->routeIs('manager.leaves.*')">
+                            {{ __('Gestion des congés') }}
+                        </x-nav-link>
+                    @endif
+                    @if (auth()->user()->isDepartmentHead() )
+                        <x-nav-link :href="route('head.leaves.index')" :active="request()->routeIs('head.leaves.*')">
                             {{ __('Gestion des congés') }}
                         </x-nav-link>
                     @endif

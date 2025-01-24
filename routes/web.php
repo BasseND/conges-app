@@ -88,6 +88,11 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
                  ->name('manager.leaves.reject');
         });
 
+        // Routes pour la gestion des congés par Head
+        Route::middleware(['auth', 'verified'])->group(function () {
+            Route::get('head/leaves', [App\Http\Controllers\Head\LeaveController::class, 'index'])->name('head.leaves.index');
+        });
+
         // Routes pour l'administration
         Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
             // Redirection du tableau de bord vers les statistiques

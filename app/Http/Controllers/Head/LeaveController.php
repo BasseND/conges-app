@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Head;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leave;
@@ -14,64 +14,23 @@ class LeaveController extends Controller
     {
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
-            if (!auth()->user()->isManager() && !auth()->user()->isAdmin()) {
+            if (!auth()->user()->isDepartmentHead() && !auth()->user()->isAdmin()) {
                 abort(403);
             }
             return $next($request);
         });
     }
 
-     public function indexautres(Request $request)
-    {
-        $user = auth()->user();
-        
-        $query = Leave::with(['user', 'user.teams']);
-
-        // Si c'est un manager, il ne voit que les demandes des membres de son équipe
-        if (!$user->isAdmin()) {
-            $query->whereHas('user.teams', function ($q) use ($user) {
-                $q->whereHas('manager', function ($q) use ($user) {
-                    $q->where('id', $user->id);
-                });
-            });
-        }
-
-        // Recherche par nom d'employé
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('employee_id', 'like', "%{$search}%");
-            });
-        }
-
-        // Filtre par statut
-        if ($request->filled('status') && array_key_exists($request->status, Leave::STATUSES)) {
-            $query->where('status', $request->status);
-        }
-
-        $leaves = $query->latest()->paginate(10);
-        
-        return view('manager.leaves.index', [
-            'leaves' => $leaves,
-            'statuses' => Leave::STATUSES
-        ]);
-    }
-
-
     public function index(Request $request)
     {
         $user = auth()->user();
         
-        $query = Leave::with(['user', 'user.teams']);
+        $query = Leave::with(['user', 'user.department']);
 
-        // Si c'est un manager, il ne voit que les demandes des membres de son équipe
+        // Si c'est un manager, il ne voit que les demandes de son département
         if (!$user->isAdmin()) {
-            $query->whereHas('user.teams', function ($q) use ($user) {
-                $q->whereHas('manager', function ($q) use ($user) {
-                    $q->where('id', $user->id);
-                });
+            $query->whereHas('user', function ($q) use ($user) {
+                $q->where('department_id', $user->department_id);
             });
         }
 
@@ -108,7 +67,7 @@ class LeaveController extends Controller
         // Conserver les paramètres de filtrage dans les liens de pagination
         $leaves->appends($request->only(['search', 'status', 'type', 'date_from', 'date_to']));
 
-        return view('manager.leaves.index', compact('leaves'));
+        return view('head.leaves.index', compact('leaves'));
     }
 
     public function approve(Leave $leave)

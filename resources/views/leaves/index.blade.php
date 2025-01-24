@@ -176,11 +176,18 @@
 
 </x-app-layout>
 
+ @push('styles')
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+@endpush
+
 {{-- Modales --}}
 <div x-data="{ 
     showCancelModal: false, 
     cancelUrl: ''
 }"
+
     x-on:show-cancel-modal.window="showCancelModal = true; cancelUrl = $event.detail.url">
     
     {{-- Modale d'annulation --}}
