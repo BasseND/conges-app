@@ -10,7 +10,7 @@
             <!-- Formulaire de recherche et filtres -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('manager.leaves.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <form action="{{ route('head.leaves.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <!-- Recherche par nom -->
                         <div>
                             <label for="search" class="block text-sm font-medium text-gray-700">Rechercher un employé</label>
@@ -64,7 +64,7 @@
 
                         <!-- Boutons -->
                         <div class="md:col-span-3 flex justify-end space-x-4">
-                            <a href="{{ route('manager.leaves.index') }}"
+                            <a href="{{ route('head.leaves.index') }}"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Réinitialiser
                             </a>
@@ -185,10 +185,10 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 @if($leave->status === 'pending' && auth()->user()->canManageUserLeaves($leave->user))
-                                                    <button onclick="showApproveModal('{{ route('manager.leaves.approve', $leave) }}')" class="text-green-600 hover:text-green-900 mr-3">
+                                                    <button onclick="showApproveModal('{{ route('head.leaves.approve', $leave) }}')" class="text-green-600 hover:text-green-900 mr-3">
                                                         Approuver
                                                     </button>
-                                                    <button onclick="showRejectModal('{{ route('manager.leaves.reject', $leave) }}')" class="text-red-600 hover:text-red-900">
+                                                    <button onclick="showRejectModal('{{ route('head.leaves.reject', $leave) }}')" class="text-red-600 hover:text-red-900">
                                                         Rejeter
                                                     </button>
                                                 @else

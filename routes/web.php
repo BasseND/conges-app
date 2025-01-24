@@ -91,6 +91,10 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         // Routes pour la gestion des congés par Head
         Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('head/leaves', [App\Http\Controllers\Head\LeaveController::class, 'index'])->name('head.leaves.index');
+            Route::put('/head/leaves/{leave}/approve', [App\Http\Controllers\Head\LeaveController::class, 'approve'])
+                 ->name('head.leaves.approve');
+            Route::put('/head/leaves/{leave}/reject', [App\Http\Controllers\Head\LeaveController::class, 'reject'])
+                 ->name('head.leaves.reject');
         });
 
         // Routes pour l'administration

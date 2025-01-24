@@ -154,7 +154,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function canManageUserLeaves(User $user): bool
     {
         return $this->isAdmin() || 
-               ($this->isManager() && $this->department_id === $user->department_id);
+               ($this->isManager() && $this->department_id === $user->department_id) ||
+               ($this->isDepartmentHead() && $this->department_id === $user->department_id);
     }
 
     /**
