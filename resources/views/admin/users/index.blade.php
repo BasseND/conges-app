@@ -36,7 +36,7 @@
                                     <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rechercher</label>
                                     <input type="text" name="search" id="search" 
                                            value="{{ request('search') }}"
-                                           class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                                            placeholder="Nom ou email...">
                                 </div>
 
@@ -57,7 +57,7 @@
                                 <div>
                                     <label for="department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Département</label>
                                     <select name="department" id="department" 
-                                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
                                         <option value="">Tous les départements</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>

@@ -28,3 +28,8 @@ Assurer que les pièces jointes sont dans un format utilisable
 Donner des messages d'erreur clairs aux utilisateurs
 
 La validation se fait automatiquement lorsque le formulaire est soumis, et les messages d'erreur seront affichés à l'utilisateur si une règle n'est pas respectée.
+
+
+A l'image de la page de gestion des congés par les managers, je voudrais exactement la même chose pour les chefs de departament. Cela permettrait aux chefs de departament de voir les congés de leurs employés et de les approuver ou refuser.
+
+Je voudrais modifier la page de gestion des congés pour les managers pour que chaque manager ne voit que les congés des membres de son équipe (teams). Je voudrais que le filtre repose sur l'appartenance à une équipe et non au département. Que chaque manager qui a une équipe puisse voir les congés de ses membres. Cela permettrait à ces managers de voir les congés de leurs employés et de les approuver ou refuser. 

@@ -1,4 +1,164 @@
-<x-app-layout>
+Voici mon store : 
+ public function store(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            
+           // Validation de base
+            try {
+
+                 $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'start_date' => [
+                    'required',
+                    'date',
+                    'before:+1 year',
+                    function ($attribute, $value, $fail) {
+                        $startDate = Carbon::parse($value);
+                        if ($startDate->isWeekend()) {
+                            $fail('La date de début ne peut pas être un weekend.');
+                        }
+                    }
+                ],
+                'end_date' => [
+                    'required',
+                    'date',
+                    'after_or_equal:start_date',
+                    function ($attribute, $value, $fail) {
+                        $endDate = Carbon::parse($value);
+                        if ($endDate->isWeekend()) {
+                            $fail('La date de fin ne peut pas être un weekend.');
+                        }
+                    }
+                ],
+                'type' => ['required', Rule::in(['annual', 'sick', 'unpaid', 'other'])],
+                'reason' => ['required', 'string', 'min:10', 'max:500'],
+                'attachments.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:2048']
+            ], [
+                'start_date.required' => 'La date de début est requise.',
+                'start_date.date' => 'La date de début doit être une date valide.',
+                'start_date.before' => 'La date de début doit être dans moins d\'un an.',
+                'end_date.required' => 'La date de fin est requise.',
+                'end_date.date' => 'La date de fin doit être une date valide.',
+                'end_date.after_or_equal' => 'La date de fin doit être égale ou postérieure à la date de début.',
+                'type.required' => 'Le type de congé est requis.',
+                'type.in' => 'Le type de congé sélectionné n\'est pas valide.',
+                'reason.required' => 'Le motif est requis.',
+                'reason.min' => 'Le motif doit faire au moins :min caractères.',
+                'reason.max' => 'Le motif ne peut pas dépasser :max caractères.',
+            ]);
+
+            if ($validator->fails()) {
+                return back()
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'Veuillez corriger les erreurs dans le formulaire.');
+            }
+
+            $validated = $validator->validated();
+               
+             } catch (\Illuminate\Validation\ValidationException $e) {
+                dd([
+                    'errors' => $e->errors(),
+                    'has_errors' => session()->has('errors'),
+                    'old_input' => old(),
+                ]);
+                return redirect()->back()
+                    ->withErrors($e->errors())
+                    ->withInput();
+            }
+
+            // Vérification des chevauchements
+            $start = Carbon::parse($validated['start_date']);
+            $end = Carbon::parse($validated['end_date']);
+            
+            $existingLeave = Leave::query()
+                ->where('user_id', auth()->id())
+                ->where('status', '!=', 'rejected')
+                ->where(function ($query) use ($start, $end) {
+                    $query->where(function ($q) use ($start, $end) {
+                        $q->where('start_date', '<=', $start)
+                          ->where('end_date', '>=', $start);
+                    })->orWhere(function ($q) use ($start, $end) {
+                        $q->where('start_date', '<=', $end)
+                          ->where('end_date', '>=', $end);
+                    })->orWhere(function ($q) use ($start, $end) {
+                        $q->where('start_date', '>=', $start)
+                          ->where('end_date', '<=', $end);
+                    })->orWhere(function ($q) use ($start, $end) {
+                        $q->where('start_date', '<=', $start)
+                          ->where('end_date', '>=', $end);
+                    });
+                })
+                ->first();
+
+            if ($existingLeave) {
+                return back()->withInput()->with('error', sprintf(
+                    'Cette période chevauche un congé existant du %s au %s.',
+                    $existingLeave->start_date->format('d/m/Y'),
+                    $existingLeave->end_date->format('d/m/Y')
+                ));
+            }
+
+            // Calcul de la durée en jours ouvrables
+            $duration = 0;
+            for ($date = clone $start; $date->lte($end); $date->addDay()) {
+                if (!$date->isWeekend()) {
+                    $duration++;
+                }
+            }
+
+            // Vérification de la durée maximale
+            $maxDuration = match($validated['type']) {
+                'annual' => 30,
+                'sick' => 90,
+                'unpaid' => 60,
+                'other' => 5,
+                default => 30,
+            };
+
+            if ($duration > $maxDuration) {
+                return back()->withInput()->with('error', 
+                    "La durée maximale pour ce type de congé est de {$maxDuration} jours ouvrables."
+                );
+            }
+
+            // Création du congé
+            $leave = new Leave($validated);
+            $leave->user_id = auth()->id();
+            $leave->status = 'pending';
+            $leave->duration = $duration;
+            
+            if (!$leave->save()) {
+                throw new \Exception('Erreur lors de la sauvegarde du congé');
+            }
+
+            // Gestion des pièces jointes
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('leave_attachments');
+                    $leave->attachments()->create([
+                        'filename' => $path,
+                        'original_filename' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getMimeType(),
+                        'size' => $file->getSize()
+                    ]);
+                }
+            }
+
+            DB::commit();
+            
+            return redirect()->route('leaves.index')
+                ->with('success', 'Votre demande de congé a été soumise avec succès.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
+        }
+    }
+
+
+    Voici ma vue blade : 
+    <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Nouvelle demande de congé') }}
@@ -9,15 +169,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
-                    @if (session('error'))
-                        <div class="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded relative mb-4" role="alert">
-                            <p>{{ session('error') }}</p>
-                        </div>
-                    @endif
-
-                    
-
                     <form method="POST" action="{{ route('leaves.store') }}" class="space-y-6" enctype="multipart/form-data">
                         @csrf
 
@@ -41,7 +192,7 @@
                         </div>
 
                         <div class="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
-                            {{-- <div>
+                            <div>
                                 <x-input-label for="start_date" :value="__('Date de début')" />
                                 <x-text-input id="start_date" class="block mt-1 w-full" type="date" name="start_date" :value="old('start_date')" required />
                                 @error('start_date')
@@ -53,38 +204,6 @@
                                 <x-input-label for="end_date" :value="__('Date de fin')" />
                                 <x-text-input id="end_date" class="block mt-1 w-full" type="date" name="end_date" :value="old('end_date')" required />
                                 @error('end_date')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div> --}}
-
-                            <!-- Date de début -->
-                            <div>
-                                <x-input-label for="start_date" :value="__('Date de début')" />
-                                <x-text-input
-                                    id="start_date"
-                                    class="block mt-1 w-full"
-                                    type="text"
-                                    name="start_date"
-                                    :value="old('start_date')"
-                                    required
-                                />
-                                @error('start_date')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Date de fin -->
-                             <div>
-                                <x-input-label for="end_date" :value="__('Date de fin')" />
-                                <x-text-input
-                                    id="end_date"
-                                    class="block mt-1 w-full"
-                                    type="text"
-                                    name="end_date"
-                                    :value="old('end_date')"
-                                    required
-                                />
-                                 @error('end_date')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -137,61 +256,8 @@
     </div>
 
    @push('scripts')
-   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-        // Configuration de la date max : 1 an à partir d'aujourd'hui
-        const oneYearFromNow = new Date();
-        oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
-
-        // Fonction qui désactive les week-ends (retourne true si la date doit être bloquée)
-        // Documentation Flatpickr: https://flatpickr.js.org/options/#disable
-        function disableWeekends(date) {
-            // day = 0 (Dimanche), day = 6 (Samedi)
-            return (date.getDay() === 0 || date.getDay() === 6);
-        }
-
-        // Initialisation pour la date de début
-        flatpickr("#start_date", {
-            locale: "fr",               // Langue (optionnelle)
-            dateFormat: "Y-m-d",         // Format de date (ex: 2025-01-28)
-            minDate: false,           // Pas avant aujourd'hui (optionnel)
-            maxDate: oneYearFromNow,    // Pas au-delà d'un an
-            disable: [ disableWeekends ], // Désactive les week-ends via callback
-            onChange: function(selectedDates, dateStr) {
-                // Récupérer l'instance du datepicker de la date de fin
-                const endPicker = document.querySelector('#end_date')._flatpickr;
-                if (endPicker) {
-                    // Forcer la "minDate" du champ de fin à la date sélectionnée
-                    endPicker.set('minDate', dateStr);
-                    // Si la date de fin est avant la nouvelle date de début, on la réinitialise
-                    if (endPicker.selectedDates[0] < selectedDates[0]) {
-                        endPicker.setDate(dateStr);
-                    }
-                }
-            }
-        });
-
-        // Initialisation pour la date de fin
-        flatpickr("#end_date", {
-            locale: "fr",
-            dateFormat: "Y-m-d",
-            minDate: false,
-            maxDate: oneYearFromNow,
-            disable: [ disableWeekends ],
-            onChange: function(selectedDates, dateStr) {
-                // Récupérer l'instance du datepicker de la date de début
-                const startPicker = document.querySelector('#start_date')._flatpickr;
-                if (startPicker && selectedDates[0] < startPicker.selectedDates[0]) {
-                    // Si l’utilisateur choisit une date de fin avant la date de début,
-                    // on aligne la fin sur la date de début.
-                    startPicker.setDate(dateStr);
-                }
-            }
-        });
-
-
             const form = document.querySelector('form');
             const startDateInput = document.getElementById('start_date');
             const endDateInput = document.getElementById('end_date');
@@ -274,3 +340,6 @@
     </script>
     @endpush
 </x-app-layout>
+
+
+Quand je soumets le formulaire, je ne vois pas de messages d'erreur, je reste dans le formulaire. Et les messages d'erreurs ne sont pas affichés.

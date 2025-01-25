@@ -24,11 +24,21 @@ class LeaveRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+
+
+        // dd([
+        //     'data' => $this->all(),
+        //     'start_date' => $this->start_date,
+        //     'end_date' => $this->end_date,
+        //     'type' => $this->type,
+        //     'reason' => $this->reason,
+        // ]);
+
+         $rules = [
             'start_date' => [
                 'required', 
                 'date', 
-                'after_or_equal:today',
+                
                 'before:+1 year',
                 function ($attribute, $value, $fail) {
                     $startDate = Carbon::parse($value);
@@ -37,23 +47,62 @@ class LeaveRequest extends FormRequest
                     }
                 }
             ],
-            'end_date' => [
+           'end_date' => [
                 'required', 
                 'date', 
                 'after_or_equal:start_date',
-                'before:start_date +3 months',
                 function ($attribute, $value, $fail) {
                     $endDate = Carbon::parse($value);
                     if ($endDate->isWeekend()) {
                         $fail('La date de fin ne peut pas être un weekend.');
                     }
 
-                    // Vérifie la durée maximale selon le type de congé
+                    if (!$this->start_date) {
+                        return;
+                    }
+
                     $startDate = Carbon::parse($this->start_date);
-                    $duration = $startDate->diffInDays($endDate) + 1;
+                    
+                    // Vérifie les chevauchements avec d'autres congés
+                    $existingLeave = Leave::query()
+                        ->where('user_id', auth()->id())
+                        ->where('status', '!=', 'rejected')
+                        ->where(function ($query) use ($startDate, $endDate) {
+                            $query->where(function ($q) use ($startDate, $endDate) {
+                                $q->where('start_date', '<=', $startDate)
+                                  ->where('end_date', '>=', $startDate);
+                            })->orWhere(function ($q) use ($startDate, $endDate) {
+                                $q->where('start_date', '<=', $endDate)
+                                  ->where('end_date', '>=', $endDate);
+                            })->orWhere(function ($q) use ($startDate, $endDate) {
+                                $q->where('start_date', '>=', $startDate)
+                                  ->where('end_date', '<=', $endDate);
+                            })->orWhere(function ($q) use ($startDate, $endDate) {
+                                $q->where('start_date', '<=', $startDate)
+                                  ->where('end_date', '>=', $endDate);
+                            });
+                        })
+                        ->first();
+
+                    if ($existingLeave) {
+                        $fail(sprintf(
+                            'Cette période chevauche un congé existant du %s au %s.',
+                            $existingLeave->start_date->format('d/m/Y'),
+                            $existingLeave->end_date->format('d/m/Y')
+                        ));
+                        return;
+                    }
+
+                    // Vérifie la durée maximale selon le type de congé
+                    $duration = 0;
+                    for ($date = clone $startDate; $date->lte($endDate); $date->addDay()) {
+                        if (!$date->isWeekend()) {
+                            $duration++;
+                        }
+                    }
                     $maxDuration = $this->getMaxDurationForLeaveType($this->type);
                     if ($duration > $maxDuration) {
-                        $fail("La durée maximale pour ce type de congé est de {$maxDuration} jours.");
+                        $fail("La durée maximale pour ce type de congé est de {$maxDuration} jours ouvrables.");
                     }
                 }
             ],
@@ -119,6 +168,11 @@ class LeaveRequest extends FormRequest
                 }
             ]
         ];
+
+        //  dd('Validation rules passed', $this->all());
+        return $rules;
+
+
     }
 
     /**
@@ -131,7 +185,6 @@ class LeaveRequest extends FormRequest
         return [
             'start_date.required' => 'La date de début est requise.',
             'start_date.date' => 'La date de début doit être une date valide.',
-            'start_date.after_or_equal' => 'La date de début doit être aujourd\'hui ou une date future.',
             'start_date.before' => 'La date de début ne peut pas être plus d\'un an dans le futur.',
             'end_date.required' => 'La date de fin est requise.',
             'end_date.date' => 'La date de fin doit être une date valide.',
@@ -152,15 +205,13 @@ class LeaveRequest extends FormRequest
      */
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            $this->validatePeriod($validator);
-        });
+        // -
     }
 
     /**
      * Prepare the data for validation.
      */
-    protected function prepareForValidation(): void
+     protected function prepareForValidation(): void
     {
         if ($this->start_date) {
             $this->merge([
@@ -172,8 +223,6 @@ class LeaveRequest extends FormRequest
                 'end_date' => date('Y-m-d', strtotime($this->end_date)),
             ]);
         }
-        // Ajoute un champ virtuel pour la validation de la période
-        $this->merge(['period' => true]);
     }
 
     /**
