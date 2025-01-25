@@ -133,9 +133,16 @@
                                                         <i class="fas fa-trash"></i> Annuler
                                                     </button>
                                                 @endif
-                                                <a href="{{ route('leaves.show', $leave->id) }}" class="text-blue-600 hover:text-blue-900 ml-2">
+                                                {{-- <a href="{{ route('leaves.show', $leave->id) }}" class="text-blue-600 hover:text-blue-900 ml-2">
                                                     <i class="fas fa-eye"></i> Voir
+                                                </a> --}}
+
+                                                <a href="{{ route('leaves.show', ['leave' => $leave->id]) }}" 
+                                                   class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                                    Voir
                                                 </a>
+
+                                                
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 @if($leave->status === 'pending')

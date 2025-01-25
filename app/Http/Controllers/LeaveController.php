@@ -371,11 +371,106 @@ class LeaveController extends Controller
     /**
      * Affiche les détails d'une demande de congé
      */
-    public function show(Leave $leave)
+
+     public function show($id)
+    {
+        \Log::info('Attempting to show leave:', ['id' => $id]);
+
+        try {
+            // Charger la demande avec ses relations
+            $leave = Leave::with(['user.department', 'attachments', 'approver'])
+                         ->findOrFail($id);
+
+            \Log::info('Leave found:', [
+                'leave_id' => $leave->id,
+                'user_id' => $leave->user_id,
+                'auth_user_id' => auth()->id()
+            ]);
+
+            $this->authorize('view', $leave);
+            
+            \Log::info('Leave loaded:', [
+                'leave' => $leave->toArray(),
+                'user' => $leave->user ? $leave->user->toArray() : null,
+                'department' => $leave->user && $leave->user->department ? $leave->user->department->toArray() : null
+            ]);
+
+            return view('leaves.show', compact('leave'));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Leave not found:', ['id' => $id]);
+            abort(404, 'Demande de congé non trouvée');
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            \Log::error('Unauthorized access:', [
+                'user_id' => auth()->id(),
+                'leave_id' => $id
+            ]);
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
+        } catch (\Exception $e) {
+            \Log::error('Error showing leave:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            abort(500, 'Une erreur est survenue lors de l\'affichage de la demande');
+        }
+    }
+    
+    public function showOLD(Leave $leave)
     {
         $this->authorize('view', $leave);
         $leave->load(['user.department', 'attachments', 'approver']);
+         dd($leave);
         return view('leaves.show', compact('leave'));
+    }
+
+    
+
+    public function showNEW(Leave $leave)
+    {
+        if (!$leave || !$leave->exists) {
+            \Log::error('Leave not found');
+            abort(404, 'Demande de congé non trouvée');
+        }
+
+        \Log::info('Showing leave:', [
+            'leave_id' => $leave->id,
+            'user_id' => $leave->user_id,
+            'auth_user_id' => auth()->id()
+        ]);
+
+         dd($leave);
+
+        try {
+            $this->authorize('view', $leave);
+            
+            // Eager load all necessary relationships
+            $leave = Leave::with(['user.department', 'attachments', 'approver'])
+                         ->findOrFail($leave->id);
+            
+            \Log::info('Leave loaded:', [
+                'leave' => $leave->toArray(),
+                'user' => $leave->user ? $leave->user->toArray() : null,
+                'department' => $leave->user && $leave->user->department ? $leave->user->department->toArray() : null
+            ]);
+
+             dd($leave);
+
+            return view('leaves.show', compact('leave'));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Leave not found:', ['id' => $leave->id]);
+            abort(404, 'Demande de congé non trouvée');
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            \Log::error('Unauthorized access:', [
+                'user_id' => auth()->id(),
+                'leave_id' => $leave->id
+            ]);
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
+        } catch (\Exception $e) {
+            \Log::error('Error showing leave:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            abort(500, 'Une erreur est survenue lors de l\'affichage de la demande');
+        }
     }
 
     /**

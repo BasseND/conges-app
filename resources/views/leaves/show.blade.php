@@ -1,9 +1,19 @@
-<x-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Demande de congé') }}
-            @if($leave->user)
-                de {{ $leave->user->name }}
+            @if($leave->user_id)
+                @php
+                    \Log::info('User ID: ' . $leave->user_id);
+                    \Log::info('User relation: ', ['user' => $leave->user]);
+                @endphp
+                @if($leave->user)
+                    de {{ $leave->user->name }}
+                @else
+                    (Utilisateur ID: {{ $leave->user_id }})
+                @endif
+            @else
+                (Aucun utilisateur associé)
             @endif
         </h2>
     </x-slot>
@@ -11,16 +21,28 @@
     <div class="py-12">
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                    Demande de {{ $leave->user->name }}
+                 <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Demande de {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
                 </h3>
+                @php
+                    \Log::info('Leave data:', [
+                        'id' => $leave->id,
+                        'created_at' => $leave->created_at,
+                        'start_date' => $leave->start_date,
+                        'end_date' => $leave->end_date
+                    ]);
+                @endphp
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    Soumise le {{ $leave->created_at->format('d/m/Y à H:i') }}
+                    @if($leave->created_at)
+                        Soumise le {{ $leave->created_at->format('d/m/Y à H:i') }}
+                    @else
+                        Date de soumission non disponible
+                    @endif
                 </p>
             </div>
             <div class="border-t border-gray-200">
                 <dl>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    {{-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Type de congé</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -37,6 +59,30 @@
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             Du {{ $leave->start_date->format('d/m/Y') }} au {{ $leave->end_date->format('d/m/Y') }}
                             ({{ $leave->duration_days }} jour(s))
+                        </dd>
+                    </div> --}}
+
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Type de congé</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                @if($leave->type === 'annual') bg-green-100 text-green-800
+                                @elseif($leave->type === 'sick') bg-red-100 text-red-800
+                                @else bg-gray-100 text-gray-800
+                                @endif">
+                                {{ ucfirst($leave->type ?? 'inconnu') }}
+                            </span>
+                        </dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Période</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            @if($leave->start_date && $leave->end_date)
+                                Du {{ $leave->start_date->format('d/m/Y') }} au {{ $leave->end_date->format('d/m/Y') }}
+                                ({{ $leave->duration_days }} jour(s))
+                            @else
+                                Période non disponible
+                            @endif
                         </dd>
                     </div>
                     <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -115,9 +161,18 @@
                 </dl>
             </div>
             
-            @can('update', $leave)
+            {{-- @can('update', $leave)
                 <div class="mt-6 flex justify-end">
                     <a href="{{ route('leaves.edit', $leave) }}" 
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        Modifier
+                    </a>
+                </div>
+            @endcan --}}
+
+            @can('update', $leave)
+                <div class="mt-6 flex justify-end">
+                    <a href="{{ route('leaves.edit', ['leave' => $leave->id]) }}" 
                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         Modifier
                     </a>
@@ -151,4 +206,4 @@
             @endif
         </div>
     </div>
-</x-layout>
+</x-app-layout>
