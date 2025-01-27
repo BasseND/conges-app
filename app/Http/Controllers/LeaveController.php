@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 
+
 class LeaveController extends Controller
 {
     /**
@@ -41,7 +42,7 @@ class LeaveController extends Controller
      * Enregistre une nouvelle demande de congé
      */
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         try {
             DB::beginTransaction();
@@ -189,190 +190,11 @@ class LeaveController extends Controller
         }
     }
 
-    public function storeNew(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            
-            $validated = $request->validate([
-                'start_date' => 'required|date',
-                'end_date' => 'required|date|after_or_equal:start_date',
-                'type' => 'required|in:annual,sick,unpaid,other',
-                'reason' => 'required|string|min:10|max:500'
-            ]);
-
-            // Calcul de la durée en jours (en excluant les weekends)
-            $start = Carbon::parse($validated['start_date']);
-            $end = Carbon::parse($validated['end_date']);
-            $duration = 0;
-
-            for ($date = clone $start; $date->lte($end); $date->addDay()) {
-                if (!$date->isWeekend()) {
-                    $duration++;
-                }
-            }
-
-            $leave = new Leave($validated);
-            $leave->user_id = auth()->id();
-            $leave->status = 'pending';
-            $leave->duration = $duration;
-            
-            if (!$leave->save()) {
-                throw new \Exception('Erreur lors de la sauvegarde du congé');
-            }
-
-            // Gérer les pièces jointes après avoir sauvegardé la demande
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $path = $file->store('leave_attachments');
-                    $leave->attachments()->create([
-                        'filename' => $path,
-                        'original_filename' => $file->getClientOriginalName(),
-                        'mime_type' => $file->getMimeType(),
-                        'size' => $file->getSize()
-                    ]);
-                }
-            }
-
-            DB::commit();
-            
-            return redirect()->route('leaves.index')
-                ->with('success', 'Votre demande de congé a été soumise avec succès.');
-                
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withInput()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
-        }
-    }
-
-      public function storeENCOURS(LeaveRequest $request)
-    {
-        try {
-
-             // Validation manuelle pour déboguer
-            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                'start_date' => 'required|date',
-                'end_date' => 'required|date|after_or_equal:start_date',
-                'type' => 'required|in:annual,sick,unpaid,other',
-                'reason' => 'required|string|min:10|max:500'
-            ]);
-            
-            if ($validator->fails()) {
-                dd('Validation errors:', $validator->errors()->all());
-            }
-            
-            // DB::beginTransaction();
-            
-            // $validated = $request->validated();
-
-            DB::beginTransaction();
-            
-            $validated = $request->validated();
-            //  dd($validated); // Ajoutez cette ligne temporairement
-            Log::info('Données validées:', $validated);
-
-            // Calcul de la durée en jours (en excluant les weekends)
-            $start = \Carbon\Carbon::parse($validated['start_date']);
-            $end = \Carbon\Carbon::parse($validated['end_date']);
-            $duration = 0;
-
-            for ($date = $start; $date->lte($end); $date->addDay()) {
-                if (!$date->isWeekend()) {
-                    $duration++;
-                }
-            }
-
-            Log::info('Durée calculée:', ['duration' => $duration]);
-
-            $leave = new Leave($validated);
-            $leave->user_id = auth()->id();
-            $leave->status = 'pending';
-            $leave->duration = $duration;
-            
-            if (!$leave->save()) {
-                Log::error('Erreur lors de la sauvegarde:', $leave->getAttributes());
-                throw new \Exception('Erreur lors de la sauvegarde du congé');
-            }
-
-            Log::info('Congé enregistré avec succès:', ['id' => $leave->id]);
-
-            // Gérer les pièces jointes après avoir sauvegardé la demande
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $path = $file->store('leave_attachments');
-                    $leave->attachments()->create([
-                        'filename' => $path,
-                        'original_filename' => $file->getClientOriginalName(),
-                        'mime_type' => $file->getMimeType(),
-                        'size' => $file->getSize()
-                    ]);
-                }
-                Log::info('Pièces jointes enregistrées');
-            }
-
-            DB::commit();
-            
-            return redirect()->route('leaves.index')
-                ->with('success', 'Votre demande de congé a été soumise avec succès.');
-                
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Erreur lors de l\'enregistrement:', ['error' => $e->getMessage()]);
-            return back()->withInput()->with('error', 'Une erreur est survenue lors de l\'enregistrement de votre demande.');
-        }
-    }
-
-    public function storeOLD(LeaveRequest  $request)
-    {
-        // $validated = $request->validate([
-        //     'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
-        //     'start_date' => 'required|date',
-        //     'end_date' => 'required|date|after_or_equal:start_date',
-        //     'reason' => 'required|string|max:500',
-        //     'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240'
-        // ]);
-
-        $validated = $request->validated();
-
-        // Calcul de la durée en jours (en excluant les weekends)
-        $start = \Carbon\Carbon::parse($validated['start_date']);
-        $end = \Carbon\Carbon::parse($validated['end_date']);
-        $duration = 0;
-
-        for ($date = $start; $date->lte($end); $date->addDay()) {
-            if (!$date->isWeekend()) {
-                $duration++;
-            }
-        }
-
-        $leave = new Leave($validated);
-        $leave->user_id = auth()->id();
-        $leave->status = 'pending';
-        $leave->duration = $duration;
-        $leave->save();
-
-        // Gérer les pièces jointes après avoir sauvegardé la demande
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('leave_attachments');
-                $leave->attachments()->create([
-                    'filename' => $path,
-                    'original_filename' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize()
-                ]);
-            }
-        }
-
-        return redirect()->route('leaves.index')
-            ->with('success', 'Votre demande de congé a été soumise avec succès.');
-    }
-
     /**
      * Affiche les détails d'une demande de congé
      */
 
-     public function show($id)
+    public function show($id)
     {
         \Log::info('Attempting to show leave:', ['id' => $id]);
 
@@ -403,65 +225,6 @@ class LeaveController extends Controller
             \Log::error('Unauthorized access:', [
                 'user_id' => auth()->id(),
                 'leave_id' => $id
-            ]);
-            abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
-        } catch (\Exception $e) {
-            \Log::error('Error showing leave:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            abort(500, 'Une erreur est survenue lors de l\'affichage de la demande');
-        }
-    }
-    
-    public function showOLD(Leave $leave)
-    {
-        $this->authorize('view', $leave);
-        $leave->load(['user.department', 'attachments', 'approver']);
-         dd($leave);
-        return view('leaves.show', compact('leave'));
-    }
-
-    
-
-    public function showNEW(Leave $leave)
-    {
-        if (!$leave || !$leave->exists) {
-            \Log::error('Leave not found');
-            abort(404, 'Demande de congé non trouvée');
-        }
-
-        \Log::info('Showing leave:', [
-            'leave_id' => $leave->id,
-            'user_id' => $leave->user_id,
-            'auth_user_id' => auth()->id()
-        ]);
-
-         dd($leave);
-
-        try {
-            $this->authorize('view', $leave);
-            
-            // Eager load all necessary relationships
-            $leave = Leave::with(['user.department', 'attachments', 'approver'])
-                         ->findOrFail($leave->id);
-            
-            \Log::info('Leave loaded:', [
-                'leave' => $leave->toArray(),
-                'user' => $leave->user ? $leave->user->toArray() : null,
-                'department' => $leave->user && $leave->user->department ? $leave->user->department->toArray() : null
-            ]);
-
-             dd($leave);
-
-            return view('leaves.show', compact('leave'));
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            \Log::error('Leave not found:', ['id' => $leave->id]);
-            abort(404, 'Demande de congé non trouvée');
-        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
-            \Log::error('Unauthorized access:', [
-                'user_id' => auth()->id(),
-                'leave_id' => $leave->id
             ]);
             abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
         } catch (\Exception $e) {
@@ -589,8 +352,51 @@ class LeaveController extends Controller
     /**
      * Annule une demande de congé
      */
-    public function destroy(Leave $leave)
+
+    public function destroy($id)
     {
+        try {
+            $leave = Leave::with(['user.department', 'attachments', 'approver'])
+                         ->findOrFail($id);
+
+            $this->authorize('delete', $leave);
+
+            if ($leave->status !== 'pending') {
+                return back()->with('error', 'Vous ne pouvez supprimer que les demandes en attente.');
+            }
+
+            \Log::info('Suppression de la demande:', [
+                'leave_id' => $leave->id,
+                'user_id' => auth()->id()
+            ]);
+
+            // Supprimer les pièces jointes si elles existent
+            if ($leave->attachments->count() > 0) {
+                foreach ($leave->attachments as $attachment) {
+                    Storage::delete($attachment->filename);
+                    $attachment->delete();
+                }
+            }
+
+            // Supprimer la demande
+            $leave->delete();
+
+            return redirect()->route('leaves.index')
+                ->with('success', 'La demande de congé a été supprimée.');
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la suppression:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Une erreur est survenue lors de la suppression de la demande.');
+        }
+    }
+
+    public function destroyOLD($id)
+    {
+        $leave = Leave::with(['user.department', 'attachments', 'approver'])
+                         ->findOrFail($id);
+
         $this->authorize('delete', $leave);
 
         if ($leave->status !== 'pending') {
@@ -613,21 +419,137 @@ class LeaveController extends Controller
     /**
      * Affiche le formulaire d'édition d'une demande de congé
      */
-    public function edit(Leave $leave)
+     public function edit($id)
     {
-        $this->authorize('update', $leave);
 
-        if ($leave->status !== 'pending') {
-            return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+        $leave = Leave::with(['user.department', 'attachments', 'approver'])
+                         ->findOrFail($id);
+
+        \Log::info('Tentative d\'édition de la demande:', [
+            'leave_id' => $leave->id,
+            'user_id' => auth()->id(),
+            'leave_status' => $leave->status
+        ]);
+
+        try {
+            $this->authorize('update', $leave);
+
+            if ($leave->status !== 'pending') {
+                \Log::warning('Tentative de modification d\'une demande non en attente', [
+                    'leave_id' => $leave->id,
+                    'status' => $leave->status
+                ]);
+                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+            }
+
+            \Log::info('Affichage du formulaire d\'édition', [
+                'leave' => $leave->toArray()
+            ]);
+
+            return view('leaves.edit', compact('leave'));
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'édition:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            abort(403, 'Vous n\'êtes pas autorisé à modifier cette demande.');
         }
-
-        return view('leaves.edit', compact('leave'));
     }
 
     /**
      * Met à jour une demande de congé
      */
-    public function update(Request $request, Leave $leave)
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $leave = Leave::findOrFail($id);
+
+            \Log::info('Tentative de mise à jour de la demande:', [
+                'leave_id' => $leave->id,
+                'current_status' => $leave->status,
+                'user_id' => auth()->id()
+            ]);
+            
+            $this->authorize('update', $leave);
+
+            // Recharger la demande depuis la base de données pour avoir les données à jour
+            $leave = Leave::findOrFail($leave->id);
+            
+            \Log::info('Statut de la demande après rechargement:', [
+                'leave_id' => $leave->id,
+                'status' => $leave->status
+            ]);
+
+            if ($leave->status !== 'pending') {
+                \Log::warning('Tentative de modification d\'une demande non en attente:', [
+                    'leave_id' => $leave->id,
+                    'status' => $leave->status
+                ]);
+                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+            }
+
+            $validated = $request->validate([
+                'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'reason' => 'required|string|min:10',
+                'attachments.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
+            ]);
+
+            // Calculer la durée en jours ouvrables
+            $start = Carbon::parse($validated['start_date']);
+            $end = Carbon::parse($validated['end_date']);
+            $duration = 0;
+
+            for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+                if (!$date->isWeekend()) {
+                    $duration++;
+                }
+            }
+
+            DB::beginTransaction();
+
+            $leave->update([
+                'type' => $validated['type'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'duration' => $duration,
+                'reason' => $validated['reason']
+            ]);
+
+            // Gérer les pièces jointes
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('leave_attachments');
+                    $leave->attachments()->create([
+                        'filename' => $path,
+                        'original_filename' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getMimeType(),
+                        'size' => $file->getSize()
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('leaves.show', $leave)
+                ->with('success', 'Demande de congé mise à jour avec succès.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Erreur lors de la mise à jour:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->withInput()
+                ->with('error', 'Une erreur est survenue lors de la mise à jour de la demande : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Met à jour une demande de congé
+     */
+    public function updateOLD(Request $request, Leave $leave)
     {
         $this->authorize('update', $leave);
 

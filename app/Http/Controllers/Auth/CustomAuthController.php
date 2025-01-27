@@ -29,8 +29,10 @@ class CustomAuthController extends Controller
 
             // Redirection selon le rôle
             $user = Auth::user();
-            if ($user->isAdmin()) {
-                return redirect()->intended(route('admin.dashboard'));
+            if ($user->isAdmin() || $user->isHR()) {
+                return redirect()->intended(route('admin.stats'));
+            } elseif ($user->isDepartmentHead()) {
+                return redirect()->intended(route('leaves.pending'));
             } elseif ($user->isManager()) {
                 return redirect()->intended(route('leaves.pending'));
             } else {

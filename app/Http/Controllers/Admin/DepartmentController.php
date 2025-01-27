@@ -63,15 +63,6 @@ class DepartmentController extends Controller
         return view('admin.departments.edit', compact('department', 'departmentHeads'));
     }
 
-     public function editOLD(Department $department)
-    {
-        $users = User::where('role', 'manager')
-            ->orderBy('name')
-            ->get();
-
-        return view('admin.departments.edit', compact('department', 'users'));
-    }
-
     public function update(Request $request, Department $department)
     {
         $this->authorize('manage-departments');
@@ -89,27 +80,6 @@ class DepartmentController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur est survenue lors de la mise à jour du département.');
         }
-    }
-
-     public function showOLD(Department $department)
-    {
-        $department->load(['teams.manager', 'teams.members']);
-        
-        // Debug logging
-        foreach ($department->teams as $team) {
-            \Log::info("Team {$team->name} members count: " . $team->members->count());
-            \Log::info("Team {$team->name} members: " . $team->members->pluck('name')->join(', '));
-        }
-        
-        $managers = $department->users()
-            ->where('role', 'manager')
-            ->orderBy('name')
-            ->get();
-
-        return view('admin.departments.show', [
-            'department' => $department,
-            'managers' => $managers
-        ]);
     }
 
     public function show(Department $department)
@@ -138,20 +108,6 @@ class DepartmentController extends Controller
         ]);
     }
 
-    // public function showOLD(Department $department)
-    // {
-    //     $department->load(['teams.manager', 'teams.members']);
-        
-    //     $managers = $department->users()
-    //         ->where('role', 'manager')
-    //         ->orderBy('name')
-    //         ->get();
-
-    //     return view('admin.departments.show', [
-    //         'department' => $department,
-    //         'managers' => $managers
-    //     ]);
-    // }
 
     public function destroy(Department $department)
     {

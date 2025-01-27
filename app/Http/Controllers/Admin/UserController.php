@@ -66,7 +66,7 @@ class UserController extends Controller
                 User::ROLE_DEPARTMENT_HEAD
             ])],
             'department_id' => 'required|exists:departments,id',
-            'team_id' => 'nullable|exists:teams,id',
+            // 'team_id' => 'nullable|exists:teams,id',
             'annual_leave_days' => 'required|integer|min:0',
             'sick_leave_days' => 'required|integer|min:0',
         ]);
@@ -112,7 +112,7 @@ class UserController extends Controller
                 User::ROLE_DEPARTMENT_HEAD
             ])],
             'department_id' => 'required|exists:departments,id',
-            'team_id' => 'nullable|exists:teams,id',
+            // 'team_id' => 'nullable|exists:teams,id',
             'annual_leave_days' => 'required|integer|min:0',
             'sick_leave_days' => 'required|integer|min:0',
         ]);

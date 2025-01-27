@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\HelpController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,9 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [CustomAuthController::class, 'register']);
     Route::get('forgot-password', [CustomAuthController::class, 'showPasswordResetForm'])->name('password.request');
 });
+
+// Page d'aide
+Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
 // Routes protégées par l'authentification et la vérification email
 Route::middleware(['auth', 'verify.email'])->group(function () {
@@ -58,16 +62,17 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     });
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/', function () {
-            return view('dashboard');
-        })->name('dashboard');
+        // Route::get('/', function () {
+        //     return view('leaves.index');
+        // })->name('Leaves.index');
+        Route::get('/', [LeaveController::class, 'index'])->name('leaves.index');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
         // Routes pour les congés
-        Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
+        //Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
         Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
         Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
         Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');

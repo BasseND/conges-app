@@ -33,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'department_id',
         'annual_leave_days',
         'sick_leave_days'
+        //'team_id'
     ];
 
     /**

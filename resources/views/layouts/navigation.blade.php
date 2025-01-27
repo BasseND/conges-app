@@ -26,7 +26,7 @@
                    
 
                     @auth
-                        @if (auth()->user()->role === 'admin')
+                        @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
                             <x-nav-link :href="route('admin.stats.index')" :active="request()->routeIs('admin.stats.*')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
@@ -55,6 +55,9 @@
                     <x-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
                         {{ __('Mes congés') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
+    {{ __('Aide') }}
+</x-nav-link>
                     
                 </div>
             </div>

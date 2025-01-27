@@ -76,13 +76,14 @@
                                 </select>
                             </div>
 
+                            
+                         </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="annual_leave_days" :value="__('Jours de congés annuels')" />
                                 <x-text-input id="annual_leave_days" class="block mt-1 w-full" type="number" name="annual_leave_days" :value="old('annual_leave_days', 25)" required />
                                 <x-input-error :messages="$errors->get('annual_leave_days')" class="mt-2" />
                             </div>
-                         </div>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                             <div>
                                 <x-input-label for="sick_leave_days" :value="__('Jours de congés maladie')" />
@@ -92,7 +93,10 @@
                          </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ml-4">
+                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('Annuler') }}
+                            </a>
+                            <x-primary-button class="bg-green-500 hover:bg-green-700 focus:bg-green-700 focus:ring-green-500">
                                 {{ __('Créer') }}
                             </x-primary-button>
                         </div>
@@ -165,15 +169,15 @@
             
             // Attacher l'événement change au select département
             const departmentSelect = document.getElementById('department_id');
-            departmentSelect.addEventListener('change', function() {
-                loadTeams(this.value);
-            });
+            // departmentSelect.addEventListener('change', function() {
+            //     loadTeams(this.value);
+            // });
 
             // Charger les équipes si un département est déjà sélectionné
-            if (departmentSelect.value) {
-                console.log('Département pré-sélectionné:', departmentSelect.value);
-                loadTeams(departmentSelect.value);
-            }
+            // if (departmentSelect.value) {
+            //     console.log('Département pré-sélectionné:', departmentSelect.value);
+            //     loadTeams(departmentSelect.value);
+            // }
         });
     </script>
 </x-app-layout>

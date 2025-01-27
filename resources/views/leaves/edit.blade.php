@@ -13,6 +13,12 @@
                         @csrf
                         @method('PUT')
 
+                        @if (session('error'))
+                            <div class="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded relative mb-4" role="alert">
+                                <p>{{ session('error') }}</p>
+                            </div>
+                        @endif
+
                         <div>
                             <x-input-label for="type" :value="__('Type de congé')" />
                             <select id="type" name="type" class="block mt-1 w-full rounded-md border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -25,7 +31,7 @@
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <x-input-label for="start_date" :value="__('Date de début')" />
                                 <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block w-full" :value="old('start_date', $leave->start_date)" required />
@@ -35,6 +41,22 @@
                             <div>
                                 <x-input-label for="end_date" :value="__('Date de fin')" />
                                 <x-text-input id="end_date" name="end_date" type="date" class="mt-1 block w-full" :value="old('end_date', $leave->end_date)" required />
+                                <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
+                            </div>
+                        </div> --}}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <x-input-label for="start_date" :value="__('Date de début')" />
+                                <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block w-full" 
+                                    :value="old('start_date', $leave->start_date ? $leave->start_date->format('Y-m-d') : '')" required />
+                                <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="end_date" :value="__('Date de fin')" />
+                                <x-text-input id="end_date" name="end_date" type="date" class="mt-1 block w-full" 
+                                    :value="old('end_date', $leave->end_date ? $leave->end_date->format('Y-m-d') : '')" required />
                                 <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
                             </div>
                         </div>
@@ -72,4 +94,64 @@
             </div>
         </div>
     </div>
+
+     @push('scripts')
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+        // Configuration de la date max : 1 an à partir d'aujourd'hui
+        const oneYearFromNow = new Date();
+        oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+        // Fonction qui désactive les week-ends (retourne true si la date doit être bloquée)
+        // Documentation Flatpickr: https://flatpickr.js.org/options/#disable
+        function disableWeekends(date) {
+            // day = 0 (Dimanche), day = 6 (Samedi)
+            return (date.getDay() === 0 || date.getDay() === 6);
+        }
+
+        // Initialisation pour la date de début
+        flatpickr("#start_date", {
+            locale: "fr",               // Langue (optionnelle)
+            dateFormat: "Y-m-d",         // Format de date (ex: 2025-01-28)
+            minDate: false,           // Pas avant aujourd'hui (optionnel)
+            maxDate: oneYearFromNow,    // Pas au-delà d'un an
+            disable: [ disableWeekends ], // Désactive les week-ends via callback
+            onChange: function(selectedDates, dateStr) {
+                // Récupérer l'instance du datepicker de la date de fin
+                const endPicker = document.querySelector('#end_date')._flatpickr;
+                if (endPicker) {
+                    // Forcer la "minDate" du champ de fin à la date sélectionnée
+                    endPicker.set('minDate', dateStr);
+                    // Si la date de fin est avant la nouvelle date de début, on la réinitialise
+                    if (endPicker.selectedDates[0] < selectedDates[0]) {
+                        endPicker.setDate(dateStr);
+                    }
+                }
+            }
+        });
+
+        // Initialisation pour la date de fin
+        flatpickr("#end_date", {
+            locale: "fr",
+            dateFormat: "Y-m-d",
+            minDate: false,
+            maxDate: oneYearFromNow,
+            disable: [ disableWeekends ],
+            onChange: function(selectedDates, dateStr) {
+                // Récupérer l'instance du datepicker de la date de début
+                const startPicker = document.querySelector('#start_date')._flatpickr;
+                if (startPicker && selectedDates[0] < startPicker.selectedDates[0]) {
+                    // Si l’utilisateur choisit une date de fin avant la date de début,
+                    // on aligne la fin sur la date de début.
+                    startPicker.setDate(dateStr);
+                }
+            }
+        });
+
+
+    });
+    </script>
+    @endpush
 </x-app-layout>
