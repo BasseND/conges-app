@@ -9,7 +9,42 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h2 class="text-lg font-semibold mb-4">Comment utiliser l'application de gestion des congés</h2>
+
+                     <h2 class="text-lg font-semibold mb-4">Comment utiliser l'application de gestion des congés</h2>
+
+                        <div class="w-full px-5">
+                            <ul>
+                                <li class="flex pb-10 mb-8 border-b border-gray-200 dark:border-gray-700">
+                                <div class="mr-8">
+                                    <span class="flex justify-center items-center w-14 h-14 bg-blue-200/50 dark:bg-blue-600/30 text-lg font-bold rounded-full text-blue-600 dark:text-blue-300">1</span>
+                                </div>
+                                <div class="">
+                                    <h3 class="mb-2 text-lg font-bold text-gray-700 dark:text-gray-300">Create Your Account</h3>
+                                    <p class="text-lg text-gray-500 dark:text-gray-400">Sign up quickly and easily to access our full range of features.</p>
+                                </div>
+                                </li>
+                                <li class="flex pb-10 mb-8 border-b border-gray-200 dark:border-gray-700">
+                                <div class="mr-8">
+                                    <span class="flex justify-center items-center w-14 h-14 bg-blue-200/50 dark:bg-blue-600/30 text-lg font-bold rounded-full text-blue-600 dark:text-blue-300">2</span>
+                                </div>
+                                <div class="">
+                                    <h3 class="mb-2 text-lg font-bold text-gray-700 dark:text-gray-300">Personalize Your Experience</h3>
+                                    <p class="text-lg text-gray-500 dark:text-gray-400">Tailor tools and settings to fit your needs and preferences.</p>
+                                </div>
+                                </li>
+                                <li class="flex pb-10 border-b border-gray-200 dark:border-gray-700">
+                                <div class="mr-8">
+                                    <span class="flex justify-center items-center w-14 h-14 bg-blue-200/50 dark:bg-blue-600/30 text-lg font-bold rounded-full text-blue-600 dark:text-blue-300">3</span>
+                                </div>
+                                <div class="">
+                                    <h3 class="mb-2 text-lg font-bold text-gray-700 dark:text-gray-300">Collaborate with Your Team</h3>
+                                    <p class="text-lg text-gray-500 dark:text-gray-400">Seamlessly work together, sharing insights and tools for better productivity.</p>
+                                </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                   
                     
                     <div class="space-y-6">
                         <div class="mb-6">

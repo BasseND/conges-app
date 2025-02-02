@@ -32,9 +32,9 @@ class CustomAuthController extends Controller
             if ($user->isAdmin() || $user->isHR()) {
                 return redirect()->intended(route('admin.stats'));
             } elseif ($user->isDepartmentHead()) {
-                return redirect()->intended(route('leaves.pending'));
+                return redirect()->intended(route('leaves.index'));
             } elseif ($user->isManager()) {
-                return redirect()->intended(route('leaves.pending'));
+                return redirect()->intended(route('leaves.index'));
             } else {
                 return redirect()->intended(route('leaves.index'));
             }

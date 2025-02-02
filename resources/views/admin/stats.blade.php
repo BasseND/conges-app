@@ -12,7 +12,7 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Statistiques des congés</h3>
-                        <div class="space-y-4">
+                        {{-- <div class="space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 dark:text-gray-400">En attente</span>
                                 <span class="text-yellow-600 dark:text-yellow-400 font-semibold">{{ $stats['pending'] }}</span>
@@ -25,9 +25,16 @@
                                 <span class="text-gray-600 dark:text-gray-400">Rejetés</span>
                                 <span class="text-red-600 dark:text-red-400 font-semibold">{{ $stats['rejected'] }}</span>
                             </div>
+                        </div> --}}
+
+                        <div class="chart-container">
+                            <canvas id="congesChart"></canvas>
                         </div>
                     </div>
                 </div>
+
+
+                
 
                 <!-- Statistiques des utilisateurs -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -158,6 +165,40 @@
      @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+
+        // Données pour le graphique des congés
+        const congesData = @json($stats);
+        const congesChart = new Chart(
+            document.getElementById('congesChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: ['En attente', 'Approuvés', 'Rejetés'],
+                    datasets: [{
+                        data: [
+                            congesData.pending, 
+                            congesData.approved, 
+                            congesData.rejected
+                        ],
+                        backgroundColor: [
+                            'rgb(132 108 249)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgb(7 182 213)'
+                        ],
+                        borderColor: [
+                            'rgb(132 108 249)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgb(7 182 213)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            }
+        );
         // Données pour le graphique par département
         const departmentData = @json($departmentStats);
         const departmentChart = new Chart(
