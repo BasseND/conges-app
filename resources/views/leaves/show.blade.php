@@ -20,7 +20,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg dark:bg-gray-800">
                 <div class="px-4 py-5 sm:px-6">
 
                     @if(session('success'))
@@ -29,7 +29,7 @@
                         </div>
                     @endif
 
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                         Demande de {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
                     </h3>
                     @php
@@ -40,7 +40,7 @@
                             'end_date' => $leave->end_date
                         ]);
                     @endphp
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">    
                         @if($leave->created_at)
                             Soumise le {{ $leave->created_at->format('d/m/Y à H:i') }}
                         @else
@@ -50,9 +50,9 @@
                 </div>
                 <div class="border-t border-gray-200">
                     <dl>    
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Type de congé</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Type de congé</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                     @if($leave->type === 'annual') bg-green-100 text-green-800
                                     @elseif($leave->type === 'sick') bg-red-100 text-red-800
@@ -62,9 +62,9 @@
                                 </span>
                             </dd>
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Période</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Période</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 @if($leave->start_date && $leave->end_date)
                                     Du {{ $leave->start_date->format('d/m/Y') }} au {{ $leave->end_date->format('d/m/Y') }}
                                     ({{ $leave->duration_days }} jour(s))
@@ -73,21 +73,21 @@
                                 @endif
                             </dd>
                         </div>
-                        <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Demandeur</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Demandeur</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu' }}
                             </dd>
                         </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Département</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Département</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 {{ $leave->user && $leave->user->department ? $leave->user->department->name : 'Non assigné' }}
                             </dd>
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Statut</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Statut</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 {{-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                     @if($leave->status === 'approved') bg-green-100 text-green-800
                                     @elseif($leave->status === 'rejected') bg-red-100 text-red-800
@@ -116,32 +116,32 @@
                                     @endswitch
                                 </div>
                         </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Motif</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Motif</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 {{ $leave->reason }}
                             </dd>
                         </div>
                         @if($leave->status === 'rejected' && $leave->rejection_reason)
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Motif du refus</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-white">Motif du refus</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                     {{ $leave->rejection_reason }}
                                 </dd>
                             </div>
                         @endif
                         @if($leave->approved_by)
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Traité par</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-white">Traité par</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                     {{ $leave->approver->name }} le {{ $leave->approved_at->format('d/m/Y à H:i') }}
                                 </dd>
                             </div>
                         @endif
                         @if($leave->attachments->count() > 0)
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Pièces jointes</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-white">Pièces jointes</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                     <div class="mt-2 space-y-2">
                                         @foreach($leave->attachments as $attachment)
                                             <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -187,7 +187,7 @@
 
                         
                         <div class="flex justify-end space-x-3">
-                            <form action="{{ route('leaves.reject', $leave) }}" method="POST" class="inline">
+                            <!-- <form action="{{ route('leaves.reject', $leave) }}" method="POST" class="inline">
                                 @csrf
                                 @method('PUT')
                                 <div class="flex items-center space-x-3">
@@ -205,7 +205,20 @@
                                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="return confirm('Êtes-vous sûr de vouloir approuver cette demande ?')">
                                     Approuver
                                 </button>
-                            </form>
+                            </form> -->
+
+                            <button onclick="showApproveModal('{{ route('manager.leaves.approve', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Approuver
+                            </button>
+                            <button onclick="showRejectModal('{{ route('manager.leaves.reject', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Refuser
+                            </button>
                         </div>
                     </div>
                 @endif
@@ -213,4 +226,57 @@
             </div>
         </div>
     </div>
+
+    <x-modals.approve-leave :action="''" />
+    <x-modals.reject-leave :action="''" />
+
+    @push('scripts')
+    <script>
+        function showApproveModal(action) {
+            const modal = document.getElementById('approveModal');
+            const form = document.getElementById('approveForm');
+            form.action = action;
+            modal.classList.remove('hidden');
+        }
+
+        function hideApproveModal() {
+            const modal = document.getElementById('approveModal');
+            modal.classList.add('hidden');
+        }
+
+        function showRejectModal(action) {
+            const modal = document.getElementById('rejectModal');
+            const form = document.getElementById('rejectForm');
+            form.action = action;
+            modal.classList.remove('hidden');
+        }
+
+        function hideRejectModal() {
+            const modal = document.getElementById('rejectModal');
+            modal.classList.add('hidden');
+            // Réinitialiser le formulaire
+            document.getElementById('rejection_reason').value = '';
+        }
+
+        // Fermer les modales avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideApproveModal();
+                hideRejectModal();
+            }
+        });
+
+        // Fermer les modales en cliquant en dehors
+        window.onclick = function(event) {
+            const approveModal = document.getElementById('approveModal');
+            const rejectModal = document.getElementById('rejectModal');
+            if (event.target === approveModal) {
+                hideApproveModal();
+            }
+            if (event.target === rejectModal) {
+                hideRejectModal();
+            }
+        }
+    </script>
+    @endpush 
 </x-app-layout>

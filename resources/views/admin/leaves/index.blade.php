@@ -207,11 +207,15 @@
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($leave->status === 'pending' && auth()->user()->canManageUserLeaves($leave->user))
-                                                <button onclick="showApproveModal('{{ route('manager.leaves.approve', $leave) }}')" class="text-green-600 hover:text-green-900 mr-3">
-                                                    Approuver
+                                                <button title="Approuver" onclick="showApproveModal('{{ route('manager.leaves.approve', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-green-600 dark:bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
+                                                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
                                                 </button>
-                                                <button onclick="showRejectModal('{{ route('manager.leaves.reject', $leave) }}')" class="text-red-600 hover:text-red-900">
-                                                    Rejeter
+                                                <button title="Rejeter" onclick="showRejectModal('{{ route('manager.leaves.reject', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-red-600 dark:bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
                                                 </button>
                                             @else
                                                 @if($leave->status === 'approved')

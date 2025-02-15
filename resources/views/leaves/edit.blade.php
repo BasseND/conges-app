@@ -87,7 +87,9 @@
                             <a href="{{ route('leaves.show', $leave) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 {{ __('Annuler') }}
                             </a>
-                            <x-primary-button>{{ __('Mettre à jour') }}</x-primary-button>
+                            <x-primary-button class="bg-green-600 hover:bg-green-700 focus:bg-green-700 focus:ring-green-500">
+                                {{ __('Mettre à jour') }}
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
@@ -95,63 +97,65 @@
         </div>
     </div>
 
+    
+
      @push('scripts')
    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
 
-        // Configuration de la date max : 1 an à partir d'aujourd'hui
-        const oneYearFromNow = new Date();
-        oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+            // Configuration de la date max : 1 an à partir d'aujourd'hui
+            const oneYearFromNow = new Date();
+            oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
-        // Fonction qui désactive les week-ends (retourne true si la date doit être bloquée)
-        // Documentation Flatpickr: https://flatpickr.js.org/options/#disable
-        function disableWeekends(date) {
-            // day = 0 (Dimanche), day = 6 (Samedi)
-            return (date.getDay() === 0 || date.getDay() === 6);
-        }
+            // Fonction qui désactive les week-ends (retourne true si la date doit être bloquée)
+            // Documentation Flatpickr: https://flatpickr.js.org/options/#disable
+            function disableWeekends(date) {
+                // day = 0 (Dimanche), day = 6 (Samedi)
+                return (date.getDay() === 0 || date.getDay() === 6);
+            }
 
-        // Initialisation pour la date de début
-        flatpickr("#start_date", {
-            locale: "fr",               // Langue (optionnelle)
-            dateFormat: "Y-m-d",         // Format de date (ex: 2025-01-28)
-            minDate: false,           // Pas avant aujourd'hui (optionnel)
-            maxDate: oneYearFromNow,    // Pas au-delà d'un an
-            disable: [ disableWeekends ], // Désactive les week-ends via callback
-            onChange: function(selectedDates, dateStr) {
-                // Récupérer l'instance du datepicker de la date de fin
-                const endPicker = document.querySelector('#end_date')._flatpickr;
-                if (endPicker) {
-                    // Forcer la "minDate" du champ de fin à la date sélectionnée
-                    endPicker.set('minDate', dateStr);
-                    // Si la date de fin est avant la nouvelle date de début, on la réinitialise
-                    if (endPicker.selectedDates[0] < selectedDates[0]) {
-                        endPicker.setDate(dateStr);
+            // Initialisation pour la date de début
+            flatpickr("#start_date", {
+                locale: "fr",               // Langue (optionnelle)
+                dateFormat: "Y-m-d",         // Format de date (ex: 2025-01-28)
+                minDate: false,           // Pas avant aujourd'hui (optionnel)
+                maxDate: oneYearFromNow,    // Pas au-delà d'un an
+                disable: [ disableWeekends ], // Désactive les week-ends via callback
+                onChange: function(selectedDates, dateStr) {
+                    // Récupérer l'instance du datepicker de la date de fin
+                    const endPicker = document.querySelector('#end_date')._flatpickr;
+                    if (endPicker) {
+                        // Forcer la "minDate" du champ de fin à la date sélectionnée
+                        endPicker.set('minDate', dateStr);
+                        // Si la date de fin est avant la nouvelle date de début, on la réinitialise
+                        if (endPicker.selectedDates[0] < selectedDates[0]) {
+                            endPicker.setDate(dateStr);
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        // Initialisation pour la date de fin
-        flatpickr("#end_date", {
-            locale: "fr",
-            dateFormat: "Y-m-d",
-            minDate: false,
-            maxDate: oneYearFromNow,
-            disable: [ disableWeekends ],
-            onChange: function(selectedDates, dateStr) {
-                // Récupérer l'instance du datepicker de la date de début
-                const startPicker = document.querySelector('#start_date')._flatpickr;
-                if (startPicker && selectedDates[0] < startPicker.selectedDates[0]) {
-                    // Si l’utilisateur choisit une date de fin avant la date de début,
-                    // on aligne la fin sur la date de début.
-                    startPicker.setDate(dateStr);
+            // Initialisation pour la date de fin
+            flatpickr("#end_date", {
+                locale: "fr",
+                dateFormat: "Y-m-d",
+                minDate: false,
+                maxDate: oneYearFromNow,
+                disable: [ disableWeekends ],
+                onChange: function(selectedDates, dateStr) {
+                    // Récupérer l'instance du datepicker de la date de début
+                    const startPicker = document.querySelector('#start_date')._flatpickr;
+                    if (startPicker && selectedDates[0] < startPicker.selectedDates[0]) {
+                        // Si l’utilisateur choisit une date de fin avant la date de début,
+                        // on aligne la fin sur la date de début.
+                        startPicker.setDate(dateStr);
+                    }
                 }
-            }
+            });
+
+
         });
-
-
-    });
-    </script>
+        </script>
     @endpush
 </x-app-layout>
