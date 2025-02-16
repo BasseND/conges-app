@@ -87,10 +87,16 @@ class LeaveController extends Controller
      */
     public function reject(Leave $leave)
     {
+
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|min:10|max:255',
+       ]);
+       
         $leave->update([
             'status' => 'rejected',
             'processed_at' => now(),
-            'processed_by' => auth()->id()
+            'processed_by' => auth()->id(),
+            'rejection_reason' => $validated['rejection_reason']
         ]);
 
         return redirect()->route('admin.leaves.index')

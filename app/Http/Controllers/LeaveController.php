@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
+use App\Mail\LeaveStatusNotification;
+use Illuminate\Support\Facades\Mail;
 
 
 class LeaveController extends Controller

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\TestMailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -106,9 +107,6 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
             // Redirection du tableau de bord vers les statistiques
             Route::redirect('/', '/admin/stats')->name('dashboard');
-
-            // Route de test
-            Route::get('/test-teams/{department}', [TeamController::class, 'getTeamsByDepartment']);
 
             // Routes pour les congés
             Route::prefix('leaves')->name('leaves.')->group(function () {

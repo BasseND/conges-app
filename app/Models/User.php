@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -171,5 +172,14 @@ class User extends Authenticatable implements MustVerifyEmail
             self::ROLE_HR => 'RH',
             self::ROLE_DEPARTMENT_HEAD => 'Chef de Département',
         ];
+    }
+
+    public function routeNotificationForMail()
+    {
+        Log::info('routeNotificationForMail appelé', [
+            'user_id' => $this->id,
+            'email' => $this->email
+        ]);
+        return $this->email;
     }
 }

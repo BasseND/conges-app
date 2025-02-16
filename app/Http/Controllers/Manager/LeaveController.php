@@ -7,6 +7,10 @@ use App\Models\Leave;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Mail\LeaveStatusNotification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
 {
@@ -137,7 +141,7 @@ class LeaveController extends Controller
         return back()->with('success', 'La demande de congé a été approuvée.');
     }
 
-    public function reject(Leave $leave)
+    public function rejectOLD(Leave $leave)
     {
         if (!auth()->user()->canManageUserLeaves($leave->user)) {
             abort(403, 'Vous n\'avez pas le droit de gérer les congés de cet employé.');
@@ -154,5 +158,49 @@ class LeaveController extends Controller
         ]);
 
         return back()->with('success', 'La demande de congé a été rejetée.');
+    }
+
+    public function reject(Request $request, Leave $leave)
+    {
+
+        if (!auth()->user()->canManageUserLeaves($leave->user)) {
+            abort(403, 'Vous n\'avez pas le droit de gérer les congés de cet employé.');
+        }
+        
+        $validated = $request->validate([
+             'rejection_reason' => 'required|string|min:10|max:255',
+        ]);
+
+        try {
+            Log::info('Début du rejet', ['leave_id' => $leave->id]);
+
+            // Ajouter ce log pour vérifier la réception des données
+            Log::debug('Données de rejet reçues', [
+                'rejection_reason' => $validated['rejection_reason'],
+                'leave_id' => $leave->id
+            ]);
+
+            $leave->update([
+                'status' => 'rejected',
+                'rejection_reason' => $validated['rejection_reason'],
+                'processed_by' => auth()->id(),
+                'processed_at' => now()
+            ]);
+
+            // Envoi de l'email de notification
+            //Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
+
+            Log::info('Rejet terminé avec succès', ['leave_id' => $leave->id]);
+
+            return back()->with('success', 'La demande de congé a été rejetée.');
+
+            
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du rejet', [
+                'leave_id' => $leave->id,
+                'error' => $e->getMessage()
+            ]);
+            return back()->withErrors(['error' => 'Une erreur est survenue lors du rejet.']);
+        }
     }
 }

@@ -17,7 +17,7 @@
                             <div class="mt-2">
                                 <textarea name="rejection_reason" id="rejection_reason" rows="4" 
                                     class="block w-full rounded-md dark:bg-gray-700 dark:border-gray-600 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('rejection_reason') border-red-500 @enderror"
-                                    placeholder="Veuillez indiquer le motif du rejet..." required minlength="10"></textarea>
+                                    placeholder="Veuillez indiquer le motif du rejet..." required minlength="10" maxlength="255"></textarea>
                                 @error('rejection_reason')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

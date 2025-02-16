@@ -3,10 +3,6 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Demande de congé') }}
             @if($leave->user_id)
-                @php
-                    \Log::info('User ID: ' . $leave->user_id);
-                    \Log::info('User relation: ', ['user' => $leave->user]);
-                @endphp
                 @if($leave->user)
                     de {{ $leave->user->name }}
                 @else
@@ -32,14 +28,7 @@
                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                         Demande de {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
                     </h3>
-                    @php
-                        \Log::info('Leave data:', [
-                            'id' => $leave->id,
-                            'created_at' => $leave->created_at,
-                            'start_date' => $leave->start_date,
-                            'end_date' => $leave->end_date
-                        ]);
-                    @endphp
+                   
                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">    
                         @if($leave->created_at)
                             Soumise le {{ $leave->created_at->format('d/m/Y à H:i') }}
@@ -53,13 +42,28 @@
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500 dark:text-white">Type de congé</dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    @if($leave->type === 'annual') bg-green-100 text-green-800
-                                    @elseif($leave->type === 'sick') bg-red-100 text-red-800
-                                    @else bg-gray-100 text-gray-800
-                                    @endif">
-                                    {{ ucfirst($leave->type ?? 'inconnu') }}
+                             
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
+                                    $leave->type === 'annual' ? 'bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-200' : 
+                                    ($leave->type === 'sick' ? 'bg-green-100 text-green-800 dark:bg-green-600 dark:text-green-200' : 
+                                    ($leave->type === 'unpaid' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-200' : 
+                                    'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200')) 
+                                }}">
+                                    @switch($leave->type)
+                                        @case('annual')
+                                            Congé annuel
+                                            @break
+                                        @case('sick')
+                                            Congé maladie
+                                            @break
+                                        @case('unpaid')
+                                            Congé sans solde
+                                            @break
+                                        @default
+                                            Autre
+                                    @endswitch
                                 </span>
+
                             </dd>
                         </div>
                         <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -117,13 +121,13 @@
                                 </div>
                         </div>
                         <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
-                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Motif</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-white">Motif de la demande</dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                 {{ $leave->reason }}
                             </dd>
                         </div>
                         @if($leave->status === 'rejected' && $leave->rejection_reason)
-                            <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-white">Motif du refus</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                     {{ $leave->rejection_reason }}
