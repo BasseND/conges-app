@@ -61,7 +61,7 @@
                             <select id="department_id" name="department_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 <option value="">Sélectionner un département</option>
                                 @foreach($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('department_id')" class="mt-2" />
@@ -73,6 +73,9 @@
                                 <x-input-label for="team_id" :value="__('Équipe')" />
                                 <select id="team_id" name="team_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">Sélectionner une équipe</option>
+                                    @foreach($teams as $team)
+                                        <option value="{{ $team->id }}" {{ old('team_id') == $team->id ? 'selected' : '' }}>{{ $team->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 

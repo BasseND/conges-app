@@ -81,8 +81,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
         Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
         Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
-        Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
-        Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+        // Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
+        // Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
 
         // Routes pour la gestion des congés par les managers
         Route::middleware(['auth', 'verified'])->group(function () {

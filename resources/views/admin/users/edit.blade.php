@@ -72,21 +72,29 @@
                         </div>
                         </div>
 
-                        {{-- <div>
-                            <x-input-label for="team_id" :value="__('Équipe')" />
-                            <select id="team_id" name="team_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Sélectionner une équipe</option>
-                            </select>
-                            <x-input-error :messages="$errors->get('team_id')" class="mt-2" />
-                        </div> --}}
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <div>
+                                <x-input-label for="team_id" :value="__('Équipe')" />
+                                <select id="team_id" name="team_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">Sélectionner une équipe</option>
+                                    @foreach($teams as $team)
+                                        <option value="{{ $team->id }}" {{ $user->teams->contains($team->id) ? 'selected' : '' }}>
+                                            {{ $team->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <x-input-error :messages="$errors->get('team_id')" class="mt-2" />
+                            </div>
 
                             <div>
                                 <x-input-label for="annual_leave_days" :value="__('Jours de congés annuels')" />
                                 <x-text-input id="annual_leave_days" class="block mt-1 w-full" type="number" name="annual_leave_days" :value="old('annual_leave_days', $user->annual_leave_days)" required />
                                 <x-input-error :messages="$errors->get('annual_leave_days')" class="mt-2" />
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                             <div>
                                 <x-input-label for="sick_leave_days" :value="__('Jours de congés maladie')" />

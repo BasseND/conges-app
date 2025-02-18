@@ -1,272 +1,176 @@
-Voici la methode show : 
-public function show(Leave $leave)
-    {
-        if (!$leave || !$leave->exists) {
-            \Log::error('Leave not found');
-            abort(404, 'Demande de congé non trouvée');
-        }
+J'ai une souci pour envoyé un mail de notification aux employés lors leur demande de congés ait été refusée ou validé. 
 
-        \Log::info('Showing leave:', [
-            'leave_id' => $leave->id,
-            'user_id' => $leave->user_id,
-            'auth_user_id' => auth()->id()
-        ]);
+Voici la methode de validation de la demande de congés :
+ // protected function approveLeave(Request $request, Leave $leave)
+    protected function approveLeave(Leave $leave)
+    {
+        //$this->authorize('approve', $leave);
 
         try {
-            $this->authorize('view', $leave);
-            
-            // Eager load all necessary relationships
-            $leave = Leave::with(['user.department', 'attachments', 'approver'])
-                         ->findOrFail($leave->id);
-            
-            \Log::info('Leave loaded:', [
-                'leave' => $leave->toArray(),
-                'user' => $leave->user ? $leave->user->toArray() : null,
-                'department' => $leave->user && $leave->user->department ? $leave->user->department->toArray() : null
+            Log::info('Début de l\'approbation', ['leave_id' => $leave->id]);
+            if (!auth()->user()->canManageUserLeaves($leave->user)) {
+                abort(403, 'Vous n\'avez pas le droit de gérer les congés de cet employé.');
+            }
+            if (!$leave->relationLoaded('user')) {
+                $leave->load('user');
+            }
+
+            if (!$leave->user || !$leave->user->email) {
+                throw new \Exception("Utilisateur ou email manquant pour la demande ID: {$leave->id}");
+            }
+            if ($leave->status !== 'pending') {
+                return back()->with('error', 'Cette demande de congé a déjà été traitée.');
+            }
+
+            $leave->update([
+                'status' => 'approved',
+                'processed_by' => auth()->id(),
+                'processed_at' => now(),
             ]);
 
-            return view('leaves.show', compact('leave'));
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            \Log::error('Leave not found:', ['id' => $leave->id]);
-            abort(404, 'Demande de congé non trouvée');
-        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
-            \Log::error('Unauthorized access:', [
-                'user_id' => auth()->id(),
-                'leave_id' => $leave->id
-            ]);
-            abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
+            // Mettre à jour le solde de congés de l'employé
+            if ($leave->type === 'annual') {
+                $leave->user->decrement('annual_leave_days', $leave->duration);
+            } elseif ($leave->type === 'sick') {
+                $leave->user->decrement('sick_leave_days', $leave->duration);
+            }
+
+            Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
+
+            Log::info('Approbation terminée avec succès', ['leave_id' => $leave->id]);
+
+            return true;
         } catch (\Exception $e) {
-            \Log::error('Error showing leave:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+            Log::error('Erreur lors de l\'approbation', [
+                'leave_id' => $leave->id,
+                'error' => $e->getMessage()
             ]);
-            abort(500, 'Une erreur est survenue lors de l\'affichage de la demande');
+            return false;
         }
     }
 
-    Ma vue : 
+    Et voici la methode de refus : 
+     protected function rejectLeave(Request $request, Leave $leave)
+    {
+       //  $this->authorize('reject', $leave);
 
-    <x-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Demande de congé') }}
-            @if($leave->user_id)
-                @php
-                    \Log::info('User ID: ' . $leave->user_id);
-                    \Log::info('User relation: ', ['user' => $leave->user]);
-                @endphp
-                @if($leave->user)
-                    de {{ $leave->user->name }}
-                @else
-                    (Utilisateur ID: {{ $leave->user_id }})
-                @endif
-            @else
-                (Aucun utilisateur associé)
-            @endif
-        </h2>
-    </x-slot>
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|min:10|max:255',
+        ]);
 
-    <div class="py-12">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div class="px-4 py-5 sm:px-6">
-                 <h3 class="text-lg leading-6 font-medium text-gray-900">
-                    Demande de {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
-                </h3>
-                @php
-                    \Log::info('Leave data:', [
-                        'id' => $leave->id,
-                        'created_at' => $leave->created_at,
-                        'start_date' => $leave->start_date,
-                        'end_date' => $leave->end_date
-                    ]);
-                @endphp
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    @if($leave->created_at)
-                        Soumise le {{ $leave->created_at->format('d/m/Y à H:i') }}
-                    @else
-                        Date de soumission non disponible
-                    @endif
-                </p>
-            </div>
-            <div class="border-t border-gray-200">
-                <dl>
-                    {{-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Type de congé</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                @if($leave->type === 'annual') bg-green-100 text-green-800
-                                @elseif($leave->type === 'sick') bg-red-100 text-red-800
-                                @else bg-gray-100 text-gray-800
-                                @endif">
-                                {{ ucfirst($leave->type) }}
-                            </span>
-                        </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Période</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            Du {{ $leave->start_date->format('d/m/Y') }} au {{ $leave->end_date->format('d/m/Y') }}
-                            ({{ $leave->duration_days }} jour(s))
-                        </dd>
-                    </div> --}}
+        try {
+            Log::info('Début du rejet', ['leave_id' => $leave->id]);
 
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Type de congé</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                @if($leave->type === 'annual') bg-green-100 text-green-800
-                                @elseif($leave->type === 'sick') bg-red-100 text-red-800
-                                @else bg-gray-100 text-gray-800
-                                @endif">
-                                {{ ucfirst($leave->type ?? 'inconnu') }}
-                            </span>
-                        </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Période</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            @if($leave->start_date && $leave->end_date)
-                                Du {{ $leave->start_date->format('d/m/Y') }} au {{ $leave->end_date->format('d/m/Y') }}
-                                ({{ $leave->duration_days }} jour(s))
-                            @else
-                                Période non disponible
-                            @endif
-                        </dd>
-                    </div>
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Demandeur</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu' }}
-                        </dd>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Département</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $leave->user && $leave->user->department ? $leave->user->department->name : 'Non assigné' }}
-                        </dd>
-                    </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Statut</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                @if($leave->status === 'approved') bg-green-100 text-green-800
-                                @elseif($leave->status === 'rejected') bg-red-100 text-red-800
-                                @elseif($leave->status === 'cancelled') bg-gray-100 text-gray-800
-                                @else bg-yellow-100 text-yellow-800
-                                @endif">
-                                {{ ucfirst($leave->status) }}
-                            </span>
-                        </dd>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Motif</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $leave->reason }}
-                        </dd>
-                    </div>
-                    @if($leave->status === 'rejected' && $leave->rejection_reason)
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Motif du refus</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $leave->rejection_reason }}
-                            </dd>
-                        </div>
-                    @endif
-                    @if($leave->approved_by)
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Traité par</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $leave->approver->name }} le {{ $leave->approved_at->format('d/m/Y à H:i') }}
-                            </dd>
-                        </div>
-                    @endif
-                    @if($leave->attachments->count() > 0)
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Pièces jointes</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                <div class="mt-2 space-y-2">
-                                    @foreach($leave->attachments as $attachment)
-                                        <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg shadow">
-                                            <div class="flex items-center space-x-3">
-                                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                                                </svg>
-                                                <div>
-                                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $attachment->original_filename }}</p>
-                                                    <p class="text-xs text-gray-500">{{ number_format($attachment->size / 1024, 2) }} KB</p>
-                                                </div>
-                                            </div>
-                                            <a href="{{ route('leaves.download-attachment', ['leave' => $leave->id, 'attachment' => $attachment->id]) }}" 
-                                               class="px-3 py-1 text-sm text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                Télécharger
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </dd>
-                        </div>
-                    @endif
-                </dl>
-            </div>
-            
-            {{-- @can('update', $leave)
-                <div class="mt-6 flex justify-end">
-                    <a href="{{ route('leaves.edit', $leave) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        Modifier
-                    </a>
-                </div>
-            @endcan --}}
+            $leave->update([
+                'status' => 'rejected',
+                'rejection_reason' => $validated['rejection_reason'],
+                'processed_by' => auth()->id(),
+                'processed_at' => now(),
+            ]);
 
-            @can('update', $leave)
-                <div class="mt-6 flex justify-end">
-                    <a href="{{ route('leaves.edit', ['leave' => $leave->id]) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        Modifier
-                    </a>
-                </div>
-            @endcan
+            Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
 
-            @if(auth()->user()->can('approve-leaves') && $leave->status === 'pending')
-                <div class="px-4 py-5 sm:px-6 border-t border-gray-200">
-                    <div class="flex justify-end space-x-3">
-                        <form action="{{ route('leaves.reject', $leave) }}" method="POST" class="inline">
-                            @csrf
-                            @method('PUT')
-                            <div class="flex items-center space-x-3">
-                                <input type="text" name="rejection_reason" 
-                                    class="block w-64 border-gray-300 rounded-md shadow-sm focus:ring-secondary focus:border-secondary sm:text-sm"
-                                    placeholder="Motif du refus" required>
-                                <button type="submit" class="btn-secondary" onclick="return confirm('Êtes-vous sûr de vouloir refuser cette demande ?')">
-                                    Refuser
-                                </button>
-                            </div>
-                        </form>
-                        <form action="{{ route('leaves.approve', $leave) }}" method="POST" class="inline">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir approuver cette demande ?')">
-                                Approuver
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            Log::info('Rejet terminé avec succès', ['leave_id' => $leave->id]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du rejet', [
+                'leave_id' => $leave->id,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
+
+    Et voici LeaveStatusNotification : 
+
+    <?php
+
+namespace App\Mail;
+
+use App\Models\Leave;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
+class LeaveStatusNotification extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $leave;
+
+    public function __construct(Leave $leave)
+    {
+        $this->leave = $leave;
+        Log::info('Construction de la notification', [
+            'leave_id' => $leave->id,
+            'user_id' => $leave->user->id ?? 'null'
+        ]);
+    }
+
+    public function build()
+    {
+        $statusMap = [
+            'approved' => 'Approuvée',
+            'rejected' => 'Rejetée', 
+            'pending' => 'En attente'
+        ];
+
+        return $this->view('emails.leave-status-simple')
+            ->with([
+                'user_email' => $this->leave->user->email ?? 'inconnu@example.com',
+                'user_name' => $this->leave->user->name ?? 'Utilisateur',
+                //'status' => $statusMap[$this->leave->status],
+                'status_label' => $statusMap[$this->leave->status] ?? 'Inconnu',
+                'start_date' => $this->leave->start_date->format('d/m/Y'),
+                'end_date' => $this->leave->end_date->format('d/m/Y'),
+                'rejection_reason' => $this->leave->rejection_reason
+            ])
+            ->subject('Mise à jour de votre demande de congé');
+    }
+}
+
+Et voici la vue emails.leave-status-simple.blade.php :
+<div class="container">
+        <h1 class="header">Statut de votre demande de congé</h1>
+        
+        <p>Bonjour {{ $leave->user->name }},</p>
+
+        <p>Votre demande de congé a été mise à jour.</p>
+
+        @if($user_email)
+        <p>Bonjour {{ $user_name ?? 'collaborateur' }},</p>
+        
+        <div class="status {{ $status === 'approved' ? 'approved' : 'rejected' }}">
+            Statut actuel : {{ $status === 'approved' ? 'Approuvée ✅' : 'Rejetée ❌' }}
+        </div>
+
+        <div class="details">
+            <p><strong>Période :</strong> Du {{ $start_date }} au {{ $end_date }}</p>
+            @if($status === 'rejected' && $rejection_reason)
+            <p><strong>Motif du refus :</strong> {{ $rejection_reason }}</p>
             @endif
         </div>
+        @else
+        <p class="error">⚠️ Erreur : Destinataire inconnu</p>
+        @endif
+
+        <a href="{{ url("/leaves/{$leave->id}") }}" class="button">Voir les détails</a>
+
+        <p>Cordialement,<br>
+        {{ config('app.name') }}</p>
     </div>
-</x-layout>
 
+    Et voici la config mail dans .env :
 
-Et ma route : 
-Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    MAIL_MAILER=smtp
+    MAIL_HOST=sandbox.smtp.mailtrap.io
+    MAIL_PORT=2525
+    MAIL_USERNAME=608e620e27ed19
+    MAIL_PASSWORD=my_pass_word
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS="hello@example.com"
+    MAIL_FROM_NAME="${APP_NAME}"
 
-Et le lien dans mon index : 
-<a href="{{ route('leaves.show', ['leave' => $leave->id]) }}" 
-    class="text-indigo-600 hover:text-indigo-900 mr-3">
-    Voir
-</a>
-
-Et quand je clique sur le lien, j'ai cette page  :
-
-404
-Page introuvable
+    L'envoie de message ne marche pas.

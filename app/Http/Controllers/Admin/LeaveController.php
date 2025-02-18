@@ -7,9 +7,12 @@ use App\Models\Leave;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Concerns\HandlesLeaveApproval;
 
 class LeaveController extends Controller
 {
+    use HandlesLeaveApproval;
+
     public function __construct()
     {
         $this->middleware(['auth', 'admin']);
@@ -70,36 +73,25 @@ class LeaveController extends Controller
     /**
      * Approuve une demande de congé
      */
+
     public function approve(Leave $leave)
     {
-        $leave->update([
-            'status' => 'approved',
-            'processed_at' => now(),
-            'processed_by' => auth()->id()
-        ]);
-
-        return redirect()->route('admin.leaves.index')
-            ->with('success', 'La demande de congé a été approuvée.');
+        if ($this->approveLeave($leave)) {
+            return back()->with('success', 'La demande de congé a été approuvée.');
+        }
+        return back()->withErrors(['error' => 'Échec de l\'approbation']);
     }
-
+    
     /**
      * Rejette une demande de congé
      */
-    public function reject(Leave $leave)
+
+     public function reject(Request $request, Leave $leave)
     {
-
-        $validated = $request->validate([
-            'rejection_reason' => 'required|string|min:10|max:255',
-       ]);
-       
-        $leave->update([
-            'status' => 'rejected',
-            'processed_at' => now(),
-            'processed_by' => auth()->id(),
-            'rejection_reason' => $validated['rejection_reason']
-        ]);
-
-        return redirect()->route('admin.leaves.index')
-            ->with('success', 'La demande de congé a été rejetée.');
+        if ($this->rejectLeave($request, $leave)) {
+            return back()->with('success', 'Demande de congé rejetée avec succès');
+        }
+        return back()->withErrors(['error' => 'Échec du rejet']);
     }
+    
 }

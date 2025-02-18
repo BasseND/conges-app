@@ -35,7 +35,7 @@ class LeaveStatusNotification extends Mailable
             ->with([
                 'user_email' => $this->leave->user->email ?? 'inconnu@example.com',
                 'user_name' => $this->leave->user->name ?? 'Utilisateur',
-                //'status' => $statusMap[$this->leave->status],
+                'status' => $statusMap[$this->leave->status],
                 'status_label' => $statusMap[$this->leave->status] ?? 'Inconnu',
                 'start_date' => $this->leave->start_date->format('d/m/Y'),
                 'end_date' => $this->leave->end_date->format('d/m/Y'),
