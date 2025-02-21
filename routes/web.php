@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
+use App\Http\Controllers\Expense\ExpenseReportController;
+use App\Http\Controllers\Expense\ExpenseLineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,15 +35,22 @@ Route::middleware('guest')->group(function () {
     Route::get('forgot-password', [CustomAuthController::class, 'showPasswordResetForm'])->name('password.request');
 });
 
-// Page d'aide
-Route::get('/help', [HelpController::class, 'index'])->name('help.index');
+
 
 // Routes protégées par l'authentification et la vérification email
 Route::middleware(['auth', 'verify.email'])->group(function () {
-    // Route par défaut redirige vers les congés
+
+    // Route Home page (welcome.blade.php)
     Route::get('/', function () {
+        return view('welcome');
+    });
+    // Route par défaut redirige vers les congés
+    Route::get('/leaves', function () {
         return redirect()->route('leaves.index');
     });
+
+    // Page d'aide
+    Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
     // Routes de gestion du compte
     Route::get('password/update', [CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.update.form');
@@ -66,7 +75,7 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         // Route::get('/', function () {
         //     return view('leaves.index');
         // })->name('Leaves.index');
-        Route::get('/', [LeaveController::class, 'index'])->name('leaves.index');
+        //Route::get('/', [LeaveController::class, 'index'])->name('leaves.index');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -138,6 +147,30 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             Route::get('/departments/{department}/managers', [TeamController::class, 'getManagersByDepartment'])->name('departments.managers');
             Route::get('/departments/{department}/teams', [TeamController::class, 'getTeamsByDepartment'])->name('departments.teams');
         });
+
+        // Routes pour les rapports d'expenses (accessibles à tous les utilisateurs authentifiés)
+        Route::middleware(['auth', 'verified'])->group(function () {
+            // Expense Reports
+            Route::get('expense-reports', [ExpenseReportController::class, 'index'])->name('expense-reports.index');
+            Route::get('expense-reports/create', [ExpenseReportController::class, 'create'])->name('expense-reports.create');
+            Route::post('expense-reports', [ExpenseReportController::class, 'store'])->name('expense-reports.store');
+            Route::get('expense-reports/{id}', [ExpenseReportController::class, 'show'])->name('expense-reports.show');
+            Route::get('expense-reports/{id}/edit', [ExpenseReportController::class, 'edit'])->name('expense-reports.edit');
+            Route::put('expense-reports/{id}', [ExpenseReportController::class, 'update'])->name('expense-reports.update');
+        
+            // Actions custom pour changer le statut
+            Route::patch('expense-reports/{id}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
+            Route::patch('expense-reports/{id}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
+            Route::patch('expense-reports/{id}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
+            Route::delete('expense-reports/{id}', [ExpenseReportController::class, 'destroy'])->name('expense-reports.destroy');
+        
+            // Expense Lines (routes imbriquées)
+            Route::post('expense-reports/{reportId}/lines', [ExpenseLineController::class, 'store'])->name('expense-lines.store');
+            Route::get('expense-reports/{reportId}/lines/{lineId}/edit', [ExpenseLineController::class, 'edit'])->name('expense-lines.edit');
+            Route::put('expense-reports/{reportId}/lines/{lineId}', [ExpenseLineController::class, 'update'])->name('expense-lines.update');
+            Route::delete('expense-reports/{reportId}/lines/{lineId}', [ExpenseLineController::class, 'destroy'])->name('expense-lines.destroy');
+        });
+
 
     });
 });

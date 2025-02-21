@@ -122,6 +122,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the expense reports created by the user.
+     */
+    public function expenseReports()
+    {
+        return $this->hasMany(ExpenseReport::class);
+    }
+
+    /**
+     * Get the expense lines created by the user.
+     */
+    public function expenseLines()
+    {
+        return $this->hasMany(ExpenseLine::class);
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isManager()
@@ -158,6 +174,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->isAdmin() || 
                ($this->isManager() && $this->department_id === $user->department_id) ||
                ($this->isDepartmentHead() && $this->department_id === $user->department_id);
+    }
+
+    public function canApproveExpenseReports(): bool
+    {
+        return $this->isAdmin() || $this->isHR();
     }
 
     /**

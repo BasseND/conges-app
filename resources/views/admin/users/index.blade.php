@@ -154,7 +154,9 @@
                                             </a>
 
                                             @if($user->id !== auth()->id())
-                                                <button onclick="showDeleteModal('{{ route('admin.users.destroy', $user) }}')" 
+                                                <button @click="$dispatch('delete-dialog', '{{ route('admin.users.destroy', $user) }}')"  
+                                                        title="Supprimer" 
+                                                        type="button" 
                                                         class="text-red-600 dark:text-red-500 hover:text-red-900 dark:hover:text-red-700">
                                                     <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -176,16 +178,7 @@
         </div>
     </div>
 
-    <x-modals.delete-modal />
+    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront définitivement supprimées." />
 
-    @push('scripts')
-    <script>
-        function showDeleteModal(deleteUrl) {
-            const modal = document.getElementById('deleteModal');
-            const deleteForm = document.getElementById('deleteForm');
-            deleteForm.action = deleteUrl;
-            modal.classList.remove('hidden');
-        }
-    </script>
-    @endpush
+   
 </x-app-layout>

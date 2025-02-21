@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
         }
-        .container {
+        .max-w-7xl {
             max-width: 600px;
             margin: 15px auto;
             padding: 30px;
@@ -79,14 +79,14 @@
             font-size: 14px;
         }
         @media (max-width: 600px) {
-            .container {
+            .max-w-7xl {
                 padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="max-w-7xl">
         <div class="header">
             <h1>Statut de votre demande de congé</h1>
         </div>

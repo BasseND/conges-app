@@ -27,7 +27,7 @@
                             </div>
                         </div> --}}
 
-                        <div class="chart-container">
+                        <div class="chart-max-w-7xl">
                             <canvas id="congesChart"></canvas>
                         </div>
                     </div>
