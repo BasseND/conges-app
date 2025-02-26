@@ -58,14 +58,14 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::resource('leaves', LeaveController::class);
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
     
-    Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
-    Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
-    Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
-    Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-    Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
-    Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-    Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
-    Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+    // Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
+    // Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+    // Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    // Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+    // Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+    // Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+    // Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
+    // Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
 
 
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
@@ -139,7 +139,9 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
 
         // Routes pour les rapports d'expenses (accessibles à tous les utilisateurs authentifiés)
         Route::middleware(['auth', 'verified'])->group(function () {
-            // Expense Reports
+            
+
+            // Routes pour les rapports d'expenses
             Route::resource('expense-reports', ExpenseReportController::class);
             Route::patch('expense-reports/{id}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
             Route::patch('expense-reports/{id}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
@@ -147,6 +149,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         
             // Expense Lines (routes imbriquées)
             Route::resource('expense-reports/{reportId}/lines', ExpenseLineController::class);
+            // Routes pour les lignes de dépenses
+          Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
         });
     });
 });
