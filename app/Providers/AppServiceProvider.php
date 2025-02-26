@@ -21,10 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::useBootstrap();
-        Paginator::defaultView('pagination::tailwind');
-        Paginator::defaultSimpleView('pagination::simple-tailwind');
-        // Configurer Carbon en français globalement
         Carbon::setLocale('fr');
+        Paginator::useBootstrap();
     }
 }
