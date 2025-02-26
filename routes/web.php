@@ -146,4 +146,4 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     });
 });
 
-// require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';
