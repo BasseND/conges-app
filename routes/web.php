@@ -27,15 +27,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Routes d'authentification
-Route::middleware('guest')->group(function () {
-    Route::get('login', [CustomAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [CustomAuthController::class, 'login']);
-    Route::get('register', [CustomAuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('register', [CustomAuthController::class, 'register']);
-    Route::get('forgot-password', [CustomAuthController::class, 'showPasswordResetForm'])->name('password.request');
-});
-
 // Routes protégées par l'authentification et la vérification email
 Route::middleware(['auth', 'verify.email'])->group(function () {
 
@@ -155,4 +146,4 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
