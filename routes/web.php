@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LeaveApprovalController;
 use App\Http\Controllers\ProfileController;
@@ -27,38 +26,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Routes protégées par l'authentification et la vérification email
-Route::middleware(['auth', 'verify.email'])->group(function () {
+// Routes publiques
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
 
-    // Route Home page (welcome.blade.php)
-    Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
+// Routes d'authentification standard de Laravel
+require __DIR__.'/auth.php';
+
+// Routes protégées par l'authentification et la vérification email
+Route::middleware(['auth', 'verified'])->group(function () {
+
     // Route par défaut redirige vers les congés
-    Route::get('/leaves', function () {
+    Route::get('/dashboard', function () {
         return redirect()->route('leaves.index');
-    });
+    })->name('dashboard');
 
     // Page d'aide
     Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
     // Routes de gestion du compte
-    Route::get('password/change', [CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.change.form');
-    Route::post('password/change', [CustomAuthController::class, 'updatePassword'])->name('password.change');
-    Route::post('logout', [CustomAuthController::class, 'logout'])->name('logout');
+    Route::get('password/change', [App\Http\Controllers\Auth\CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.change.form');
+    Route::post('password/change', [App\Http\Controllers\Auth\CustomAuthController::class, 'updatePassword'])->name('password.change');
+    Route::post('logout', [App\Http\Controllers\Auth\CustomAuthController::class, 'logout'])->name('logout');
 
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
     Route::resource('leaves', LeaveController::class);
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
     
-    // Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
-    // Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
-    // Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
-    // Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-    // Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
-    // Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-    // Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
-    // Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-
-
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
     Route::middleware('role:manager,admin')->group(function () {
         Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
@@ -145,5 +138,3 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         });
     });
 });
-
-require __DIR__.'/auth.php';
