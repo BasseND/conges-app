@@ -36,8 +36,6 @@ Route::middleware('guest')->group(function () {
     Route::get('forgot-password', [CustomAuthController::class, 'showPasswordResetForm'])->name('password.request');
 });
 
-
-
 // Routes protégées par l'authentification et la vérification email
 Route::middleware(['auth', 'verify.email'])->group(function () {
 
@@ -59,9 +57,16 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
     Route::resource('leaves', LeaveController::class);
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
+    
+    Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
+    Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+    Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+    Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+    Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
     Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-    Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-    Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+
 
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
     Route::middleware('role:manager,admin')->group(function () {
@@ -71,26 +76,11 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     });
 
     Route::middleware(['auth'])->group(function () {
-        // Route::get('/', function () {
-        //     return view('leaves.index');
-        // })->name('Leaves.index');
-        //Route::get('/', [LeaveController::class, 'index'])->name('leaves.index');
-
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        // Routes pour les congés
-        //Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
-        Route::get('/leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
-        Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
-        Route::get('/leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
-        Route::get('/leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
-        Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
-        Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
-        Route::get('/leaves/{leave}/attachment/{attachment}/download', [LeaveController::class, 'downloadAttachment'])->name('leaves.download-attachment');
-        // Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
-        // Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+       
 
         // Routes pour la gestion des congés par les managers
         Route::middleware(['auth', 'verified'])->group(function () {
@@ -150,27 +140,14 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         // Routes pour les rapports d'expenses (accessibles à tous les utilisateurs authentifiés)
         Route::middleware(['auth', 'verified'])->group(function () {
             // Expense Reports
-            Route::get('expense-reports', [ExpenseReportController::class, 'index'])->name('expense-reports.index');
-            Route::get('expense-reports/create', [ExpenseReportController::class, 'create'])->name('expense-reports.create');
-            Route::post('expense-reports', [ExpenseReportController::class, 'store'])->name('expense-reports.store');
-            Route::get('expense-reports/{id}', [ExpenseReportController::class, 'show'])->name('expense-reports.show');
-            Route::get('expense-reports/{id}/edit', [ExpenseReportController::class, 'edit'])->name('expense-reports.edit');
-            Route::put('expense-reports/{id}', [ExpenseReportController::class, 'update'])->name('expense-reports.update');
-        
-            // Actions custom pour changer le statut
+            Route::resource('expense-reports', ExpenseReportController::class);
             Route::patch('expense-reports/{id}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
             Route::patch('expense-reports/{id}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
             Route::patch('expense-reports/{id}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
-            Route::delete('expense-reports/{id}', [ExpenseReportController::class, 'destroy'])->name('expense-reports.destroy');
         
             // Expense Lines (routes imbriquées)
-            Route::post('expense-reports/{reportId}/lines', [ExpenseLineController::class, 'store'])->name('expense-lines.store');
-            Route::get('expense-reports/{reportId}/lines/{lineId}/edit', [ExpenseLineController::class, 'edit'])->name('expense-lines.edit');
-            Route::put('expense-reports/{reportId}/lines/{lineId}', [ExpenseLineController::class, 'update'])->name('expense-lines.update');
-            Route::delete('expense-reports/{reportId}/lines/{lineId}', [ExpenseLineController::class, 'destroy'])->name('expense-lines.destroy');
+            Route::resource('expense-reports/{reportId}/lines', ExpenseLineController::class);
         });
-
-
     });
 });
 

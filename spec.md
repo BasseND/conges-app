@@ -35,3 +35,58 @@ A l'image de la page de gestion des congés par les managers, je voudrais exacte
 Je voudrais modifier la page de gestion des congés pour les managers pour que chaque manager ne voit que les congés des membres de son équipe (teams). Je voudrais que le filtre repose sur l'appartenance à une équipe et non au département. Que chaque manager qui a une équipe puisse voir les congés de ses membres. Cela permettrait à ces managers de voir les congés de leurs employés et de les approuver ou refuser. 
 
 
+
+
+Je voudrais faire évoluer mon application qui pour l'instant fait de la gestion de Congés. Je voudrais à terme qu'elle soit une app SIRH complète. Donc je voudrais ajouter une couche pour la gestion des notes de frais. Pour cela, j'ai besoin de ton aide.
+J'ai déjà commencé à faire cette partie. Je voudrais que tu aies une idee de la structure de la couche.
+Je voudrais que tu me génères les migrations :
+
+Migration  expense_reports :
+class CreateExpenseReportsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('expense_reports', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('status')->default('draft');
+            $table->decimal('total_amount', 10, 2)->default(0.00);
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('expense_reports');
+    }
+}
+
+user_id fait référence à la table users.
+status = draft, submitted, approved, rejected, etc.
+total_amount peut être recalculé à la volée, mais le stocker peut simplifier les rapports.
+submitted_at et approved_at pour tracer le workflow.
+
+Migration  expense_lines : 
+
+class CreateExpenseLinesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('expense_lines', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('expense_report_id')->constrained()->onDelete('cascade');
+            $table->string('description');
+            $table->decimal('amount', 10, 2)->default(0.00);
+            $table->date('spent_on')->nullable();
+            $table->string('receipt_path')->nullable();  // Pour stocker le chemin/URL du justificatif
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('expense_lines');
+    }
+}
