@@ -41,8 +41,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
     // Routes de gestion du compte
-    Route::get('password/update', [CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.update.form');
-    Route::post('password/update', [CustomAuthController::class, 'updatePassword'])->name('password.update');
+    Route::get('password/change', [CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.change.form');
+    Route::post('password/change', [CustomAuthController::class, 'updatePassword'])->name('password.change');
     Route::post('logout', [CustomAuthController::class, 'logout'])->name('logout');
 
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
