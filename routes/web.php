@@ -13,6 +13,7 @@ use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
 use App\Http\Controllers\Expense\ExpenseLineController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,9 +42,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'verify.email'])->group(function () {
 
     // Route Home page (welcome.blade.php)
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
     // Route par défaut redirige vers les congés
     Route::get('/leaves', function () {
         return redirect()->route('leaves.index');

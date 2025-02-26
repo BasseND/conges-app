@@ -14,7 +14,15 @@ class ExpenseReportController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ExpenseReport::where('user_id', Auth::id());
+        $user = Auth::user();
+        
+        // Initialiser la requête
+        $query = ExpenseReport::query();
+
+        // Si l'utilisateur n'est ni admin ni RH, ne montrer que ses propres notes de frais
+        if (!$user->isAdmin() && !$user->isHR()) {
+            $query->where('user_id', $user->id);
+        }
 
         // Filtre par statut
         if ($request->filled('status')) {
@@ -29,6 +37,9 @@ class ExpenseReportController extends Controller
         if ($request->filled('date_to')) {
             $query->whereDate('created_at', '<=', $request->date_to);
         }
+
+        // Ajouter les relations nécessaires
+        $query->with(['user', 'lines']);
 
         $expenseReports = $query->orderBy('created_at', 'desc')
             ->paginate(10)
@@ -138,7 +149,15 @@ class ExpenseReportController extends Controller
 
     public function show($id)
     {
-        $report = ExpenseReport::where('user_id', Auth::id())->findOrFail($id);
+        $user = Auth::user();
+        $query = ExpenseReport::query();
+
+        // Si l'utilisateur n'est ni admin ni RH, ne montrer que ses propres notes de frais
+        if (!$user->isAdmin() && !$user->isHR()) {
+            $query->where('user_id', $user->id);
+        }
+
+        $report = $query->with(['user', 'lines'])->findOrFail($id);
         return view('expenses.reports.show', compact('report'));
     }
 

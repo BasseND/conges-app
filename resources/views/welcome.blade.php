@@ -67,29 +67,44 @@
         </div>
 
         <!-- Section Statistiques Rapides -->
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="text-sm font-medium text-gray-500">Congés restants</div>
                 <div class="mt-2 flex items-baseline">
-                    <span class="text-2xl font-semibold text-gray-900">12</span>
+                    <span class="text-2xl font-semibold text-gray-900">{{ auth()->user()->remaining_days }}</span>
                     <span class="ml-2 text-sm text-gray-600">jours</span>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="text-sm font-medium text-gray-500">Notes en attente</div>
                 <div class="mt-2 flex items-baseline">
-                    <span class="text-2xl font-semibold text-gray-900">3</span>
+                    <span class="text-2xl font-semibold text-gray-900">{{ auth()->user()->pending_notes }}</span>
                     <span class="ml-2 text-sm text-gray-600">notes</span>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="text-sm font-medium text-gray-500">Prochain congé</div>
-                <div class="mt-2 text-gray-900 font-medium">15 Mars 2025</div>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="text-sm font-medium text-gray-500">Budget frais restant</div>
-                <div class="mt-2 flex items-baseline">
-                    <span class="text-2xl font-semibold text-gray-900">1250€</span>
+                <div class="mt-2 text-gray-900 font-medium">
+                    @php
+                        $nextLeave = auth()->user()->leaves()
+                            ->where('start_date', '>=', now())
+                            ->where('status', 'approved')
+                            ->orderBy('start_date', 'asc')
+                            ->first();
+
+                        $mois = [
+                            1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+                            5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+                            9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+                        ];
+
+                        if ($nextLeave) {
+                            $date = $nextLeave->start_date->day . ' ' . $mois[$nextLeave->start_date->month] . ' ' . $nextLeave->start_date->year;
+                            echo $date;
+                        } else {
+                            echo 'Aucun congé prévu';
+                        }
+                    @endphp
                 </div>
             </div>
         </div>

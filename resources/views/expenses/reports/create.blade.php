@@ -111,41 +111,42 @@
 
     @push('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const max-w-7xl = document.getElementById('expense-lines');
-        const template = document.getElementById('expense-line-template');
-        const addButton = document.getElementById('add-line');
-        const noLinesMessage = document.getElementById('no-lines-message');
-        let lineCount = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            const addButton = document.getElementById('add-line');
+            const expenseLines = document.getElementById('expense-lines');
+            const template = document.getElementById('expense-line-template');
+            let lineCount = 0;
 
-        function updateNoLinesMessage() {
-            noLinesMessage.style.display = lineCount === 0 ? 'block' : 'none';
-        }
+            function updateNoLinesMessage() {
+                const noLinesMessage = document.getElementById('no-lines-message');
+                if (noLinesMessage) {
+                    noLinesMessage.style.display = lineCount === 0 ? 'block' : 'none';
+                }
+            }
 
-        function addExpenseLine() {
-            const clone = template.content.cloneNode(true);
-            const newLine = clone.querySelector('.expense-line');
-            
-            // Mettre à jour les indices
-            newLine.querySelectorAll('input').forEach(input => {
-                input.name = input.name.replace('INDEX', lineCount);
-            });
+            function addExpenseLine() {
+                const newLine = template.content.cloneNode(true);
+                const inputs = newLine.querySelectorAll('input');
 
-            // Ajouter le gestionnaire de suppression
-            newLine.querySelector('.remove-line').addEventListener('click', function() {
-                newLine.remove();
-                lineCount--;
+                inputs.forEach(input => {
+                    input.name = input.name.replace('INDEX', lineCount);
+                });
+
+                // Ajouter le gestionnaire de suppression
+                newLine.querySelector('.remove-line').addEventListener('click', function() {
+                    this.closest('.expense-line').remove();
+                    lineCount--;
+                    updateNoLinesMessage();
+                });
+
+                expenseLines.appendChild(newLine);
+                lineCount++;
                 updateNoLinesMessage();
-            });
+            }
 
-            max-w-7xl.appendChild(newLine);
-            lineCount++;
+            addButton.addEventListener('click', addExpenseLine);
             updateNoLinesMessage();
-        }
-
-        addButton.addEventListener('click', addExpenseLine);
-        updateNoLinesMessage();
-    });
+        });
     </script>
     @endpush
 </x-app-layout>

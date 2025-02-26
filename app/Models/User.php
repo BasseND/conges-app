@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -44,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token',   
     ];
 
     /**
@@ -98,6 +99,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Vérifie si l'utilisateur est RH
+     */
+    public function isHR(): bool
+    {
+        return $this->role === self::ROLE_HR;
+    }
+
+    /**
      * Get the team that the user belongs to.
      */
     // public function team()
@@ -145,11 +154,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role === self::ROLE_MANAGER;
     }
 
-    public function isHR()
-    {
-        return $this->role === self::ROLE_HR;
-    }
-
     public function hasAdminAccess()
     {
         return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_HR]);
@@ -193,6 +197,72 @@ class User extends Authenticatable implements MustVerifyEmail
             self::ROLE_HR => 'RH',
             self::ROLE_DEPARTMENT_HEAD => 'Chef de Département',
         ];
+    }
+
+    /**
+     * Get the remaining days of leave for the user
+     * 
+     * @return int
+     */
+    public function getRemainingDaysAttribute()
+    {
+        // Récupérer les congés déjà pris cette année
+        $usedLeaves = $this->leaves()
+            ->whereYear('start_date', now()->year)
+            ->where('status', 'approved')
+            ->sum('duration');
+
+        // Calculer les jours restants
+        return $this->annual_leave_days - $usedLeaves;
+    }
+
+    /**
+     * Get the next leave date for the user
+     * 
+     * @return string|null
+     */
+    public function getNextLeaveDateAttribute()
+    {
+        $nextLeave = $this->leaves()
+            ->where('start_date', '>=', now())
+            ->where('status', 'approved')
+            ->orderBy('start_date', 'asc')
+            ->first();
+
+        if (!$nextLeave) {
+            return 'Aucun congé prévu';
+        }
+
+        $mois = [
+            1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+            5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+            9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+        ];
+        
+        $jour = $nextLeave->start_date->day;
+        $moisNum = $nextLeave->start_date->month;
+        $annee = $nextLeave->start_date->year;
+        
+        return $jour . ' ' . $mois[$moisNum] . ' ' . $annee;
+    }
+
+    /**
+     * Get the number of pending notes (expense reports) for the user
+     * 
+     * @return int
+     */
+    public function getPendingNotesAttribute()
+    {
+        if ($this->isAdmin() || $this->isHR()) {
+            // Pour admin et RH, compter toutes les notes en attente
+            return ExpenseReport::whereIn('status', ['submitted'])
+                ->count();
+        }
+
+        // Pour les autres utilisateurs, compter leurs propres notes en attente
+        return $this->expenseReports()
+            ->whereIn('status', ['submitted'])
+            ->count();
     }
 
     public function routeNotificationForMail()
