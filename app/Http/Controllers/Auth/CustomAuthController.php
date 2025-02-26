@@ -14,7 +14,7 @@ class CustomAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return app('auth.login.response')->toResponse(request());
     }
 
     public function login(Request $request)
