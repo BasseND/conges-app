@@ -148,7 +148,7 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             Route::patch('expense-reports/{id}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
         
             // Expense Lines (routes imbriquées)
-            Route::resource('expense-reports/{reportId}/lines', ExpenseLineController::class);
+            // Route::resource('expense-reports/{reportId}/lines', ExpenseLineController::class);
             // Routes pour les lignes de dépenses
           Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
         });
