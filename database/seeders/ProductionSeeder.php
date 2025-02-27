@@ -42,6 +42,7 @@ class ProductionSeeder extends Seeder
             'password' => Hash::make('admin123'), // À changer après le premier login
             'role' => 'admin',
             'department_id' => Department::where('code', 'IT')->first()->id,
+            'employee_id' => 'ADMIN001', // Ajout de l'employee_id
         ]);
     }
 }
