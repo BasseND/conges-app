@@ -35,9 +35,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Routes publiques
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
-
 // Routes d'authentification
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -63,7 +60,9 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+// Routes protégées par l'authentification
 Route::middleware('auth')->group(function () {
+    // Vérification d'email
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -75,6 +74,7 @@ Route::middleware('auth')->group(function () {
                 ->middleware('throttle:6,1')
                 ->name('verification.send');
 
+    // Mot de passe et déconnexion
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->name('password.confirm');
 
@@ -88,6 +88,9 @@ Route::middleware('auth')->group(function () {
 
 // Routes protégées par l'authentification et la vérification email
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Page d'accueil
+    Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
+    
     // Route par défaut redirige vers les congés
     Route::get('/dashboard', function () {
         return redirect()->route('leaves.index');
@@ -97,7 +100,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
-    Route::resource('leaves', LeaveController::class);
+    Route::get('leaves', [LeaveController::class, 'index'])->name('leaves.index');
+    Route::get('leaves/create', [LeaveController::class, 'create'])->name('leaves.create');
+    Route::post('leaves', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::get('leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+    Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+    Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
 
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)

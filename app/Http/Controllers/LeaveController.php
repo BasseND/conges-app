@@ -16,7 +16,6 @@ use Illuminate\Validation\Rule;
 use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
 
-
 class LeaveController extends Controller
 {
     /**
@@ -196,16 +195,15 @@ class LeaveController extends Controller
      * Affiche les détails d'une demande de congé
      */
 
-    public function show($id)
+    public function show(Leave $leave)
     {
-        \Log::info('Attempting to show leave:', ['id' => $id]);
+        \Log::info('Attempting to show leave:', ['id' => $leave->id]);
 
         try {
             // Charger la demande avec ses relations
-            $leave = Leave::with(['user.department', 'attachments', 'approver'])
-                         ->findOrFail($id);
+            $leave->load(['user.department', 'attachments', 'approver']);
 
-            \Log::info('Leave found:', [
+            \Log::info('Leave loaded:', [
                 'leave_id' => $leave->id,
                 'user_id' => $leave->user_id,
                 'auth_user_id' => auth()->id()
@@ -213,20 +211,17 @@ class LeaveController extends Controller
 
             $this->authorize('view', $leave);
             
-            \Log::info('Leave loaded:', [
+            \Log::info('Leave details:', [
                 'leave' => $leave->toArray(),
                 'user' => $leave->user ? $leave->user->toArray() : null,
                 'department' => $leave->user && $leave->user->department ? $leave->user->department->toArray() : null
             ]);
 
             return view('leaves.show', compact('leave'));
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            \Log::error('Leave not found:', ['id' => $id]);
-            abort(404, 'Demande de congé non trouvée');
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             \Log::error('Unauthorized access:', [
                 'user_id' => auth()->id(),
-                'leave_id' => $id
+                'leave_id' => $leave->id
             ]);
             abort(403, 'Vous n\'êtes pas autorisé à voir cette demande de congé');
         } catch (\Exception $e) {
