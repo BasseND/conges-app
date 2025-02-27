@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\TestDataSeeder;
+use Database\Seeders\ProductionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,8 +21,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call([
-            TestDataSeeder::class,
-        ]);
+        if (app()->environment('production')) {
+            $this->call([
+                ProductionSeeder::class,
+            ]);
+        } else {
+            $this->call([
+                TestDataSeeder::class,
+            ]);
+        }
     }
 }
