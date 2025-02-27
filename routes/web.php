@@ -84,107 +84,71 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+});
+
+// Routes protégées par l'authentification et la vérification email
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Route par défaut redirige vers les congés
+    Route::get('/dashboard', function () {
+        return redirect()->route('leaves.index');
+    })->name('dashboard');
 
     // Page d'aide
     Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
-    // Routes de gestion du compte
-    Route::get('password/change', [App\Http\Controllers\Auth\CustomAuthController::class, 'showPasswordUpdateForm'])->name('password.change.form');
-    Route::post('password/change', [App\Http\Controllers\Auth\CustomAuthController::class, 'updatePassword'])->name('password.change');
-    Route::post('logout', [App\Http\Controllers\Auth\CustomAuthController::class, 'logout'])->name('logout');
-
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
     Route::resource('leaves', LeaveController::class);
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
-    
+
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
     Route::middleware('role:manager,admin')->group(function () {
         Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
-        Route::put('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
-        Route::put('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
+        Route::post('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
     });
 
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Routes pour les notes de frais
+    Route::resource('expense-reports', ExpenseReportController::class);
+    Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
 
-       
+    // Routes pour le profil utilisateur
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        // Routes pour la gestion des congés par les managers
-        Route::middleware(['auth', 'verified'])->group(function () {
-            Route::get('/manager/leaves', [App\Http\Controllers\Manager\LeaveController::class, 'index'])
-                 ->name('manager.leaves.index');
-            Route::put('/manager/leaves/{leave}/approve', [App\Http\Controllers\Manager\LeaveController::class, 'approve'])
-                 ->name('manager.leaves.approve');
-            Route::put('/manager/leaves/{leave}/reject', [App\Http\Controllers\Manager\LeaveController::class, 'reject'])
-                 ->name('manager.leaves.reject');
-        });
+    // Routes pour les managers
+    Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
+        Route::get('leaves', [LeaveController::class, 'managerIndex'])->name('leaves.index');
+    });
 
-        // Routes pour la gestion des congés par Head
-        Route::middleware(['auth', 'verified'])->group(function () {
-            Route::get('head/leaves', [App\Http\Controllers\Head\LeaveController::class, 'index'])->name('head.leaves.index');
-            Route::put('/head/leaves/{leave}/approve', [App\Http\Controllers\Head\LeaveController::class, 'approve'])
-                 ->name('head.leaves.approve');
-            Route::put('/head/leaves/{leave}/reject', [App\Http\Controllers\Head\LeaveController::class, 'reject'])
-                 ->name('head.leaves.reject');
-        });
+    // Routes pour les chefs de département
+    Route::middleware('role:department_head')->name('head.')->prefix('head')->group(function () {
+        Route::get('leaves', [LeaveController::class, 'headIndex'])->name('leaves.index');
+    });
 
-        // Routes pour l'administration
-        Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
-            // Redirection du tableau de bord vers les statistiques
-            Route::redirect('/', '/admin/stats')->name('dashboard');
+    // Routes pour les administrateurs et RH
+    Route::middleware('role:admin,hr')->name('admin.')->prefix('admin')->group(function () {
+        // Statistiques
+        Route::get('stats', [StatsController::class, 'index'])->name('stats.index');
 
-            // Routes pour les congés
-            Route::prefix('leaves')->name('leaves.')->group(function () {
-                Route::get('/', [AdminLeaveController::class, 'index'])->name('index');
-                Route::put('/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('approve');
-                Route::put('/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('reject');
-            });
+        // Gestion des congés
+        Route::get('leaves', [AdminLeaveController::class, 'index'])->name('leaves.index');
+        Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
+        Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
+        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
 
-            // Routes pour les statistiques
-            Route::prefix('stats')->name('stats.')->group(function () {
-                Route::get('/', [StatsController::class, 'index'])->name('index');
-            });
+        // Gestion des utilisateurs
+        Route::resource('users', UserController::class);
+        Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
-            // Routes pour la gestion des utilisateurs
-            Route::resource('users', UserController::class);
-
-            // Routes pour la gestion des départements
-            Route::resource('departments', DepartmentController::class);
-
-            // Routes pour les équipes
-            Route::get('/teams/{team}/edit', [TeamController::class, 'edit'])->name('teams.edit');
-            Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
-            Route::put('/teams/{team}', [TeamController::class, 'update'])->name('teams.update');
-            Route::delete('teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
-
-            Route::post('/teams/{team}/members', [TeamController::class, 'addMembers'])
-                ->name('admin.teams.members.add');
-            Route::delete('/teams/{team}', [TeamController::class, 'destroy'])->name('teams.destroy');
-            Route::get('/departments/{department}/managers', [TeamController::class, 'getManagersByDepartment'])->name('departments.managers');
-            Route::get('/departments/{department}/teams', [TeamController::class, 'getTeamsByDepartment'])->name('departments.teams');
-        });
-
-        // Routes pour les rapports d'expenses (accessibles à tous les utilisateurs authentifiés)
-        Route::middleware(['auth', 'verified'])->group(function () {
-            
-
-            // Routes pour les rapports d'expenses
-            Route::resource('expense-reports', ExpenseReportController::class);
-            Route::patch('expense-reports/{id}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
-            Route::patch('expense-reports/{id}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
-            Route::patch('expense-reports/{id}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
-        
-            // Expense Lines (routes imbriquées)
-            // Route::resource('expense-reports/{reportId}/lines', ExpenseLineController::class);
-            // Routes pour les lignes de dépenses
-          Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
-        });
+        // Gestion des départements
+        Route::resource('departments', DepartmentController::class);
+        Route::get('departments/{department}/teams', [TeamController::class, 'index'])->name('departments.teams.index');
+        Route::post('departments/{department}/teams', [TeamController::class, 'store'])->name('departments.teams.store');
+        Route::get('departments/{department}/teams/create', [TeamController::class, 'create'])->name('departments.teams.create');
+        Route::get('departments/{department}/teams/{team}/edit', [TeamController::class, 'edit'])->name('departments.teams.edit');
+        Route::put('departments/{department}/teams/{team}', [TeamController::class, 'update'])->name('departments.teams.update');
+        Route::delete('departments/{department}/teams/{team}', [TeamController::class, 'destroy'])->name('departments.teams.destroy');
     });
 });
-
-// Route par défaut redirige vers les congés
-Route::get('/dashboard', function () {
-    return redirect()->route('leaves.index');
-})->name('dashboard')->middleware(['auth', 'verified']);
