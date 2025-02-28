@@ -1,9 +1,0 @@
-[phases.setup]
-nixPkgs = ['mysql']
-
-[build]
-provider = "docker"
-cmd = "composer install && npm install && npm run build"
-
-[start]
-cmd = "bash railway-start.sh"
