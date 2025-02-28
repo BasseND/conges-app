@@ -36,6 +36,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT002',
+            'email_verified_at' => now(),
         ]);
 
         $infraManager = User::create([
@@ -47,6 +48,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT005',
+            'email_verified_at' => now(),
         ]);
 
         $hrTeamManager = User::create([
@@ -58,6 +60,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $hrDept->id,
             'employee_id' => 'HR002',
+            'email_verified_at' => now(),
         ]);
 
         $financeManager = User::create([
@@ -69,6 +72,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $finDept->id,
             'employee_id' => 'FIN001',
+            'email_verified_at' => now(),
         ]);
 
         // Équipes avec leurs managers
@@ -106,6 +110,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'ADMIN001',
+            'email_verified_at' => now(),
         ]);
 
         // HR Manager
@@ -118,6 +123,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $hrDept->id,
             'employee_id' => 'HR001',
+            'email_verified_at' => now(),
         ]);
 
         // Chef de département IT
@@ -130,6 +136,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT001',
+            'email_verified_at' => now(),
         ]);
 
         // Employés
@@ -142,6 +149,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT003',
+            'email_verified_at' => now(),
         ]);
 
         $employee2 = User::create([
@@ -153,6 +161,7 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT004',
+            'email_verified_at' => now(),
         ]);
 
         // Associer les utilisateurs aux équipes
