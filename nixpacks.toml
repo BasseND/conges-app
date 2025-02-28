@@ -1,3 +1,6 @@
+[phases.setup]
+nixPkgs = ['mysql']
+
 [build]
 cmd = "composer install && npm install && npm run build"
 
