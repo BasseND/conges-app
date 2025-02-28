@@ -1,5 +1,5 @@
 [build]
-cmd = "composer install --no-dev --optimize-autoloader && npm install && npm run build"
+cmd = "composer install && npm install && npm run build"
 
 [start]
-cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+cmd = "bash railway-start.sh"
