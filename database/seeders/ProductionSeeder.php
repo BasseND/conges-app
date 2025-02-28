@@ -21,17 +21,82 @@ class ProductionSeeder extends Seeder
         Department::create(['name' => 'Marketing', 'code' => 'MKT']);
         Department::create(['name' => 'Opérations', 'code' => 'OPS']);
 
-        // Équipes
+        // Récupérer les départements
         $itDept = Department::where('code', 'IT')->first();
         $hrDept = Department::where('code', 'HR')->first();
         $finDept = Department::where('code', 'FIN')->first();
 
-        $team1 = Team::create(['name' => 'Développement Web', 'department_id' => $itDept->id]);
-        $team2 = Team::create(['name' => 'Infrastructure', 'department_id' => $itDept->id]);
-        $team3 = Team::create(['name' => 'Recrutement', 'department_id' => $hrDept->id]);
-        $team4 = Team::create(['name' => 'Comptabilité', 'department_id' => $finDept->id]);
+        // Créer les managers d'abord
+        $webManager = User::create([
+            'name' => 'Web Team Manager',
+            'email' => 'web.manager@example.com',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_MANAGER,
+            'annual_leave_days' => 25,
+            'sick_leave_days' => 12,
+            'department_id' => $itDept->id,
+            'employee_id' => 'IT002',
+        ]);
 
-        // Utilisateurs
+        $infraManager = User::create([
+            'name' => 'Infrastructure Manager',
+            'email' => 'infra.manager@example.com',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_MANAGER,
+            'annual_leave_days' => 25,
+            'sick_leave_days' => 12,
+            'department_id' => $itDept->id,
+            'employee_id' => 'IT005',
+        ]);
+
+        $hrTeamManager = User::create([
+            'name' => 'HR Team Manager',
+            'email' => 'hr.team@example.com',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_MANAGER,
+            'annual_leave_days' => 25,
+            'sick_leave_days' => 12,
+            'department_id' => $hrDept->id,
+            'employee_id' => 'HR002',
+        ]);
+
+        $financeManager = User::create([
+            'name' => 'Finance Manager',
+            'email' => 'finance.manager@example.com',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_MANAGER,
+            'annual_leave_days' => 25,
+            'sick_leave_days' => 12,
+            'department_id' => $finDept->id,
+            'employee_id' => 'FIN001',
+        ]);
+
+        // Équipes avec leurs managers
+        $team1 = Team::create([
+            'name' => 'Développement Web',
+            'department_id' => $itDept->id,
+            'manager_id' => $webManager->id
+        ]);
+
+        $team2 = Team::create([
+            'name' => 'Infrastructure',
+            'department_id' => $itDept->id,
+            'manager_id' => $infraManager->id
+        ]);
+
+        $team3 = Team::create([
+            'name' => 'Recrutement',
+            'department_id' => $hrDept->id,
+            'manager_id' => $hrTeamManager->id
+        ]);
+
+        $team4 = Team::create([
+            'name' => 'Comptabilité',
+            'department_id' => $finDept->id,
+            'manager_id' => $financeManager->id
+        ]);
+
+        // Admin utilisateur
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
@@ -55,7 +120,7 @@ class ProductionSeeder extends Seeder
             'employee_id' => 'HR001',
         ]);
 
-        // Chefs de département
+        // Chef de département IT
         $itHead = User::create([
             'name' => 'IT Department Head',
             'email' => 'it.head@example.com',
@@ -65,18 +130,6 @@ class ProductionSeeder extends Seeder
             'sick_leave_days' => 12,
             'department_id' => $itDept->id,
             'employee_id' => 'IT001',
-        ]);
-
-        // Managers
-        $webManager = User::create([
-            'name' => 'Web Team Manager',
-            'email' => 'web.manager@example.com',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_MANAGER,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT002',
         ]);
 
         // Employés

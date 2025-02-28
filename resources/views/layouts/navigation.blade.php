@@ -50,11 +50,11 @@
                             {{ __('Notes de frais') }}
                         </x-nav-link>
                     @endauth
-                    @auth
+                    <!-- @auth
                         <x-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
                             {{ __('Aide') }}
                         </x-nav-link>
-                    @endauth
+                    @endauth -->
                     
                 </div>
             </div>
