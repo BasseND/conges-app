@@ -175,9 +175,9 @@
                     {{ __('Mes congés') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
+                <!-- <x-responsive-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
                     {{ __('Aide') }}
-                </x-responsive-nav-link>
+                </x-responsive-nav-link> -->
             </div>
 
             <!-- Responsive Settings Options -->
