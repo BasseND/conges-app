@@ -63,12 +63,10 @@ Route::middleware('guest')->group(function () {
 // Routes protégées par l'authentification
 Route::middleware('auth')->group(function () {
     // Mot de passe et déconnexion
+    Route::get('confirmable-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirmable');
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
 // Routes protégées par l'authentification et la vérification email

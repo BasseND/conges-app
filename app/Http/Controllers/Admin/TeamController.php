@@ -75,8 +75,12 @@ class TeamController extends Controller
      */
    
 
-     public function edit(Team $team)
+     public function edit(Department $department, Team $team)
     {
+        if ($team->department_id !== $department->id) {
+            return response()->json(['error' => 'L\'équipe n\'appartient pas à ce département'], 404);
+        }
+
         return response()->json([
             'name' => $team->name,
             'manager_id' => $team->manager_id,
@@ -89,8 +93,12 @@ class TeamController extends Controller
      */
    
 
-    public function update(Request $request, Team $team)
+    public function update(Request $request, Department $department, Team $team)
     {
+        if ($team->department_id !== $department->id) {
+            return response()->json(['error' => 'L\'équipe n\'appartient pas à ce département'], 404);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'manager_id' => 'required|exists:users,id',
@@ -113,6 +121,7 @@ class TeamController extends Controller
 
             return redirect()->back()->with('success', 'Équipe mise à jour avec succès.');
         } catch (\Exception $e) {
+            Log::error('Erreur lors de la mise à jour de l\'équipe: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la mise à jour de l\'équipe.');
         }
     }

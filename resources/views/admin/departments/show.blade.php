@@ -124,7 +124,7 @@
 
                     <!-- Contenu du modal -->
                     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <form id="teamForm" x-bind:action="isEdit ? '/admin/teams/' + teamId : '/admin/teams'" method="POST" class="p-6">
+                        <form id="teamForm" x-bind:action="isEdit ? '/admin/departments/{{ $department->id }}/teams/' + teamId : '/admin/departments/{{ $department->id }}/teams'" method="POST" class="p-6">
                             @csrf
                             <template x-if="isEdit">
                                 @method('PUT')
@@ -197,7 +197,7 @@
                     
                     async confirmDelete() {
                         try {
-                            const response = await fetch(`/admin/teams/${this.teamToDelete}`, {
+                            const response = await fetch(`/admin/departments/{{ $department->id }}/teams/${this.teamToDelete}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -312,7 +312,8 @@
 
                 function editTeam(teamId) {
                     console.log('Début editTeam - ID:', teamId);
-                    const url = `/admin/teams/${teamId}/edit`;
+                    const departmentId = {{ $department->id }};
+                    const url = `/admin/departments/${departmentId}/teams/${teamId}/edit`;
                     console.log('URL de la requête:', url);
 
                     fetch(url, {
@@ -365,7 +366,7 @@
                             const teamId = this.teamToDelete;
                             console.log('Confirmation de suppression - ID:', teamId);
                             
-                            fetch(`/admin/teams/${teamId}`, {
+                            fetch(`/admin/departments/{{ $department->id }}/teams/${teamId}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',

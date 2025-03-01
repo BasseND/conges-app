@@ -17,17 +17,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if(session('success'))
-                        <div class="bg-green-100 dark:bg-green-800 border border-green-400 text-green-700 dark:text-green-400 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('success') }}</span>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="bg-red-100 dark:bg-red-800 border border-red-400 text-red-700 dark:text-red-400 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('error') }}</span>
-                        </div>
-                    @endif
+                    <x-alert type="success" :message="session('success')" />
+                    <x-alert type="error" :message="session('error')" />
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
