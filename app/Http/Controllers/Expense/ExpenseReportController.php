@@ -306,21 +306,19 @@ class ExpenseReportController extends Controller
     }
 
     // Approuver la note de frais (pour un manager/admin)
-    public function approve($id)
+    public function approve(ExpenseReport $expense_report)
     {
         // Seuls les managers/admins peuvent approuver
         if (!auth()->user()->canApproveExpenseReports()) {
             abort(403, 'Vous n\'avez pas l\'autorisation d\'approuver les notes de frais.');
         }
 
-        $report = ExpenseReport::findOrFail($id);
-
-        $report->update([
+        $expense_report->update([
             'status' => 'approved',
             'approved_at' => now()
         ]);
 
-        return redirect()->route('expense-reports.show', $report)
+        return redirect()->route('expense-reports.show', $expense_report)
                          ->with('success', 'Note de frais approuvée');
     }
 

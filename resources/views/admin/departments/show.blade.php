@@ -126,9 +126,7 @@
                     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                         <form id="teamForm" x-bind:action="isEdit ? '/admin/departments/{{ $department->id }}/teams/' + teamId : '/admin/departments/{{ $department->id }}/teams'" method="POST" class="p-6">
                             @csrf
-                            <template x-if="isEdit">
-                                @method('PUT')
-                            </template>
+                            <input type="hidden" name="_method" x-bind:value="isEdit ? 'PUT' : 'POST'">
 
                             <div class="space-y-4">
                                 <div>
