@@ -43,9 +43,9 @@ class RegisteredUserController extends Controller
             'employee_id' => 'EMP' . str_pad(User::count() + 1, 4, '0', STR_PAD_LEFT),
         ]);
 
-        event(new Registered($user));
-
         Auth::login($user);
+        
+        event(new Registered($user));
 
         return redirect()->route('verification.notice')->with('success', 'Inscription réussie ! Veuillez vérifier votre email.');
     }

@@ -170,10 +170,14 @@
                         {{ __('Gestion des congés') }}
                     </x-responsive-nav-link>
                 @endif
-
-                <x-responsive-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
-                    {{ __('Mes congés') }}
-                </x-responsive-nav-link>
+                @auth
+                    <x-responsive-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
+                        {{ __('Mes congés') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
+                        {{ __('Notes de frais') }}
+                    </x-responsive-nav-link>
+                @endauth
 
                 <!-- <x-responsive-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
                     {{ __('Aide') }}

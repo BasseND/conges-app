@@ -102,9 +102,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routes pour les notes de frais
     Route::resource('expense-reports', ExpenseReportController::class);
     Route::post('expense-reports/{expense_report}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
+    Route::post('expense-reports/{expense_report}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
+    Route::post('expense-reports/{expense_report}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
+    Route::post('expense-reports/{expense_report}/pay', [ExpenseReportController::class, 'pay'])->name('expense-reports.pay');
     Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
-
-    
 
     // Routes pour le profil utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

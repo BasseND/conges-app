@@ -185,6 +185,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->isAdmin() || $this->isHR();
     }
 
+    public function canPayExpenseReports(): bool
+    {
+        return $this->isAdmin() || $this->isHR();
+    }
+
     /**
      * Get the roles available for the user.
      */

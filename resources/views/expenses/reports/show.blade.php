@@ -72,6 +72,11 @@
                                                         Rejeté
                                                     </span>
                                                     @break
+                                                @case('paid')
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500 text-white dark:bg-green-700 dark:text-green-300">
+                                                        Payé
+                                                    </span>
+                                                    @break
                                             @endswitch
                                         </dd>
                                     </div>
@@ -171,6 +176,7 @@
                         </a>
                         @if($report->status === 'draft')
                             <button type="button"
+                                @click="$dispatch('submit-expense', '{{ route('expense-reports.submit', $report) }}')"
                                 class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -181,7 +187,7 @@
 
                         @if(auth()->user()->canApproveExpenseReports())
                             @if($report->status === 'submitted')
-                                <button @click="$dispatch('approve-expense-dialog', '{{ route('expense-reports.approve', $report) }}')"
+                                <button @click="$dispatch('approve-expense', '{{ route('expense-reports.approve', $report) }}')"
                                     type="button"
                                     class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +195,27 @@
                                     </svg>
                                     Valider
                                 </button>
+                                <button @click="$dispatch('reject-expense', '{{ route('expense-reports.reject', $report) }}')"
+                                    type="button"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    Rejeter
+                                </button>
                             @endif
+                            @if(auth()->user()->canPayExpenseReports())
+                                @if($report->status === 'approved')
+                                    <button @click="$dispatch('pay-expense', '{{ route('expense-reports.pay', $report) }}')"
+                                        type="button"
+                                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Payer
+                                    </button>
+                                @endif
+                            @endcan
                         @endif
                     </div>
                 </div>
@@ -197,4 +223,7 @@
         </div>
     </div>
     <x-modals.approve-expense message="Êtes-vous sûr de vouloir valider cette note de frais ? Une fois validée, elle ne pourra plus être modifiée." />
+    <x-modals.submit-expense message="Êtes-vous sûr de vouloir soumettre cette note de frais ? Une fois soumise, elle ne pourra plus être modifiée." />
+    <x-modals.reject-expense message="Êtes-vous sûr de vouloir rejeter cette note de frais ? Une fois rejetée, elle ne pourra plus être modifiée." />
+    <x-modals.pay-expense message="Êtes-vous sûr de vouloir payer cette note de frais ? Une fois payée, elle ne pourra plus être modifiée." />
 </x-app-layout>
