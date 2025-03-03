@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Contract;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,8 @@ class UserController extends Controller
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
-                $q->where('name', 'like', "%{$searchTerm}%")
+                $q->where('first_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('last_name', 'like', "%{$searchTerm}%")
                   ->orWhere('email', 'like', "%{$searchTerm}%");
             });
         }
@@ -39,7 +41,7 @@ class UserController extends Controller
         }
 
         // Tri
-        $sortField = $request->input('sort', 'name');
+        $sortField = $request->input('sort', 'first_name');
         $sortDirection = $request->input('direction', 'asc');
         $query->orderBy($sortField, $sortDirection);
 
@@ -61,8 +63,10 @@ class UserController extends Controller
         Log::info('Request data:', $request->all());
 
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8',
             'role' => ['required', Rule::in([
                 User::ROLE_EMPLOYEE,
@@ -114,14 +118,30 @@ class UserController extends Controller
     {
         $departments = Department::all();
         $teams = Team::all();
+    
         return view('admin.users.edit', compact('user', 'departments', 'teams'));
+    }
+
+    public function show(User $user)
+    {
+
+        $departments = Department::all();
+        $teams = Team::all();
+        // Charger les relations nécessaires
+        $user->load(['department', 'teams', 'contracts' => function($query) {
+            $query->orderBy('date_debut', 'desc');
+        }]);
+
+        return view('admin.users.show', compact('user', 'departments', 'teams'));
     }
 
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
             'role' => ['required', Rule::in([
                 User::ROLE_EMPLOYEE,
@@ -193,4 +213,7 @@ class UserController extends Controller
 
         return $employeeId;
     }
+
+    // Profile Infos Dialog Edit
+    
 }

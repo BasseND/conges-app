@@ -8,6 +8,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Contract;
+use App\Models\Department;
+use App\Models\Team;
+use App\Models\Leave;
+use App\Models\ExpenseReport;
+use App\Models\ExpenseLine;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -27,9 +33,14 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'phone',
         'email',
         'password',
+        'role',
+        'employee_id',
+        'department_id',
         'role',
         'employee_id',
         'department_id',
@@ -128,6 +139,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function managedTeams()
     {
         return $this->hasMany(Team::class, 'manager_id');
+    }
+
+    /**
+     * Get the contracts created by the user.
+     */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    /**
+     * Get the documents for the user.
+     */
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
     }
 
     /**

@@ -16,7 +16,7 @@
                 @forelse($leaves as $leave)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ $leave->user->name }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $leave->user->first_name }}</div>
                             <div class="text-sm text-gray-500">{{ $leave->user->department->name }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

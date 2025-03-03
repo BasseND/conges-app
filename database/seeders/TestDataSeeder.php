@@ -39,8 +39,10 @@ class TestDataSeeder extends Seeder
 
         // Créer un admin
         User::create([
-            'name' => 'Admin',
+            'first_name' => 'Admin',
+            'last_name' => 'Admin',
             'email' => 'admin@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => 'admin',
             'department_id' => Department::inRandomOrder()->first()->id,
@@ -50,8 +52,10 @@ class TestDataSeeder extends Seeder
         // Créer des chefs de département
         foreach (Department::all() as $department) {
             $head = User::create([
-                'name' => "Chef {$department->name}",
+                'first_name' => "Chef {$department->name}",
+                'last_name' => "Chef {$department->name}",
                 'email' => "head.{$department->id}@example.com",
+                'phone' => '1234567890',
                 'password' => Hash::make('password'),
                 'role' => 'department_head',
                 'department_id' => $department->id,
@@ -67,8 +71,10 @@ class TestDataSeeder extends Seeder
         foreach (Department::all() as $department) {
             for ($i = 1; $i <= 3; $i++) {
                 User::create([
-                    'name' => "Employé {$i} {$department->name}",
+                    'first_name' => "Employé {$i} {$department->name}",
+                    'last_name' => "Employé {$i} {$department->name}",
                     'email' => "employee.{$department->id}.{$i}@example.com",
+                    'phone' => '1234567890',
                     'password' => Hash::make('password'),
                     'role' => 'employee',
                     'department_id' => $department->id,

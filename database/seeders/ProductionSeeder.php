@@ -28,8 +28,10 @@ class ProductionSeeder extends Seeder
 
         // Créer les managers d'abord
         $webManager = User::create([
-            'name' => 'Web Team Manager',
+            'first_name' => 'Web Team Manager',
+            'last_name' => 'Web Team Manager',
             'email' => 'web.manager@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
             'annual_leave_days' => 25,
@@ -40,8 +42,10 @@ class ProductionSeeder extends Seeder
         ]);
 
         $infraManager = User::create([
-            'name' => 'Infrastructure Manager',
+            'first_name' => 'Infrastructure Manager',
+            'last_name' => 'Infrastructure Manager',
             'email' => 'infra.manager@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
             'annual_leave_days' => 25,
@@ -52,8 +56,10 @@ class ProductionSeeder extends Seeder
         ]);
 
         $hrTeamManager = User::create([
-            'name' => 'HR Team Manager',
+            'first_name' => 'HR Team Manager',
+            'last_name' => 'HR Team Manager',
             'email' => 'hr.team@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
             'annual_leave_days' => 25,
@@ -64,8 +70,10 @@ class ProductionSeeder extends Seeder
         ]);
 
         $financeManager = User::create([
-            'name' => 'Finance Manager',
+            'first_name' => 'Finance Manager',
+            'last_name' => 'Finance Manager',
             'email' => 'finance.manager@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
             'annual_leave_days' => 25,
@@ -102,8 +110,10 @@ class ProductionSeeder extends Seeder
 
         // Admin utilisateur
         $admin = User::create([
-            'name' => 'Admin',
+            'first_name' => 'Admin',
+            'last_name' => 'Admin',
             'email' => 'admin@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_ADMIN,
             'annual_leave_days' => 25,
@@ -115,8 +125,10 @@ class ProductionSeeder extends Seeder
 
         // HR Manager
         $hrManager = User::create([
-            'name' => 'HR Manager',
+            'first_name' => 'HR',
+            'last_name' => 'Manager',
             'email' => 'hr@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_HR,
             'annual_leave_days' => 25,
@@ -128,8 +140,10 @@ class ProductionSeeder extends Seeder
 
         // Chef de département IT
         $itHead = User::create([
-            'name' => 'IT Department Head',
+            'first_name' => 'IT Department Head',
+            'last_name' => 'IT Department Head',
             'email' => 'it.head@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_DEPARTMENT_HEAD,
             'annual_leave_days' => 25,
@@ -141,8 +155,10 @@ class ProductionSeeder extends Seeder
 
         // Employés
         $employee1 = User::create([
-            'name' => 'John Developer',
+            'first_name' => 'John',
+            'last_name' => 'Developer',
             'email' => 'john@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_EMPLOYEE,
             'annual_leave_days' => 25,
@@ -153,8 +169,10 @@ class ProductionSeeder extends Seeder
         ]);
 
         $employee2 = User::create([
-            'name' => 'Jane Developer',
+            'first_name' => 'Jane',
+            'last_name' => 'Developer',
             'email' => 'jane@example.com',
+            'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_EMPLOYEE,
             'annual_leave_days' => 25,

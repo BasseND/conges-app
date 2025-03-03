@@ -162,7 +162,7 @@
                                                            value="{{ $user->id }}"
                                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                                                     <label for="member-{{ $user->id }}" class="ml-2 block text-sm text-gray-900">
-                                                        {{ $user->name }}
+                                                        {{ $user->first_name }}
                                                     </label>
                                                 </div>
                                             @endforeach

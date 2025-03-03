@@ -119,7 +119,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $leave->user->name }}</div>
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $leave->user->first_name }}</div>
                                                 <div class="text-sm text-gray-500 dark:text-gray-400">
                                                     {{ $leave->user->department ? $leave->user->department->name : 'Non assigné' }}
                                                 </div>

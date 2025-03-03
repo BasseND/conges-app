@@ -31,7 +31,7 @@
                                 <option value="">Sélectionner un chef</option>
                                 @foreach($departmentHeads as $user)
                                     <option value="{{ $user->id }}" {{ old('head_id', $department->head_id) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
+                                        {{ $user->first_name }}
                                     </option>
                                 @endforeach
                             </select> 
@@ -39,7 +39,7 @@
                                 <option value="">Sélectionner un chef</option>
                                 @foreach($departmentHeads as $user)
                                     <option value="{{ $user->id }}" {{ old('head_id', optional($department->head)->id) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
+                                        {{ $user->first_name }}
                                     </option>
                                 @endforeach
                             </select> --}}

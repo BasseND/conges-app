@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\LeaveController as AdminLeaveController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\HelpController;
@@ -137,6 +139,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Gestion des utilisateurs
         Route::resource('users', UserController::class);
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        // Route::get('users/{user}', [UserController::class, 'edit'])->name('users.edit-profile-infos');
+        // Document routes
+        Route::post('/users/{user}/documents', [DocumentController::class, 'store'])->name('users.documents.store');
+        Route::get('/users/{user}/documents/{document}/download', [DocumentController::class, 'download'])->name('users.documents.download');
+        Route::delete('/users/{user}/documents/{document}', [DocumentController::class, 'destroy'])->name('users.documents.destroy');
+        // Contract routes
+        Route::post('/users/{user}/contracts', [ContractController::class, 'store'])->name('users.contracts.store');
+        Route::get('/users/{user}/contracts/{contract}/download', [ContractController::class, 'download'])->name('users.contracts.download');
+        Route::delete('/users/{user}/contracts/{contract}', [ContractController::class, 'destroy'])->name('users.contracts.destroy');
 
         // Gestion des départements
         Route::resource('departments', DepartmentController::class);

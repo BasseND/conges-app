@@ -99,7 +99,7 @@
                                         #{{ $report->id }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $report->user->name }}
+                                        {{ $report->user->first_name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                         {{ $report->submitted_at ? $report->submitted_at->format('d/m/Y') : 'Non soumis' }}

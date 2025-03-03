@@ -4,7 +4,7 @@
             {{ __('Demande de congé') }}
             @if($leave->user_id)
                 @if($leave->user)
-                    de {{ $leave->user->name }}
+                    de {{ $leave->user->first_name }} {{ $leave->user->last_name }}
                 @else
                     (Utilisateur ID: {{ $leave->user_id }})
                 @endif
@@ -26,7 +26,7 @@
                     @endif
 
                     <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                        Demande de {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
+                        Demande de {{ $leave->user ? $leave->user->first_name . ' ' . $leave->user->last_name : 'Utilisateur inconnu (ID: ' . $leave->user_id . ')' }}
                     </h3>
                    
                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">    
@@ -80,7 +80,7 @@
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500 dark:text-white">Demandeur</dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
-                                {{ $leave->user ? $leave->user->name : 'Utilisateur inconnu' }}
+                                {{ $leave->user ? $leave->user->first_name : 'Utilisateur inconnu' }}
                             </dd>
                         </div>
                         <div class="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -191,36 +191,15 @@
 
                 @if(auth()->user()->can('approve-leaves') && $leave->status === 'pending')
                     <div class="">
-
                         
                         <div class="flex justify-end space-x-3">
-                            <!-- <form action="{{ route('leaves.reject', $leave) }}" method="POST" class="inline">
-                                @csrf
-                                @method('PUT')
-                                <div class="flex items-center space-x-3">
-                                    <input type="text" name="rejection_reason" 
-                                        class="block w-64 border-gray-300 rounded-md shadow-sm focus:ring-secondary focus:border-secondary sm:text-sm"
-                                        placeholder="Motif du refus" required>
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="return confirm('Êtes-vous sûr de vouloir refuser cette demande ?')">
-                                        Refuser
-                                    </button>
-                                </div>
-                            </form>
-                            <form action="{{ route('leaves.approve', $leave) }}" method="POST" class="inline">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="return confirm('Êtes-vous sûr de vouloir approuver cette demande ?')">
-                                    Approuver
-                                </button>
-                            </form> -->
-
-                            <button onclick="showApproveModal('{{ route('manager.leaves.approve', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
+                            <button @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
                                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 Approuver
                             </button>
-                            <button onclick="showRejectModal('{{ route('manager.leaves.reject', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <button @click="$dispatch('reject-leave', '{{ route('leaves.reject', $leave) }}')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -234,56 +213,7 @@
         </div>
     </div>
 
-    <x-modals.approve-leave :action="''" />
-    <x-modals.reject-leave :action="''" />
-
-    @push('scripts')
-    <script>
-        function showApproveModal(action) {
-            const modal = document.getElementById('approveModal');
-            const form = document.getElementById('approveForm');
-            form.action = action;
-            modal.classList.remove('hidden');
-        }
-
-        function hideApproveModal() {
-            const modal = document.getElementById('approveModal');
-            modal.classList.add('hidden');
-        }
-
-        function showRejectModal(action) {
-            const modal = document.getElementById('rejectModal');
-            const form = document.getElementById('rejectForm');
-            form.action = action;
-            modal.classList.remove('hidden');
-        }
-
-        function hideRejectModal() {
-            const modal = document.getElementById('rejectModal');
-            modal.classList.add('hidden');
-            // Réinitialiser le formulaire
-            document.getElementById('rejection_reason').value = '';
-        }
-
-        // Fermer les modales avec la touche Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                hideApproveModal();
-                hideRejectModal();
-            }
-        });
-
-        // Fermer les modales en cliquant en dehors
-        window.onclick = function(event) {
-            const approveModal = document.getElementById('approveModal');
-            const rejectModal = document.getElementById('rejectModal');
-            if (event.target === approveModal) {
-                hideApproveModal();
-            }
-            if (event.target === rejectModal) {
-                hideRejectModal();
-            }
-        }
-    </script>
-    @endpush 
+    <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
+    <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
+    
 </x-app-layout>
