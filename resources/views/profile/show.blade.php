@@ -153,18 +153,6 @@
                                 <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Horaires de travail</h3>
                                 <p class="mt-1 text-sm text-gray-900 dark:text-white">8h - 17h</p>
                             </div>
-
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Type d'emploi</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if(isset($user->contracts) && $user->contracts->count() > 0)
-                                        {{ $user->contracts->sortByDesc('date_debut')->first()->type }}
-                                    @else
-                                        Non renseigné
-                                    @endif
-                                </p>
-                            </div>
-
                             <div>
                                 <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Manager</h3>
                                 <p class="mt-1 text-sm text-gray-900 dark:text-white">

@@ -238,51 +238,87 @@
         <div class="space-y-4">
             @foreach($user->contracts as $contract)
                 <div class="border rounded-lg p-4 dark:border-gray-700">
-                    <div class="flex justify-between items-start">
+
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ $contract->type }}</h2>
                         <div>
-                            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ $contract->type }}</h4>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $contract->statut === 'actif' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                            {{ ucfirst($contract->statut) }}
+                           </span>
+                        </div>
+                    </div>
+                            
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Salaire brut annuel: </h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                Du {{ $contract->date_debut->format('d/m/Y') }} 
-                                @if($contract->date_fin)
-                                    au {{ $contract->date_fin->format('d/m/Y') }}
+                                {{ number_format($contract->salaire_brut, 2, ',', ' ') }} €
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Période</h3>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                                @if($contract->type == \App\Models\Contract::CONTRACT_CDI)
+                                    Indéterminée
                                 @else
-                                    (sans date de fin)
+                                    {{ $contract->date_fin->diffInMonths($contract->date_debut) }} mois
                                 @endif
                             </p>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $contract->statut === 'actif' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                            {{ ucfirst($contract->statut) }}
-                        </span>
-                    </div>
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Salaire brut annuel: {{ number_format($contract->salaire_brut, 2, ',', ' ') }} €
-                        </p>
+
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de début</h3>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $contract->date_debut->format('d M, Y') }}</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de fin</h3>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                                @if($contract->type == \App\Models\Contract::CONTRACT_CDI)
+                                    N/A
+                                @else
+                                    {{ $contract->date_fin->format('d M, Y') }}
+                                @endif
+                            </p>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Pièce jointe</h3>
+                            @if($contract->contrat_file)
+                                <div class="mt-1 flex items-center">
+                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <a href="{{ asset('storage/' . $contract->contrat_file) }}" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank">
+                                        Contrat de travail
+                                    </a>
+                                </div>
+                            @else
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aucun document joint</p>
+                            @endif
+                        </div>
+                        
+                        
                     </div>
                     <div class="mt-3 flex justify-end space-x-2">
-                        @if($contract->contrat_file)
-                            <a href="{{ route('admin.users.contracts.download', [$user->id, $contract->id]) }}" class="inline-flex items-center px-2 py-1 text-xs font-medium text-indigo-700 bg-indigo-100 rounded hover:bg-indigo-200">
+                            @if($contract->contrat_file)
+                                <a href="{{ route('admin.users.contracts.download', [$user->id, $contract->id]) }}" class="inline-flex items-center px-2 py-1 text-xs font-medium text-indigo-700 bg-indigo-100 rounded hover:bg-indigo-200">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Télécharger
+                                </a>
+                            @endif
+
+                            <button @click="$dispatch('delete-dialog', '{{ route('admin.users.contracts.destroy', [$user->id, $contract->id]) }}')" type="button" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded hover:bg-red-200"
+                            >
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                Télécharger
-                            </a>
-                        @endif
-
-                        <button @click="$dispatch('delete-dialog', '{{ route('admin.users.contracts.destroy', [$user->id, $contract->id]) }}')" type="button" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded hover:bg-red-200"
-                         >
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            Supprimer
-                        </button>
-
-                        <!-- <form method="POST"  @click="$dispatch('delete-dialog', '{{ route('admin.users.contracts.destroy', [$user->id, $contract->id]) }}')" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            
-                        </form> -->
-                    </div>
+                                Supprimer
+                            </button>
+                        </div>
                 </div>
             @endforeach
         </div>
