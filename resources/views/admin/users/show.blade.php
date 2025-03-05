@@ -53,32 +53,32 @@
                     <div class="">
                         <ul class="flex space-x-4 border-b border-gray-200 dark:border-gray-700">
                             <li>
-                                <button @click="activeTab = 'personal'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'personal' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'personal'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'personal' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
                                     Informations personnelles
                                 </button>
                             </li>
                             <li>
-                                <button @click="activeTab = 'contract'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'contract' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'contract'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'contract' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
                                     Contrat
                                 </button>
                             </li>
                             <li>
-                                <button @click="activeTab = 'payroll'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'payroll' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'payroll'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'payroll' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
                                     Paie
                                 </button>
                             </li>
                             <li>
-                                <button @click="activeTab = 'timesheet'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'timesheet' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'timesheet'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'timesheet' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
                                     Gestion du temps
                                 </button>
                             </li>
                             <li>
-                                <button @click="activeTab = 'documents'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'documents' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'documents'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'documents' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300"> 
                                     Documents
                                 </button>
                             </li>
                             <li>
-                                <button @click="activeTab = 'training'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'training' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300">
+                                <button @click="activeTab = 'training'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'training' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
                                     Formation
                                 </button>
                             </li>

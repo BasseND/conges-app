@@ -10,6 +10,14 @@ class Contract  extends Model
 {
     use HasFactory;
 
+     // Constantes pour les contrats
+     const CONTRACT_CDI = 'CDI';
+     const CONTRACT_CDD = 'CDD';
+     const CONTRACT_INTERIM = 'Interim';
+     const CONTRACT_STAGE = 'Stage';
+     const CONTRACT_ALTERNANCE = 'Alternance';
+     const CONTRACT_FREELANCE = 'Freelance';
+
     protected $table = 'contrats';
 
     protected $fillable = [
@@ -32,5 +40,21 @@ class Contract  extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+
+     /**
+     * Get the Contract types available for the user.
+     */
+    public static function getContractTypes()
+    {
+        return [
+            self::CONTRACT_CDI => 'CDI',
+            self::CONTRACT_CDD => 'CDD',
+            self::CONTRACT_INTERIM => 'Interim',
+            self::CONTRACT_STAGE => 'Stage',
+            self::CONTRACT_ALTERNANCE => 'Alternance',
+            self::CONTRACT_FREELANCE => 'Freelance',
+        ];
     }
 }

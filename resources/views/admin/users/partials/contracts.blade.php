@@ -138,13 +138,16 @@
 
                         <div>
                             <x-input-label for="type" :value="__('Type de contrat')" />
-                            <select id="type" name="type" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                <option value="">Sélectionnez un type</option>
-                                <option value="CDI">CDI</option>
-                                <option value="CDD">CDD</option>
-                                <option value="Stage">Stage</option>
-                                <option value="Alternance">Alternance</option>
+                            <select id="type" name="type" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">Sélectionner un type de contrat</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_CDI }}">CDI</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_CDD }}">CDD</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_INTERIM }}">Interim</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_STAGE }}">Stage</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_ALTERNANCE }}">Alternance</option>
+                                <option value="{{ App\Models\Contract::CONTRACT_FREELANCE }}">Freelance</option>
                             </select>
+
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
                         </div>
 

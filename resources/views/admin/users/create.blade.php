@@ -33,7 +33,7 @@
 
                                 <div>
                                     <x-input-label for="last_name" :value="__('Nom de famille')" />
-                                    <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus />
+                                    <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required  />
                                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                                 </div>
                             </div>
@@ -64,8 +64,16 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Mettre un select -->
                                 <div>
-                                    <x-input-label for="role" :value="__('Rôle')" />
+                                    <x-input-label for="position" :value="__('Poste')" />
+                                    <select id="position" name="position" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Sélectionnez un poste">
+                                        <option value="">Sélectionnez un poste</option>
+                                    </select>
+                                    <x-input-error :messages="$errors->get('position')" class="mt-2" />
+                                </div>
+                                <div>
+                                    <x-input-label for="role" :value="__('Rôle de l\'utilisateur')" />
                                     <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                         <option value="">Sélectionner un rôle</option>
                                         <option value="{{ App\Models\User::ROLE_EMPLOYEE }}">Employé</option>
@@ -74,10 +82,12 @@
                                         <option value="{{ App\Models\User::ROLE_HR }}">Ressources Humaines</option>
                                         <option value="{{ App\Models\User::ROLE_ADMIN }}">Administrateur</option>
                                     </select>
-                                    
                                     <x-input-error :messages="$errors->get('role')" class="mt-2" />
                                 </div>
 
+                               
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-input-label for="department_id" :value="__('Département')" />
                                     <select id="department_id" name="department_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
@@ -88,8 +98,6 @@
                                     </select>
                                     <x-input-error :messages="$errors->get('department_id')" class="mt-2" />
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 <div>
                                     <x-input-label for="team_id" :value="__('Équipe')" />
@@ -221,6 +229,53 @@
             //     console.log('Département pré-sélectionné:', departmentSelect.value);
             //     loadTeams(departmentSelect.value);
             // }
-        });
+
+            // Mettre à jour le select position
+             fetch('/data/positions.json')
+            .then(response => response.json())
+            .then(data => {
+                // Préparer les options pour Tom Select
+                let options = [];
+                let optgroups = [];
+                
+                // Parcourir les catégories et les postes
+                Object.entries(data.postes).forEach(([category, positions]) => {
+                    // Ajouter la catégorie comme optgroup
+                    optgroups.push({
+                        value: category,
+                        label: category
+                    });
+                    
+                    // Ajouter chaque poste comme option
+                    positions.forEach(position => {
+                        options.push({
+                            value: position,
+                            text: position,
+                            optgroup: category
+                        });
+                    });
+                });
+                
+                // Initialiser Tom Select
+                new TomSelect('#position', {
+                    valueField: 'value',
+                    labelField: 'text',
+                    searchField: 'text',
+                    options: options,
+                    optgroups: optgroups,
+                    optgroupField: 'optgroup',
+                    optgroupLabelField: 'label',
+                    optgroupValueField: 'value',
+                    placeholder: "Sélectionnez un poste",
+                    create: false,
+                    render: {
+                        optgroup_header: function(data, escape) {
+                            return '<div class="optgroup-header">' + escape(data.label) + '</div>';
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des postes:', error));
+            });
     </script>
 </x-app-layout>

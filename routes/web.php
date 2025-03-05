@@ -110,9 +110,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
 
     // Routes pour le profil utilisateur
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
