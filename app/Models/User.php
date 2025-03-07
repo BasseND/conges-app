@@ -47,7 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'annual_leave_days',
         'sick_leave_days',
         'is_active',
-        'position'
+        'position',
+        'is_prestataire'
         //'team_id'
     ];
 

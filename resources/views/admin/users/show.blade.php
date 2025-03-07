@@ -89,8 +89,13 @@
                     <!-- Contenu des onglets -->
                     <div class="mt-6">
                         <!-- Informations personnelles -->
-                        <div x-show="activeTab === 'personal'" class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            @include('admin.users.partials.infos-perso')
+                        <div x-show="activeTab === 'personal'" >
+                            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                                @include('admin.users.partials.infos-perso')
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg mt-6">
+                                @include('admin.users.modals.delete-user-form')
+                            </div>
                         </div>
 
                         <!-- Contrat -->

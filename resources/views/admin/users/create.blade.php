@@ -12,6 +12,20 @@
                     <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-6">
                         @csrf
 
+                        <!-- Block erreurs -->
+
+                        @if ($errors->any())
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                <strong class="font-bold">Erreur!</strong>
+                                <span class="block sm:inline">Veuillez corriger les erreurs ci-dessous.</span>
+                                <ul class="mt-2 list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <!-- Informations sur l'utilisateur -->
                         <div class="border border-gray-200 dark:border-gray-700 rounded-md px-4 py-6 space-y-4">
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -19,12 +33,6 @@
                             </h2>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- <div>
-                                    <x-input-label for="name" :value="__('Nom')" />
-                                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-                                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                                </div> -->
-
                                 <div>
                                     <x-input-label for="first_name" :value="__('Prénom')" />
                                     <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
@@ -46,7 +54,7 @@
 
                                 <div>
                                     <x-input-label for="phone" :value="__('Numéro de téléphone')" />
-                                    <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required />
+                                    <x-text-input id="phone" class="block mt-1 w-full" type="number" name="phone" :value="old('phone')" required />
                                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                                 </div>
                             </div>
@@ -108,19 +116,16 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                
                             </div>
-                           
-                        </div>
-
-                        <!-- Informations contractuelles -->
-                        <div class="border border-gray-200 dark:border-gray-700 rounded-md px-4 py-6 space-y-4">
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('Informations contractuelles') }}
-                            </h2>
-
-                         
+                            <div>
+                                <div class="mt-3 mb-3">
+                                    <p class="block font-medium text-sm text-gray-700 dark:text-gray-200">L'utilisateur est-il un prestataire ?</p>
+                                </div>
+                                <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" {{ old('is_prestataire') ? 'checked' : '' }} />
+                                <label for="is_prestataire" class="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 outline-gray-400 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500">
+                                    <span class="sr-only">Enable</span>
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Solde de conges -->

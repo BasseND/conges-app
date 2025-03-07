@@ -94,11 +94,11 @@ class DepartmentController extends Controller
         
         $managers = $department->users()
             ->where('role', 'manager')
-            ->orderBy('name')
+            ->orderBy('first_name')
             ->get();
 
         $users = $department->users()
-            ->orderBy('name')
+            ->orderBy('first_name')
             ->get();
 
         return view('admin.departments.show', [

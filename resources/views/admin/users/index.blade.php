@@ -153,12 +153,11 @@
                                                 </svg>
                                             </a>
 
-                                            <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 dark:text-indigo-500 hover:text-indigo-900 dark:hover:text-indigo-700 mr-3">
+                                            <!-- <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 dark:text-indigo-500 hover:text-indigo-900 dark:hover:text-indigo-700 mr-3">
                                                 <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                 </svg>
-                                            </a>
-
+                                            </a> -->
                                             @if($user->id !== auth()->id())
                                                 <button @click="$dispatch('delete-dialog', '{{ route('admin.users.destroy', $user) }}')"  
                                                         title="Supprimer" 
@@ -185,6 +184,6 @@
     </div>
 
     <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront définitivement supprimées." />
-
+  
    
 </x-app-layout>
