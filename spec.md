@@ -90,3 +90,10 @@ class CreateExpenseLinesTable extends Migration
         Schema::dropIfExists('expense_lines');
     }
 }
+
+
+Ajouter ces champs (first_name
+last_name
+phone ) dans la table user.   
+ 
+Le champs frist_name va remplacer le champs name.

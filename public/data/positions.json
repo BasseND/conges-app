@@ -1,0 +1,119 @@
+{
+    "postes": {
+      "Direction et Management": [
+        "Directeur Général",
+        "Directeur Financier",
+        "Directeur des Opérations",
+        "Manager",
+        "Chef de département",
+        "Directeur des Ressources Humaines",
+        "Directeur Marketing",
+        "Directeur Commercial"
+      ],
+      "Développement": [
+        "Développeur Front-end",
+        "Développeur Back-end",
+        "Développeur Full Stack",
+        "Développeur Mobile",
+        "Ingénieur Logiciel",
+        "Développeur Web",
+        "Développeur JavaScript",
+        "Développeur Python",
+        "Développeur Java",
+        "Développeur PHP"
+      ],
+      "Cloud": [
+        "Technicien Cloud",
+        "Ingénieur Cloud",
+        "Architecte Cloud",
+        "Administrateur Cloud",
+        "Consultant Cloud"
+      ],
+      "Cybersécurité": [
+        "Ingénieur sécurité",
+        "Architecte sécurité",
+        "Analyste en cybersécurité",
+        "Consultant en cybersécurité",
+        "Responsable sécurité",
+        "Spécialiste en sécurité informatique"
+      ],
+      "Réseaux & Infrastructure": [
+        "Administrateur Réseaux",
+        "Ingénieur Réseaux",
+        "Technicien Réseaux",
+        "Administrateur Systèmes",
+        "Architecte Infrastructure",
+        "Technicien Infrastructure",
+        "Ingénieur Télécom"
+      ],
+      "Data & Intelligence Artificielle": [
+        "Data Scientist",
+        "Data Analyst",
+        "Ingénieur Big Data",
+        "Architecte Data",
+        "Ingénieur en Intelligence Artificielle",
+        "Analyste de données"
+      ],
+      "Support et Maintenance": [
+        "Technicien Support",
+        "Ingénieur Support",
+        "Technicien Helpdesk",
+        "Technicien Maintenance",
+        "Support Technique"
+      ],
+      "Marketing et Communication": [
+        "Responsable Marketing",
+        "Chef de Produit",
+        "Chargé de Communication",
+        "Community Manager",
+        "Content Manager",
+        "Spécialiste SEO/SEM",
+        "Chargé de Marketing Digital",
+        "Responsable Communication"
+      ],
+      "Commercial et Vente": [
+        "Commercial",
+        "Ingénieur Commercial",
+        "Responsable Grands Comptes",
+        "Chef de Secteur",
+        "Directeur Commercial",
+        "Attaché Commercial",
+        "Représentant Commercial"
+      ],
+      "Finance et Comptabilité": [
+        "Comptable",
+        "Analyste Financier",
+        "Contrôleur de Gestion",
+        "Auditeur",
+        "Directeur Financier",
+        "Trésorier",
+        "Gestionnaire de Paie"
+      ],
+      "Ressources Humaines": [
+        "Chargé de Recrutement",
+        "Responsable RH",
+        "Gestionnaire de Paie",
+        "Talent Acquisition Specialist",
+        "Assistant RH",
+        "Gestionnaire RH"
+      ],
+      "Production et Logistique": [
+        "Responsable Production",
+        "Chef d'Atelier",
+        "Technicien de Maintenance Industrielle",
+        "Logisticien",
+        "Responsable Logistique",
+        "Planificateur de Production",
+        "Opérateur de Production"
+      ],
+      "Administration et Services Généraux": [
+        "Assistant Administratif",
+        "Secrétaire",
+        "Office Manager",
+        "Gestionnaire de Services Généraux",
+        "Assistant de Direction",
+        "Réceptionniste",
+        "Agent Administratif"
+      ]
+    }
+  }

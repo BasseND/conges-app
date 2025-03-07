@@ -129,7 +129,7 @@
                                     @foreach($leaves as $leave)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900">{{ $leave->user->name }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $leave->user->first_name }}</div>
                                                 <div class="text-sm text-gray-500">{{ $leave->user->email }}</div>
                                                 <div class="text-xs text-gray-500">ID: {{ $leave->user->employee_id }}</div>
                                             </td>

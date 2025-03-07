@@ -1,20 +1,38 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Modifier l\'utilisateur') }}
-        </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-6">
-                        @csrf
-                        @method('PUT')
+@props(['user' => null])
+<div x-data="{ show: false, url: '', method: 'POST' }" 
+     x-show="show" 
+     @edit-user.window="show = true; url = $event.detail; method = 'POST'"
+     class="fixed z-50 inset-0 overflow-y-auto" 
+     aria-labelledby="modal-title" 
+     role="dialog" 
+     aria-modal="true"
+     style="display: none;">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div x-show="show" 
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+             aria-hidden="true"></div>
 
-                       
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div x-show="show" 
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <form x-bind:action="url" x-bind:method="method">
+                   @csrf
+                   @method('PUT')
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <x-input-label for="first_name" :value="__('Nom')" />
@@ -52,7 +70,7 @@
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
                         </div>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
                             <x-input-label for="role" :value="__('Rôle')" />
@@ -121,12 +139,20 @@
                                 {{ __('Mettre à jour') }}
                             </x-primary-button>
                         </div>
-                    </form>
-                </div>
-            </div>
+        
+
+
+                    
+                </form>
         </div>
     </div>
-</x-app-layout>
+</div>
+    
+    
+    
+    
+    
+              
 
 <script>
     console.log('Script chargé');

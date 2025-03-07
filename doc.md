@@ -12,7 +12,7 @@ php artisan db:seed
 
 // Supprimer la base de données et la recreer et les remplir avec les seeds
 php artisan migrate:fresh --seed
-
+php artisan make:migration add_is_prestataire_to_users_table --table=users
 
 php artisan cache:clear
 php artisan config:clear

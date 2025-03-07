@@ -115,7 +115,7 @@
                                 @forelse($leaves as $leave)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-gray-200">{{ $leave->user->name }}</div>
+                                            <div class="text-sm font-medium text-gray-900 dark:text-gray-200">{{ $leave->user->first_name }}</div>
                                             <div class="text-sm text-gray-500 dark:text-gray-200">{{ $leave->user->email }}</div>
                                             <div class="text-xs text-gray-500 dark:text-gray-200">ID: {{ $leave->user->employee_id }}</div>
                                         </td>
@@ -198,12 +198,12 @@
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($leave->status === 'pending' && auth()->user()->canManageUserLeaves($leave->user))
-                                                <button title="Approuver" onclick="showApproveModal('{{ route('leaves.approve', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-green-600 dark:bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
+                                                <button title="Approuver"  @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-green-600 dark:bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-3">
                                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                                     </svg>
                                                 </button>
-                                                <button title="Rejeter" onclick="showRejectModal('{{ route('leaves.reject', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-red-600 dark:bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                <button title="Rejeter"  @click="$dispatch('reject-leave', '{{ route('leaves.reject', $leave) }}')" class="inline-flex items-center px-3 py-2 bg-red-600 dark:bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
@@ -237,56 +237,6 @@
         </div>
     </div>
 
-    <x-modals.approve-leave :action="''" />
-    <x-modals.reject-leave :action="''" />
-
-    @push('scripts')
-    <script>
-        function showApproveModal(action) {
-            const modal = document.getElementById('approveModal');
-            const form = document.getElementById('approveForm');
-            form.action = action;
-            modal.classList.remove('hidden');
-        }
-
-        function hideApproveModal() {
-            const modal = document.getElementById('approveModal');
-            modal.classList.add('hidden');
-        }
-
-        function showRejectModal(action) {
-            const modal = document.getElementById('rejectModal');
-            const form = document.getElementById('rejectForm');
-            form.action = action;
-            modal.classList.remove('hidden');
-        }
-
-        function hideRejectModal() {
-            const modal = document.getElementById('rejectModal');
-            modal.classList.add('hidden');
-            // Réinitialiser le formulaire
-            document.getElementById('rejection_reason').value = '';
-        }
-
-        // Fermer les modales avec la touche Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                hideApproveModal();
-                hideRejectModal();
-            }
-        });
-
-        // Fermer les modales en cliquant en dehors
-        window.onclick = function(event) {
-            const approveModal = document.getElementById('approveModal');
-            const rejectModal = document.getElementById('rejectModal');
-            if (event.target === approveModal) {
-                hideApproveModal();
-            }
-            if (event.target === rejectModal) {
-                hideRejectModal();
-            }
-        }
-    </script>
-    @endpush 
+    <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
+    <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
 </x-app-layout>

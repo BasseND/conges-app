@@ -68,7 +68,7 @@
                 </div>
 
                 <!-- Tableau -->
-                <div class="overflow-hidden">
+                <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
@@ -99,7 +99,7 @@
                                         #{{ $report->id }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $report->user->name }}
+                                        {{ $report->user->first_name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                         {{ $report->submitted_at ? $report->submitted_at->format('d/m/Y') : 'Non soumis' }}
