@@ -146,6 +146,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/users/{user}/documents', [DocumentController::class, 'store'])->name('users.documents.store');
         Route::get('/users/{user}/documents/{document}/download', [DocumentController::class, 'download'])->name('users.documents.download');
         Route::delete('/users/{user}/documents/{document}', [DocumentController::class, 'destroy'])->name('users.documents.destroy');
+        Route::patch('/users/{user}/documents/{document}/status', [DocumentController::class, 'updateStatus'])->name('users.documents.update-status');
+       
         // Contract routes
         Route::post('/users/{user}/contracts', [ContractController::class, 'store'])->name('users.contracts.store');
         Route::get('/users/{user}/contracts/{contract}/download', [ContractController::class, 'download'])->name('users.contracts.download');

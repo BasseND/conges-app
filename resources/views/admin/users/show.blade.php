@@ -93,7 +93,7 @@
                             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                                 @include('admin.users.partials.infos-perso')
                             </div>
-                            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg mt-6">
+                            <div class="bg-slate-50 dark:bg-gray-800 shadow sm:rounded-lg mt-6">
                                 @include('admin.users.modals.delete-user-form')
                             </div>
                         </div>

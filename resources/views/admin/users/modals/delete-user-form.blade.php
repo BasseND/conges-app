@@ -1,4 +1,4 @@
-<section class="space-y-6">
+<section class="space-y-6 ">
     <div class="p-6">
     <header>
         <div class="flex items-center justify-between mb-4">

@@ -19,6 +19,9 @@ class Document extends Model
         'type',
         'size',
         'description',
+        'title',
+        'expiration_date',
+        'status',
     ];
 
     /**
@@ -66,5 +69,46 @@ class Document extends Model
     public function getDownloadUrlAttribute()
     {
         return route('admin.users.documents.download', [$this->user_id, $this->id]);
+    }
+
+    /**
+     * Get the formatted status.
+     */
+    public function getStatusLabelAttribute()
+    {
+        $labels = [
+            'pending' => 'En attente',
+            'validated' => 'Validé',
+            'rejected' => 'Rejeté',
+        ];
+        
+        return $labels[$this->status] ?? $this->status;
+    }
+
+    /**
+     * Get the status badge class.
+     */
+    public function getStatusBadgeClassAttribute()
+    {
+        $classes = [
+            'pending' => 'bg-yellow-100 text-yellow-800',
+            'validated' => 'bg-green-100 text-green-800',
+            'rejected' => 'bg-red-100 text-red-800',
+        ];
+        
+        return $classes[$this->status] ?? 'bg-gray-100 text-gray-800';
+    }
+
+    /**
+     * Get the formatted expiration date.
+     */
+    public function getFormattedExpirationDateAttribute()
+    {
+        // Retourner la date d'expiration uniquement pour les pièces d'identité
+        if ($this->type === 'identity') {
+            return $this->expiration_date ? date('d/m/Y', strtotime($this->expiration_date)) : 'N/A';
+        }
+        
+        return '-';
     }
 }

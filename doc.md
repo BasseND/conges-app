@@ -18,6 +18,3 @@ php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
-
-Email : admin@conges-app.com
-Mot de passe : admin123
