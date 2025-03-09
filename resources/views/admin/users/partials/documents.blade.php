@@ -39,8 +39,8 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Statut
                     </th>
-                    <th scope="col" class="relative px-6 py-3">
-                        <span class="sr-only">Actions</span>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <span>Actions</span>
                     </th>
                 </tr>
             </thead>
