@@ -102,7 +102,7 @@ class ContractController extends Controller
             // Stocker le nouveau fichier
             $path = $request->file('contrat_file')->store('contracts');
             $contract->contrat_file = $path;
-            $contract->original_filename = $request->file('contrat_file')->getClientOriginalName();
+            
         }
         
         $contract->save();
