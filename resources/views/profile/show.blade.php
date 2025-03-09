@@ -84,170 +84,44 @@
                 </div>
 
                 <!-- Navigation par onglets -->
-                <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+                <div  x-data="{ activeTab: 'user_personal' }"  class="mb-6 border-b border-gray-200 dark:border-gray-700">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
                         <li class="mr-2">
-                            <a href="#" class="inline-block p-4 border-b-2 border-blue-600 uppercase rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Informations personnelles</a>
+                            <button @click="activeTab = 'user_personal'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'personal' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
+                                Informations personnelles
+                            </button>
                         </li>
                         <li class="mr-2">
-                            <a href="#" class="inline-block p-4 border-b-2 border-transparent uppercase rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Documents</a>
+                            <button @click="activeTab = 'user_documents'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'documents' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
+                                Documents
+                            </button>
                         </li>
                         <li class="mr-2">
-                            <a href="#" class="inline-block p-4 border-b-2 border-transparent uppercase rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Congés</a>
-                        </li>
-                        <li>
-                            <a href="#" class="inline-block p-4 border-b-2 border-transparent uppercase rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Présence</a>
+                            <button @click="activeTab = 'user_presence'" :class="{ 'border-primary-500 text-primary-600 border-blue-500 dark:text-primary-500': activeTab === 'presence' }" class="px-3 py-2 text-sm font-medium border-b-2 border-transparent uppercase hover:border-gray-300">
+                                Présence
+                            </button>
                         </li>
                     </ul>
-                </div>
+                
 
-                <!-- Informations générales -->
-                <div class="border border-gray-200 dark:border-gray-600 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Informations générales</h2>
-                           
+                    <!-- Contenu des onglets -->
+                    <div class="mt-6">
+                        <!-- Informations personnelles -->
+                        <div x-show="activeTab === 'user_personal'" >
+                        @include('profile.partials.user-infos-perso') 
+                        </div>
+                        <!-- Documents -->
+                        <div x-show="activeTab === 'user_documents'" >
+                            @include('profile.partials.user-documents')
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Poste actuel</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if(isset($user->position))
-                                        {{ $user->position  }}
-                                    @else
-                                        Non renseigné
-                                    @endif
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date d'embauche</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if(isset($user->contracts) && $user->contracts->count() > 0)
-                                        {{ $user->contracts->sortBy('date_debut')->first()->date_debut->format('d M, Y') }}
-                                    @else
-                                        Non renseigné
-                                    @endif
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Rôle d'accès</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @switch($user->role)
-                                        @case(\App\Models\User::ROLE_ADMIN)
-                                            Administrateur
-                                            @break
-                                        @case(\App\Models\User::ROLE_HR)
-                                            Ressources Humaines
-                                            @break
-                                        @case(\App\Models\User::ROLE_MANAGER)
-                                            Manager
-                                            @break
-                                        @case(\App\Models\User::ROLE_DEPARTMENT_HEAD)
-                                            Chef de département
-                                            @break
-                                        @default
-                                            Employé
-                                    @endswitch
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Département</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if($user->department)
-                                        {{ $user->department->name }}
-                                    @else
-                                        Non assigné
-                                    @endif
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Horaires de travail</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">8h - 17h</p>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Manager</h3>
-                                <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if($user->department && $user->department->head)
-                                        {{ $user->department->head->first_name }} {{ $user->department->head->last_name }}
-                                    @else
-                                        Non assigné
-                                    @endif
-                                </p>
-                            </div>
+                        <!-- Présence -->
+                        <div x-show="activeTab === 'user_presence'" >
+                            @include('profile.partials.user-presence')
                         </div>
                     </div>
                 </div>
-
-                <!-- Informations de contrat -->
-                <div class="border border-gray-200 dark:border-gray-600 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Informations de contrat</h2>
-                        </div>
-
-                        @if(isset($user->contracts) && $user->contracts->count() > 0)
-                            @php
-                                $latestContract = $user->contracts->sortByDesc('date_debut')->first();
-                            @endphp
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Type de contrat</h3>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $latestContract->type }}</p>
-                                </div>
-
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Période</h3>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                        @if($latestContract->type == \App\Models\Contract::CONTRACT_CDI)
-                                            Indéterminée
-                                        @else
-                                            {{ $latestContract->date_fin->diffInMonths($latestContract->date_debut) }} mois
-                                        @endif
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de début</h3>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $latestContract->date_debut->format('d M, Y') }}</p>
-                                </div>
-
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de fin</h3>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">
-                                        @if($latestContract->type == \App\Models\Contract::CONTRACT_CDI)
-                                            N/A
-                                        @else
-                                            {{ $latestContract->date_fin->format('d M, Y') }}
-                                        @endif
-                                    </p>
-                                </div>
-
-                                <div class="md:col-span-2">
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Pièce jointe</h3>
-                                    @if($latestContract->contrat_file)
-                                        <div class="mt-1 flex items-center">
-                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                            </svg>
-                                            <a href="{{ asset('storage/' . $latestContract->contrat_file) }}" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank">
-                                                Contrat de travail
-                                            </a>
-                                        </div>
-                                    @else
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aucun document joint</p>
-                                    @endif
-                                </div>
-                            </div>
-                        @else
-                            <p class="text-gray-500 dark:text-gray-400">Aucun contrat enregistré</p>
-                        @endif
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

@@ -142,11 +142,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('users', UserController::class);
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         // Route::get('users/{user}', [UserController::class, 'edit'])->name('users.edit-profile-infos');
+        
         // Document routes
         Route::post('/users/{user}/documents', [DocumentController::class, 'store'])->name('users.documents.store');
         Route::get('/users/{user}/documents/{document}/download', [DocumentController::class, 'download'])->name('users.documents.download');
         Route::delete('/users/{user}/documents/{document}', [DocumentController::class, 'destroy'])->name('users.documents.destroy');
         Route::patch('/users/{user}/documents/{document}/status', [DocumentController::class, 'updateStatus'])->name('users.documents.update-status');
+        Route::get('/users/{user}/contracts/{contract}/edit', [ContractController::class, 'edit'])->name('users.contracts.edit');
+        Route::put('/users/{user}/contracts/{contract}', [ContractController::class, 'update'])->name('users.contracts.update');
        
         // Contract routes
         Route::post('/users/{user}/contracts', [ContractController::class, 'store'])->name('users.contracts.store');
