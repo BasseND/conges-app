@@ -23,6 +23,7 @@
                 date_fin: '',
                 salaire_brut: '',
                 statut: 'actif',
+                tjm: '',
             },
             resetForm() {
                 this.contractData = {
@@ -31,6 +32,7 @@
                     date_fin: '',
                     salaire_brut: '',
                     statut: 'actif',
+                    tjm: '',
                 };
                 this.isEditing = false;
                 this.contractId = null;
@@ -89,13 +91,17 @@
                  class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
                 
                 <div class="max-w-xl">
-                    <header>
+                <header>
+                        <!-- Titre avec contenu conditionnel -->
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Nouveau contrat') }}
+                            <span x-show="!isEditing">{{ __('Nouveau contrat') }}</span>
+                            <span x-show="isEditing">{{ __('Modifier le contrat') }}</span>
                         </h2>
 
+                        <!-- Description avec contenu conditionnel -->
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                            {{ __('Créer un nouveau contrat pour l\'employé.') }}
+                            <span x-show="!isEditing">{{ __('Créer un nouveau contrat pour l\'employé.') }}</span>
+                            <span x-show="isEditing">{{ __('Modifier le contrat de l\'employé.') }}</span>
                         </p>
                     </header>
 
@@ -187,34 +193,51 @@
                         </div>
 
                             <div class="grid grid-cols-2 gap-4">
-                                <!--  Type de contrat -->
+                                <!-- Type de contrat -->
                                 <div>
                                     <x-input-label for="type" :value="__('Type de contrat')" />
-                                    <select  x-model="contractData.type" id="type" name="type" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                        <option value="">Sélectionner un type de contrat</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_CDI }}">CDI</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_CDD }}">CDD</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_INTERIM }}">Interim</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_STAGE }}">Stage</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_ALTERNANCE }}">Alternance</option>
-                                        <option value="{{ App\Models\Contract::CONTRACT_FREELANCE }}">Freelance</option>
-                                    </select>
-
+                                    <template x-if="!isEditing">
+                                        <select x-model="contractData.type" id="type" name="type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" required>
+                                            <option value="">Sélectionner un type</option>
+                                            <option value="CDI">CDI</option>
+                                            <option value="CDD">CDD</option>
+                                            <option value="Stage">Stage</option>
+                                            <option value="Alternance">Alternance</option>
+                                            <option value="Freelance">Freelance</option>
+                                        </select>
+                                    </template>
+                                    <template x-if="isEditing">
+                                        <div>
+                                            <input type="hidden" name="type" x-model="contractData.type">
+                                            <div class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-md bg-gray-100 dark:bg-gray-700 cursor-not-allowed" x-text="contractData.type"></div>
+                                        </div>
+                                    </template>
                                     <x-input-error :messages="$errors->get('type')" class="mt-2" />
                                 </div>
 
                                  <!--  Salaire brut annuel -->
-                                 <div>
+                                 <div x-show="contractData.type !== 'Freelance'">
                                     <x-input-label  for="salaire_brut" :value="__('Salaire brut annuel')" />
                                     <div class="mt-1 relative rounded-md shadow-sm">
-                                        <x-text-input x-model="contractData.salaire_brut" id="salaire_brut" name="salaire_brut" type="number" step="0.01" min="0" class="block w-full pr-12" required />
+                                        <x-text-input x-model="contractData.salaire_brut" id="salaire_brut" name="salaire_brut" type="number" step="0.01" min="0" class="block w-full pr-12" x-bind:required="contractData.type !== 'Freelance'" />
                                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                             <span class="text-gray-500 sm:text-sm">€</span>
                                         </div>
                                     </div>
                                     <x-input-error :messages="$errors->get('salaire_brut')" class="mt-2" />
                                 </div>
-                                <!--  Date de début -->
+
+                                <!-- TJM (Freelance) -->
+                                 <div x-show="contractData.type === 'Freelance'">
+                                    <x-input-label  for="tjm" :value="__('Tarif journalier (TJM)')" />
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <x-text-input x-model="contractData.tjm" id="tjm" name="tjm" type="number" step="0.01" min="0" class="block w-full pr-12" x-bind:required="contractData.type === 'Freelance'" />
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">€</span>
+                                        </div>
+                                    </div>
+                                    <x-input-error :messages="$errors->get('tjm')" class="mt-2" />
+                                </div>
 
                                 <div>
                                     <x-input-label for="date_debut" :value="__('Date de début')" />
@@ -325,10 +348,18 @@
                     <dl>
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                Salaire brut annuel
+                                @if($contract->type !== 'Freelance')
+                                    Salaire brut annuel
+                                @else
+                                    TJM
+                                @endif
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:mt-0 sm:col-span-2">
-                                {{ number_format($contract->salaire_brut, 2, ',', ' ') }} €
+                                @if($contract->type !== 'Freelance')
+                                    {{ number_format($contract->salaire_brut, 2, ',', ' ') }} €
+                                @else
+                                    {{ number_format($contract->tjm, 2, ',', ' ') }} €
+                                @endif
                             </dd>
                         </div>
                         <div class="bg-white dark:bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

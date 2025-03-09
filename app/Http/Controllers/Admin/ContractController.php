@@ -20,10 +20,19 @@ class ContractController extends Controller
             'type' => ['required', 'string'],
             'date_debut' => ['required', 'date'],
             'date_fin' => ['nullable', 'date', 'after:date_debut'],
-            'salaire_brut' => ['required', 'numeric', 'min:0'],
             'statut' => ['required', Rule::in(['actif', 'termine', 'suspendu'])],
             'contrat_file' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
         ]);
+
+
+         // Ajout des règles conditionnelles selon le type de contrat
+         if ($request->type === 'Freelance') {
+            $rules['tjm'] = ['required', 'numeric', 'min:0'];
+            $rules['salaire_brut'] = ['nullable', 'numeric', 'min:0'];
+        } else {
+            $rules['salaire_brut'] = ['required', 'numeric', 'min:0'];
+            $rules['tjm'] = ['nullable', 'numeric', 'min:0'];
+        }
 
         if ($request->hasFile('contrat_file')) {
             $path = $request->file('contrat_file')->store('contrats');
@@ -61,6 +70,7 @@ class ContractController extends Controller
             'date_debut' => $contract->date_debut->format('Y-m-d'),
             'date_fin' => $contract->date_fin ? $contract->date_fin->format('Y-m-d') : null,
             'salaire_brut' => $contract->salaire_brut,
+            'tjm' => $contract->tjm,
             'statut' => $contract->statut,
         ]);
     }
@@ -69,47 +79,64 @@ class ContractController extends Controller
      * Update the specified contract in storage.
      */
 
-    public function update(Request $request, User $user, Contract $contract)
-    {
-        // Vérifier les permissions
-        if ($contract->user_id !== $user->id) {
-            abort(403);
-        }
-        
-        // Valider les données
-        $validated = $request->validate([
-            'type' => 'required|string',
-            'date_debut' => 'required|date',
-            'date_fin' => 'nullable|date|after:date_debut',
-            'salaire_brut' => 'required|numeric|min:0',
-            'statut' => 'required|string|in:actif,suspendu,termine',
-        ]);
-        
-        // Mettre à jour le contrat
-        $contract->type = $validated['type'];
-        $contract->date_debut = $validated['date_debut'];
-        $contract->date_fin = $validated['date_fin'];
-        $contract->salaire_brut = $validated['salaire_brut'];
-        $contract->statut = $validated['statut'];
-        
-        // Gérer le fichier si fourni
-        if ($request->hasFile('contrat_file')) {
-            // Supprimer l'ancien fichier si existant
-            if ($contract->contrat_file) {
-                Storage::delete($contract->contrat_file);
-            }
-            
-            // Stocker le nouveau fichier
-            $path = $request->file('contrat_file')->store('contracts');
-            $contract->contrat_file = $path;
-            
-        }
-        
-        $contract->save();
-        
-        return redirect()->route('admin.users.show', $user->id)
-            ->with('success', 'Contrat mis à jour avec succès.');
-    }
+     public function update(Request $request, User $user, Contract $contract)
+     {
+         // Vérifier les permissions
+         if ($contract->user_id !== $user->id) {
+             abort(403);
+         }
+         
+         // Règles de validation de base - sans le type qui ne peut pas être modifié
+         $rules = [
+             'date_debut' => 'required|date',
+             'date_fin' => 'nullable|date|after:date_debut',
+             'statut' => 'required|string|in:actif,suspendu,termine',
+         ];
+         
+         // Ajout des règles conditionnelles selon le type de contrat existant
+         if ($contract->type === 'Freelance') {
+             $rules['tjm'] = 'required|numeric|min:0';
+             $rules['salaire_brut'] = 'nullable|numeric|min:0';
+         } else {
+             $rules['salaire_brut'] = 'required|numeric|min:0';
+             $rules['tjm'] = 'nullable|numeric|min:0';
+         }
+         
+         // Valider les données
+         $validated = $request->validate($rules);
+         
+         // Mettre à jour le contrat - sans modifier le type
+         $contract->date_debut = $validated['date_debut'];
+         $contract->date_fin = $validated['date_fin'];
+         $contract->statut = $validated['statut'];
+         
+         // Mettre à jour les champs financiers selon le type de contrat existant
+         if ($contract->type === 'Freelance') {
+             $contract->tjm = $validated['tjm'];
+             $contract->salaire_brut = 0; // Valeur par défaut pour les freelances
+         } else {
+             $contract->salaire_brut = $validated['salaire_brut'];
+             $contract->tjm = 0; // Valeur par défaut pour les non-freelances
+         }
+         
+         // Gérer le fichier si fourni
+         if ($request->hasFile('contrat_file')) {
+             // Supprimer l'ancien fichier si existant
+             if ($contract->contrat_file) {
+                 Storage::delete($contract->contrat_file);
+             }
+             
+             // Stocker le nouveau fichier
+             $path = $request->file('contrat_file')->store('contracts');
+             $contract->contrat_file = $path;
+             
+         }
+         
+         $contract->save();
+         
+         return redirect()->route('admin.users.show', $user->id)
+             ->with('success', 'Contrat mis à jour avec succès.');
+     }
 
     /**
      * Remove the specified contract from storage.

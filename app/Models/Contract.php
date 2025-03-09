@@ -28,12 +28,14 @@ class Contract  extends Model
         'salaire_brut',
         'statut',
         'contrat_file',
+        'tjm',
     ];
 
     protected $casts = [
         'date_debut' => 'datetime',
         'date_fin' => 'datetime',
-        'salaire_brut' => 'decimal:2'
+        'salaire_brut' => 'decimal:2',
+        'tjm' => 'decimal:2'
     ];
 
     // Relation avec l'utilisateur
