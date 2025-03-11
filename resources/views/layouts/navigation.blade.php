@@ -1,4 +1,4 @@
-<nav role="navigation" aria-label="{{ __('Menu principal') }}"  x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav role="navigation" aria-label="{{ __('Menu principal') }}" x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,8 +6,17 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('welcome.index') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-300" />
+                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
+                </div>
+
+                <!-- Bouton toggle sidebar -->
+                <div class="hidden lg:flex lg:items-center lg:ml-4">
+                    <button @click="$store.sidebar.toggle()" class="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
 
                 <!-- Navigation Links -->
@@ -50,12 +59,6 @@
                             {{ __('Notes de frais') }}
                         </x-nav-link>
                     @endauth
-                    <!-- @auth
-                        <x-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
-                            {{ __('Aide') }}
-                        </x-nav-link>
-                    @endauth -->
-                    
                 </div>
             </div>
 
@@ -179,33 +182,29 @@
                     </x-responsive-nav-link>
                 @endauth
 
-                <!-- <x-responsive-nav-link :href="route('help.index')" :active="request()->routeIs('help.index')">
-                    {{ __('Aide') }}
-                </x-responsive-nav-link> -->
-            </div>
+                <!-- Responsive Settings Options -->
+                <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                    <div class="px-4">
+                        <div class="font-medium text-base text-gray-800 dark:text-gray-300">{{ Auth::user()->first_name }}</div>
+                        <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
+                    </div>
 
-            <!-- Responsive Settings Options -->
-            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800 dark:text-gray-300">{{ Auth::user()->first_name }}</div>
-                    <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
-                </div>
-
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.show')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
-
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-
-                        <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                    <div class="mt-3 space-y-1">
+                        <x-responsive-nav-link :href="route('profile.show')">
+                            {{ __('Profile') }}
                         </x-responsive-nav-link>
-                    </form>
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-responsive-nav-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-responsive-nav-link>
+                        </form>
+                    </div>
                 </div>
             </div>
         @else

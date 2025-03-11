@@ -10,10 +10,13 @@ use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
 use App\Http\Controllers\Expense\ExpenseLineController;
+use App\Http\Controllers\Payroll\PayslipController;
+use App\Http\Controllers\Payroll\SalaryAdvanceController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -115,6 +118,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Routes pour les bulletins de paie
+    Route::get('payslips', [PayslipController::class, 'index'])->name('payslips.index');
+    Route::get('payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
+    Route::get('payslips/{payslip}/download', [PayslipController::class, 'download'])->name('payslips.download');
+
+    // Routes pour les avances sur salaire
+    Route::get('salary-advances', [SalaryAdvanceController::class, 'index'])->name('salary-advances.index');
+    Route::get('salary-advances/create', [SalaryAdvanceController::class, 'create'])->name('salary-advances.create');
+    Route::post('salary-advances', [SalaryAdvanceController::class, 'store'])->name('salary-advances.store');
+    Route::get('salary-advances/{salaryAdvance}', [SalaryAdvanceController::class, 'show'])->name('salary-advances.show');
+    Route::post('salary-advances/{salaryAdvance}/cancel', [SalaryAdvanceController::class, 'cancel'])->name('salary-advances.cancel');
 
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
@@ -137,6 +151,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
         Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
+
+        // Paramètres de paie
+        Route::resource('payroll-settings', PayrollSettingController::class);
 
         // Gestion des utilisateurs
         Route::resource('users', UserController::class);
