@@ -387,11 +387,19 @@
                                 Date de fin
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:mt-0 sm:col-span-2">
+                            <div class="flex items-center justify-between">
+                                <div>
                                 @if($contract->type == \App\Models\Contract::CONTRACT_CDI)
                                     N/A
                                 @else
                                     {{ $contract->date_fin->format('d M, Y') }}
                                 @endif
+                                </div>
+                                <div>
+                                  @if($contract->is_expired)
+                                    <span class="text-red-600 dark:text-red-400">Ce contrat a expiré</span>
+                                  @endif  
+                                </div>
                             </dd>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

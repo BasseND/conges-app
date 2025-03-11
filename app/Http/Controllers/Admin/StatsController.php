@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Leave;
 use App\Models\User;
+use App\Models\ExpenseReport;
+use App\Models\Contract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +56,30 @@ class StatsController extends Controller
             'employees' => User::where('role', 'employee')->count(),
             'managers' => User::where('role', 'manager')->count(),
             'admins' => User::where('role', 'admin')->count(),
+            'active_employees' => User::where('is_active', true)
+                                      ->where('is_prestataire', false)
+                                      ->count(),
+            'prestataires' => User::where('is_prestataire', true)->count(),
+            'total_users' => User::count(),
+            'total_leaves' => Leave::count(),
+            'total_days' => Leave::selectRaw('COALESCE(SUM(DATEDIFF(end_date, start_date) + 1), 0) as total_days')
+                                 ->where('status', 'approved')
+                                 ->first()
+                                 ->total_days,
+            'total_months_expenses' => ExpenseReport::where('status', ExpenseReport::STATUS_APPROVED)
+                                 ->orWhere('status', ExpenseReport::STATUS_PAID)
+                                 ->sum('total_amount'),
+            'total_salary_mass' => Contract::where('is_expired', false)
+                      ->where('type', '!=', Contract::CONTRACT_FREELANCE)
+                      ->where('statut', 'actif')
+                      ->sum('salaire_brut')
         ];
+
+        // Dernières notes de frais
+        $recentExpenses = ExpenseReport::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
 
         // Dernières activités
         $recentLeaves = Leave::with('user')
@@ -66,7 +91,8 @@ class StatsController extends Controller
             'departmentStats',
             'monthlyStats',
             'stats',
-            'recentLeaves'
+            'recentLeaves',
+            'recentExpenses'
         ));
     }
 }

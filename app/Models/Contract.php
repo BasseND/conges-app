@@ -23,6 +23,7 @@ class Contract  extends Model
     protected $fillable = [
         'user_id',
         'type',
+        'is_expired',
         'date_debut',
         'date_fin',
         'salaire_brut',
@@ -35,7 +36,8 @@ class Contract  extends Model
         'date_debut' => 'datetime',
         'date_fin' => 'datetime',
         'salaire_brut' => 'decimal:2',
-        'tjm' => 'decimal:2'
+        'tjm' => 'decimal:2',
+        'is_expired' => 'boolean'
     ];
 
     // Relation avec l'utilisateur
