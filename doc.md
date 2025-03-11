@@ -19,5 +19,8 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
+// Pour tester la tâche planifiée manuellement :
+php artisan contracts:update-expired
+
 
 https://uxwing.com/finance-icon/

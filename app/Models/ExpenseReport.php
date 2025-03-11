@@ -57,7 +57,7 @@ class ExpenseReport extends Model
             self::STATUS_DRAFT => 'Brouillon',
             self::STATUS_SUBMITTED => 'Soumis',
             self::STATUS_APPROVED => 'Approuvée',
-            self::STATUS_REJECTED => 'Rejettée',
+            self::STATUS_REJECTED => 'Rejetée',
             self::STATUS_PAID => 'Payée',
         ];
     }

@@ -7,6 +7,10 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+
+      
+
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
                 <div class="flex items-center bg-white dark:bg-gray-600 p-4 border border-green-200 dark:border-green-600 sm:rounded-lg overflow-hidden ">
@@ -18,7 +22,7 @@
                     </div>
                     <div class="px-4 text-gray-700 dark:text-gray-300">
                         <h3 class="text-sm tracking-wider">Total employés</h3>
-                        <p class="text-3xl">12,768</p>
+                        <p class="text-3xl">{{ $stats['active_employees'] }}</p>
                     </div>
                 </div>
                 <div class="flex items-center bg-white dark:bg-gray-600 p-4 border border-blue-200 dark:border-blue-600 sm:rounded-lg overflow-hidden ">
@@ -30,7 +34,7 @@
                     </div>
                     <div class="px-4 text-gray-700 dark:text-gray-300">
                         <h3 class="text-sm tracking-wider">Total congés</h3>
-                        <p class="text-3xl">39,265</p>
+                        <p class="text-3xl">{{ $stats['total_leaves'] }}</p>
                     </div>
                 </div>
                 <div class="flex items-center bg-white dark:bg-gray-600 p-4 border border-indigo-200 dark:border-indigo-600 sm:rounded-lg overflow-hidden ">
@@ -42,7 +46,7 @@
                     </div>
                     <div class="px-4 text-gray-700 dark:text-gray-300">
                         <h3 class="text-sm tracking-wider">Total notes de frais</h3>
-                        <p class="text-3xl">142,334</p>
+                        <p class="text-3xl">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} €</p>
                     </div>
                 </div>
                 <div class="flex items-center bg-white dark:bg-gray-600 p-4 border border-red-200 dark:border-red-600 sm:rounded-lg overflow-hidden ">
@@ -53,13 +57,59 @@
                     </div>
                     <div class="px-4 text-gray-700 dark:text-gray-300">
                         <h3 class="text-sm tracking-wider">Masse salariale</h3>
-                        <p class="text-3xl">34.12%</p>
+                        <p class="text-3xl">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} €</p>
                     </div>
                 </div>
             </div>
         </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Actions a faire -->
+
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Request to validate</h3>
+                        
+                        <div class="mb-3">
+                            <h2 class="text-3xl font-bold text-slate-800">26</h2>
+                            <p class="text-sm text-slate-500">En attente de traitement</p>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs mr-2">12</div>
+                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
+                                    Absences
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs mr-2">14</div>
+                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
+                                    Note de frais
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-slate-600 text-xs mr-2">0</div>
+                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
+                                    Contrats à terme
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Statistiques des congés -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
@@ -110,7 +160,7 @@
                 </div>
 
                 <!-- Actions rapides -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <!-- <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Actions rapides</h3>
                         <div class="space-y-4">
@@ -128,7 +178,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             
             <!-- Graphiques -->
@@ -154,10 +204,10 @@
                 </div>
             </div>
 
-             <!-- Dernières activités -->
+             <!-- Dernières activités congés -->
             <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Dernières activités</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Dernières activités congés</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
@@ -210,7 +260,69 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Dernières notes de frais -->
+            <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Dernières notes de frais</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Utilisateur</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Montant</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Statut</th>
+                                          </thead>
+                                          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
+                                          @foreach($recentExpenses as $expense)
+                                            <tr> 
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">{{ $expense->created_at->format('d/m/Y H:i') }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">{{ $expense->user->first_name }} {{ $expense->user->last_name }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100"><span class="text-gray-900 dark:text-gray-400 font-semibold">{{ $expense->total_amount }}</span></td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
+                                               <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                    {{ $expense->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                                    ($expense->status === 'draft' ? 'bg-blue-100 text-blue-800  ' : 
+                                                    ($expense->status === 'submitted' ? 'bg-yellow-100 text-yellow-800' : 
+                                                    ($expense->status === 'rejected' ? 'bg-red-100 text-red-800' : 
+                                                    ($expense->status === 'paid' ? 'bg-green-500 text-white' : 
+                                                    'bg-gray-100 text-gray-800')))) }}">
+                                                    
+                                                    @switch($expense->status)
+                                                        @case(\App\Models\ExpenseReport::STATUS_DRAFT)
+                                                        Brouillon
+                                                        @break
+                                                        @case(\App\Models\ExpenseReport::STATUS_SUBMITTED)
+                                                        Soumis
+                                                        @break
+                                                        @case(\App\Models\ExpenseReport::STATUS_APPROVED)
+                                                        Approuvée
+                                                        @break
+                                                        @case(\App\Models\ExpenseReport::STATUS_REJECTED)  
+                                                        Rejetée
+                                                        @break
+                                                        @case(\App\Models\ExpenseReport::STATUS_PAID)
+                                                        Payée
+                                                        @break
+                                                    @endswitch
+                                                </span>
+                                                @if($expense->processed_at)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        {{ $expense->processed_at->format('d/m/Y H:i') }}
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
