@@ -101,6 +101,25 @@
                                 </div>
                             </div>
 
+                            <!-- Statut -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Statut</h3>
+                                
+                                <div class="mb-4">
+                                    <x-input-label for="status" :value="__('Statut du bulletin')" />
+                                    <select id="status" name="status" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" required>
+                                        <option value="{{ \App\Models\Payslip::STATUS_DRAFT }}" {{ old('status', $payslip->status) == \App\Models\Payslip::STATUS_DRAFT ? 'selected' : '' }}>Brouillon</option>
+                                        <option value="{{ \App\Models\Payslip::STATUS_VALIDATED }}" {{ old('status', $payslip->status) == \App\Models\Payslip::STATUS_VALIDATED ? 'selected' : '' }}>Validé</option>
+                                        <option value="{{ \App\Models\Payslip::STATUS_PAID }}" {{ old('status', $payslip->status) == \App\Models\Payslip::STATUS_PAID ? 'selected' : '' }}>Payé</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="payment_date_container" class="mb-4 {{ old('status', $payslip->status) == \App\Models\Payslip::STATUS_PAID ? '' : 'hidden' }}">
+                                    <x-input-label for="payment_date" :value="__('Date de paiement')" />
+                                    <x-text-input id="payment_date" class="block mt-1 w-full" type="date" name="payment_date" :value="old('payment_date', $payslip->payment_date)" />
+                                </div>
+                            </div>
+
                             <!-- Commentaires -->
                             <div class="mb-6">
                                 <x-input-label for="comments" :value="__('Commentaires')" />
@@ -154,6 +173,27 @@
             taxAmountInput.addEventListener('input', calculateNetSalary);
             bonusAmountInput.addEventListener('input', calculateNetSalary);
             expenseReimbursementInput.addEventListener('input', calculateNetSalary);
+
+            // Gestion de l'affichage du champ de date de paiement en fonction du statut
+            const statusSelect = document.getElementById('status');
+            const paymentDateContainer = document.getElementById('payment_date_container');
+            const paymentDateInput = document.getElementById('payment_date');
+
+            statusSelect.addEventListener('change', function() {
+                if (this.value === '{{ \App\Models\Payslip::STATUS_PAID }}') {
+                    paymentDateContainer.classList.remove('hidden');
+                    paymentDateInput.setAttribute('required', 'required');
+                    // Si la date de paiement n'est pas définie, utiliser la date du jour
+                    if (!paymentDateInput.value) {
+                        const today = new Date();
+                        const formattedDate = today.toISOString().split('T')[0];
+                        paymentDateInput.value = formattedDate;
+                    }
+                } else {
+                    paymentDateContainer.classList.add('hidden');
+                    paymentDateInput.removeAttribute('required');
+                }
+            });
         });
     </script>
 </x-app-layout>

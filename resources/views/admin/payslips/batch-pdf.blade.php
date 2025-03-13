@@ -39,7 +39,7 @@
                                 <p>Aucun bulletin validé ou payé n'est disponible pour la génération de PDF.</p>
                             </div>
                         @else
-                            <form method="POST" action="{{ route('admin.payslips.batchPdf') }}" class="mt-6">
+                            <form method="POST" action="{{ route('admin.payslips.batch-pdf') }}" class="mt-6">
                                 @csrf
                                 
                                 <div class="mb-4">
@@ -78,15 +78,30 @@
             const periodSelect = document.getElementById('period');
             const periodYearInput = document.getElementById('period_year');
             const periodMonthInput = document.getElementById('period_month');
+            const form = document.querySelector('form');
 
-            periodSelect.addEventListener('change', function() {
-                if (this.value) {
-                    const [year, month] = this.value.split('-');
+            // Fonction pour mettre à jour les champs cachés
+            function updateHiddenFields() {
+                if (periodSelect.value) {
+                    const [year, month] = periodSelect.value.split('-');
                     periodYearInput.value = year;
                     periodMonthInput.value = month;
+                    return true;
                 } else {
                     periodYearInput.value = '';
                     periodMonthInput.value = '';
+                    return false;
+                }
+            }
+
+            // Mettre à jour les champs cachés lors du changement de sélection
+            periodSelect.addEventListener('change', updateHiddenFields);
+
+            // Mettre à jour les champs cachés avant la soumission du formulaire
+            form.addEventListener('submit', function(event) {
+                if (!updateHiddenFields()) {
+                    event.preventDefault();
+                    alert('Veuillez sélectionner une période.');
                 }
             });
         });

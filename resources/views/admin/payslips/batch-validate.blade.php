@@ -39,7 +39,7 @@
                                 <p>Aucun bulletin en brouillon n'est disponible pour validation.</p>
                             </div>
                         @else
-                            <form method="POST" action="{{ route('admin.payslips.batchValidate') }}" class="mt-6">
+                            <form method="POST" action="{{ route('admin.payslips.batch-validate') }}" class="mt-6">
                                 @csrf
                                 
                                 <div class="mb-4">
@@ -75,15 +75,30 @@
             const periodSelect = document.getElementById('period');
             const periodYearInput = document.getElementById('period_year');
             const periodMonthInput = document.getElementById('period_month');
+            const form = document.querySelector('form');
 
-            periodSelect.addEventListener('change', function() {
-                if (this.value) {
-                    const [year, month] = this.value.split('-');
+            // Fonction pour mettre à jour les champs cachés
+            function updateHiddenFields() {
+                if (periodSelect.value) {
+                    const [year, month] = periodSelect.value.split('-');
                     periodYearInput.value = year;
                     periodMonthInput.value = month;
+                    return true;
                 } else {
                     periodYearInput.value = '';
                     periodMonthInput.value = '';
+                    return false;
+                }
+            }
+
+            // Mettre à jour les champs cachés lors du changement de sélection
+            periodSelect.addEventListener('change', updateHiddenFields);
+
+            // Mettre à jour les champs cachés avant la soumission du formulaire
+            form.addEventListener('submit', function(event) {
+                if (!updateHiddenFields()) {
+                    event.preventDefault();
+                    alert('Veuillez sélectionner une période.');
                 }
             });
         });

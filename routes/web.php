@@ -161,18 +161,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\PayslipController::class, 'index'])->name('index');
             Route::get('/create', [App\Http\Controllers\Admin\PayslipController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\Admin\PayslipController::class, 'store'])->name('store');
+            
+            // Nouvelles routes pour les actions en masse
+            Route::get('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidateForm'])->name('batch-validate-form');
+            Route::post('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidate'])->name('batch-validate');
+            Route::get('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdfForm'])->name('batch-pdf-form');
+            Route::post('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdf'])->name('batch-pdf');
+            
+            // Routes avec des paramètres
             Route::get('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'show'])->name('show');
             Route::get('/{payslip}/edit', [App\Http\Controllers\Admin\PayslipController::class, 'edit'])->name('edit');
             Route::put('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'update'])->name('update');
             Route::post('/{payslip}/validatePayslip', [App\Http\Controllers\Admin\PayslipController::class, 'validatePayslip'])->name('validatePayslip');
             Route::post('/{payslip}/mark-as-paid', [App\Http\Controllers\Admin\PayslipController::class, 'markAsPaid'])->name('markAsPaid');
             Route::get('/{payslip}/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'generatePdf'])->name('generatePdf');
-            
-            // Nouvelles routes pour les actions en masse
-            Route::get('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidateForm'])->name('batchValidateForm');
-            Route::post('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidate'])->name('batchValidate');
-            Route::get('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdfForm'])->name('batchPdfForm');
-            Route::post('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdf'])->name('batchPdf');
         });
 
         // Gestion des utilisateurs

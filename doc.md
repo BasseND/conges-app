@@ -21,6 +21,7 @@ php artisan view:clear
 
 // Pour tester la tâche planifiée manuellement :
 php artisan contracts:update-expired
+type storage\logs\laravel.log | Select-Object -Last 100
 
 
 https://uxwing.com/finance-icon/

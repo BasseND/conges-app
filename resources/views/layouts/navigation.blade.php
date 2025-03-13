@@ -56,10 +56,10 @@
                                         <x-dropdown-link :href="route('admin.payslips.create')">
                                             {{ __('Générer des bulletins') }}
                                         </x-dropdown-link>
-                                        <x-dropdown-link :href="route('admin.payslips.batchValidateForm')">
+                                        <x-dropdown-link :href="route('admin.payslips.batch-validate-form')">
                                             {{ __('Validation en masse') }}
                                         </x-dropdown-link>
-                                        <x-dropdown-link :href="route('admin.payslips.batchPdfForm')">
+                                        <x-dropdown-link :href="route('admin.payslips.batch-pdf-form')">
                                             {{ __('PDF en masse') }}
                                         </x-dropdown-link>
                                     </x-slot>
@@ -199,10 +199,10 @@
                     <x-responsive-nav-link :href="route('admin.payslips.create')" :active="request()->routeIs('admin.payslips.create')">
                         {{ __('Générer des bulletins') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.payslips.batchValidateForm')" :active="request()->routeIs('admin.payslips.batchValidateForm')">
+                    <x-responsive-nav-link :href="route('admin.payslips.batch-validate-form')" :active="request()->routeIs('admin.payslips.batch-validate-form')">
                         {{ __('Validation en masse') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.payslips.batchPdfForm')" :active="request()->routeIs('admin.payslips.batchPdfForm')">
+                    <x-responsive-nav-link :href="route('admin.payslips.batch-pdf-form')" :active="request()->routeIs('admin.payslips.batch-pdf-form')">
                         {{ __('PDF en masse') }}
                     </x-responsive-nav-link>
                 @endif

@@ -581,6 +581,8 @@ class PayslipController extends Controller
      */
     public function batchValidateForm()
     {
+        $this->authorize('create', Payslip::class);
+        
         // Récupérer les années et mois disponibles pour les bulletins en brouillon
         $availablePeriods = Payslip::where('status', Payslip::STATUS_DRAFT)
             ->select(DB::raw('DISTINCT period_year, period_month'))
@@ -606,6 +608,8 @@ class PayslipController extends Controller
      */
     public function batchValidate(Request $request)
     {
+        $this->authorize('create', Payslip::class);
+        
         $validated = $request->validate([
             'period_year' => 'required|integer|min:2000|max:2100',
             'period_month' => 'required|integer|min:1|max:12',
@@ -628,7 +632,7 @@ class PayslipController extends Controller
                 ->get();
 
             if ($payslips->isEmpty()) {
-                return redirect()->route('admin.payslips.batchValidateForm')
+                return redirect()->route('admin.payslips.batch-validate-form')
                     ->with('error', 'Aucun bulletin en brouillon trouvé pour cette période.');
             }
 
@@ -643,7 +647,7 @@ class PayslipController extends Controller
             return redirect()->route('admin.payslips.index')
                 ->with('success', "{$validatedCount} bulletins de paie ont été validés avec succès pour " . Carbon::create($validated['period_year'], $validated['period_month'], 1)->locale('fr_FR')->isoFormat('MMMM YYYY') . ".");
         } catch (\Exception $e) {
-            return redirect()->route('admin.payslips.batchValidateForm')
+            return redirect()->route('admin.payslips.batch-validate-form')
                 ->with('error', 'Une erreur est survenue lors de la validation des bulletins : ' . $e->getMessage());
         }
     }
@@ -655,6 +659,8 @@ class PayslipController extends Controller
      */
     public function batchPdfForm()
     {
+        $this->authorize('viewAny', Payslip::class);
+        
         // Récupérer les années et mois disponibles pour les bulletins validés ou payés
         $availablePeriods = Payslip::whereIn('status', [Payslip::STATUS_VALIDATED, Payslip::STATUS_PAID])
             ->select(DB::raw('DISTINCT period_year, period_month'))
@@ -680,6 +686,8 @@ class PayslipController extends Controller
      */
     public function batchPdf(Request $request)
     {
+        $this->authorize('viewAny', Payslip::class);
+        
         $validated = $request->validate([
             'period_year' => 'required|integer|min:2000|max:2100',
             'period_month' => 'required|integer|min:1|max:12',
@@ -703,7 +711,7 @@ class PayslipController extends Controller
                 ->get();
 
             if ($payslips->isEmpty()) {
-                return redirect()->route('admin.payslips.batchPdfForm')
+                return redirect()->route('admin.payslips.batch-pdf-form')
                     ->with('error', 'Aucun bulletin validé ou payé trouvé pour cette période.');
             }
 
@@ -754,7 +762,7 @@ class PayslipController extends Controller
                 'Content-Type' => 'application/zip',
             ])->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            return redirect()->route('admin.payslips.batchPdfForm')
+            return redirect()->route('admin.payslips.batch-pdf-form')
                 ->with('error', 'Une erreur est survenue lors de la génération des PDF : ' . $e->getMessage());
         }
     }
