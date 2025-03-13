@@ -35,6 +35,36 @@
                             <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
                                 {{ __('Gestion des départements') }}
                             </x-nav-link>
+                            <!-- Menu déroulant pour les bulletins de paie -->
+                            <div class="hidden sm:flex sm:items-center">
+                                <x-dropdown align="right" width="48">
+                                    <x-slot name="trigger">
+                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150 {{ request()->routeIs('admin.payslips.*') ? 'border-b-2 border-indigo-400 dark:border-indigo-600' : '' }}">
+                                            <div>{{ __('Bulletins de paie') }}</div>
+                                            <div class="ml-1">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </x-slot>
+
+                                    <x-slot name="content">
+                                        <x-dropdown-link :href="route('admin.payslips.index')">
+                                            {{ __('Liste des bulletins') }}
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('admin.payslips.create')">
+                                            {{ __('Générer des bulletins') }}
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('admin.payslips.batchValidateForm')">
+                                            {{ __('Validation en masse') }}
+                                        </x-dropdown-link>
+                                        <x-dropdown-link :href="route('admin.payslips.batchPdfForm')">
+                                            {{ __('PDF en masse') }}
+                                        </x-dropdown-link>
+                                    </x-slot>
+                                </x-dropdown>
+                            </div>
                         @endif
 
                         @if (auth()->user()->isManager())
@@ -58,6 +88,9 @@
                         <x-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
                             {{ __('Notes de frais') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('payslips.index')" :active="request()->routeIs('payslips.*')">
+                            {{ __('Mes bulletins de paie') }}
+                        </x-nav-link>
                     @endauth
                 </div>
             </div>
@@ -67,7 +100,7 @@
                 @auth
                     <x-dropdown align="right" width="48"> 
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
                                 <div>{{ Auth::user()->first_name }}</div>
 
                                 <div class="ml-1">
@@ -160,6 +193,18 @@
                     <x-responsive-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
                         {{ __('Gestion des départements') }}
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.payslips.index')" :active="request()->routeIs('admin.payslips.index')">
+                        {{ __('Liste des bulletins') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.payslips.create')" :active="request()->routeIs('admin.payslips.create')">
+                        {{ __('Générer des bulletins') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.payslips.batchValidateForm')" :active="request()->routeIs('admin.payslips.batchValidateForm')">
+                        {{ __('Validation en masse') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.payslips.batchPdfForm')" :active="request()->routeIs('admin.payslips.batchPdfForm')">
+                        {{ __('PDF en masse') }}
+                    </x-responsive-nav-link>
                 @endif
 
                 @if (auth()->user()->isManager())
@@ -179,6 +224,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
                         {{ __('Notes de frais') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('payslips.index')" :active="request()->routeIs('payslips.*')">
+                        {{ __('Mes bulletins de paie') }}
                     </x-responsive-nav-link>
                 @endauth
 

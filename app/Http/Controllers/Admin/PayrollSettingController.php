@@ -18,7 +18,7 @@ class PayrollSettingController extends Controller
     {
         $this->authorize('viewAny', PayrollSetting::class);
         
-        $payrollSettings = PayrollSetting::all();
+        $payrollSettings = PayrollSetting::paginate(15);
         
         return view('admin.payroll-settings.index', compact('payrollSettings'));
     }

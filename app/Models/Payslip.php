@@ -80,6 +80,16 @@ class Payslip extends Model
     }
 
     /**
+     * Relation avec les notes de frais remboursées dans ce bulletin
+     */
+    public function expenseReports()
+    {
+        return $this->belongsToMany(ExpenseReport::class, 'payslip_expense_report')
+            ->withPivot('reimbursed_amount')
+            ->withTimestamps();
+    }
+
+    /**
      * Recalculer le salaire brut en fonction des éléments de paie
      */
     public function recalculateGrossSalary()

@@ -106,22 +106,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Routes pour les notes de frais
     Route::resource('expense-reports', ExpenseReportController::class);
-    Route::post('expense-reports/{expense_report}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
     Route::post('expense-reports/{expense_report}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
+    Route::post('expense-reports/{expense_report}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
     Route::post('expense-reports/{expense_report}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
     Route::post('expense-reports/{expense_report}/pay', [ExpenseReportController::class, 'pay'])->name('expense-reports.pay');
-    Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
+    Route::resource('expense-reports.expense-lines', ExpenseLineController::class)->shallow();
+    Route::get('expense-lines/{expense_line}/receipt', [ExpenseLineController::class, 'downloadReceipt'])->name('expense-lines.receipt');
 
-    // Routes pour le profil utilisateur
+    // Routes pour les bulletins de paie des utilisateurs
+    Route::get('payslips', [App\Http\Controllers\PayslipController::class, 'index'])->name('payslips.index');
+    Route::get('payslips/{payslip}', [App\Http\Controllers\PayslipController::class, 'show'])->name('payslips.show');
+    Route::get('payslips/{payslip}/generate-pdf', [App\Http\Controllers\PayslipController::class, 'generatePdf'])->name('payslips.generatePdf');
+
+    // Routes pour les profils
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Routes pour les bulletins de paie
-    Route::get('payslips', [PayslipController::class, 'index'])->name('payslips.index');
-    Route::get('payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
-    Route::get('payslips/{payslip}/download', [PayslipController::class, 'download'])->name('payslips.download');
 
     // Routes pour les avances sur salaire
     Route::get('salary-advances', [SalaryAdvanceController::class, 'index'])->name('salary-advances.index');
@@ -154,6 +155,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Paramètres de paie
         Route::resource('payroll-settings', PayrollSettingController::class);
+
+        // Gestion des bulletins de paie
+        Route::prefix('payslips')->name('payslips.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PayslipController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\PayslipController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\PayslipController::class, 'store'])->name('store');
+            Route::get('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'show'])->name('show');
+            Route::get('/{payslip}/edit', [App\Http\Controllers\Admin\PayslipController::class, 'edit'])->name('edit');
+            Route::put('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'update'])->name('update');
+            Route::post('/{payslip}/validatePayslip', [App\Http\Controllers\Admin\PayslipController::class, 'validatePayslip'])->name('validatePayslip');
+            Route::post('/{payslip}/mark-as-paid', [App\Http\Controllers\Admin\PayslipController::class, 'markAsPaid'])->name('markAsPaid');
+            Route::get('/{payslip}/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'generatePdf'])->name('generatePdf');
+            
+            // Nouvelles routes pour les actions en masse
+            Route::get('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidateForm'])->name('batchValidateForm');
+            Route::post('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidate'])->name('batchValidate');
+            Route::get('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdfForm'])->name('batchPdfForm');
+            Route::post('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdf'])->name('batchPdf');
+        });
 
         // Gestion des utilisateurs
         Route::resource('users', UserController::class);

@@ -43,6 +43,14 @@ class ExpenseReport extends Model
         return $this->hasMany(ExpenseLine::class);
     }
 
+    // Relation avec les bulletins de paie dans lesquels cette note de frais a été remboursée
+    public function payslips()
+    {
+        return $this->belongsToMany(Payslip::class, 'payslip_expense_report')
+            ->withPivot('reimbursed_amount')
+            ->withTimestamps();
+    }
+
     // Exemple de méthode pour recalcule du total
     public function recalculateTotal()
     {

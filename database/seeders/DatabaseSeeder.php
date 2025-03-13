@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\TestDataSeeder;
 use Database\Seeders\ProductionSeeder;
+use Database\Seeders\PayrollSettingsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,10 +25,12 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('production')) {
             $this->call([
                 ProductionSeeder::class,
+                PayrollSettingsSeeder::class,
             ]);
         } else {
             $this->call([
                 TestDataSeeder::class,
+                PayrollSettingsSeeder::class,
             ]);
         }
     }
