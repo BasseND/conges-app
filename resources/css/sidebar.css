@@ -129,11 +129,11 @@
     transition: margin-left 0.3s ease-in-out;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
     .main-content {
-        margin-left: 16rem; /* 64px ou 16rem */
+        margin-left: 16rem; 
     }
-}
+} */
 
 /* Styles pour le bouton de toggle */
 .sidebar-toggle {

@@ -25,7 +25,12 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/css/sidebar.css', 'resources/js/app.js'])
+        @vite([
+            'resources/css/app.css',
+            'resources/css/sidebar.css',
+            'resources/css/header.css',
+            'resources/js/app.js'
+        ])
         
         <!-- Dark Mode Script -->
         <script>
@@ -99,26 +104,26 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900" x-data x-init="$store.darkMode.init()">
-        <div class="min-h-screen flex flex-col">
-            <!-- Top Navigation -->
-            <header class="w-full z-30">
+    <body class="font-sans antialiased bg-[#f7f9ff] dark:bg-gray-900" x-data x-init="$store.darkMode.init()">
+        <!-- Sidebar Navigation -->
+        @auth
+            @include('layouts.sidebar')
+        @endauth
+    
+        <div class="min-h-screen flex flex-col navbar-sticky">
+          
+            <div class="main-content flex-1 flex flex-col overflow-x-hidden" :class="{'lg:ml-64': $store.sidebar.open, 'lg:ml-0': !$store.sidebar.open}">
+                 <!-- Top Navigation -->
+            <header class="w-full z-30 app-header">
                 @include('layouts.navigation')
             </header>
 
-            <div class="flex flex-1 overflow-hidden">
-                <!-- Sidebar Navigation -->
-                @auth
-                    @include('layouts.sidebar')
-                @endauth
-
                 <!-- Main Content Container -->
-                <div class="main-content flex-1 flex flex-col overflow-x-hidden" 
-                     :class="{'lg:ml-64': $store.sidebar.open, 'lg:ml-0': !$store.sidebar.open}">
+                <main role="main" class="">
                     <!-- Page Heading -->
                     @if (isset($header))
-                        <div class="bg-white dark:bg-gray-800 shadow">
-                            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                        <div class="bg-white dark:bg-gray-800 shadow ">
+                            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
                         </div>
@@ -126,7 +131,7 @@
 
                     <!-- Affichage des erreurs de validation en haut de la page -->
                     @if ($errors->any())
-                        <div class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8">
+                        <div class="mx-auto mt-4 px-4 sm:px-6 lg:px-8">
                             <div class="alert-error">
                                 <div class="font-medium">{{ __('Veuillez corriger les erreurs suivantes:') }}</div>
                                 <ul>
@@ -139,12 +144,12 @@
                     @endif
 
                     <!-- Page Content -->
-                    <main role="main" class="flex-1 py-4 px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-7xl mx-auto">
+                    <div  class="flex-1 py-4 px-4 sm:px-6 lg:px-8">
+                        <div class="mx-auto">
                             {{ $slot }}
                         </div>
-                    </main>
-                </div>
+                    </div>
+                </main>
             </div>
         </div>
 

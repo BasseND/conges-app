@@ -5,13 +5,9 @@
     <div class="flex flex-col h-full">
         <!-- Logo et titre -->
         <div class="flex items-center justify-between p-4 border-b border-indigo-100 dark:border-gray-700">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 dark:text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd" />
-                    <path d="M10 8a2 2 0 100-4 2 2 0 000 4z" />
-                </svg>
-                <span class="text-xl font-semibold text-gray-800 dark:text-white">{{ config('app.name', 'Laravel') }}</span>
-            </div>
+            <a href="{{ route('welcome.index') }}">
+                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+            </a>
             <button @click="$store.sidebar.toggle()" class="p-1 rounded-md hover:bg-indigo-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 lg:hidden">
                 <svg class="h-6 w-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
