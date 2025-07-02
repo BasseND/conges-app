@@ -26,7 +26,6 @@
         <section class="bg-white dark:bg-darkblack-500">
             <div class="flex flex-col lg:flex-row justify-between min-h-screen">
                 <!-- Left -->
-                
                 <div class="lg:w-1/2 px-5 xl:pl-12 pt-10">
                    {{ $slot }}
                 </div>

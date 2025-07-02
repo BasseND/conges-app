@@ -191,16 +191,6 @@
             </div>
         </div>
 
-
-    
-    
-    <!-- Sidebar Navigation -->
-        <!-- @auth
-            @include('layouts.sidebar')
-        @endauth -->
-    
-        
-
         @stack('scripts')
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     </body>
