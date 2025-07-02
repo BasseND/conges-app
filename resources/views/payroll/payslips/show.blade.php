@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
                 {{ __('Bulletin de paie') }} - {{ \Carbon\Carbon::parse($payslip->period_start)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($payslip->period_end)->format('d/m/Y') }}
             </h2>
             <a href="{{ route('payslips.download', $payslip) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">

@@ -1,0 +1,32 @@
+/* Styles pour la sidebar */
+.sidebar-link.active {
+    color: #27DA68;
+}
+.sidebar-sublink.active {
+    color: #27DA68;
+}
+.sidebar-sublink.active {
+    color: #27DA68;
+}
+/* Animation pour le menu déroulant */
+[x-collapse] {
+    transition-property: height;
+    transition-duration: 300ms;
+    overflow: hidden;
+}
+
+/* Animation pour le collapse */
+[x-cloak] { 
+    display: none !important; 
+}
+/* Styles pour le bouton de toggle */
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}

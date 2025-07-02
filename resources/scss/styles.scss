@@ -1,0 +1,201 @@
+// Import Tailwind CSS
+
+
+@use "sass:color";
+
+@forward "./layout/index.scss";
+
+// Import layout
+
+
+// Variables Sass personnalisées
+$primary-color: rgb(34 197 94);
+$secondary-color: #64748b;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+
+// Mixins Sass utiles
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+@mixin button-style($bg-color, $text-color: white) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  @include transition();
+  
+  &:hover {
+    background-color: color.adjust($bg-color, $lightness: -10%);
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
+  }
+}
+
+@mixin button-style-outlined($bg-color, $text-color: white) {
+  background-color: transparent;
+  color: $text-color;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid $bg-color;
+  cursor: pointer;
+  @include transition();
+  
+  &:hover {
+    background-color: color.adjust($bg-color, $lightness: -10%);
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
+  }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    pointer-events: none;
+  }
+
+  &.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  &.btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+// Styles personnalisés
+.btn-primary {
+  @include button-style($primary-color);
+}
+
+.btn-secondary {
+  @include button-style($secondary-color);
+}
+
+.btn-success {
+  @include button-style($success-color);
+}
+
+.btn-warning {
+  @include button-style($warning-color);
+}
+
+.btn-error {
+  @include button-style($error-color);
+}
+
+.btn-outlined-primary {
+  @include button-style-outlined($primary-color);
+}
+
+.btn-outlined-secondary {
+  @include button-style-outlined($secondary-color);
+}
+
+.btn-outlined-success {
+  @include button-style-outlined($success-color);
+}
+
+.btn-outlined-warning {
+  @include button-style-outlined($warning-color);
+}
+
+.btn-outlined-error {
+  @include button-style-outlined($error-color);
+}
+
+// Styles pour les cartes
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  @include transition(box-shadow);
+  
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Styles pour les formulaires
+.form-group {
+  margin-bottom: 1rem;
+  
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #374151;
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    @include transition(border-color);
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+}
+
+// Styles responsifs
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-error {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Animations personnalisées
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+// Utilitaires personnalisés
+.text-gradient {
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
