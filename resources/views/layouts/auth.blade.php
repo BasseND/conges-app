@@ -53,14 +53,13 @@
                         <h3
                         class="text-bgray-900 dark:text-white font-semibold font-popins text-4xl mb-4"
                         >
-                        Speady, Easy and Fast
+                        Simple, Rapide et Efficace
                         </h3>
                         <p class="text-bgray-600 dark:text-bgray-50 text-sm font-medium">
-                        BankCo. help you set saving goals, earn cash back offers, Go to
-                        disclaimer for more details and get paychecks up to two days
-                        early. Get a
-                        <span class="text-success-300 font-bold">$20</span> bonus when
-                        you receive qualifying direct deposits
+                        Notre plateforme vous aide à gérer vos congés en toute simplicité.
+                        Soumettez vos demandes, suivez leur statut et planifiez vos vacances
+                        en quelques clics. Profitez d'une interface intuitive pour une
+                        <span class="text-success-300 font-bold">gestion optimale</span> de vos congés
                         </p>
                     </div>
                     </div>
