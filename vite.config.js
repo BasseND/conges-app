@@ -5,6 +5,11 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/assets/css/slick.css',
+                'resources/assets/css/aos.css',
+                'resources/assets/css/flatpickr.min.css',
+                'resources/assets/css/output.css',
+                'resources/assets/css/style.css',
                 'resources/css/app.css',
                 'resources/js/app.js',
             ],
