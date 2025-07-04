@@ -56,10 +56,11 @@
                         Simple, Rapide et Efficace
                         </h3>
                         <p class="text-bgray-600 dark:text-bgray-50 text-sm font-medium">
-                        Notre plateforme vous aide à gérer vos congés en toute simplicité.
-                        Soumettez vos demandes, suivez leur statut et planifiez vos vacances
-                        en quelques clics. Profitez d'une interface intuitive pour une
-                        <span class="text-success-300 font-bold">gestion optimale</span> de vos congés
+                        Notre plateforme complète vous aide à gérer vos congés, notes de frais,
+                        paie et communications en toute simplicité. Soumettez vos demandes,
+                        suivez leur statut et communiquez avec votre équipe grâce à la messagerie
+                        intégrée. Profitez d'une <span class="text-success-300 font-bold">solution tout-en-un</span>
+                        pour votre gestion RH
                         </p>
                     </div>
                     </div>
