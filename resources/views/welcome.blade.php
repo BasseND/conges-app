@@ -1,48 +1,71 @@
 <!-- Page d'accueil -->
 <x-app-layout>
-<div class="py-12">
-    <div class="relative py-16">
-        <div aria-hidden="true"
-            class="absolute inset-0 h-max w-full m-auto grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
-            <div class="blur-[106px] h-56 bg-gradient-to-br from-blue-500 to-indigo-400 dark:from-indigo-700"></div>
-            <div class="blur-[106px] h-32 bg-gradient-to-r from-blue-400 to-sky-300 dark:to-indigo-600"></div>
-        </div>
+<div class="pb-12">
+    <div class="home-page-container bg-[#F6FAFF] dark:bg-darkblack-600 mb-10">
 
-        <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
-            <div class="relative">
-                
-                <div class="flex items-center justify-center -space-x-2">
-                    <img loading="lazy" width="400" height="400" src="https://randomuser.me/api/portraits/women/12.jpg" alt="member photo" class="h-8 w-8 rounded-full object-cover">
-                    <img loading="lazy" width="200" height="200" src="https://randomuser.me/api/portraits/women/45.jpg" alt="member photo" class="h-12 w-12 rounded-full object-cover">
-                    <img loading="lazy" width="200" height="200" src="https://randomuser.me/api/portraits/women/60.jpg" alt="member photo" class="z-10 h-16 w-16 rounded-full object-cover">
-                    <img loading="lazy" width="200" height="200" src="https://randomuser.me/api/portraits/women/4.jpg" alt="member photo" class="relative h-12 w-12 rounded-full object-cover">
-                    <img loading="lazy" width="200" height="200" src="https://randomuser.me/api/portraits/women/34.jpg" alt="member photo" class="h-8 w-8 rounded-full object-cover">
-                </div>
+        <div class="flex flex-col lg:flex-row justify-between ">
+           <div class="lg:w-1/2 px-5 xl:pl-12 flex items-center justify-center">
+                <div class="p-20 relative">
+                    <!-- <div aria-hidden="true">
+                        <img src="{{ asset('images/shapes/square.svg') }}" alt="" />
+                        <img src="{{ asset('images/shapes/vline.svg') }}" alt="" />
+                        <img src="{{ asset('images/shapes/dotted.svg') }}" alt="" />
+                    </div> -->
 
-                <div class="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
-                    <h1 class="text-center text-4xl font-bold text-gray-800 dark:text-white md:text-5xl">Bienvenue sur votre Portail RH
+                    <div class="text-center max-w-lg px-1.5 m-auto">
+                    <h1
+                        class="text-bgray-900 dark:text-white font-bold font-popins text-4xl mb-4"
+                    >
+                        Bienvenue sur votre Portail RH
                     </h1>
-                    <p class="text-center text-xl text-gray-600 dark:text-gray-300">
+                    <p class="text-bgray-600 dark:text-darkblack-300 text-lg font-medium">
                         Gérez vos congés et notes de frais en toute simplicité
                     </p>
-                    <!-- <div class="flex flex-wrap justify-center gap-6">
-                        <a href="#"
-                            class="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:bg-indigo-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
-                            <span class="relative text-base font-semibold text-white dark:text-dark">Get Started</span>
-                        </a>
-                        <a href="#"
-                            class="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-indigo-500/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
-                            <span class="relative text-base font-semibold text-indigo-500 dark:text-white">More about</span>
-                        </a>
-                    </div> -->
+                    </div>
                 </div>
-            </div>
+           </div>
+
+           <div class="lg:w-1/2 px-5 xl:pl-12">
+                <div class="relative">
+                    <div aria-hidden="true"
+                        class="absolute inset-0 h-max w-full m-auto grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+                        <div class="blur-[106px] h-56 bg-gradient-to-br from-blue-500 to-indigo-400 dark:from-indigo-700"></div>
+                        <div class="blur-[106px] h-32 bg-gradient-to-r from-blue-400 to-sky-300 dark:to-indigo-600"></div>
+                    </div>
+
+
+                    <div class="w-full lg:block hidden  relative">
+                        <ul>
+                            <li class="absolute top-10 left-8">
+                            <img src="{{ asset('images/shapes/square.svg') }}" alt="" />
+                            </li>
+                            <li class="absolute right-12 top-14">
+                            <img src="{{ asset('images/shapes/vline.svg') }}" alt="" />
+                            </li>
+                            <li class="absolute bottom-7 left-8">
+                            <img src="{{ asset('images/shapes/dotted.svg') }}" alt="" />
+                            </li>
+                        </ul>
+                        <div class="mb-2">
+                            <img 
+                            class="m-auto max-h-[225px]"
+                            style="max-height: 225px;"
+                            src="{{ asset('images/illustration/signup.svg') }}"
+                            alt=""
+                            />
+                        </div>
+                        
+                    </div>
+
+                </div>
+           </div>
+
         </div>
     </div>
 
 
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
         <!-- <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Bienvenue sur votre Portail RH</h1>
             <p class="text-lg text-gray-600 dark:text-gray-400">Gérez vos congés et notes de frais en toute simplicité</p>
@@ -52,14 +75,14 @@
             <!-- Carte Congés -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden border border-indigo-100 dark:border-gray-500 rounded-lg hover:shadow-2xl transition duration-300">
                 <div class="p-6">
-                    <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    <div class="flex items-center justify-center w-[60px] h-[60px] bg-violet-extra-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                         </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Gestion des Congés</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Demandez et suivez vos congés en quelques clics</p>
-                    <a href="{{ route('leaves.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('leaves.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300">
                         Nouvelle demande
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -71,14 +94,14 @@
             <!-- Carte Notes de Frais -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden border border-indigo-100 dark:border-gray-500 rounded-lg hover:shadow-2xl transition duration-300">
                 <div class="p-6">
-                    <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <div class="flex items-center justify-center w-[60px] h-[60px] bg-violet-100 rounded-full mb-4">
                         <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
                         </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Notes de Frais</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Soumettez et gérez vos notes de frais facilement</p>
-                    <a href="{{ route('expense-reports.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('expense-reports.create') }}" class="btn btn-violet-extra inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300">
                         Nouvelle note
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -90,14 +113,14 @@
             <!-- Carte Tableau de Bord -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden border border-indigo-100 dark:border-gray-500 rounded-lg hover:shadow-2xl transition duration-300">
                 <div class="p-6">
-                    <div class="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
+                    <div class="flex items-center justify-center w-[60px] h-[60px] bg-success-50 rounded-full mb-4">
                         <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Tableau de Bord</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Visualisez vos statistiques et demandes en cours</p>
-                    <a href="{{ route('leaves.index') }}" class="inline-flex items-center px-4 py-2 bg-purple-600 dark:bg-purple-500 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('leaves.index') }}" class="btn btn-vert-extra inline-flex items-center px-4 py-2 bg-purple-600 dark:bg-purple-500 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300">
                         Voir les stats
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -112,9 +135,9 @@
             <!-- Congés restants -->
             <div class="flex flex-col p-4 space-y-6 transition-all duration-500 bg-white dark:bg-gray-700 border border-indigo-100 dark:border-gray-500 rounded-lg  hover:shadow-xl lg:p-6 lg:flex-row lg:space-y-0 lg:space-x-6">
                 <div class="flex items-center justify-center w-16 h-16 bg-gray-100 border border-gray-200 rounded-lg shadow-inner lg:h-20 lg:w-20">
-                   
+                
 
-                   
+                
 
                 </div>
                 <div class="flex-1">
@@ -184,6 +207,7 @@
 
 
     </div>
+    
 </div>
 
 </x-app-layout>

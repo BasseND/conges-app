@@ -14,6 +14,8 @@ use App\Models\Team;
 use App\Models\Leave;
 use App\Models\ExpenseReport;
 use App\Models\ExpenseLine;
+use App\Models\Payslip;
+use App\Models\SalaryAdvance;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -174,6 +176,30 @@ class User extends Authenticatable implements MustVerifyEmail
     public function expenseLines()
     {
         return $this->hasMany(ExpenseLine::class);
+    }
+
+    /**
+     * Get the payslips for the user.
+     */
+    public function payslips()
+    {
+        return $this->hasMany(Payslip::class);
+    }
+
+    /**
+     * Get the salary advances for the user.
+     */
+    public function salaryAdvances()
+    {
+        return $this->hasMany(SalaryAdvance::class);
+    }
+
+    /**
+     * Get the approved salary advances (as an approver).
+     */
+    public function approvedSalaryAdvances()
+    {
+        return $this->hasMany(SalaryAdvance::class, 'approved_by');
     }
 
     /**

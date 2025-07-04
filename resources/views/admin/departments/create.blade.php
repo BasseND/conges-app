@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
             {{ __('Nouveau département') }}
         </h2>
     </x-slot>
@@ -61,11 +61,11 @@
                             <x-input-error :messages="$errors->get('manager_id')" class="mt-2" />
                         </div> --}}
 
-                        <div class="flex items-center justify-end mt-4">
-                            <a href="{{ route('admin.departments.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 dark:bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-4">
+                        <div class="flex items-center justify-end gap-2 mt-4">
+                            <a href="{{ route('admin.departments.index') }}" class="btn btn-secondary">
                                 {{ __('Annuler') }}
                             </a>
-                            <x-primary-button class="bg-green-600 dark:bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <x-primary-button>
                                 {{ __('Créer le département') }}
                             </x-primary-button>
                         </div>

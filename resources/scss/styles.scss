@@ -1,0 +1,253 @@
+// Import Tailwind CSS
+
+
+@use "sass:color";
+@use "sass:math";
+
+@forward "./base/index.scss";
+@forward "./layout/index.scss";
+@forward "./components/index.scss";
+
+// Import layout
+
+// Variables Sass personnalisées
+$primary-color: rgb(34 197 94);
+$secondary-color: #64748b;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+$info-color: #3b82f6;
+$light-color: #f3f4f6;
+$dark-color: #1e293b;
+$blue-sky: #b0cdff;
+$blue-dark: #001e4d;
+$blue-light: #e5f3ff;
+$green-sky: #cffafe;
+$green-dark: #004d40;
+$green-light: #e6fffa;
+$yellow-sky: #fffbeb;
+$yellow-dark: #664d03;
+$yellow-light: #fff3cd;
+$red-sky: #ffe4e1;
+$red-dark: #842029;
+$red-light: #f8d7da;
+$purple-sky: #f3e8ff;
+$purple-dark: #581c87;
+$purple-light: #e6d6fc;
+
+$vert-extra : #18dab5;
+$vert-extra-light : #e0fbf5;
+$vert-extra-dark : #0e7468;
+
+$violet-extra : #795ded;
+$violet-extra-light : #f5f3ff;
+$violet-extra-dark : #4a1680;
+
+
+
+
+// Mixins Sass utiles
+
+@mixin bg-style($bg-color, $lightnessvalue: 0) {
+  @if math.unit($lightnessvalue) == '%' {
+    background-color: color.adjust($bg-color, $lightness: $lightnessvalue);
+  } @else {
+    background-color: color.adjust($bg-color, $lightness: $lightnessvalue * 1%);
+  }
+}
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+
+// bg color
+
+.bg-primary-50 {
+ @include bg-style($primary-color, 50%);
+}
+.bg-primary-100 {
+ @include bg-style($primary-color, 40%);
+}
+.bg-primary-200 {
+  @include bg-style($primary-color, 30%);
+ }
+
+.bg-primary-300 {
+  @include bg-style($primary-color, 20%);
+ }
+
+.bg-primary-400 {
+  @include bg-style($primary-color, 10%);
+ }
+
+.bg-primary-500 {
+  @include bg-style($primary-color, 5%);
+ }
+
+.bg-primary-600 {
+  @include bg-style($primary-color, 3%);
+ }
+
+.bg-primary-700 {
+  @include bg-style($primary-color, 2%);
+ }
+
+.bg-primary-800 {
+  @include bg-style($primary-color);
+ }
+
+// .bg-secondary {
+//   @include bg-style($secondary-color);
+// }
+
+// .bg-secondary-50 {
+//   @include bg-style($secondary-color, 50%);
+//  }
+//  .bg-secondary-100 {
+//   @include bg-style($secondary-color, 40%);
+//  }
+//  .bg-secondary-200 {
+//   @include bg-style($secondary-color, 30%);
+//  }
+
+//  .bg-secondary-300 {
+//   @include bg-style($secondary-color, 20%); 
+//  }
+
+// .bg-secondary-400 {
+//   @include bg-style($secondary-color, 10%);
+//  }
+
+// .bg-secondary-500 {
+//   @include bg-style($secondary-color, 5%);
+//  }
+
+// .bg-secondary-600 {
+//   @include bg-style($secondary-color, 3%);
+//  }
+
+// .bg-secondary-700 {
+//   @include bg-style($secondary-color, 2%);
+// }
+// .bg-secondary-800 {
+//   @include bg-style($secondary-color);
+// }
+
+// .bg-violet-extra-50 {
+//   @include bg-style($violet-extra, 50%);
+//  }  
+// .bg-violet-extra-100 {
+//   @include bg-style($violet-extra, 40%);
+//  }  
+// .bg-violet-extra-200 {
+//   @include bg-style($violet-extra, 30%);
+//  }
+// .bg-violet-extra-300 {
+//   @include bg-style($violet-extra, 20%);
+//  }
+// .bg-violet-extra-400 {
+//   @include bg-style($violet-extra, 10%);
+//  }
+// .bg-violet-extra-500 {
+//   @include bg-style($violet-extra, 5%);
+//  }
+// .bg-violet-extra-600 {
+//   @include bg-style($violet-extra, 3%);
+//  }
+// .bg-violet-extra-700 {
+//   @include bg-style($violet-extra, 2%);
+//  }
+// .bg-violet-extra-800 {
+//   @include bg-style($violet-extra);
+//  }
+  
+
+
+
+
+// Styles pour les cartes
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  @include transition(box-shadow);
+  
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Styles pour les formulaires
+.form-group {
+  margin-bottom: 1rem;
+  
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #374151;
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    @include transition(border-color);
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+}
+
+// Styles responsifs
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-error {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Animations personnalisées
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+// Utilitaires personnalisés
+.text-gradient {
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}

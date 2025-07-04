@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
             {{ __('Nouvelle note de frais') }}
         </h2>
     </x-slot>
@@ -36,7 +36,7 @@
                             <div class="mb-4 flex justify-between items-center">
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Lignes de frais</h2>
                                 <button type="button" id="add-line" 
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    class="btn btn-vert-extra inline-flex items-center">
                                     <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                     </svg>
@@ -89,15 +89,15 @@
                         <!-- Boutons d'action -->
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('expense-reports.index') }}" 
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="inline-flex items-center px-4 py-2 btn btn-secondary">
                                 Annuler
                             </a>
                             <button type="submit" name="action" value="draft" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                class="inline-flex items-center px-4 py-2 btn btn-info">
                                 Enregistrer comme brouillon
                             </button>
                             <button type="submit" name="action" value="submit"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="inline-flex items-center px-4 py-2 btn btn-primary">
                                 Soumettre
                             </button>
                         </div>

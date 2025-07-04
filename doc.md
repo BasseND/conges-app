@@ -2,6 +2,8 @@ Pour voir les changements Tailwind, nous devons recompiler les assets CSS. Je va
 
 To restart Windsurf, please reload the window (Ctrl+Shift+P, then select "Reload Window").
 
+
+taskkill /f /im node.exe
 npm run dev
 
 // Pour creer un template
@@ -21,6 +23,7 @@ php artisan view:clear
 
 // Pour tester la tâche planifiée manuellement :
 php artisan contracts:update-expired
+type storage\logs\laravel.log | Select-Object -Last 100
 
 
 https://uxwing.com/finance-icon/

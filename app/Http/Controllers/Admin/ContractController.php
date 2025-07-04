@@ -16,23 +16,43 @@ class ContractController extends Controller
      */
     public function store(Request $request, User $user)
     {
-        $validated = $request->validate([
+        // Définir les règles de base
+        $rules = [
             'type' => ['required', 'string'],
             'date_debut' => ['required', 'date'],
             'date_fin' => ['nullable', 'date', 'after:date_debut'],
             'statut' => ['required', Rule::in(['actif', 'termine', 'suspendu'])],
             'contrat_file' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
-        ]);
+        ];
 
-
-         // Ajout des règles conditionnelles selon le type de contrat
-         if ($request->type === 'Freelance') {
+        // Ajout des règles conditionnelles selon le type de contrat
+        if ($request->type === 'Freelance') {
             $rules['tjm'] = ['required', 'numeric', 'min:0'];
             $rules['salaire_brut'] = ['nullable', 'numeric', 'min:0'];
         } else {
             $rules['salaire_brut'] = ['required', 'numeric', 'min:0'];
             $rules['tjm'] = ['nullable', 'numeric', 'min:0'];
         }
+
+        // Valider les données avec toutes les règles
+        $validated = $request->validate($rules, [
+            'type.required' => 'Le type de contrat est obligatoire.',
+            'date_debut.required' => 'La date de début est obligatoire.',
+            'date_debut.date' => 'La date de début doit être une date valide.',
+            'date_fin.date' => 'La date de fin doit être une date valide.',
+            'date_fin.after' => 'La date de fin doit être postérieure à la date de début.',
+            'statut.required' => 'Le statut du contrat est obligatoire.',
+            'statut.in' => 'Le statut du contrat doit être actif, terminé ou suspendu.',
+            'salaire_brut.required' => 'Le salaire brut est obligatoire.',
+            'salaire_brut.numeric' => 'Le salaire brut doit être un nombre.',
+            'salaire_brut.min' => 'Le salaire brut doit être supérieur ou égal à 0.',
+            'tjm.required' => 'Le taux journalier est obligatoire pour les freelances.',
+            'tjm.numeric' => 'Le taux journalier doit être un nombre.',
+            'tjm.min' => 'Le taux journalier doit être supérieur ou égal à 0.',
+            'contrat_file.file' => 'Le fichier du contrat doit être un fichier valide.',
+            'contrat_file.mimes' => 'Le fichier du contrat doit être au format PDF, DOC ou DOCX.',
+            'contrat_file.max' => 'Le fichier du contrat ne doit pas dépasser 10 Mo.',
+        ]);
 
         if ($request->hasFile('contrat_file')) {
             $path = $request->file('contrat_file')->store('contrats');

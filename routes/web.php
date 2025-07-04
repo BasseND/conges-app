@@ -10,10 +10,13 @@ use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
 use App\Http\Controllers\Expense\ExpenseLineController;
+use App\Http\Controllers\Payroll\PayslipController;
+use App\Http\Controllers\Payroll\SalaryAdvanceController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -103,18 +106,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Routes pour les notes de frais
     Route::resource('expense-reports', ExpenseReportController::class);
-    Route::post('expense-reports/{expense_report}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
     Route::post('expense-reports/{expense_report}/submit', [ExpenseReportController::class, 'submit'])->name('expense-reports.submit');
+    Route::post('expense-reports/{expense_report}/approve', [ExpenseReportController::class, 'approve'])->name('expense-reports.approve');
     Route::post('expense-reports/{expense_report}/reject', [ExpenseReportController::class, 'reject'])->name('expense-reports.reject');
     Route::post('expense-reports/{expense_report}/pay', [ExpenseReportController::class, 'pay'])->name('expense-reports.pay');
-    Route::resource('expense-reports.lines', ExpenseLineController::class)->shallow();
+    Route::resource('expense-reports.expense-lines', ExpenseLineController::class)->shallow();
+    Route::get('expense-lines/{expense_line}/receipt', [ExpenseLineController::class, 'downloadReceipt'])->name('expense-lines.receipt');
 
-    // Routes pour le profil utilisateur
+    // Routes pour les bulletins de paie des utilisateurs
+    Route::get('payslips', [App\Http\Controllers\PayslipController::class, 'index'])->name('payslips.index');
+    Route::get('payslips/{payslip}', [App\Http\Controllers\PayslipController::class, 'show'])->name('payslips.show');
+    Route::get('payslips/{payslip}/generate-pdf', [App\Http\Controllers\PayslipController::class, 'generatePdf'])->name('payslips.generatePdf');
+
+    // Routes pour les profils
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Routes pour les avances sur salaire
+    Route::get('salary-advances', [SalaryAdvanceController::class, 'index'])->name('salary-advances.index');
+    Route::get('salary-advances/create', [SalaryAdvanceController::class, 'create'])->name('salary-advances.create');
+    Route::post('salary-advances', [SalaryAdvanceController::class, 'store'])->name('salary-advances.store');
+    Route::get('salary-advances/{salaryAdvance}', [SalaryAdvanceController::class, 'show'])->name('salary-advances.show');
+    Route::post('salary-advances/{salaryAdvance}/cancel', [SalaryAdvanceController::class, 'cancel'])->name('salary-advances.cancel');
 
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
@@ -137,6 +152,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
         Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
+
+        // Paramètres de paie
+        Route::resource('payroll-settings', PayrollSettingController::class);
+
+        // Gestion des bulletins de paie
+        Route::prefix('payslips')->name('payslips.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PayslipController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\PayslipController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\PayslipController::class, 'store'])->name('store');
+            
+            // Nouvelles routes pour les actions en masse
+            Route::get('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidateForm'])->name('batch-validate-form');
+            Route::post('/batch/validate', [App\Http\Controllers\Admin\PayslipController::class, 'batchValidate'])->name('batch-validate');
+            Route::get('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdfForm'])->name('batch-pdf-form');
+            Route::post('/batch/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'batchPdf'])->name('batch-pdf');
+            
+            // Routes avec des paramètres
+            Route::get('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'show'])->name('show');
+            Route::get('/{payslip}/edit', [App\Http\Controllers\Admin\PayslipController::class, 'edit'])->name('edit');
+            Route::put('/{payslip}', [App\Http\Controllers\Admin\PayslipController::class, 'update'])->name('update');
+            Route::post('/{payslip}/validatePayslip', [App\Http\Controllers\Admin\PayslipController::class, 'validatePayslip'])->name('validatePayslip');
+            Route::post('/{payslip}/mark-as-paid', [App\Http\Controllers\Admin\PayslipController::class, 'markAsPaid'])->name('markAsPaid');
+            Route::get('/{payslip}/pdf', [App\Http\Controllers\Admin\PayslipController::class, 'generatePdf'])->name('generatePdf');
+        });
 
         // Gestion des utilisateurs
         Route::resource('users', UserController::class);

@@ -51,7 +51,7 @@
 
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Équipes</h3>
-                        <button onclick="openTeamModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                        <button onclick="openTeamModal()" class="btn btn-primary">
                             Ajouter une équipe
                         </button>
                     </div>
