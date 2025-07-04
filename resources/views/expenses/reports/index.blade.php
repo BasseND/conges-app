@@ -4,7 +4,7 @@
             <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
                {{ __('Notes de frais') }}
             </h2>
-            <a href="{{ route('expense-reports.create') }}" class="bg-success-300 hover:bg-success-400 transition duration-300 ease-in-out ml-6 font-semibold text-white py-3 flex items-center justify-center rounded-xl px-4">
+            <a href="{{ route('expense-reports.create') }}" class="btn btn-primary inline-flex items-center">
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>

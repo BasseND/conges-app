@@ -53,7 +53,6 @@
                     <!--  theme toggle Button -->
                     <button
                       @click="$store.darkMode.toggle()"
-                      :class="$store.darkMode.on ? 'bg-indigo-600' : 'bg-gray-200'"
                       type="button"
                       id="theme-toggle"
                       class="relative flex h-[52px] w-[52px] items-center justify-center rounded-[12px] border border-success-300 dark:border-darkblack-400"

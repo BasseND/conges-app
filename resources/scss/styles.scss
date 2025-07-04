@@ -2,11 +2,13 @@
 
 
 @use "sass:color";
+@use "sass:math";
 
+@forward "./base/index.scss";
 @forward "./layout/index.scss";
+@forward "./components/index.scss";
 
 // Import layout
-
 
 // Variables Sass personnalisées
 $primary-color: rgb(34 197 94);
@@ -14,8 +16,45 @@ $secondary-color: #64748b;
 $success-color: #10b981;
 $warning-color: #f59e0b;
 $error-color: #ef4444;
+$info-color: #3b82f6;
+$light-color: #f3f4f6;
+$dark-color: #1e293b;
+$blue-sky: #b0cdff;
+$blue-dark: #001e4d;
+$blue-light: #e5f3ff;
+$green-sky: #cffafe;
+$green-dark: #004d40;
+$green-light: #e6fffa;
+$yellow-sky: #fffbeb;
+$yellow-dark: #664d03;
+$yellow-light: #fff3cd;
+$red-sky: #ffe4e1;
+$red-dark: #842029;
+$red-light: #f8d7da;
+$purple-sky: #f3e8ff;
+$purple-dark: #581c87;
+$purple-light: #e6d6fc;
+
+$vert-extra : #18dab5;
+$vert-extra-light : #e0fbf5;
+$vert-extra-dark : #0e7468;
+
+$violet-extra : #795ded;
+$violet-extra-light : #f5f3ff;
+$violet-extra-dark : #4a1680;
+
+
+
 
 // Mixins Sass utiles
+
+@mixin bg-style($bg-color, $lightnessvalue: 0) {
+  @if math.unit($lightnessvalue) == '%' {
+    background-color: color.adjust($bg-color, $lightness: $lightnessvalue);
+  } @else {
+    background-color: color.adjust($bg-color, $lightness: $lightnessvalue * 1%);
+  }
+}
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -26,98 +65,111 @@ $error-color: #ef4444;
   transition: $property $duration $timing;
 }
 
-@mixin button-style($bg-color, $text-color: white) {
-  background-color: $bg-color;
-  color: $text-color;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  border: none;
-  cursor: pointer;
-  @include transition();
+
+// bg color
+
+.bg-primary-50 {
+ @include bg-style($primary-color, 50%);
+}
+.bg-primary-100 {
+ @include bg-style($primary-color, 40%);
+}
+.bg-primary-200 {
+  @include bg-style($primary-color, 30%);
+ }
+
+.bg-primary-300 {
+  @include bg-style($primary-color, 20%);
+ }
+
+.bg-primary-400 {
+  @include bg-style($primary-color, 10%);
+ }
+
+.bg-primary-500 {
+  @include bg-style($primary-color, 5%);
+ }
+
+.bg-primary-600 {
+  @include bg-style($primary-color, 3%);
+ }
+
+.bg-primary-700 {
+  @include bg-style($primary-color, 2%);
+ }
+
+.bg-primary-800 {
+  @include bg-style($primary-color);
+ }
+
+// .bg-secondary {
+//   @include bg-style($secondary-color);
+// }
+
+// .bg-secondary-50 {
+//   @include bg-style($secondary-color, 50%);
+//  }
+//  .bg-secondary-100 {
+//   @include bg-style($secondary-color, 40%);
+//  }
+//  .bg-secondary-200 {
+//   @include bg-style($secondary-color, 30%);
+//  }
+
+//  .bg-secondary-300 {
+//   @include bg-style($secondary-color, 20%); 
+//  }
+
+// .bg-secondary-400 {
+//   @include bg-style($secondary-color, 10%);
+//  }
+
+// .bg-secondary-500 {
+//   @include bg-style($secondary-color, 5%);
+//  }
+
+// .bg-secondary-600 {
+//   @include bg-style($secondary-color, 3%);
+//  }
+
+// .bg-secondary-700 {
+//   @include bg-style($secondary-color, 2%);
+// }
+// .bg-secondary-800 {
+//   @include bg-style($secondary-color);
+// }
+
+// .bg-violet-extra-50 {
+//   @include bg-style($violet-extra, 50%);
+//  }  
+// .bg-violet-extra-100 {
+//   @include bg-style($violet-extra, 40%);
+//  }  
+// .bg-violet-extra-200 {
+//   @include bg-style($violet-extra, 30%);
+//  }
+// .bg-violet-extra-300 {
+//   @include bg-style($violet-extra, 20%);
+//  }
+// .bg-violet-extra-400 {
+//   @include bg-style($violet-extra, 10%);
+//  }
+// .bg-violet-extra-500 {
+//   @include bg-style($violet-extra, 5%);
+//  }
+// .bg-violet-extra-600 {
+//   @include bg-style($violet-extra, 3%);
+//  }
+// .bg-violet-extra-700 {
+//   @include bg-style($violet-extra, 2%);
+//  }
+// .bg-violet-extra-800 {
+//   @include bg-style($violet-extra);
+//  }
   
-  &:hover {
-    background-color: color.adjust($bg-color, $lightness: -10%);
-  }
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
-  }
-}
 
-@mixin button-style-outlined($bg-color, $text-color: white) {
-  background-color: transparent;
-  color: $text-color;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  border: 1px solid $bg-color;
-  cursor: pointer;
-  @include transition();
-  
-  &:hover {
-    background-color: color.adjust($bg-color, $lightness: -10%);
-    color: white;
-  }
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
-  }
-  &.disabled {
-    cursor: not-allowed;
-    opacity: 0.65;
-    pointer-events: none;
-  }
 
-  &.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-  }
 
-  &.btn-lg {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-  }
-}
-
-// Styles personnalisés
-.btn-primary {
-  @include button-style($primary-color);
-}
-
-.btn-secondary {
-  @include button-style($secondary-color);
-}
-
-.btn-success {
-  @include button-style($success-color);
-}
-
-.btn-warning {
-  @include button-style($warning-color);
-}
-
-.btn-error {
-  @include button-style($error-color);
-}
-
-.btn-outlined-primary {
-  @include button-style-outlined($primary-color);
-}
-
-.btn-outlined-secondary {
-  @include button-style-outlined($secondary-color);
-}
-
-.btn-outlined-success {
-  @include button-style-outlined($success-color);
-}
-
-.btn-outlined-warning {
-  @include button-style-outlined($warning-color);
-}
-
-.btn-outlined-error {
-  @include button-style-outlined($error-color);
-}
 
 // Styles pour les cartes
 .card {
