@@ -27,11 +27,7 @@
 
            <div class="lg:w-1/2 px-5 xl:pl-12">
                 <div class="relative">
-                    <div aria-hidden="true"
-                        class="absolute inset-0 h-max w-full m-auto grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
-                        <div class="blur-[106px] h-56 bg-gradient-to-br from-blue-500 to-indigo-400 dark:from-indigo-700"></div>
-                        <div class="blur-[106px] h-32 bg-gradient-to-r from-blue-400 to-sky-300 dark:to-indigo-600"></div>
-                    </div>
+                    
 
 
                     <div class="w-full lg:block hidden  relative">
@@ -65,7 +61,7 @@
 
 
 
-    <div class="max-w-7xl mx-auto">
+    <div class="mx-auto">
         <!-- <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Bienvenue sur votre Portail RH</h1>
             <p class="text-lg text-gray-600 dark:text-gray-400">Gérez vos congés et notes de frais en toute simplicité</p>
@@ -82,7 +78,7 @@
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Gestion des Congés</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Demandez et suivez vos congés en quelques clics</p>
-                    <a href="{{ route('leaves.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('leaves.create') }}" class="btn btn-primary inline-flex items-center">
                         Nouvelle demande
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -101,7 +97,7 @@
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Notes de Frais</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Soumettez et gérez vos notes de frais facilement</p>
-                    <a href="{{ route('expense-reports.create') }}" class="btn btn-violet-extra inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('expense-reports.create') }}" class="btn btn-violet-extra inline-flex items-center">
                         Nouvelle note
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -120,7 +116,7 @@
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Tableau de Bord</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Visualisez vos statistiques et demandes en cours</p>
-                    <a href="{{ route('leaves.index') }}" class="btn btn-vert-extra inline-flex items-center px-4 py-2 bg-purple-600 dark:bg-purple-500 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300">
+                    <a href="{{ route('leaves.index') }}" class="btn btn-vert-extra inline-flex items-center">
                         Voir les stats
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

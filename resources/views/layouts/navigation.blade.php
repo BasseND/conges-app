@@ -35,6 +35,9 @@
                             <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
                                 {{ __('Gestion des départements') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('admin.company.show')" :active="request()->routeIs('admin.company.*')">
+                                {{ __('Informations société') }}
+                            </x-nav-link>
                             <!-- Menu déroulant pour les bulletins de paie -->
                             <div class="hidden sm:flex sm:items-center">
                                 <x-dropdown align="right" width="48">
@@ -192,6 +195,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
                         {{ __('Gestion des départements') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.company.show')" :active="request()->routeIs('admin.company.*')">
+                        {{ __('Informations société') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.payslips.index')" :active="request()->routeIs('admin.payslips.index')">
                         {{ __('Liste des bulletins') }}

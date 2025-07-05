@@ -228,7 +228,7 @@
                               style="
                                 filter: drop-shadow(12px 12px 40px rgba(0, 0, 0, 0.08));
                               "
-                              class="profile-box w-[300px] overflow-hidden rounded-lg bg-white dark:bg-darkblack-600"
+                              class="profile-box overflow-hidden rounded-lg bg-white dark:bg-darkblack-600"
                             >
                               <div class="relative w-full px-3 py-2">
                                 <div>
@@ -930,7 +930,7 @@
                     style="
                       filter: drop-shadow(12px 12px 40px rgba(0, 0, 0, 0.08));
                     "
-                    class="profile-box absolute right-0 top-[81px] hidden w-[300px] overflow-hidden rounded-lg bg-white dark:bg-darkblack-600"
+                    class="profile-box absolute right-0 top-[81px] hidden overflow-hidden rounded-lg bg-white dark:bg-darkblack-600"
                   >
                     <div class="relative w-full px-3 py-2">
                       <div>
@@ -1428,7 +1428,7 @@
                     style="
                       filter: drop-shadow(12px 12px 40px rgba(0, 0, 0, 0.08));
                     "
-                    class="profile-box absolute right-0 top-[81px] hidden w-[300px] overflow-hidden rounded-lg bg-white"
+                    class="profile-box absolute right-0 top-[81px] hidden overflow-hidden rounded-lg bg-white"
                   >
                     <div class="relative w-full px-3 py-2">
                       <div>

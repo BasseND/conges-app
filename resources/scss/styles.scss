@@ -8,6 +8,10 @@
 @forward "./layout/index.scss";
 @forward "./components/index.scss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Import layout
 
 // Variables Sass personnalisées
@@ -28,6 +32,7 @@ $green-light: #e6fffa;
 $yellow-sky: #fffbeb;
 $yellow-dark: #664d03;
 $yellow-light: #fff3cd;
+$yellow-light-2: #fcfdec;
 $red-sky: #ffe4e1;
 $red-dark: #842029;
 $red-light: #f8d7da;
@@ -100,6 +105,11 @@ $violet-extra-dark : #4a1680;
 
 .bg-primary-800 {
   @include bg-style($primary-color);
+ }
+
+ .bg-yellow-light-border {
+  @include bg-style($yellow-light-2);
+  border: 2px solid $yellow-light;
  }
 
 // .bg-secondary {

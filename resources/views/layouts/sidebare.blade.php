@@ -414,6 +414,7 @@
                     </div>
                 </a>
             </li>
+          
             
         </ul>
         </div>
@@ -478,7 +479,7 @@
             </li>
             <!-- Settings -->
             <li class="item py-[11px] text-bgray-900 dark:text-white">
-                <a href="settings.html">
+                <a href="{{ route('admin.company.show') }}" class="sidebar-link {{ request()->routeIs('admin.company.show') ? 'active' : '' }}">
                     <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-2.5">
                         <span class="item-ico">

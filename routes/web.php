@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
+use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
@@ -203,5 +204,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('departments/{department}/teams/{team}/edit', [TeamController::class, 'edit'])->name('departments.teams.edit');
         Route::put('departments/{department}/teams/{team}', [TeamController::class, 'update'])->name('departments.teams.update');
         Route::delete('departments/{department}/teams/{team}', [TeamController::class, 'destroy'])->name('departments.teams.destroy');
+
+        // Gestion de la société
+        Route::get('company', [CompanyController::class, 'show'])->name('company.show');
+        Route::get('company/create', [CompanyController::class, 'create'])->name('company.create');
+        Route::post('company', [CompanyController::class, 'store'])->name('company.store');
+        Route::get('company/edit', [CompanyController::class, 'edit'])->name('company.edit');
+        Route::put('company', [CompanyController::class, 'update'])->name('company.update');
     });
 });

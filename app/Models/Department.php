@@ -16,8 +16,17 @@ class Department extends Model
         'name',
         'code',
         'description',
-        'head_id'
+        'head_id',
+        'company_id'
     ];
+
+    /**
+     * Get the company that the department belongs to.
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     /**
      * Get the manager of the department.
