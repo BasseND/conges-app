@@ -26,12 +26,10 @@
 
         <!-- Scripts -->
         @vite([
-            
            'resources/assets/css/slick.css',
            'resources/assets/css/aos.css',
            'resources/assets/css/flatpickr.min.css',
-           'resources/assets/css/output.css',
-           'resources/assets/css/style.css',
+           'resources/assets/css/layout.css',
            'resources/css/app.css',
            'resources/js/app.js',
         ])
@@ -136,7 +134,7 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased bg-[#f7f9ff] dark:bg-gray-900" x-data="{}" x-init="$store.darkMode.init()" @keydown.ctrl.b.window.prevent="$store.drawer.toggle()">
+    <body class="font-sans antialiased" x-data="{}" x-init="$store.darkMode.init()" @keydown.ctrl.b.window.prevent="$store.drawer.toggle()">
         <div class="layout-wrapper active w-full">
             <div class="relative flex w-full">
                 <!-- Sidebar Navigation -->

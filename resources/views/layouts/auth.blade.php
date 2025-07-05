@@ -13,8 +13,7 @@
 
         <!-- Scripts -->
         @vite([
-            'resources/assets/css/output.css',
-            'resources/assets/css/style.css',
+            'resources/assets/css/layout.css',
             'resources/css/app.css',
             'resources/js/app.js'
         ])

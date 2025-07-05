@@ -414,6 +414,9 @@
                     </div>
                 </a>
             </li>
+            <x-nav-link :href="route('admin.company.show')" :active="request()->routeIs('admin.company.*')">
+                {{ __('Informations société') }}
+            </x-nav-link>
             
         </ul>
         </div>

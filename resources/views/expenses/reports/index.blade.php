@@ -19,13 +19,14 @@
                 <!-- Filtres -->
                 <div class="mb-6">
 
-                <x-alert type="success" :message="session('success')" />
-                <x-alert type="error" :message="session('error')" />
+                    <x-alert type="success" :message="session('success')" />
+                    <x-alert type="error" :message="session('error')" />
 
-                    <form action="{{ route('expense-reports.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                    <form action="{{ route('expense-reports.index') }}" method="GET" class="w-full bg-white p-6 rounded-2xl shadow border border-transparent grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Statut</label>
-                            <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300">
+                            <select name="status" id="status" class="mt-1 block w-full bg-gray-50 dark:bg-dark-card-two border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 text-gray-700 dark:text-white focus:border-violet-500">
                                 <option value="">Tous les statuts</option>
                                 @foreach(\App\Models\ExpenseReport::getStatusLabelAttribute() as $value => $label)
                                     <option value="{{ $value }}" {{ request('status') == $value ? 'selected' : '' }}>
@@ -38,13 +39,13 @@
                         <div>
                             <label for="date_from" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date début</label>
                             <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}" 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300">
+                                class="mt-1 block w-full bg-gray-50 dark:bg-dark-card-two border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 text-gray-700 dark:text-white focus:border-violet-500">
                         </div>
 
                         <div>
                             <label for="date_to" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date fin</label>
                             <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300">
+                                class="mt-1 block w-full bg-gray-50 dark:bg-dark-card-two border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 text-gray-700 dark:text-white focus:border-violet-500">
                         </div>
 
                         <div class="flex items-end gap-2">
@@ -71,7 +72,7 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-700">
-                            <tr>
+                            <tr class="border-b border-bgray-300 dark:border-darkblack-400">
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     Référence
                                 </th>
@@ -94,18 +95,18 @@
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             @forelse ($expenseReports as $report)
-                                <tr>
+                                <tr class="border-b border-bgray-300 dark:border-darkblack-400">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                         #{{ $report->id }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $report->user->first_name }}
+                                       <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ $report->user->first_name }} </span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $report->submitted_at ? $report->submitted_at->format('d/m/Y') : 'Non soumis' }}
+                                        <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ $report->submitted_at ? $report->submitted_at->format('d/m/Y') : 'Non soumis' }}</span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">   
-                                        {{ number_format($report->total_amount, 2, ',', ' ') }} €
+                                        <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ number_format($report->total_amount, 2, ',', ' ') }} €</span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 

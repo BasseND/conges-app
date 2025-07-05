@@ -243,3 +243,19 @@ Implémenter un système d'envoi par email des bulletins de paie aux employés.
 Ajouter des statistiques sur les salaires versés par mois, par département, etc.
 Intégrer un système d'exportation en masse des bulletins de paie pour une période donnée.
 Souhaitez-vous que nous implémentions l'une de ces améliorations ou avez-vous d'autres fonctionnalités que vous aimeriez ajouter au système de gestion des bulletins de paie ?
+
+
+Je voudrais ajouter un model 
+
+id                   String                
+name                 String
+logo                 String?
+description          String?
+address              String?
+city                 String?
+country              String?
+postalCode           String?
+location             String?
+contactEmail         String?
+contactPhone         String?
+currency             String?

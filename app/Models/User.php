@@ -43,9 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'employee_id',
         'department_id',
-        'role',
-        'employee_id',
-        'department_id',
+        'company_id',
         'annual_leave_days',
         'sick_leave_days',
         'is_active',
@@ -88,6 +86,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    /**
+     * Get the company that the user belongs to.
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**
