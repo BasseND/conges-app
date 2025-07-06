@@ -44,6 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'employee_id',
         'department_id',
         'company_id',
+        'leave_balance_id',
         'annual_leave_days',
         'sick_leave_days',
         'is_active',
@@ -94,6 +95,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the leave balance that the user belongs to.
+     */
+    public function leaveBalance()
+    {
+        return $this->belongsTo(LeaveBalance::class);
     }
 
     /**
@@ -279,8 +288,53 @@ class User extends Authenticatable implements MustVerifyEmail
             ->where('status', 'approved')
             ->sum('duration');
 
+        // Utiliser le solde de congés de l'entreprise ou les valeurs individuelles
+        $annualLeaveDays = $this->getAnnualLeaveDaysAttribute();
+        
         // Calculer les jours restants
-        return $this->annual_leave_days - $usedLeaves;
+        return $annualLeaveDays - $usedLeaves;
+    }
+
+    /**
+     * Get the annual leave days for the user (from leave balance or individual setting)
+     * 
+     * @return int
+     */
+    public function getAnnualLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->annual_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->annual_leave_days;
+        }
+        
+        // En dernier recours, utiliser la valeur individuelle
+        return $this->attributes['annual_leave_days'] ?? 25;
+    }
+
+    /**
+     * Get the sick leave days for the user (from leave balance or individual setting)
+     * 
+     * @return int
+     */
+    public function getSickLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->sick_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->sick_leave_days;
+        }
+        
+        // En dernier recours, utiliser la valeur individuelle
+        return $this->attributes['sick_leave_days'] ?? 12;
     }
 
     /**

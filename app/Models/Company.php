@@ -13,7 +13,7 @@ class Company extends Model
     protected $fillable = [
         'name',
         'logo',
-        'description',
+        'website_url',
         'address',
         'city',
         'country',
@@ -51,5 +51,21 @@ class Company extends Model
     public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class);
+    }
+
+    /**
+     * Get the leave balances for the company.
+     */
+    public function leaveBalances(): HasMany
+    {
+        return $this->hasMany(LeaveBalance::class);
+    }
+
+    /**
+     * Get the default leave balance for the company.
+     */
+    public function defaultLeaveBalance()
+    {
+        return $this->leaveBalances()->where('is_default', true)->first();
     }
 }

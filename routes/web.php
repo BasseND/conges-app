@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\LeaveBalanceController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
@@ -204,6 +205,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('departments/{department}/teams/{team}/edit', [TeamController::class, 'edit'])->name('departments.teams.edit');
         Route::put('departments/{department}/teams/{team}', [TeamController::class, 'update'])->name('departments.teams.update');
         Route::delete('departments/{department}/teams/{team}', [TeamController::class, 'destroy'])->name('departments.teams.destroy');
+        Route::get('departments/{department}/leave-balances', [LeaveBalanceController::class, 'getByCompany'])->name('departments.leave-balances');
+
+        // Gestion des soldes de congés
+        Route::resource('leave-balances', LeaveBalanceController::class);
 
         // Gestion de la société
         Route::get('company', [CompanyController::class, 'show'])->name('company.show');
@@ -211,5 +216,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('company', [CompanyController::class, 'store'])->name('company.store');
         Route::get('company/edit', [CompanyController::class, 'edit'])->name('company.edit');
         Route::put('company', [CompanyController::class, 'update'])->name('company.update');
+        
+        // Routes pour les soldes de congés de la société
+        Route::post('company/leave-balances', [CompanyController::class, 'storeLeaveBalance'])->name('company.leave-balances.store');
+        Route::put('company/leave-balances/{leaveBalance}', [CompanyController::class, 'updateLeaveBalance'])->name('company.leave-balances.update');
+        Route::delete('company/leave-balances/{leaveBalance}', [CompanyController::class, 'destroyLeaveBalance'])->name('company.leave-balances.destroy');
     });
 });
