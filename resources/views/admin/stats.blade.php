@@ -63,53 +63,210 @@
 
                 <!-- Actions a faire -->
 
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Request to validate</h3>
-                        
-                        <div class="mb-3">
-                            <h2 class="text-3xl font-bold text-slate-800">26</h2>
-                            <p class="text-sm text-slate-500">En attente de traitement</p>
+                 <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
+                      <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-base xl:text-2xl text-bgray-900 dark:text-white font-bold">
+                          A traiter en urgence
+                        </h2>
+                        <span>
+                          <svg
+                            width="14"
+                            height="4"
+                            viewBox="0 0 14 4"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M2.33317 2.66659C2.70136 2.66659 2.99984 2.36811 2.99984 1.99992C2.99984 1.63173 2.70136 1.33325 2.33317 1.33325C1.96498 1.33325 1.6665 1.63173 1.6665 1.99992C1.6665 2.36811 1.96498 2.66659 2.33317 2.66659Z"
+                              stroke="#64748B"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M6.99967 2.66659C7.36786 2.66659 7.66634 2.36811 7.66634 1.99992C7.66634 1.63173 7.36786 1.33325 6.99967 1.33325C6.63148 1.33325 6.33301 1.63173 6.33301 1.99992C6.33301 2.36811 6.63148 2.66659 6.99967 2.66659Z"
+                              stroke="#64748B"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M11.6667 2.66659C12.0349 2.66659 12.3333 2.36811 12.3333 1.99992C12.3333 1.63173 12.0349 1.33325 11.6667 1.33325C11.2985 1.33325 11 1.63173 11 1.99992C11 2.36811 11.2985 2.66659 11.6667 2.66659Z"
+                              stroke="#64748B"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                      <div class="flex space-x-3 rtl:space-x-reverse mb-10">
+                        <div
+                          class="w-full h-[128px] bg-success-300 flex justify-center items-center rounded-md"
+                        >
+                          <div>
+                            <div class="flex justify-center mb-3">
+                              <span
+                                ><svg
+                                  width="40"
+                                  height="40"
+                                  viewBox="0 0 40 40"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle
+                                    opacity="0.5"
+                                    cx="20"
+                                    cy="20"
+                                    r="19.5"
+                                    class="stroke-white dark:stroke-bgray-900"
+                                  />
+                                  <path
+                                    opacity="0.4"
+                                    d="M21 16.86L21 14.3567C21 13.2506 20.1046 12.354 19 12.354L17.6667 12.354C17.2339 12.354 16.8129 12.2135 16.4667 11.9535L15.5333 11.2526C15.1871 10.9926 14.7661 10.8521 14.3333 10.8521L13 10.8521C11.8954 10.8521 11 11.7487 11 12.8547L11 16.86C11 17.966 11.8954 18.8626 13 18.8626L19 18.8626C20.1046 18.8626 21 17.966 21 16.86Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                  <path
+                                    opacity="0.4"
+                                    d="M29 28.8758L29 26.3725C29 25.2665 28.1046 24.3699 27 24.3699L25.6667 24.3699C25.2339 24.3699 24.8129 24.2294 24.4667 23.9694L23.5333 23.2684C23.1871 23.0085 22.7661 22.8679 22.3333 22.8679L21 22.8679C19.8954 22.8679 19 23.7645 19 24.8706L19 28.8758C19 29.9819 19.8954 30.8785 21 30.8785L27 30.8785C28.1046 30.8785 29 29.9819 29 28.8758Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M22.25 14.8572C22.25 14.4424 22.5858 14.1062 23 14.1062L25 14.1062C26.5188 14.1062 27.75 15.339 27.75 16.8598L27.75 22.3671C27.75 22.7819 27.4142 23.1181 27 23.1181C26.5858 23.1181 26.25 22.7819 26.25 22.3671L26.25 16.8598C26.25 16.1686 25.6904 15.6082 25 15.6082L23 15.6082C22.5858 15.6082 22.25 15.272 22.25 14.8572ZM13 20.1141C13.4142 20.1141 13.75 20.4504 13.75 20.8651L13.75 24.8704C13.75 25.5617 14.3096 26.1221 15 26.1221L17 26.1221C17.4142 26.1221 17.75 26.4583 17.75 26.873C17.75 27.2878 17.4142 27.624 17 27.624L15 27.624C13.4812 27.624 12.25 26.3912 12.25 24.8704L12.25 20.8651C12.25 20.4504 12.5858 20.1141 13 20.1141Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                            <p class="text-white  dark:text-bgray-900 text-xs text-center">
+                              Absences
+                            </p>
+                            <p
+                              class="text-base dark:text-bgray-900 font-bold text-white text-center"
+                            >
+                              40
+                            </p>
+                          </div>
                         </div>
-                        
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs mr-2">12</div>
-                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
-                                    Absences
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
+                        <div
+                          class="w-full h-[128px] bg-success-200 flex justify-center items-center rounded-md"
+                        >
+                          <div>
+                            <div class="flex justify-center mb-3">
+                                  <span
+                                ><svg
+                                  width="40"
+                                  height="40"
+                                  viewBox="0 0 40 40"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle
+                                    opacity="0.5"
+                                    cx="20"
+                                    cy="20"
+                                    r="19.5"
+                                    class="stroke-white dark:stroke-bgray-900"
+                                  />
+                                  <path
+                                    opacity="0.4"
+                                    d="M21 16.86L21 14.3567C21 13.2506 20.1046 12.354 19 12.354L17.6667 12.354C17.2339 12.354 16.8129 12.2135 16.4667 11.9535L15.5333 11.2526C15.1871 10.9926 14.7661 10.8521 14.3333 10.8521L13 10.8521C11.8954 10.8521 11 11.7487 11 12.8547L11 16.86C11 17.966 11.8954 18.8626 13 18.8626L19 18.8626C20.1046 18.8626 21 17.966 21 16.86Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                  <path
+                                    opacity="0.4"
+                                    d="M29 28.8758L29 26.3725C29 25.2665 28.1046 24.3699 27 24.3699L25.6667 24.3699C25.2339 24.3699 24.8129 24.2294 24.4667 23.9694L23.5333 23.2684C23.1871 23.0085 22.7661 22.8679 22.3333 22.8679L21 22.8679C19.8954 22.8679 19 23.7645 19 24.8706L19 28.8758C19 29.9819 19.8954 30.8785 21 30.8785L27 30.8785C28.1046 30.8785 29 29.9819 29 28.8758Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M22.25 14.8572C22.25 14.4424 22.5858 14.1062 23 14.1062L25 14.1062C26.5188 14.1062 27.75 15.339 27.75 16.8598L27.75 22.3671C27.75 22.7819 27.4142 23.1181 27 23.1181C26.5858 23.1181 26.25 22.7819 26.25 22.3671L26.25 16.8598C26.25 16.1686 25.6904 15.6082 25 15.6082L23 15.6082C22.5858 15.6082 22.25 15.272 22.25 14.8572ZM13 20.1141C13.4142 20.1141 13.75 20.4504 13.75 20.8651L13.75 24.8704C13.75 25.5617 14.3096 26.1221 15 26.1221L17 26.1221C17.4142 26.1221 17.75 26.4583 17.75 26.873C17.75 27.2878 17.4142 27.624 17 27.624L15 27.624C13.4812 27.624 12.25 26.3912 12.25 24.8704L12.25 20.8651C12.25 20.4504 12.5858 20.1141 13 20.1141Z"
+                                    class="fill-white dark:fill-bgray-900"
+                                  />
+                                </svg>
+                              </span>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs mr-2">14</div>
-                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
-                                    Note de frais
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-slate-600 text-xs mr-2">0</div>
-                                <a href="#" class="text-slate-600 hover:text-slate-800 flex items-center">
-                                    Contrats à terme
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </div>
+                            <p class="text-white dark:text-bgray-900 text-xs text-center">
+                              Notes de frais
+                            </p>
+                            <p
+                              class="text-base dark:text-bgray-900 font-bold text-white text-center"
+                            >
+                              79
+                            </p>
+                          </div>
                         </div>
+                        <div
+                          class="w-full h-[128px] bg-bgray-50 dark:bg-darkblack-700 flex justify-center items-center rounded-md"
+                        >
+                          <div>
+                            <div class="flex justify-center mb-3">
+                              <span>
+                                <svg
+                                  width="40"
+                                  height="40"
+                                  viewBox="0 0 40 40"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle
+                                    opacity="0.5"
+                                    cx="20"
+                                    cy="20"
+                                    r="19.5"
+                                    stroke="#CBD5E1"
+                                  />
+                                  <path
+                                    opacity="0.4"
+                                    d="M29 25V18C29 15.7909 27.2987 14 25.2 14H22.6667C21.8445 14 21.0444 13.7193 20.3867 13.2L18.6133 11.8C17.9556 11.2807 17.1555 11 16.3333 11H13.8C11.7013 11 10 12.7909 10 15V25C10 27.2091 11.7013 29 13.8 29H25.2C27.2987 29 29 27.2091 29 25Z"
+                                    fill="#22C55E"
+                                  />
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M23.4939 18.4356C23.8056 18.7083 23.8372 19.1822 23.5645 19.4939L20.6946 22.7738C20.0779 23.4786 19.0156 23.5729 18.2843 22.9879L16.5315 21.5857C16.2081 21.3269 16.1556 20.8549 16.4144 20.5315C16.6731 20.208 17.1451 20.1556 17.4685 20.4144L19.2214 21.8166C19.3258 21.9002 19.4776 21.8867 19.5657 21.786L22.4356 18.5061C22.7084 18.1944 23.1822 18.1628 23.4939 18.4356Z"
+                                    fill="#22C55E"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                            <p class="text-bgray-500 text-xs text-center dark:text-bgray-50">
+                              Contrats à terme
+                            </p>
+                            <p
+                              class="text-base font-bold text-bgray-900 dark:text-white text-center"
+                            >
+                              40
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <p class="text-xs text-bgray-500 dark:text-white mb-2">
+                          En attente de traitement
+                        </p>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-end">
+                          <span
+                            class="text-bgray-900 dark:text-white font-bold text-2xl leading-[30px]"
+                            >38</span
+                          >
+                          <span class="text-xs font-medium text-success-300"
+                            >+2,5%</span
+                          >
+                        </div>
+                      </div>
                     </div>
-                </div>
+
+
+               
 
                 <!-- Statistiques des congés -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Statistiques des congés</h3>
+
+                 <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
+                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-6">Statistiques des congés</h3>
                         {{-- <div class="space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 dark:text-gray-400">En attente</span>
@@ -128,32 +285,146 @@
                         <div class="chart-max-w-7xl">
                             <canvas id="congesChart"></canvas>
                         </div>
-                    </div>
+                    
                 </div>
+
+                <!-- Statistiques des utilisateurs -->
+                  <div
+                    class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full"
+                  >
+                    <div class="mb-4 flex items-center justify-between">
+                      <h3
+                        class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl"
+                      >
+                       Statistiques des utilisateurs
+                      </h3>
+                      
+                    </div>
+                    <div class="items-center xl:flex xl:space-x-[26px]">
+                      <div class="mb-4 w-full xl:mb-0 xl:flex-1">
+                        <div class="mb-1 flex items-end space-x-2">
+                          <h1
+                            class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white"
+                          >
+                           {{ $stats['employees'] }}
+                          </h1>
+                          <div
+                            class="flex h-[22px] w-[60px] items-center justify-center rounded-full bg-success-400"
+                          >
+                            <div class="flex items-center space-x-1">
+                              <span>
+                                <svg
+                                  width="10"
+                                  height="7"
+                                  viewBox="0 0 10 7"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M0.5 5.89575L3.5 2.89575L5.5 4.89575L9.5 0.895752"
+                                    stroke="white"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    d="M6 0.895752H9.5V4.39575"
+                                    stroke="white"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                </svg>
+                              </span>
+                              <span class="text-xs font-medium text-white"
+                                >{{ $stats['employees'] }}</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                        <p
+                          class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300"
+                        >
+                          Total employés
+                        </p>
+                        <div class="flex flex-col space-y-2.5">
+                          <div
+                            class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                          >
+                            <div class="flex items-center space-x-2">
+                              <div
+                                class="h-2 w-2 rounded-full bg-success-300"
+                              ></div>
+                              <span
+                                class="text-sm font-medium text-bgray-900 dark:text-white"
+                                >Total employés</span
+                              >
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600"
+                              >{{ $stats['employees'] }}</span
+                            >
+                          </div>
+                          <div
+                            class="flex h-[32px] w-full items-center justify-between rounded-lg px-2"
+                          >
+                            <div class="flex items-center space-x-2">
+                              <div
+                                class="h-2 w-2 rounded-full bg-warning-300"
+                              ></div>
+                              <span
+                                class="text-sm font-medium text-bgray-900 dark:text-white"
+                                >Mangers</span
+                              >
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600"
+                              >{{ $stats['managers'] }}</span
+                            >
+                          </div>
+                          <div
+                            class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                          >
+                            <div class="flex items-center space-x-2">
+                              <div class="h-2 w-2 rounded-full bg-purple"></div>
+                              <span
+                                class="text-sm font-medium text-bgray-900 dark:text-white"
+                                >Administrateurs</span
+                              >
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600"
+                              >{{ $stats['admins'] }}</span
+                            >
+                          </div>
+                          <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                            <div class="flex items-center space-x-2">
+                              <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">15,732</span>
+                          </div>
+
+                           <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                            <div class="flex items-center space-x-2">
+                              <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                              <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">15,732</span>
+                          </div>
+                        </div>
+                      </div>
+                   
+                    </div>
+                  </div>
+                 
+                
+
+
+
+
+               
 
 
                 
 
                 <!-- Statistiques des utilisateurs -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Statistiques des utilisateurs</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 dark:text-gray-400">Total employés</span>
-                                <span class="text-blue-600 dark:text-blue-400 font-semibold">{{ $stats['employees'] }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 dark:text-gray-400">Managers</span>
-                                <span class="text-purple-600 dark:text-purple-400 font-semibold">{{ $stats['managers'] }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 dark:text-gray-400">Administrateurs</span>
-                                <span class="text-indigo-600 dark:text-indigo-400 font-semibold">{{ $stats['admins'] }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              
 
                 <!-- Actions rapides -->
                 <!-- <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -178,22 +449,44 @@
             </div>
             
             <!-- Graphiques -->
-            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Graphique par département -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Jours de congés par département</h3>
-                        <div class="h-80">
+                <div class="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📊 Congés par département</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Répartition des jours de congés</p>
+                            </div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-inner">
                             <canvas id="departmentChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- Graphique par mois -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Jours de congés par mois</h3>
-                        <div class="h-80">
+                <div class="relative bg-gradient-to-br from-white via-green-50 to-emerald-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500"></div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📈 Évolution mensuelle</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Tendance des congés sur l'année</p>
+                            </div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-inner">
                             <canvas id="monthlyChart"></canvas>
                         </div>
                     </div>
@@ -358,7 +651,7 @@
             {
                 type: 'doughnut',
                 data: {
-                    labels: ['En attente', 'Approuvés', 'Rejetés'],
+                    labels: ['⏳ En attente', '✅ Approuvés', '❌ Rejetés'],
                     datasets: [{
                         data: [
                             congesData.pending, 
@@ -366,21 +659,69 @@
                             congesData.rejected
                         ],
                         backgroundColor: [
-                            'rgb(132 108 249)',
-                            'rgba(54, 162, 235, 0.5)',
-                            'rgb(7 182 213)'
+                            '#fbbf24',
+                            '#10b981',
+                            '#ef4444'
                         ],
                         borderColor: [
-                            'rgb(132 108 249)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgb(7 182 213)'
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff'
                         ],
-                        borderWidth: 1
+                        borderWidth: 4,
+                        hoverBackgroundColor: [
+                            '#f59e0b',
+                            '#059669',
+                            '#dc2626'
+                        ],
+                        hoverBorderWidth: 6,
+                        cutout: '65%',
+                        spacing: 2
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    size: 13,
+                                    weight: 'bold'
+                                },
+                                color: '#374151'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderWidth: 2,
+                            cornerRadius: 12,
+                            displayColors: true,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed * 100) / total).toFixed(1);
+                                    return `${context.label}: ${context.parsed} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+                    }
                 }
             }
         );
@@ -396,33 +737,98 @@
                         label: 'Jours de congés',
                         data: departmentData.map(item => item.total_days),
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.5)',
-                            'rgba(255, 99, 132, 0.5)',
-                            'rgba(75, 192, 192, 0.5)',
-                            'rgba(255, 206, 86, 0.5)',
-                            'rgba(153, 102, 255, 0.5)',
+                            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                            'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
                         ],
                         borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(153, 102, 255, 1)',
+                            '#667eea',
+                            '#f5576c',
+                            '#00f2fe',
+                            '#38f9d7',
+                            '#fee140',
+                            '#fed6e3',
                         ],
-                        borderWidth: 1
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        hoverBackgroundColor: [
+                            '#5a6fd8',
+                            '#f04458',
+                            '#00d9e7',
+                            '#2de5c4',
+                            '#fdd835',
+                            '#fcc4d0',
+                        ],
+                        hoverBorderWidth: 3
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Nombre de jours'
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#667eea',
+                            borderWidth: 1,
+                            cornerRadius: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.parsed.y} jours de congés`;
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(107, 114, 128, 0.1)',
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '📊 Nombre de jours',
+                                color: '#374151',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
                     }
                 }
             }
@@ -439,23 +845,101 @@
                     datasets: [{
                         label: 'Jours de congés',
                         data: monthlyData.map(item => item.total_days),
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1,
+                        borderColor: '#4facfe',
+                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                        borderWidth: 4,
+                        tension: 0.4,
                         fill: true,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                        pointBackgroundColor: '#4facfe',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 3,
+                        pointRadius: 8,
+                        pointHoverRadius: 12,
+                        pointHoverBackgroundColor: '#00f2fe',
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Nombre de jours'
+                    animation: {
+                        duration: 2500,
+                        easing: 'easeInOutCubic'
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#4facfe',
+                            borderWidth: 2,
+                            cornerRadius: 12,
+                            displayColors: false,
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return `📅 ${context[0].label}`;
+                                },
+                                label: function(context) {
+                                    return `🏖️ ${context.parsed.y} jours de congés`;
+                                }
                             }
                         }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(107, 114, 128, 0.1)',
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                callback: function(value) {
+                                    return value + ' j';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '📈 Évolution mensuelle',
+                                color: '#374151',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            hoverRadius: 12
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
                     }
                 }
             }

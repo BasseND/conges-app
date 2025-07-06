@@ -52,24 +52,15 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div>
-                                <div class="mb-4">
-                                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Devise</label>
-                                    <input type="text" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('currency') border-red-500 @enderror" 
-                                           id="currency" name="currency" value="{{ old('currency') }}" 
-                                           placeholder="EUR, USD, etc.">
-                                    @error('currency')
-                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="mb-4">
-                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
-                            <textarea class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('description') border-red-500 @enderror" 
-                                      id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                            @error('description')
+                            <label for="website_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site web</label>
+                            <input type="url" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('website_url') border-red-500 @enderror" 
+                                   id="website_url" name="website_url" value="{{ old('website_url') }}" 
+                                   placeholder="https://www.exemple.com">
+                            @error('website_url')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
@@ -102,12 +93,20 @@
                             </div>
                             <div>
                                 <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pays</label>
-                                <input type="text" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('country') border-red-500 @enderror" 
-                                       id="country" name="country" value="{{ old('country') }}">
+                                <select id="country" name="country" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('country') border-red-500 @enderror">
+                                    <option value="">Sélectionnez un pays</option>
+                                </select>
                                 @error('country')
                                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <!-- Champ devise caché -->
+                            <input type="hidden" id="currency" name="currency" value="{{ old('currency') }}">
+                            @error('currency')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                            
                         </div>
 
                         <div class="mb-4">
@@ -141,7 +140,13 @@
 
                         <div class="mb-6">
                             <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo de la société</label>
-                            <input type="file" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-green-300 focus:border-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white @error('logo') border-red-500 @enderror" 
+                            <input type="file" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-300
+                                            file:mr-4 file:py-2 file:px-4
+                                            file:rounded-md file:border-0
+                                            file:text-sm file:font-semibold
+                                            file:bg-indigo-50 file:text-indigo-700
+                                            hover:file:bg-indigo-100
+                                            dark:file:bg-indigo-900 dark:file:text-indigo-300  @error('logo') border-red-500 @enderror" 
                                    id="logo" name="logo" accept="image/*">
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Formats acceptés : JPEG, PNG, JPG, GIF, SVG. Taille maximale : 2MB.</p>
                             @error('logo')
@@ -164,3 +169,46 @@
     </div>
 </div>
 </x-app-layout>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const countrySelect = document.getElementById('country');
+    const currencyInput = document.getElementById('currency');
+    
+    // Charger les données des pays
+    fetch('/data/countries.json')
+        .then(response => response.json())
+        .then(countries => {
+            // Remplir le select avec les pays
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name;
+                option.textContent = country.name;
+                option.dataset.currency = country.currency;
+                option.dataset.currencySymbol = country.currencySymbol;
+                countrySelect.appendChild(option);
+            });
+            
+            // Restaurer la valeur sélectionnée si elle existe (old input)
+            const oldCountry = '{{ old("country") }}';
+            if (oldCountry) {
+                countrySelect.value = oldCountry;
+                // Déclencher l'événement change pour mettre à jour la devise
+                countrySelect.dispatchEvent(new Event('change'));
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des pays:', error);
+        });
+    
+    // Gérer le changement de pays
+    countrySelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption && selectedOption.dataset.currency) {
+            currencyInput.value = selectedOption.dataset.currency;
+        } else {
+            currencyInput.value = '';
+        }
+    });
+});
+</script>

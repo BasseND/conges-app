@@ -6,13 +6,13 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="mx-auto">
             <div class=" bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6 p-6">
                 <x-alert type="success" :message="session('success')" />
                 <x-alert type="error" :message="session('error')" />
 
                 <!-- En-tête du profil avec photo et informations principales -->
-                <div class="bg-[#f8f8fd] dark:bg-gray-800 border border-gray-200 dark:border-gray-600 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="bg-yellow-light-border dark:bg-gray-800 border border-gray-200 dark:border-gray-600 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                     <div class="p-6">
                         <div class="flex justify-between items-start md:items-center">
                             

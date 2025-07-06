@@ -131,19 +131,54 @@
                     <!-- Solde de conges -->
                     <div class="border border-gray-200 dark:border-gray-700 rounded-md px-4 py-6 space-y-4">
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Solde de conges') }}
+                            {{ __('Solde de congés') }}
                         </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-4">
                             <div>
-                                <x-input-label for="annual_leave_days" :value="__('Jours de congés annuels')" />
-                                <x-text-input id="annual_leave_days" class="block mt-1 w-full" type="number" name="annual_leave_days" :value="old('annual_leave_days', 25)" required />
-                                <x-input-error :messages="$errors->get('annual_leave_days')" class="mt-2" />
+                                <x-input-label for="leave_balance_id" :value="__('Profil de congés')" />
+                                <select id="leave_balance_id" name="leave_balance_id" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">Utiliser le solde par défaut de l'entreprise</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('leave_balance_id')" class="mt-2" />
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    Laissez vide pour utiliser automatiquement le solde par défaut de l'entreprise de l'utilisateur.
+                                </p>
                             </div>
-
-                            <div>
-                                <x-input-label for="sick_leave_days" :value="__('Jours de congés maladie')" />
-                                <x-text-input id="sick_leave_days" class="block mt-1 w-full" type="number" name="sick_leave_days" :value="old('sick_leave_days', 12)" required />
-                                <x-input-error :messages="$errors->get('sick_leave_days')" class="mt-2" />
+                            
+                            <!-- Affichage des détails du solde sélectionné -->
+                            <div id="leave_balance_details" class="hidden bg-gray-50 dark:bg-gray-800 p-4 rounded-md">
+                                <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">Détails du solde :</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
+                                    <div>
+                                        <span class="text-gray-600 dark:text-gray-400">Congés annuels :</span>
+                                        <span id="detail_annual" class="font-medium">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600 dark:text-gray-400">Congés maladie :</span>
+                                        <span id="detail_sick" class="font-medium">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600 dark:text-gray-400">Congés maternité :</span>
+                                        <span id="detail_maternity" class="font-medium">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600 dark:text-gray-400">Congés paternité :</span>
+                                        <span id="detail_paternity" class="font-medium">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600 dark:text-gray-400">Congés spéciaux :</span>
+                                        <span id="detail_special" class="font-medium">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Champs individuels (optionnels pour compatibilité) -->
+                            <div class="hidden">
+                                <input type="hidden" id="annual_leave_days" name="annual_leave_days" value="{{ old('annual_leave_days', 25) }}" />
+                                <input type="hidden" id="sick_leave_days" name="sick_leave_days" value="{{ old('sick_leave_days', 12) }}" />
+                                <input type="hidden" id="maternity_leave_days" name="maternity_leave_days" value="{{ old('maternity_leave_days', 90) }}" />
+                                <input type="hidden" id="paternity_leave_days" name="paternity_leave_days" value="{{ old('paternity_leave_days', 14) }}" />
+                                <input type="hidden" id="special_leave_days" name="special_leave_days" value="{{ old('special_leave_days', 5) }}" />
                             </div>
                         </div>
                     </div>
@@ -217,6 +252,86 @@
                 alert('Erreur lors du chargement des équipes. Consultez la console pour plus de détails.');
             });
         }
+        
+        function loadLeaveBalances(departmentId) {
+            console.log('Chargement des soldes de congés pour le département:', departmentId);
+            
+            const leaveBalanceSelect = document.getElementById('leave_balance_id');
+            const detailsDiv = document.getElementById('leave_balance_details');
+            
+            // Réinitialiser
+            leaveBalanceSelect.innerHTML = '<option value="">Utiliser le solde par défaut de l\'entreprise</option>';
+            detailsDiv.classList.add('hidden');
+            
+            if (!departmentId) {
+                return;
+            }
+
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `/admin/departments/${departmentId}/leave-balances`;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(leaveBalances => {
+                console.log('Soldes de congés reçus:', leaveBalances);
+                
+                if (Array.isArray(leaveBalances) && leaveBalances.length > 0) {
+                    leaveBalances.forEach(balance => {
+                        const option = document.createElement('option');
+                        option.value = balance.id;
+                        option.textContent = balance.description || `Solde ${balance.is_default ? '(Défaut)' : 'Personnalisé'}`;
+                        option.dataset.annual = balance.annual_leave_days;
+                        option.dataset.sick = balance.sick_leave_days;
+                        option.dataset.maternity = balance.maternity_leave_days;
+                        option.dataset.paternity = balance.paternity_leave_days;
+                        option.dataset.special = balance.special_leave_days;
+                        leaveBalanceSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des soldes de congés:', error);
+            });
+        }
+        
+        function showLeaveBalanceDetails(selectElement) {
+            const detailsDiv = document.getElementById('leave_balance_details');
+            const selectedOption = selectElement.selectedOptions[0];
+            
+            if (selectedOption && selectedOption.value) {
+                // Afficher les détails
+                document.getElementById('detail_annual').textContent = selectedOption.dataset.annual + ' jours';
+                document.getElementById('detail_sick').textContent = selectedOption.dataset.sick + ' jours';
+                document.getElementById('detail_maternity').textContent = selectedOption.dataset.maternity + ' jours';
+                document.getElementById('detail_paternity').textContent = selectedOption.dataset.paternity + ' jours';
+                document.getElementById('detail_special').textContent = selectedOption.dataset.special + ' jours';
+                detailsDiv.classList.remove('hidden');
+                
+                // Mettre à jour les champs cachés
+                document.getElementById('annual_leave_days').value = selectedOption.dataset.annual;
+                document.getElementById('sick_leave_days').value = selectedOption.dataset.sick;
+            } else {
+                detailsDiv.classList.add('hidden');
+                // Remettre les valeurs par défaut
+                document.getElementById('annual_leave_days').value = 25;
+                document.getElementById('sick_leave_days').value = 12;
+            }
+        }
+        
+
 
         // Attacher l'événement une fois que le DOM est chargé
         document.addEventListener('DOMContentLoaded', function() {
@@ -224,15 +339,22 @@
             
             // Attacher l'événement change au select département
             const departmentSelect = document.getElementById('department_id');
-            // departmentSelect.addEventListener('change', function() {
-            //     loadTeams(this.value);
-            // });
+            departmentSelect.addEventListener('change', function() {
+                loadTeams(this.value);
+                loadLeaveBalances(this.value);
+            });
+            
+            // Gestionnaire d'événement pour le changement de solde de congés
+            document.getElementById('leave_balance_id').addEventListener('change', function() {
+                showLeaveBalanceDetails(this);
+            });
 
-            // Charger les équipes si un département est déjà sélectionné
-            // if (departmentSelect.value) {
-            //     console.log('Département pré-sélectionné:', departmentSelect.value);
-            //     loadTeams(departmentSelect.value);
-            // }
+            // Charger les équipes et soldes si un département est déjà sélectionné
+            if (departmentSelect.value) {
+                console.log('Département pré-sélectionné:', departmentSelect.value);
+                loadTeams(departmentSelect.value);
+                loadLeaveBalances(departmentSelect.value);
+            }
 
             // Mettre à jour le select position
              fetch('/data/positions.json')

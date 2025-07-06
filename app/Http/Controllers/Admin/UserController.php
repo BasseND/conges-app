@@ -79,6 +79,7 @@ class UserController extends Controller
                 ])],
                 'department_id' => 'required|exists:departments,id',
                 'team_id' => 'nullable|exists:teams,id',
+                'leave_balance_id' => 'nullable|exists:leave_balances,id',
                 'annual_leave_days' => 'required|integer|min:0',
                 'sick_leave_days' => 'required|integer|min:0',
                 'is_prestataire' => 'nullable'
@@ -97,6 +98,7 @@ class UserController extends Controller
                 'department_id.required' => 'Le département est obligatoire.',
                 'department_id.exists' => 'Le département sélectionné n\'existe pas.',
                 'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
+                'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
                 'annual_leave_days.required' => 'Le nombre de jours de congés annuels est obligatoire.',
                 'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
                 'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
@@ -272,8 +274,12 @@ class UserController extends Controller
             ])],
             'department_id' => 'required|exists:departments,id',
             'team_id' => 'nullable|exists:teams,id',
+            'leave_balance_id' => 'nullable|exists:leave_balances,id',
             'annual_leave_days' => 'required|integer|min:0',
             'sick_leave_days' => 'required|integer|min:0',
+            'maternity_leave_days' => 'nullable|integer|min:0',
+            'paternity_leave_days' => 'nullable|integer|min:0',
+            'special_leave_days' => 'nullable|integer|min:0',
             'is_prestataire' => 'nullable'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
@@ -289,6 +295,7 @@ class UserController extends Controller
             'department_id.required' => 'Le département est obligatoire.',
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
             'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
+            'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
             'annual_leave_days.required' => 'Le nombre de jours de congés annuels est obligatoire.',
             'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
             'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
