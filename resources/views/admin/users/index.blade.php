@@ -150,7 +150,7 @@
                                         ($user->role === 'department_head' ? 'badge badge-role-head-department' :
                                         ($user->role === 'hr' ? 'badge badge-role-rh' :
                                         'bg-green-100 text-green-800')))) }}">
-                                            {{ ucfirst($user->role) }}
+                                            {{ App\Models\User::getRoles()[$user->role] ?? ucfirst($user->role) }}
                                         </span>
                                         
                                     </td>

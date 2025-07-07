@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Events\ExpenseReportCreated;
+use App\Events\ExpenseReportStatusUpdated;
 
 class ExpenseReportController extends Controller
 {
@@ -131,6 +133,9 @@ class ExpenseReportController extends Controller
 
             DB::commit();
             \Log::info('Transaction validée avec succès');
+            
+            // Déclencher l'événement de création de note de frais
+            event(new ExpenseReportCreated($report));
 
             return redirect()->route('expense-reports.index')
                            ->with('success', 'Note de frais ' . ($request->action === 'submit' ? 'soumise' : 'enregistrée') . ' avec succès');
@@ -296,10 +301,15 @@ class ExpenseReportController extends Controller
     {
         $report = ExpenseReport::where('user_id', Auth::id())->findOrFail($id);
 
+        $oldStatus = $report->status;
+        
         $report->update([
             'status' => 'submitted',
             'submitted_at' => now()
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new ExpenseReportStatusUpdated($report, $oldStatus, 'submitted'));
 
         return redirect()->route('expense-reports.show', $report)
                          ->with('success', 'Note de frais soumise');
@@ -313,10 +323,15 @@ class ExpenseReportController extends Controller
             abort(403, 'Vous n\'avez pas l\'autorisation d\'approuver les notes de frais.');
         }
 
+        $oldStatus = $expense_report->status;
+        
         $expense_report->update([
             'status' => 'approved',
             'approved_at' => now()
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new ExpenseReportStatusUpdated($expense_report, $oldStatus, 'approved'));
 
         return redirect()->route('expense-reports.show', $expense_report)
                          ->with('success', 'Note de frais approuvée');
@@ -327,9 +342,14 @@ class ExpenseReportController extends Controller
     {
         $report = ExpenseReport::findOrFail($id);
 
+        $oldStatus = $report->status;
+        
         $report->update([
             'status' => 'rejected'
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new ExpenseReportStatusUpdated($report, $oldStatus, 'rejected'));
 
         return redirect()->route('expense-reports.show', $report)
                          ->with('error', 'Note de frais rejetée');
@@ -345,10 +365,15 @@ class ExpenseReportController extends Controller
 
         $report = ExpenseReport::where('user_id', Auth::id())->findOrFail($id);
 
+        $oldStatus = $report->status;
+        
         $report->update([
             'status' => 'paid',
             'paid_at' => now()
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new ExpenseReportStatusUpdated($report, $oldStatus, 'paid'));
 
         return redirect()->route('expense-reports.show', $report)
                          ->with('success', 'Note de frais payée');

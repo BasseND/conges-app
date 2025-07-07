@@ -217,6 +217,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the notifications for the user.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * Get the notifications created by the user.
+     */
+    public function createdNotifications()
+    {
+        return $this->hasMany(Notification::class, 'created_by');
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isManager()
