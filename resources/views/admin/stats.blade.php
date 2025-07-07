@@ -1,11 +1,7 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tableau de bord administrateur') }}
-        </h2>
-    </x-slot>
+    
 
-    <div class="py-8">
+    <div class="pb-8">
         <div class="">
            <!-- General Stats -->
             <div class="bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
@@ -83,50 +79,26 @@
                 <!-- Actions a faire -->
 
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                      <div class="flex justify-between items-center mb-8">
+                      <div class="mb-8">
                         <h2 class="text-base xl:text-2xl text-bgray-900 dark:text-white font-bold">
                           A traiter en urgence
                         </h2>
-                        <span>
-                          <svg
-                            width="14"
-                            height="4"
-                            viewBox="0 0 14 4"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M2.33317 2.66659C2.70136 2.66659 2.99984 2.36811 2.99984 1.99992C2.99984 1.63173 2.70136 1.33325 2.33317 1.33325C1.96498 1.33325 1.6665 1.63173 1.6665 1.99992C1.6665 2.36811 1.96498 2.66659 2.33317 2.66659Z"
-                              stroke="#64748B"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                            <path
-                              d="M6.99967 2.66659C7.36786 2.66659 7.66634 2.36811 7.66634 1.99992C7.66634 1.63173 7.36786 1.33325 6.99967 1.33325C6.63148 1.33325 6.33301 1.63173 6.33301 1.99992C6.33301 2.36811 6.63148 2.66659 6.99967 2.66659Z"
-                              stroke="#64748B"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                            <path
-                              d="M11.6667 2.66659C12.0349 2.66659 12.3333 2.36811 12.3333 1.99992C12.3333 1.63173 12.0349 1.33325 11.6667 1.33325C11.2985 1.33325 11 1.63173 11 1.99992C11 2.36811 11.2985 2.66659 11.6667 2.66659Z"
-                              stroke="#64748B"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                        </span>
+                        <div>
+                        <p class="text-xs text-bgray-500 dark:text-white mb-2">
+                          En attente de traitement
+                        </p>
+                        <div class="flex space-x-4 rtl:space-x-reverse items-end">
+                          <span class="text-bgray-500 dark:text-white font-bold text-2xl leading-[30px]">38 au total</span>
+
+                        </div>
+                      </div>
                       </div>
                       <div class="flex space-x-3 rtl:space-x-reverse mb-10">
-                        <div
-                          class="w-full h-[128px] bg-success-300 flex justify-center items-center rounded-md"
-                        >
+                        <div class="w-full h-[128px] bg-success-300 flex justify-center items-center rounded-md">
                           <div>
                             <div class="flex justify-center mb-3">
-                              <span
-                                ><svg
+                              <span>
+                                <svg
                                   width="40"
                                   height="40"
                                   viewBox="0 0 40 40"
@@ -162,16 +134,12 @@
                             <p class="text-white  dark:text-bgray-900 text-xs text-center">
                               Absences
                             </p>
-                            <p
-                              class="text-base dark:text-bgray-900 font-bold text-white text-center"
-                            >
+                            <p class="text-base dark:text-bgray-900 font-bold text-white text-center">
                               40
                             </p>
                           </div>
                         </div>
-                        <div
-                          class="w-full h-[128px] bg-success-200 flex justify-center items-center rounded-md"
-                        >
+                        <div class="w-full h-[128px] bg-success-200 flex justify-center items-center rounded-md">
                           <div>
                             <div class="flex justify-center mb-3">
                                   <span
@@ -211,16 +179,12 @@
                             <p class="text-white dark:text-bgray-900 text-xs text-center">
                               Notes de frais
                             </p>
-                            <p
-                              class="text-base dark:text-bgray-900 font-bold text-white text-center"
-                            >
+                            <p class="text-base dark:text-bgray-900 font-bold text-white text-center">
                               79
                             </p>
                           </div>
                         </div>
-                        <div
-                          class="w-full h-[128px] bg-bgray-50 dark:bg-darkblack-700 flex justify-center items-center rounded-md"
-                        >
+                        <div class="w-full h-[128px] bg-bgray-50 dark:bg-darkblack-700 flex justify-center items-center rounded-md">
                           <div>
                             <div class="flex justify-center mb-3">
                               <span>
@@ -255,32 +219,15 @@
                             <p class="text-bgray-500 text-xs text-center dark:text-bgray-50">
                               Contrats à terme
                             </p>
-                            <p
-                              class="text-base font-bold text-bgray-900 dark:text-white text-center"
-                            >
+                            <p class="text-base font-bold text-bgray-900 dark:text-white text-center">
                               40
                             </p>
                           </div>
                         </div>
                       </div>
-                      <div>
-                        <p class="text-xs text-bgray-500 dark:text-white mb-2">
-                          En attente de traitement
-                        </p>
-                        <div class="flex space-x-4 rtl:space-x-reverse items-end">
-                          <span
-                            class="text-bgray-900 dark:text-white font-bold text-2xl leading-[30px]"
-                            >38</span
-                          >
-                          <span class="text-xs font-medium text-success-300"
-                            >+2,5%</span
-                          >
-                        </div>
-                      </div>
+                      
                     </div>
 
-
-               
 
                 <!-- Statistiques des congés -->
 
@@ -323,37 +270,9 @@
                       <div class="mb-4 w-full xl:mb-0 xl:flex-1">
                         <div class="mb-1 flex items-end space-x-2">
                           <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
-                           {{ $stats['employees'] }}
+                           {{ $stats['active_employees'] }}
                           </h1>
-                          <div  class="flex h-[22px] w-[60px] items-center justify-center rounded-full bg-success-400">
-                            <div class="flex items-center space-x-1">
-                              <span>
-                                <svg
-                                  width="10"
-                                  height="7"
-                                  viewBox="0 0 10 7"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M0.5 5.89575L3.5 2.89575L5.5 4.89575L9.5 0.895752"
-                                    stroke="white"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                  <path
-                                    d="M6 0.895752H9.5V4.39575"
-                                    stroke="white"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                </svg>
-                              </span>
-                              <span class="text-xs font-medium text-white"
-                                >{{ $stats['employees'] }}</span
-                              >
-                            </div>
-                          </div>
+                         
                         </div>
                         <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
                           Total employés
@@ -386,7 +305,7 @@
                               <div  class="h-2 w-2 rounded-full bg-error-300"></div>
                               <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
                             </div>
-                            <span class="text-sm font-medium text-bgray-600">15,732</span>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
                           </div>
 
                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
@@ -394,7 +313,7 @@
                               <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
                               <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
                             </div>
-                            <span class="text-sm font-medium text-bgray-600">15,732</span>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
                           </div>
                         </div>
                       </div>
@@ -435,21 +354,21 @@
             <!-- Graphiques -->
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Graphique par département -->
-                <div class="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                <div class="relative bg-gradient-to-br from-white via-teal-50 to-cyan-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500"></div>
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-6">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📊 Congés par département</h3>
                                 <p class="text-sm text-gray-600 dark:text-gray-300">Répartition des jours de congés</p>
                             </div>
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-inner">
+                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4">
                             <canvas id="departmentChart"></canvas>
                         </div>
                     </div>
@@ -470,7 +389,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-inner">
+                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4">
                             <canvas id="monthlyChart"></canvas>
                         </div>
                     </div>
@@ -479,9 +398,9 @@
 
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Dernières activités congés -->
-                <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Dernières demandes de congés</h3>
+                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-5">Dernières demandes de congés</h3>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -556,9 +475,9 @@
                 </div>
                 
                 <!-- Dernières notes de frais -->
-                <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100  mb-4">Dernières notes de frais</h3>
+                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-5">Dernières notes de frais</h3>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -572,18 +491,20 @@
 
                                             @foreach($recentExpenses as $expense)
                                                 <tr> 
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">{{ $expense->created_at->format('d/m/Y H:i') }}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
+                                                      <span class="font-semibold text-sm text-bgray-900 dark:text-white">{{ $expense->created_at->format('d/m/Y H:i') }}</span>
+                                                    </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
                                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $expense->user->first_name }} {{ $expense->user->last_name }}</div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-100">{{ $expense->user->email }}</div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100"><span class="text-gray-900 dark:text-gray-400 font-semibold">{{ $expense->total_amount }}</span></td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                        {{ $expense->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                                <span class="inline-flex badge 
+                                                        {{ $expense->status === 'approved' ? 'badge-success-light dark:bg-green-200' : 
                                                         ($expense->status === 'draft' ? 'bg-blue-100 text-blue-800  ' : 
-                                                        ($expense->status === 'submitted' ? 'bg-yellow-100 text-yellow-800' : 
-                                                        ($expense->status === 'rejected' ? 'bg-red-100 text-red-800' : 
+                                                        ($expense->status === 'submitted' ? 'badge-warning-light text-yellow-800' : 
+                                                        ($expense->status === 'rejected' ? 'badge-red-light text-red-800' : 
                                                         ($expense->status === 'paid' ? 'bg-green-500 text-white' : 
                                                         'bg-gray-100 text-gray-800')))) }}">
                                                         

@@ -158,7 +158,7 @@
                                 style="filter: drop-shadow(12px 12px 40px rgba(0, 0, 0, 0.08));"
                                 class="absolute   w-[400px] rounded-lg bg-white dark:bg-darkblack-600">
                                 <div class="relative w-full pb-[75px] pt-[66px]">
-                                  <div class="absolute left-0 top-0 flex h-[66px] w-full items-center justify-between px-8">
+                                  <div class="border-b border-bgray-200 absolute left-0 top-0 flex h-[66px] w-full items-center justify-between px-8">
                                     <h3  class="text-xl font-bold text-bgray-900 dark:text-white">
                                       Notifications
                                     </h3>

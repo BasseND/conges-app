@@ -56,6 +56,8 @@ class StatsController extends Controller
             'employees' => User::where('role', 'employee')->count(),
             'managers' => User::where('role', 'manager')->count(),
             'admins' => User::where('role', 'admin')->count(),
+            'hr_users' => User::where('role', 'hr')->count(),
+            'department_heads' => Department::whereNotNull('head_id')->count(),
             'active_employees' => User::where('is_active', true)
                                       ->where('is_prestataire', false)
                                       ->count(),
