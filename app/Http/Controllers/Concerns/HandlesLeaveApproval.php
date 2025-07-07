@@ -37,11 +37,17 @@ trait HandlesLeaveApproval
                 'processed_at' => now(),
             ]);
 
-            // Mettre à jour le solde de congés de l'employé
+            // Mettre à jour le solde de congés de l'employé via LeaveBalance
             if ($leave->type === 'annual') {
-                $leave->user->decrement('annual_leave_days', $leave->duration);
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('annual_leave_days', $leave->duration);
+                }
             } elseif ($leave->type === 'sick') {
-                $leave->user->decrement('sick_leave_days', $leave->duration);
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('sick_leave_days', $leave->duration);
+                }
             }
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));

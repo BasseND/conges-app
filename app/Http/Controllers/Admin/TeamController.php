@@ -15,9 +15,9 @@ class TeamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Department $department)
     {
-        //
+        return $this->getTeamsByDepartment($department);
     }
 
     /**

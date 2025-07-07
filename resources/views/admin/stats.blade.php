@@ -303,14 +303,10 @@
                     <div class="items-center xl:flex xl:space-x-[26px]">
                       <div class="mb-4 w-full xl:mb-0 xl:flex-1">
                         <div class="mb-1 flex items-end space-x-2">
-                          <h1
-                            class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white"
-                          >
+                          <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
                            {{ $stats['employees'] }}
                           </h1>
-                          <div
-                            class="flex h-[22px] w-[60px] items-center justify-center rounded-full bg-success-400"
-                          >
+                          <div  class="flex h-[22px] w-[60px] items-center justify-center rounded-full bg-success-400">
                             <div class="flex items-center space-x-1">
                               <span>
                                 <svg
@@ -340,57 +336,31 @@
                             </div>
                           </div>
                         </div>
-                        <p
-                          class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300"
-                        >
+                        <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
                           Total employés
                         </p>
                         <div class="flex flex-col space-y-2.5">
-                          <div
-                            class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
                           >
                             <div class="flex items-center space-x-2">
-                              <div
-                                class="h-2 w-2 rounded-full bg-success-300"
-                              ></div>
-                              <span
-                                class="text-sm font-medium text-bgray-900 dark:text-white"
-                                >Total employés</span
-                              >
+                              <div  class="h-2 w-2 rounded-full bg-success-300"></div>
+                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
                             </div>
-                            <span class="text-sm font-medium text-bgray-600"
-                              >{{ $stats['employees'] }}</span
-                            >
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
                           </div>
-                          <div
-                            class="flex h-[32px] w-full items-center justify-between rounded-lg px-2"
-                          >
+                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
                             <div class="flex items-center space-x-2">
-                              <div
-                                class="h-2 w-2 rounded-full bg-warning-300"
-                              ></div>
-                              <span
-                                class="text-sm font-medium text-bgray-900 dark:text-white"
-                                >Mangers</span
-                              >
+                              <div class="h-2 w-2 rounded-full bg-warning-300"></div>
+                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
                             </div>
-                            <span class="text-sm font-medium text-bgray-600"
-                              >{{ $stats['managers'] }}</span
-                            >
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
                           </div>
-                          <div
-                            class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
-                          >
+                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
                             <div class="flex items-center space-x-2">
                               <div class="h-2 w-2 rounded-full bg-purple"></div>
-                              <span
-                                class="text-sm font-medium text-bgray-900 dark:text-white"
-                                >Administrateurs</span
-                              >
+                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
                             </div>
-                            <span class="text-sm font-medium text-bgray-600"
-                              >{{ $stats['admins'] }}</span
-                            >
+                            <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
                           </div>
                           <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
                             <div class="flex items-center space-x-2">
@@ -402,7 +372,7 @@
 
                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
                             <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                              <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
                               <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
                             </div>
                             <span class="text-sm font-medium text-bgray-600">15,732</span>
@@ -414,11 +384,6 @@
                   </div>
                  
                 
-
-
-
-
-               
 
 
                 
@@ -451,7 +416,7 @@
             <!-- Graphiques -->
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Graphique par département -->
-                <div class="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative bg-gradient-to-br from-white via-blue-50 to-indigo-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-6">
@@ -472,7 +437,7 @@
                 </div>
 
                 <!-- Graphique par mois -->
-                <div class="relative bg-gradient-to-br from-white via-green-50 to-emerald-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative bg-gradient-to-br from-white via-green-50 to-emerald-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500"></div>
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-6">
@@ -512,14 +477,14 @@
                                     @foreach($recentLeaves as $activity)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                {{ $activity->created_at->format('d/m/Y H:i') }}
+                                                <span class="font-semibold text-sm text-bgray-900 dark:text-white"> {{ $activity->created_at->format('d/m/Y H:i') }}</span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
-                                                    $activity->type === 'annual' ? 'bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-blue-200' : 
-                                                    ($activity->type === 'sick' ? 'bg-green-100 text-green-800 dark:bg-green-600 dark:text-green-200' : 
-                                                    ($activity->type === 'unpaid' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-200' : 
-                                                    'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200')) 
+                                                <span class="inline-flex  {{ 
+                                                    $activity->type === 'annual' ? 'badge badge-cg-annuel dark:bg-blue-600 dark:text-blue-200' : 
+                                                    ($activity->type === 'sick' ? 'badge badge-cg-maladie  dark:bg-green-600 dark:text-green-200' : 
+                                                    ($activity->type === 'unpaid' ? 'badge badge-cg-sans-solde dark:bg-yellow-600 dark:text-yellow-200' : 
+                                                    'badge badge-cg-autre dark:bg-gray-600 dark:text-gray-200')) 
                                                 }}">
                                                     @switch($activity->type)
                                                         @case('annual')
@@ -542,10 +507,10 @@
                                             </td>
                                             
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                        {{ $activity->status === 'approved' ? 'bg-green-100 dark:bg-green-200 text-green-800' : 
-                                                        ($activity->status === 'rejected' ? 'bg-red-100 dark:bg-red-200 text-red-800' : 
-                                                        'bg-yellow-100 dark:bg-yellow-200 text-yellow-800') }}">
+                                                    <span class="inline-flex  
+                                                        {{ $activity->status === 'approved' ? 'badge badge-success-light dark:bg-green-200' : 
+                                                        ($activity->status === 'rejected' ? 'badge badge-error-light dark:bg-red-200' : 
+                                                        'badge badge-warning-light dark:bg-yellow-200') }}">
                                                         @switch($activity->status)
                                                             @case('approved')
                                                                 Approuvé

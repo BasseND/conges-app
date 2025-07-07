@@ -1,10 +1,19 @@
 // Variables Sass personnalisées
-$primary-color: rgb(34 197 94);
+$primary-color: #22c55e;
 $secondary-color: #64748b;
-$success-color: #10b981;
-$warning-color: #f59e0b;
-$error-color: #ef4444;
-$info-color: #3b82f6;
+$success-color: #14eba3;
+$warning-color: #eca11f;
+$warning-color-2 : #e29817;
+$error-color: #e22b2b;
+$info-color: #206eeb;
+
+$success-outline-color: #14eba3;
+$warning-outline-color: #e2950e;
+$error-outline-color: #ef4444;
+$info-outline-color: #3b82f6;
+
+$success-solid-color: #22c62d;
+
 $light-color: #f3f4f6;
 $dark-color: #1e293b;
 $blue-sky: #b0cdff;
@@ -22,3 +31,30 @@ $red-light: #f8d7da;
 $purple-sky: #f3e8ff;
 $purple-dark: #581c87;
 $purple-light: #e6d6fc;
+
+
+$vert-extra : #18dab5;
+$vert-extra-light : #e0fbf5;
+$vert-extra-dark : #0e7468;
+$violet-extra : #795ded;
+$violet-extra-light : #f5f3ff;
+$violet-extra-dark : #4a1680;
+
+$cg-maladie : #fcd8fc;
+$cg-autre : #e1e1e1;
+$cg-formation : #d0e2a8;
+$cg-annuel : #c5eaf7;
+$cg-sans-solde : #ffd3d1;
+
+
+$white : #ffffff;
+$black : #000000;
+
+
+// $vert-success : #66cc33;
+// $orange-warning : #ff9900;
+// $orange-info : #ff6600;
+// $red-error : #ff3333;
+
+// $orange-light : #ffe6cc;
+// $blue-info : #0066cc;

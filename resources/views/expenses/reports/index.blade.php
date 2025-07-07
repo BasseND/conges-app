@@ -1,20 +1,23 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
-               {{ __('Notes de frais') }}
-            </h2>
-            <a href="{{ route('expense-reports.create') }}" class="btn btn-primary inline-flex items-center">
-                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                <span> Nouvelle note de frais</span>
-            </a>
-        </div>
-    </x-slot>
+  
 
     <div class="pb-12">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+           <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-bgray-900 dark:text-white">
+                    {{ __('Notes de frais') }}
+                    </h2>
+                    <a href="{{ route('expense-reports.create') }}" class="btn btn-primary inline-flex items-center">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span> Nouvelle note de frais</span>
+                    </a>
+                </div>
+            </div>
+
             <div class="p-6">
                 <!-- Filtres -->
                 <div class="mb-6">
@@ -23,7 +26,7 @@
                     <x-alert type="error" :message="session('error')" />
 
 
-                    <form action="{{ route('expense-reports.index') }}" method="GET" class="w-full bg-white p-6 rounded-2xl shadow border border-transparent grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <form action="{{ route('expense-reports.index') }}" method="GET" class="w-full bg-white dark:bg-darkblack-600 p-6 rounded-2xl shadow border border-transparent grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Statut</label>
                             <select name="status" id="status" class="mt-1 block w-full bg-gray-50 dark:bg-dark-card-two border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 text-gray-700 dark:text-white focus:border-violet-500">
@@ -49,7 +52,7 @@
                         </div>
 
                         <div class="flex items-end gap-2">
-                            <button type="submit" class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="inline-flex justify-center items-center btn btn-vert-extra">
                                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
@@ -109,12 +112,12 @@
                                         <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ number_format($report->total_amount, 2, ',', ' ') }} €</span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
-                                            $report->status === 'paid' ? 'bg-green-500 text-white' : 
+                                        <span class="inline-flex {{ 
+                                            $report->status === 'paid' ? 'badge badge-success' : 
                                             ($report->status === 'draft' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 
-                                            ($report->status === 'approved' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 
-                                            ($report->status === 'submitted' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' :
-                                            ($report->status === 'rejected' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : 
+                                            ($report->status === 'approved' ? 'badge badge-success-outline dark:bg-green-900 dark:text-green-200' : 
+                                            ($report->status === 'submitted' ? 'badge badge-warning-outline dark:bg-yellow-900 dark:text-yellow-200' :
+                                            ($report->status === 'rejected' ? 'badge badge-error-outline dark:bg-red-900 dark:text-red-200' : 
                                             'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200'))))
                                         }}">
                                             @switch($report->status)

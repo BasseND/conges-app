@@ -1,0 +1,137 @@
+// Import Sass modules
+@use "sass:color";
+@use "sass:math";
+
+// Import variables
+@use "../base/variables" as *;
+
+// Additional variables specific to buttons
+
+@mixin costum-badge-style($color, $bg-color) {
+    color : $color;
+    background-color: $bg-color;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+}
+
+@mixin badge-style($color) {
+    color : $white;
+    background-color: color.adjust($color, $lightness: 5%);
+}
+
+@mixin badge-light-style($color) {
+    border-color : $color;
+    --tw-text-opacity: 1;
+    color : color.adjust($color, $lightness: -10%);
+    background-color: color.adjust($color, $lightness: 40%);
+    border-width: 1px;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+}
+
+@mixin badge-outline-style($color) {
+    border-color : $color;
+    --tw-text-opacity: 1;
+    color : color.adjust($color, $lightness: -10%);
+    border-width: 1px;
+}
+
+.badge {
+  width: -moz-max-content;
+  width: max-content;
+  gap: 0.625rem;
+  border-radius: 4px;
+  padding: 0.5rem 0.375rem;
+  font-size: 0.85rem;
+  line-height: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+
+// Costum
+.badge-cg-maladie {
+  @include costum-badge-style($black, $cg-maladie);
+}
+.badge-cg-annuel {
+  @include costum-badge-style($black, $cg-annuel);
+}
+.badge-cg-sans-solde {
+  @include costum-badge-style($black, $cg-sans-solde);
+}
+.badge-cg-formation {
+  @include costum-badge-style($black, $cg-formation);
+}
+.badge-cg-autre {
+  @include costum-badge-style($black, $cg-autre);
+}
+// Roles
+.badge-role-admim {
+  @include costum-badge-style($black, $red-sky);
+}
+.badge-role-employee {
+  @include costum-badge-style($black, $blue-sky);
+}
+.badge-role-manager {
+  @include costum-badge-style($black, $cg-formation);
+}
+.badge-role-rh {
+  @include costum-badge-style($black, $yellow-sky);
+}
+.badge-role-head-department  {
+  @include costum-badge-style($black, $green-sky);
+}
+
+
+
+
+
+// Solid
+.badge-success-light {
+  @include badge-light-style($success-color);
+}
+.badge-warning-light {
+  @include badge-light-style($warning-color-2);
+}
+.badge-error-light {
+  @include badge-light-style($error-color);
+}
+.badge-info-light {
+  @include badge-light-style($info-color);
+}
+
+// Light
+.badge-success {
+  @include badge-style($success-solid-color);
+}
+.badge-warning {
+  @include badge-style($warning-color);
+}
+.badge-error {
+  @include badge-style($error-color);
+}
+.badge-info {
+  @include badge-style($info-color);
+}
+// Outline 
+.badge-success-outline {
+  @include badge-outline-style($success-outline-color);
+}
+.badge-warning-outline {
+  @include badge-outline-style($warning-outline-color);
+}
+.badge-error-outline {
+  @include badge-outline-style($error-outline-color);
+}
+.badge-info-outline {
+  @include badge-outline-style($info-outline-color);
+}
+
+// .badge.badge-success-outline {
+//   border-color: rgb(102 204 51 / 0.5);
+//   --tw-text-opacity: 1;
+//   color: rgb(102 204 51 / var(--tw-text-opacity));
+// }
+

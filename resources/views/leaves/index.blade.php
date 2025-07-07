@@ -1,20 +1,20 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
-                {{ __('Mes demandes de congés') }}
-            </h2>
-            <a href="{{ route('leaves.create') }}" class="btn btn-primary inline-flex items-center">
-                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-            Nouvelle demande
-            </a>
-        </div>
-    </x-slot>
-
     <div class="pb-12">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-bgray-900 dark:text-white">
+                        {{ __('Mes demandes de congés') }}
+                    </h2>
+                    <a href="{{ route('leaves.create') }}" class="btn btn-primary inline-flex items-center">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    Nouvelle demande
+                    </a>
+                </div>
+
+            </div>
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 @if(session('success'))
                     <div class="bg-green-100 dark:bg-green-900 border border-green-400 text-green-700 dark:text-green-300 px-4 py-3 rounded relative mb-4" role="alert">
@@ -131,11 +131,11 @@
                                 @forelse($leaves as $leave)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
-                                                $leave->type === 'annual' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 
-                                                ($leave->type === 'sick' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 
-                                                ($leave->type === 'unpaid' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' : 
-                                                'bg-gray-100 dark:bg-gray-900 text-gray-800')) 
+                                            <span class="inline-flex {{ 
+                                                $leave->type === 'annual' ? 'badge badge-cg-annuel' : 
+                                                ($leave->type === 'sick' ? 'badge badge-cg-maladie' : 
+                                                ($leave->type === 'unpaid' ? 'badge badge-cg-sans-solde' : 
+                                                'badge badge-cg-autre')) 
                                             }}">
                                                 @switch($leave->type)
                                                     @case('annual')

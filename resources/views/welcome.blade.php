@@ -21,6 +21,13 @@
                     <p class="text-bgray-600 dark:text-darkblack-300 text-lg font-medium">
                         Gérez vos congés et notes de frais en toute simplicité
                     </p>
+                    <!-- <p class="text-bgray-600 dark:text-bgray-50 text-sm font-medium">
+                        Notre plateforme complète vous aide à gérer vos congés, notes de frais,
+                        paie et communications en toute simplicité. Soumettez vos demandes,
+                        suivez leur statut et communiquez avec votre équipe grâce à la messagerie
+                        intégrée. Profitez d'une <span class="text-success-300 font-bold">solution tout-en-un</span>
+                        pour votre gestion RH
+                        </p> -->
                     </div>
                 </div>
            </div>
