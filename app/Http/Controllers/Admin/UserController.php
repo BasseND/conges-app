@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Validator;
+use App\Events\UserCreated;
 
 class UserController extends Controller
 {
@@ -214,6 +215,9 @@ class UserController extends Controller
         if ($teamId) {
             $user->teams()->attach($teamId);
         }
+        
+        // Déclencher l'événement de création d'utilisateur
+        event(new UserCreated($user));
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');

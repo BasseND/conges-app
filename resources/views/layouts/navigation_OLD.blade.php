@@ -99,8 +99,11 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6 ">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
                 @auth
+                    <!-- Notifications -->
+                    <x-notification-bell :unreadCount="auth()->user()->notifications()->where('is_read', false)->count()" />
+                    
                     <x-dropdown align="right" width="48"> 
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
@@ -233,6 +236,14 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('payslips.index')" :active="request()->routeIs('payslips.*')">
                         {{ __('Mes bulletins de paie') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.*')">
+                        {{ __('Notifications') }}
+                        @if(auth()->user()->notifications()->where('is_read', false)->count() > 0)
+                            <span class="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                {{ auth()->user()->notifications()->where('is_read', false)->count() }}
+                            </span>
+                        @endif
                     </x-responsive-nav-link>
                 @endauth
 

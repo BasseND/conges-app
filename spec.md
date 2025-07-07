@@ -97,3 +97,11 @@ last_name
 phone ) dans la table user.   
  
 Le champs frist_name va remplacer le champs name.
+
+
+Je voudrais mettre en place des notifications. 
+A chaque ajout d'une note de frais, congé, d'un nouveau user, on ajoute dans la table notification une nouvelle ligne. A chaque fois qu'un contrat d'un salarie approche son terme on ajoute une nouvelle ligne dans la table notification. A chaque paiement d'une note de frais, on ajoute une nouvelle ligne dans la table notification. A chaque validation d'un congés on ajoute une nouvelle ligne dans la table notification. A chaque validation d'une note de frais on ajoute une nouvelle ligne dans la table notification.
+
+
+
+Je voudrais également une table pour historiser les changements impportants qui interviennent dans l'app. Comme les changes de contrat, les changements de salaire, les changements de congés, etc. 

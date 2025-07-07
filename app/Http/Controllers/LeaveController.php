@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Events\LeaveCreated;
+use App\Events\LeaveStatusUpdated;
 
 class LeaveController extends Controller
 {
@@ -182,6 +184,9 @@ class LeaveController extends Controller
 
             DB::commit();
             
+            // Déclencher l'événement de création de congé
+            event(new LeaveCreated($leave));
+            
             return redirect()->route('leaves.index')
                 ->with('success', 'Votre demande de congé a été soumise avec succès.');
                 
@@ -310,11 +315,16 @@ class LeaveController extends Controller
             return back()->with('error', 'Cette demande a déjà été traitée.');
         }
 
+        $oldStatus = $leave->status;
+        
         $leave->update([
             'status' => 'approved',
             'approved_by' => auth()->id(),
             'approved_at' => now()
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
         return redirect()->back()->with('success', 'La demande de congé a été approuvée.');
     }
@@ -336,12 +346,17 @@ class LeaveController extends Controller
             'rejection_reason' => 'required|string|max:500'
         ]);
 
+        $oldStatus = $leave->status;
+        
         $leave->update([
             'status' => 'rejected',
             'approved_by' => auth()->id(),
             'approved_at' => now(),
             'rejection_reason' => $validated['rejection_reason']
         ]);
+        
+        // Déclencher l'événement de mise à jour du statut
+        event(new LeaveStatusUpdated($leave, $oldStatus, 'rejected'));
 
         return redirect()->back()->with('success', 'La demande de congé a été refusée.');
     }

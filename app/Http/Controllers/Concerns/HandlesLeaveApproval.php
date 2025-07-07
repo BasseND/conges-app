@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Events\LeaveStatusUpdated;
 
 trait HandlesLeaveApproval
 {
@@ -31,11 +32,16 @@ trait HandlesLeaveApproval
                 return back()->with('error', 'Cette demande de congé a déjà été traitée.');
             }
 
+            $oldStatus = $leave->status;
+            
             $leave->update([
                 'status' => 'approved',
                 'processed_by' => auth()->id(),
                 'processed_at' => now(),
             ]);
+            
+            // Déclencher l'événement de mise à jour du statut
+            event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
             // Mettre à jour le solde de congés de l'employé via LeaveBalance
             if ($leave->type === 'annual') {
@@ -73,12 +79,17 @@ trait HandlesLeaveApproval
         ]);
 
         try {
+            $oldStatus = $leave->status;
+            
             $leave->update([
                 'status' => 'rejected',
                 'rejection_reason' => $validated['rejection_reason'],
                 'processed_by' => auth()->id(),
                 'processed_at' => now(),
             ]);
+            
+            // Déclencher l'événement de mise à jour du statut
+            event(new LeaveStatusUpdated($leave, $oldStatus, 'rejected'));
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
             return true;
