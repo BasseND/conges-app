@@ -111,20 +111,6 @@
                         </label>
                     </div>
 
-                    <!-- Solde congés annuels -->
-                    <div>
-                        <x-input-label for="annual_leave_days" value="Solde congés annuels (jours)" />
-                        <x-text-input id="annual_leave_days" name="annual_leave_days" type="number" class="mt-1 block w-full" :value="$user->annual_leave_days" min="0" step="0.5" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('annual_leave_days')" />
-                    </div>
-
-                    <!-- Solde congés maladie -->
-                    <div>
-                        <x-input-label for="sick_leave_days" value="Solde congés maladie (jours)" />
-                        <x-text-input id="sick_leave_days" name="sick_leave_days" type="number" class="mt-1 block w-full" :value="$user->sick_leave_days" min="0" step="0.5" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('sick_leave_days')" />
-                    </div>
-                    
                     <!-- Champs cachés pour la validation du mot de passe -->
                     <input type="hidden" name="password" value="">
                     <input type="hidden" name="password_confirmation" value="">

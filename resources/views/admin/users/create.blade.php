@@ -172,14 +172,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Champs individuels (optionnels pour compatibilité) -->
-                            <div class="hidden">
-                                <input type="hidden" id="annual_leave_days" name="annual_leave_days" value="{{ old('annual_leave_days', 25) }}" />
-                                <input type="hidden" id="sick_leave_days" name="sick_leave_days" value="{{ old('sick_leave_days', 12) }}" />
-                                <input type="hidden" id="maternity_leave_days" name="maternity_leave_days" value="{{ old('maternity_leave_days', 90) }}" />
-                                <input type="hidden" id="paternity_leave_days" name="paternity_leave_days" value="{{ old('paternity_leave_days', 14) }}" />
-                                <input type="hidden" id="special_leave_days" name="special_leave_days" value="{{ old('special_leave_days', 5) }}" />
-                            </div>
+
                         </div>
                     </div>
                     
@@ -293,8 +286,7 @@
                         const option = document.createElement('option');
                         option.value = balance.id;
                         option.textContent = balance.description || `Solde ${balance.is_default ? '(Défaut)' : 'Personnalisé'}`;
-                        option.dataset.annual = balance.annual_leave_days;
-                        option.dataset.sick = balance.sick_leave_days;
+
                         option.dataset.maternity = balance.maternity_leave_days;
                         option.dataset.paternity = balance.paternity_leave_days;
                         option.dataset.special = balance.special_leave_days;
@@ -320,14 +312,10 @@
                 document.getElementById('detail_special').textContent = selectedOption.dataset.special + ' jours';
                 detailsDiv.classList.remove('hidden');
                 
-                // Mettre à jour les champs cachés
-                document.getElementById('annual_leave_days').value = selectedOption.dataset.annual;
-                document.getElementById('sick_leave_days').value = selectedOption.dataset.sick;
+
             } else {
                 detailsDiv.classList.add('hidden');
-                // Remettre les valeurs par défaut
-                document.getElementById('annual_leave_days').value = 25;
-                document.getElementById('sick_leave_days').value = 12;
+
             }
         }
         

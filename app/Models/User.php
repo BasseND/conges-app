@@ -45,8 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'department_id',
         'company_id',
         'leave_balance_id',
-        'annual_leave_days',
-        'sick_leave_days',
+
         'is_active',
         'position',
         'is_prestataire'
@@ -282,21 +281,25 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getRemainingDaysAttribute()
     {
-        // Récupérer les congés déjà pris cette année
+        // Si l'utilisateur a un solde de congés spécifique, utiliser le solde actuel
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->annual_leave_days;
+        }
+        
+        // Sinon, calculer à partir du solde par défaut moins les congés utilisés
         $usedLeaves = $this->leaves()
             ->whereYear('start_date', now()->year)
             ->where('status', 'approved')
+            ->where('type', 'annual')
             ->sum('duration');
 
-        // Utiliser le solde de congés de l'entreprise ou les valeurs individuelles
         $annualLeaveDays = $this->getAnnualLeaveDaysAttribute();
         
-        // Calculer les jours restants
-        return $annualLeaveDays - $usedLeaves;
+        return max(0, $annualLeaveDays - $usedLeaves);
     }
 
     /**
-     * Get the annual leave days for the user (from leave balance or individual setting)
+     * Get the annual leave days for the user (from leave balance)
      * 
      * @return int
      */
@@ -312,12 +315,12 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->company->defaultLeaveBalance()->annual_leave_days;
         }
         
-        // En dernier recours, utiliser la valeur individuelle
-        return $this->attributes['annual_leave_days'] ?? 25;
+        // Valeur par défaut
+        return 25;
     }
 
     /**
-     * Get the sick leave days for the user (from leave balance or individual setting)
+     * Get the sick leave days for the user (from leave balance)
      * 
      * @return int
      */
@@ -333,8 +336,8 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->company->defaultLeaveBalance()->sick_leave_days;
         }
         
-        // En dernier recours, utiliser la valeur individuelle
-        return $this->attributes['sick_leave_days'] ?? 12;
+        // Valeur par défaut
+        return 12;
     }
 
     /**

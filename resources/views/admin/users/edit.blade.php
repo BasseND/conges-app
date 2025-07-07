@@ -132,12 +132,7 @@
                         </div>
                     </div>
 
-                    <!-- Champs cachés pour la compatibilité -->
-                    <input type="hidden" id="annual_leave_days" name="annual_leave_days" value="{{ old('annual_leave_days', $user->annual_leave_days) }}">
-                    <input type="hidden" id="sick_leave_days" name="sick_leave_days" value="{{ old('sick_leave_days', $user->sick_leave_days) }}">
-                    <input type="hidden" id="maternity_leave_days" name="maternity_leave_days" value="{{ old('maternity_leave_days', $user->maternity_leave_days ?? 90) }}">
-                    <input type="hidden" id="paternity_leave_days" name="paternity_leave_days" value="{{ old('paternity_leave_days', $user->paternity_leave_days ?? 14) }}">
-                    <input type="hidden" id="special_leave_days" name="special_leave_days" value="{{ old('special_leave_days', $user->special_leave_days ?? 5) }}">
+
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -281,15 +276,12 @@
     }
 
     function showLeaveBalanceDetails(balance) {
-        document.getElementById('balance_annual_days').textContent = balance.annual_leave_days;
-        document.getElementById('balance_sick_days').textContent = balance.sick_leave_days;
+
         document.getElementById('balance_maternity_days').textContent = balance.maternity_leave_days;
         document.getElementById('balance_paternity_days').textContent = balance.paternity_leave_days;
         document.getElementById('balance_special_days').textContent = balance.special_leave_days;
         
         // Mettre à jour les champs cachés
-        document.getElementById('annual_leave_days').value = balance.annual_leave_days;
-        document.getElementById('sick_leave_days').value = balance.sick_leave_days;
         document.getElementById('maternity_leave_days').value = balance.maternity_leave_days;
         document.getElementById('paternity_leave_days').value = balance.paternity_leave_days;
         document.getElementById('special_leave_days').value = balance.special_leave_days;

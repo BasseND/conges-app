@@ -245,7 +245,7 @@ Intégrer un système d'exportation en masse des bulletins de paie pour une pér
 Souhaitez-vous que nous implémentions l'une de ces améliorations ou avez-vous d'autres fonctionnalités que vous aimeriez ajouter au système de gestion des bulletins de paie ?
 
 
-Je voudrais ajouter un model 
+Je voudrais ajouter un model société avec ces champs : 
 
 id                   String                
 name                 String
@@ -259,3 +259,4 @@ location             String?
 contactEmail         String?
 contactPhone         String?
 currency             String?
+

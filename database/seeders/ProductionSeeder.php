@@ -34,8 +34,7 @@ class ProductionSeeder extends Seeder
             'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'IT002',
             'email_verified_at' => now(),
@@ -48,8 +47,7 @@ class ProductionSeeder extends Seeder
             'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'IT005',
             'email_verified_at' => now(),
@@ -62,8 +60,7 @@ class ProductionSeeder extends Seeder
             'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $hrDept->id,
             'employee_id' => 'HR002',
             'email_verified_at' => now(),
@@ -76,8 +73,7 @@ class ProductionSeeder extends Seeder
             'phone' => '1234567890',
             'password' => Hash::make('password'),
             'role' => User::ROLE_MANAGER,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $finDept->id,
             'employee_id' => 'FIN001',
             'email_verified_at' => now(),
@@ -117,8 +113,7 @@ class ProductionSeeder extends Seeder
             'position' => 'Admin',
             'password' => Hash::make('password'),
             'role' => User::ROLE_ADMIN,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'ADMIN001',
             'email_verified_at' => now(),
@@ -133,8 +128,7 @@ class ProductionSeeder extends Seeder
             'position' => 'HR Manager',
             'password' => Hash::make('password'),
             'role' => User::ROLE_HR,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $hrDept->id,
             'employee_id' => 'HR001',
             'email_verified_at' => now(),
@@ -149,8 +143,7 @@ class ProductionSeeder extends Seeder
             'position' => 'IT Department Head',
             'password' => Hash::make('password'),
             'role' => User::ROLE_DEPARTMENT_HEAD,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'IT001',
             'email_verified_at' => now(),
@@ -165,8 +158,7 @@ class ProductionSeeder extends Seeder
             'position' => 'Developer',
             'password' => Hash::make('password'),
             'role' => User::ROLE_EMPLOYEE,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'IT003',
             'email_verified_at' => now(),
@@ -180,8 +172,7 @@ class ProductionSeeder extends Seeder
             'position' => 'Developer',
             'password' => Hash::make('password'),
             'role' => User::ROLE_EMPLOYEE,
-            'annual_leave_days' => 25,
-            'sick_leave_days' => 12,
+
             'department_id' => $itDept->id,
             'employee_id' => 'IT004',
             'email_verified_at' => now(),

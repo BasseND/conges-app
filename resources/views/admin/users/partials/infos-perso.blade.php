@@ -77,8 +77,28 @@
                     Solde de congés
                 </dt>
                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:mt-0 sm:col-span-2">
-                    Annuels: {{ $user->annual_leave_days }} jours<br>
-                    Maladie: {{ $user->sick_leave_days }} jours
+                    @if($user->leaveBalance)
+                        <div class="space-y-1">
+                            <div>Annuels: <span class="font-semibold">{{ $user->leaveBalance->annual_leave_days }}</span> jours</div>
+                            <div>Maladie: <span class="font-semibold">{{ $user->leaveBalance->sick_leave_days }}</span> jours</div>
+                            <div>Maternité: <span class="font-semibold">{{ $user->leaveBalance->maternity_leave_days }}</span> jours</div>
+                            <div>Paternité: <span class="font-semibold">{{ $user->leaveBalance->paternity_leave_days }}</span> jours</div>
+                            <div>Spéciaux: <span class="font-semibold">{{ $user->leaveBalance->special_leave_days }}</span> jours</div>
+                            @if($user->leaveBalance->description)
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ $user->leaveBalance->description }}</div>
+                            @endif
+                        </div>
+                    @elseif($user->company && $user->company->defaultLeaveBalance())
+                        <div class="space-y-1">
+                            <div>Annuels: <span class="font-semibold">{{ $user->company->defaultLeaveBalance()->annual_leave_days }}</span> jours (défaut)</div>
+                            <div>Maladie: <span class="font-semibold">{{ $user->company->defaultLeaveBalance()->sick_leave_days }}</span> jours (défaut)</div>
+                            <div>Maternité: <span class="font-semibold">{{ $user->company->defaultLeaveBalance()->maternity_leave_days }}</span> jours (défaut)</div>
+                            <div>Paternité: <span class="font-semibold">{{ $user->company->defaultLeaveBalance()->paternity_leave_days }}</span> jours (défaut)</div>
+                            <div>Spéciaux: <span class="font-semibold">{{ $user->company->defaultLeaveBalance()->special_leave_days }}</span> jours (défaut)</div>
+                        </div>
+                    @else
+                        <div class="text-gray-500 dark:text-gray-400">Aucun solde de congés configuré</div>
+                    @endif
                 </dd>
             </div>
            
