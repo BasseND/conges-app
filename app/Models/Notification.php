@@ -40,6 +40,8 @@ class Notification extends Model
     const TYPE_EXPENSE_REJECTED = 'expense_rejected';
     const TYPE_EXPENSE_PAID = 'expense_paid';
     const TYPE_USER_CREATED = 'user_created';
+    const TYPE_USER_ROLE_CHANGED = 'user_role_changed';
+    const TYPE_USER_DEPARTMENT_CHANGED = 'user_department_changed';
     const TYPE_CONTRACT_EXPIRING = 'contract_expiring';
     const TYPE_CONTRACT_EXPIRED = 'contract_expired';
 
@@ -181,8 +183,37 @@ class Notification extends Model
             self::TYPE_LEAVE_REQUEST, self::TYPE_LEAVE_APPROVED, self::TYPE_LEAVE_REJECTED => 'calendar',
             self::TYPE_EXPENSE_REQUEST, self::TYPE_EXPENSE_APPROVED, self::TYPE_EXPENSE_REJECTED, self::TYPE_EXPENSE_PAID => 'receipt',
             self::TYPE_USER_CREATED => 'user-plus',
+            self::TYPE_USER_ROLE_CHANGED, self::TYPE_USER_DEPARTMENT_CHANGED => 'user-edit',
             self::TYPE_CONTRACT_EXPIRING, self::TYPE_CONTRACT_EXPIRED => 'document',
             default => 'bell',
+        };
+    }
+
+    /**
+     * Obtenir la priorité traduite en français
+     */
+    public function getPriorityLabelAttribute(): string
+    {
+        return match ($this->priority) {
+            self::PRIORITY_LOW => 'Faible',
+            self::PRIORITY_NORMAL => 'Normal',
+            self::PRIORITY_HIGH => 'Élevé',
+            self::PRIORITY_URGENT => 'Urgent',
+            default => 'Normal',
+        };
+    }
+
+    /**
+     * Obtenir la catégorie traduite en français
+     */
+    public function getCategoryLabelAttribute(): string
+    {
+        return match ($this->category) {
+            self::CATEGORY_LEAVE => 'Congés',
+            self::CATEGORY_EXPENSE => 'Notes de frais',
+            self::CATEGORY_USER => 'Utilisateur',
+            self::CATEGORY_CONTRACT => 'Contrat',
+            default => 'Général',
         };
     }
 }

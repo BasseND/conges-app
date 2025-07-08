@@ -10,9 +10,11 @@ use App\Events\LeaveStatusUpdated;
 use App\Events\ExpenseReportCreated;
 use App\Events\ExpenseReportStatusUpdated;
 use App\Events\UserCreated;
+use App\Events\UserUpdated;
 use App\Listeners\SendLeaveNotification;
 use App\Listeners\SendExpenseNotification;
 use App\Listeners\SendUserNotification;
+use App\Listeners\SendUserUpdateNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserCreated::class => [
             SendUserNotification::class,
+        ],
+        UserUpdated::class => [
+            SendUserUpdateNotification::class,
         ],
     ];
 

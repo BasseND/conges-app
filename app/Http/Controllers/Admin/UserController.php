@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Validator;
 use App\Events\UserCreated;
+use App\Events\UserUpdated;
 
 class UserController extends Controller
 {
@@ -61,6 +62,8 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info('UserController store method called');
+        
         Log::info('Request data:', $request->all());
 
         try {
@@ -131,6 +134,11 @@ class UserController extends Controller
             if ($teamId) {
                 $user->teams()->attach($teamId);
             }
+            
+            // Déclencher l'événement de création d'utilisateur
+            \Log::info('About to trigger UserCreated event for user: ' . $user->email);
+            event(new UserCreated($user));
+            \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -217,7 +225,9 @@ class UserController extends Controller
         }
         
         // Déclencher l'événement de création d'utilisateur
+        \Log::info('About to trigger UserCreated event for user: ' . $user->email);
         event(new UserCreated($user));
+        \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -292,6 +302,12 @@ class UserController extends Controller
             'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.'
         ]);
 
+        // Sauvegarder les anciennes données
+        $oldData = $user->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
+        
+        \Log::info('User update - Old data: ' . json_encode($oldData));
+        \Log::info('User update - New data: ' . json_encode($validatedData));
+
         // Traiter la valeur is_prestataire
         $validatedData['is_prestataire'] = $request->has('is_prestataire');
 
@@ -327,6 +343,13 @@ class UserController extends Controller
         } else {
             $user->teams()->detach();
         }
+        
+        // Récupérer les nouvelles données
+        $newData = $user->fresh()->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
+        
+        // Déclencher l'événement UserUpdated
+        event(new UserUpdated($user, $oldData, $newData));
+        \Log::info('UserUpdated event dispatched for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur modifié avec succès.');
@@ -342,24 +365,55 @@ class UserController extends Controller
     public function destroy(Request $request, User $user)
     {
         $request->validate([
-            'confirm_first_name' => 'required|string',
-            'confirm_last_name' => 'required|string',
+            'confirm_text' => 'required|string',
         ]);
 
-        // Vérifier que les noms et prénoms correspondent
-        if ($request->confirm_first_name !== $user->first_name || 
-            $request->confirm_last_name !== $user->last_name) {
-            return back()
-                ->withErrors(['userDeletion' => [
-                    'confirm_first_name' => 'Le prénom saisi ne correspond pas.',
-                    'confirm_last_name' => 'Le nom saisi ne correspond pas.'
-                ]])
-                ->with('error', 'Les informations saisies ne correspondent pas à l\'utilisateur.');
+        // Vérifier que le texte de confirmation correspond
+        if ($request->confirm_text !== 'CONFIRMER') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Le texte de confirmation ne correspond pas. Veuillez saisir "CONFIRMER" pour confirmer la suppression.'
+            ], 422);
         }
 
+        // Vérifier que l'utilisateur ne peut pas supprimer son propre compte
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas supprimer votre propre compte.'
+            ], 403);
+        }
+
+        $userName = $user->first_name . ' ' . $user->last_name;
         $user->delete();
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur supprimé avec succès');
+        
+        return response()->json([
+            'success' => true,
+            'message' => "L'utilisateur {$userName} a été supprimé avec succès."
+        ]);
+    }
+
+    public function toggleStatus(Request $request, User $user)
+    {
+        // Vérifier que l'utilisateur ne peut pas désactiver son propre compte
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas modifier votre propre statut.'
+            ], 403);
+        }
+
+        // Basculer le statut
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        $status = $user->is_active ? 'activé' : 'désactivé';
+        
+        return response()->json([
+            'success' => true,
+            'message' => "L'utilisateur {$user->first_name} {$user->last_name} a été {$status} avec succès.",
+            'is_active' => $user->is_active
+        ]);
     }
 
     private function generateEmployeeId()

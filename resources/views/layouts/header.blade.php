@@ -198,7 +198,7 @@
                                     @endphp
                                     
                                     @forelse($userNotifications as $notification)
-                                      <li class="border-b border-bgray-200 py-4 pl-6 pr-4 hover:bg-bgray-100 dark:border-darkblack-400 dark:hover:bg-darkblack-500 {{ !$notification->is_read ? 'bg-blue-50 dark:bg-blue-900/20' : '' }}">
+                                      <li class="border-b border-bgray-200 py-4 pl-6 pr-4 hover:bg-bgray-100 dark:border-darkblack-400 dark:hover:bg-darkblack-500 {{ !$notification->is_read ? 'bg-lime-50 dark:bg-lime-900/20' : '' }}">
                                         <div class="flex items-start justify-between">
                                           <div class="flex-1 min-w-0">
                                             @if(isset($notification->data['url']))

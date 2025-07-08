@@ -10,14 +10,29 @@
                         <h2 class="text-2xl font-bold text-bgray-900 dark:text-white">
                             {{ __('Notifications') }}
                         </h2>
-                        @if($notifications->where('is_read', false)->count() > 0)
-                            <form method="POST" action="{{ route('notifications.mark-all-read') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="btn btn-primary inline-flex items-center">
-                                    Marquer tout comme lu
+                        <div class="flex space-x-2">
+                            @if($notifications->where('is_read', false)->count() > 0)
+                                <form method="POST" action="{{ route('notifications.mark-all-read') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outlined-primary inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+                                        Marquer tout comme lu
+                                    </button>
+                                </form>
+                            @endif
+                            @if($notifications->count() > 0)
+                                <button type="button" 
+                                        class="btn btn-outlined-error inline-flex items-center"
+                                        @click="window.dispatchEvent(new CustomEvent('delete-dialog', { detail: '{{ route('notifications.delete-all') }}' }))">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Supprimer tout
                                 </button>
-                            </form>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -25,18 +40,18 @@
                     @if($notifications->count() > 0)
                         <div class="space-y-4">
                             @foreach($notifications as $notification)
-                                <div class="border rounded-lg p-4 {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-blue-50 dark:bg-blue-900' }}">
+                                <div class="border rounded-lg p-4 {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-lime-50 dark:bg-lime-900' }}">
                                     <div class="flex justify-between items-start">
                                         <div class="flex-1">
                                             <div class="flex items-center space-x-2">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $notification->priority_color }}">
-                                                    {{ $notification->priority }}
+                                                    {{ $notification->priority_label }}
                                                 </span>
                                                 <span class="text-xs text-gray-500">
-                                                    {{ $notification->category }}
+                                                    {{ $notification->category_label }}
                                                 </span>
                                                 @if(!$notification->is_read)
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-blue-800">
                                                         Nouveau
                                                     </span>
                                                 @endif
@@ -54,13 +69,13 @@
                                             @if(!$notification->is_read)
                                                 <form method="POST" action="{{ route('notifications.mark-read', $notification) }}" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm">
+                                                    <button type="submit" class="btn btn-sm btn-outlined-vert-extra text-sm">
                                                         Marquer comme lu
                                                     </button>
                                                 </form>
                                             @endif
                                             @if(isset($notification->data['url']))
-                                                <a href="{{ $notification->data['url'] }}" class="text-green-600 hover:text-green-800 text-sm">
+                                                <a href="{{ $notification->data['url'] }}" class="btn btn-sm btn-outlined-primary text-sm">
                                                     Voir détails
                                                 </a>
                                             @endif
@@ -88,4 +103,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer toutes vos notifications ? Cette action est irréversible." />
 </x-app-layout>
