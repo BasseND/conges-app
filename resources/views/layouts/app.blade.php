@@ -31,8 +31,8 @@
            'resources/assets/css/flatpickr.min.css',
            'resources/assets/css/layout.css',
            'resources/css/app.css',
-           'resources/js/app.js'
-           
+           'resources/js/app.js',
+           'resources/js/sensitive-actions.js',
         ])
 
      
