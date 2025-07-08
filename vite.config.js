@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/assets/css/layout.css',
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/sensitive-actions.js',
             ],
             
             refresh: true,
