@@ -1,6 +1,7 @@
 @props(['message'])
 
-<div x-data="{ show: false, url: '' }" 
+<div x-cloak
+     x-data="deleteDialog()" 
      x-show="show" 
      @delete-dialog.window="show = true; url = $event.detail"
      class="fixed z-50 inset-0 overflow-y-auto" 
@@ -47,13 +48,11 @@
                 </div>
             </div>
             <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <form x-bind:action="url" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                        Supprimer
-                    </button>
-                </form>
+                <button type="button" 
+                        @click="deleteItem()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Supprimer
+                </button>
                 <button type="button" 
                         @click="show = false"
                         class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
@@ -63,3 +62,35 @@
         </div>
     </div>
 </div>
+
+<script>
+function deleteDialog() {
+    return {
+        show: false,
+        url: '',
+        deleteItem() {
+            fetch(this.url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.show = false;
+                    window.location.reload();
+                } else {
+                    alert('Erreur lors de la suppression');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la suppression');
+            });
+        }
+    }
+}
+</script>

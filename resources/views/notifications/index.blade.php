@@ -10,14 +10,29 @@
                         <h2 class="text-2xl font-bold text-bgray-900 dark:text-white">
                             {{ __('Notifications') }}
                         </h2>
-                        @if($notifications->where('is_read', false)->count() > 0)
-                            <form method="POST" action="{{ route('notifications.mark-all-read') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="btn btn-primary inline-flex items-center">
-                                    Marquer tout comme lu
+                        <div class="flex space-x-2">
+                            @if($notifications->where('is_read', false)->count() > 0)
+                                <form method="POST" action="{{ route('notifications.mark-all-read') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outlined-primary inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+                                        Marquer tout comme lu
+                                    </button>
+                                </form>
+                            @endif
+                            @if($notifications->count() > 0)
+                                <button type="button" 
+                                        class="btn btn-outlined-error inline-flex items-center"
+                                        @click="window.dispatchEvent(new CustomEvent('delete-dialog', { detail: '{{ route('notifications.delete-all') }}' }))">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Supprimer tout
                                 </button>
-                            </form>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -36,7 +51,7 @@
                                                     {{ $notification->category_label }}
                                                 </span>
                                                 @if(!$notification->is_read)
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-blue-800">
                                                         Nouveau
                                                     </span>
                                                 @endif
@@ -88,4 +103,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer toutes vos notifications ? Cette action est irréversible." />
 </x-app-layout>

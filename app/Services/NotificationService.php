@@ -308,4 +308,111 @@ class NotificationService
             ->where('is_read', true)
             ->delete();
     }
+
+    /**
+     * Créer une notification pour un changement de rôle d'utilisateur
+     */
+    public function createUserRoleChangedNotification(User $user, string $oldRole, string $newRole): void
+    {
+        \Log::info('Creating role change notification for user: ' . $user->email);
+        
+        // Notifier l'utilisateur concerné
+        Notification::createNotification(
+            type: Notification::TYPE_USER_ROLE_CHANGED,
+            title: 'Rôle modifié',
+            message: "Votre rôle a été modifié de '{$oldRole}' vers '{$newRole}'.",
+            userId: $user->id,
+            createdBy: auth()->id(),
+            data: [
+                'user_id' => $user->id,
+                'old_role' => $oldRole,
+                'new_role' => $newRole,
+                'url' => route('profile.show')
+            ],
+            priority: Notification::PRIORITY_NORMAL,
+            category: Notification::CATEGORY_USER
+        );
+        
+        // Notifier les admins et RH
+        $recipients = User::whereIn('role', ['admin', 'hr'])
+            ->where('id', '!=', $user->id)
+            ->get();
+        
+        foreach ($recipients as $recipient) {
+            Notification::createNotification(
+                type: Notification::TYPE_USER_ROLE_CHANGED,
+                title: 'Rôle utilisateur modifié',
+                message: "Le rôle de {$user->first_name} {$user->last_name} a été modifié de '{$oldRole}' vers '{$newRole}'.",
+                userId: $recipient->id,
+                createdBy: auth()->id(),
+                data: [
+                    'user_id' => $user->id,
+                    'old_role' => $oldRole,
+                    'new_role' => $newRole,
+                    'url' => route('admin.users.show', $user)
+                ],
+                priority: Notification::PRIORITY_LOW,
+                category: Notification::CATEGORY_USER
+            );
+        }
+        
+        \Log::info('Role change notification creation completed');
+    }
+
+    /**
+     * Créer une notification pour un changement de département d'utilisateur
+     */
+    public function createUserDepartmentChangedNotification(User $user, ?int $oldDepartmentId, ?int $newDepartmentId): void
+    {
+        \Log::info('Creating department change notification for user: ' . $user->email);
+        
+        $oldDepartmentName = $oldDepartmentId ? \App\Models\Department::find($oldDepartmentId)?->name ?? 'Inconnu' : 'Aucun';
+        $newDepartmentName = $newDepartmentId ? \App\Models\Department::find($newDepartmentId)?->name ?? 'Inconnu' : 'Aucun';
+        
+        // Notifier l'utilisateur concerné
+        Notification::createNotification(
+            type: Notification::TYPE_USER_DEPARTMENT_CHANGED,
+            title: 'Département modifié',
+            message: "Votre département a été modifié de '{$oldDepartmentName}' vers '{$newDepartmentName}'.",
+            userId: $user->id,
+            createdBy: auth()->id(),
+            data: [
+                'user_id' => $user->id,
+                'old_department_id' => $oldDepartmentId,
+                'new_department_id' => $newDepartmentId,
+                'old_department_name' => $oldDepartmentName,
+                'new_department_name' => $newDepartmentName,
+                'url' => route('profile.show')
+            ],
+            priority: Notification::PRIORITY_NORMAL,
+            category: Notification::CATEGORY_USER
+        );
+        
+        // Notifier les admins et RH
+        $recipients = User::whereIn('role', ['admin', 'hr'])
+            ->where('id', '!=', $user->id)
+            ->get();
+        
+        foreach ($recipients as $recipient) {
+            Notification::createNotification(
+                type: Notification::TYPE_USER_DEPARTMENT_CHANGED,
+                title: 'Département utilisateur modifié',
+                message: "Le département de {$user->first_name} {$user->last_name} a été modifié de '{$oldDepartmentName}' vers '{$newDepartmentName}'.",
+                userId: $recipient->id,
+                createdBy: auth()->id(),
+                data: [
+                    'user_id' => $user->id,
+                    'old_department_id' => $oldDepartmentId,
+                    'new_department_id' => $newDepartmentId,
+                    'old_department_name' => $oldDepartmentName,
+                    'new_department_name' => $newDepartmentName,
+                    'url' => route('admin.users.show', $user)
+                ],
+                priority: Notification::PRIORITY_LOW,
+                category: Notification::CATEGORY_USER
+            );
+        }
+        
+        \Log::info('Department change notification creation completed');
+    }
 }

@@ -32,6 +32,7 @@
            'resources/assets/css/layout.css',
            'resources/css/app.css',
            'resources/js/app.js',
+           'resources/js/sensitive-actions.js',
         ])
 
      
@@ -191,5 +192,8 @@
 
         @stack('scripts')
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+        
+        <!-- Modal pour les actions sensibles -->
+        <x-modals.sensitive-action-dialog />
     </body>
 </html>

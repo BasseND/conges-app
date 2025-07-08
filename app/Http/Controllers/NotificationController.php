@@ -87,4 +87,19 @@ class NotificationController extends Controller
 
         return back()->with('success', 'Notification supprimée.');
     }
+
+    /**
+     * Supprimer toutes les notifications de l'utilisateur connecté
+     */
+    public function deleteAll()
+    {
+        $count = Auth::user()->notifications()->count();
+        
+        Auth::user()->notifications()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Toutes les notifications ({$count}) ont été supprimées."
+        ]);
+    }
 }
