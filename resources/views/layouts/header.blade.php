@@ -285,7 +285,7 @@
                                       @endif
                                     </div>
                                     <div>
-                                      <a href="{{ route('notifications.index') }}" class="text-sm text-bgray-600 hover:text-bgray-900 dark:text-bgray-400 dark:hover:text-white">
+                                      <a href="{{ route('notifications.index') }}" class="btn btn-sm btn-outlined-primary">
                                         Voir tout
                                       </a>
                                     </div>

@@ -98,6 +98,16 @@ module.exports = {
           800: "#1F2937",
           900: "#111827",
         },
+        ambrer: {
+          50: "#FFFBEB",
+          100: "#FFC837",
+          500: "#F6A723",
+          600: "#F6A723",
+          700: "#F6A723",
+          800: "#F6A723",
+          900: "#F6A723",
+        },
+        
         purple: "#936DFF",
         primaryNew: "#B7FFD1",
         primary: "#22C55E",
