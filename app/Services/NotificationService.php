@@ -123,7 +123,7 @@ class NotificationService
             data: [
                 'expense_report_id' => $expenseReport->id,
                 'total_amount' => $expenseReport->total_amount,
-                'url' => route('expenses.show', $expenseReport)
+                'url' => route('expense-reports.show', $expenseReport)
             ],
             priority: Notification::PRIORITY_NORMAL,
             category: Notification::CATEGORY_EXPENSE
@@ -145,7 +145,7 @@ class NotificationService
                 'expense_report_id' => $expenseReport->id,
                 'total_amount' => $expenseReport->total_amount,
                 'rejection_reason' => $expenseReport->rejection_reason,
-                'url' => route('expenses.show', $expenseReport)
+                'url' => route('expense-reports.show', $expenseReport)
             ],
             priority: Notification::PRIORITY_HIGH,
             category: Notification::CATEGORY_EXPENSE
@@ -167,7 +167,7 @@ class NotificationService
                 'expense_report_id' => $expenseReport->id,
                 'total_amount' => $expenseReport->total_amount,
                 'paid_at' => $expenseReport->paid_at,
-                'url' => route('expenses.show', $expenseReport)
+                'url' => route('expense-reports.show', $expenseReport)
             ],
             priority: Notification::PRIORITY_NORMAL,
             category: Notification::CATEGORY_EXPENSE

@@ -105,3 +105,15 @@ A chaque ajout d'une note de frais, congé, d'un nouveau user, on ajoute dans la
 
 
 Je voudrais également une table pour historiser les changements impportants qui interviennent dans l'app. Comme les changes de contrat, les changements de salaire, les changements de congés, etc. 
+
+<!-- Affichage en calendar des congés -->
+
+<!-- Filtre par années des congés et Note de frais -->
+
+<!-- Sécurisé le changement de role -->
+Enlever les champs de modification de role.
+Mettre un modal spécial pour le changement de role.
+
+<!-- REF NOTE DE FRAIS / CONGES -->
+Ajouter un champ ref dans la table note de frais et congés.
+Ce champ ref va permettre de faire la correspondance entre une note de frais et un congé.

@@ -77,7 +77,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 <!-- Actions a faire -->
-
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
                       <div class="mb-8">
                         <h2 class="text-base xl:text-2xl text-bgray-900 dark:text-white font-bold">
@@ -255,13 +254,9 @@
                 </div>
 
                 <!-- Statistiques des utilisateurs -->
-                  <div
-                    class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full"
-                  >
+                  <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
                     <div class="mb-4 flex items-center justify-between">
-                      <h3
-                        class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl"
-                      >
+                      <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
                        Statistiques des utilisateurs
                       </h3>
                       
@@ -321,10 +316,6 @@
                     </div>
                   </div>
                  
-                
-
-
-                
 
                 <!-- Statistiques des utilisateurs -->
               
@@ -400,7 +391,14 @@
                 <!-- Dernières activités congés -->
                 <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-5">Dernières demandes de congés</h3>
+                        <div class="flex items-center justify-between mb-5">
+                          <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl ">
+                            Dernières demandes de congés
+                          </h3>
+                          <a href="{{ route('leaves.index') }}" class="btn btn-sm btn-outlined-primary">
+                            Voir toutes
+                          </a>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -477,7 +475,15 @@
                 <!-- Dernières notes de frais -->
                 <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-5">Dernières notes de frais</h3>
+                        <div class="flex items-center justify-between mb-5">
+                          <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl ">
+                            Dernières notes de frais
+                          </h3>
+                          <a href="{{ route('expense-reports.index') }}" class="btn btn-sm btn-outlined-primary">
+                            Voir toutes
+                          </a>
+                        </div>
+                        
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
