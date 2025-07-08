@@ -25,15 +25,15 @@
                     @if($notifications->count() > 0)
                         <div class="space-y-4">
                             @foreach($notifications as $notification)
-                                <div class="border rounded-lg p-4 {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-blue-50 dark:bg-blue-900' }}">
+                                <div class="border rounded-lg p-4 {{ $notification->is_read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-lime-50 dark:bg-lime-900' }}">
                                     <div class="flex justify-between items-start">
                                         <div class="flex-1">
                                             <div class="flex items-center space-x-2">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $notification->priority_color }}">
-                                                    {{ $notification->priority }}
+                                                    {{ $notification->priority_label }}
                                                 </span>
                                                 <span class="text-xs text-gray-500">
-                                                    {{ $notification->category }}
+                                                    {{ $notification->category_label }}
                                                 </span>
                                                 @if(!$notification->is_read)
                                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -54,13 +54,13 @@
                                             @if(!$notification->is_read)
                                                 <form method="POST" action="{{ route('notifications.mark-read', $notification) }}" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm">
+                                                    <button type="submit" class="btn btn-sm btn-outlined-vert-extra text-sm">
                                                         Marquer comme lu
                                                     </button>
                                                 </form>
                                             @endif
                                             @if(isset($notification->data['url']))
-                                                <a href="{{ $notification->data['url'] }}" class="text-green-600 hover:text-green-800 text-sm">
+                                                <a href="{{ $notification->data['url'] }}" class="btn btn-sm btn-outlined-primary text-sm">
                                                     Voir détails
                                                 </a>
                                             @endif

@@ -110,7 +110,7 @@
                     </div>
                     
                     <div class="relative z-10">
-                        <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-emerald-900 dark:to-teal-900 rounded-2xl mb-6 transition-transform duration-300">
+                        <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-900 dark:to-blue-900 rounded-2xl mb-6 transition-transform duration-300">
                             <svg class="w-10 h-10 text-sky-600 dark:text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -130,25 +130,25 @@
             </div>
 
             <!-- Carte Tableau de Bord -->
-            <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 p-1 shadow-xl hover:shadow-2xl transition-all duration-500">
+            <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 via-emerald-500 to-lime-500 p-1 shadow-xl hover:shadow-2xl transition-all duration-500">
                 <div class="relative h-full rounded-xl bg-white dark:bg-gray-900 p-8 transition-all duration-300">
                     <!-- Effet de particules animées -->
                     <div class="absolute inset-0 opacity-10">
-                        <div class="absolute top-8 left-8 w-2 h-2 bg-fuchsia-400 rounded-full animate-ping animation-delay-300"></div>
-                        <div class="absolute top-4 right-8 w-1 h-1 bg-red-400 rounded-full animate-pulse animation-delay-600"></div>
-                        <div class="absolute bottom-4 left-4 w-1.5 h-1.5 bg-pink-400 rounded-full animate-bounce animation-delay-900"></div>
+                        <div class="absolute top-8 left-8 w-2 h-2 bg-cyan-400 rounded-full animate-ping animation-delay-300"></div>
+                        <div class="absolute top-4 right-8 w-1 h-1 bg-lime-400 rounded-full animate-pulse animation-delay-600"></div>
+                        <div class="absolute bottom-4 left-4 w-1.5 h-1.5 bg-lime-400 rounded-full animate-bounce animation-delay-900"></div>
                     </div>
                     
                     <div class="relative z-10">
-                        <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-fuchsia-100 to-pink-100 dark:from-fuchsia-900 dark:to-pink-900 rounded-2xl mb-6 transition-transform duration-300">
-                            <svg class="w-10 h-10 text-fuchsia-600 dark:text-fuchsia-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-100 to-lime-100 dark:from-cyan-900 dark:to-lime-900 rounded-2xl mb-6 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-cyan-600 dark:text-cyan-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold bg-gradient-to-r from-fuchsia-600 to-pink-600 bg-clip-text text-transparent mb-3">Tableau de Bord</h2>
+                        <h2 class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-lime-600 bg-clip-text text-transparent mb-3">Tableau de Bord</h2>
                         <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">Visualisez vos statistiques et demandes en cours 📊</p>
-                        <a href="{{ route('leaves.index') }}" class="group/btn relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-fuchsia-500 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                            <span class="absolute inset-0 bg-gradient-to-r from-pink-600 to-red-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
+                        <a href="{{ route('leaves.index') }}" class="group/btn relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-lime-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                            <span class="absolute inset-0 bg-gradient-to-r from-lime-600 to-emerald-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
                             <span class="relative z-10">Voir les stats</span>
                             <svg class="relative z-10 ml-2 w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>

@@ -185,4 +185,32 @@ class Notification extends Model
             default => 'bell',
         };
     }
+
+    /**
+     * Obtenir la priorité traduite en français
+     */
+    public function getPriorityLabelAttribute(): string
+    {
+        return match ($this->priority) {
+            self::PRIORITY_LOW => 'Faible',
+            self::PRIORITY_NORMAL => 'Normal',
+            self::PRIORITY_HIGH => 'Élevé',
+            self::PRIORITY_URGENT => 'Urgent',
+            default => 'Normal',
+        };
+    }
+
+    /**
+     * Obtenir la catégorie traduite en français
+     */
+    public function getCategoryLabelAttribute(): string
+    {
+        return match ($this->category) {
+            self::CATEGORY_LEAVE => 'Congés',
+            self::CATEGORY_EXPENSE => 'Notes de frais',
+            self::CATEGORY_USER => 'Utilisateur',
+            self::CATEGORY_CONTRACT => 'Contrat',
+            default => 'Général',
+        };
+    }
 }

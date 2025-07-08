@@ -26,6 +26,8 @@ class SendUserNotification implements ShouldQueue
      */
     public function handle(UserCreated $event): void
     {
+        \Log::info('UserCreated event triggered for user: ' . $event->user->email);
         $this->notificationService->createUserCreatedNotification($event->user);
+        \Log::info('Notification creation completed for user: ' . $event->user->email);
     }
 }

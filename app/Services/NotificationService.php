@@ -179,12 +179,18 @@ class NotificationService
      */
     public function createUserCreatedNotification(User $user): void
     {
+        \Log::info('Creating user notification for: ' . $user->email);
+        
         // Notifier les admins et RH
         $recipients = User::whereIn('role', ['admin', 'hr'])
             ->where('id', '!=', $user->id)
             ->get();
         
+        \Log::info('Found ' . $recipients->count() . ' recipients for user notification');
+        
         foreach ($recipients as $recipient) {
+            \Log::info('Creating notification for recipient: ' . $recipient->email);
+            
             Notification::createNotification(
                 type: Notification::TYPE_USER_CREATED,
                 title: 'Nouvel utilisateur créé',
@@ -199,7 +205,11 @@ class NotificationService
                 priority: Notification::PRIORITY_LOW,
                 category: Notification::CATEGORY_USER
             );
+            
+            \Log::info('Notification created successfully for recipient: ' . $recipient->email);
         }
+        
+        \Log::info('User notification creation process completed');
     }
 
     /**

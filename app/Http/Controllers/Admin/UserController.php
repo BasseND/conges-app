@@ -61,6 +61,8 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info('UserController store method called');
+        
         Log::info('Request data:', $request->all());
 
         try {
@@ -131,6 +133,11 @@ class UserController extends Controller
             if ($teamId) {
                 $user->teams()->attach($teamId);
             }
+            
+            // Déclencher l'événement de création d'utilisateur
+            \Log::info('About to trigger UserCreated event for user: ' . $user->email);
+            event(new UserCreated($user));
+            \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -217,7 +224,9 @@ class UserController extends Controller
         }
         
         // Déclencher l'événement de création d'utilisateur
+        \Log::info('About to trigger UserCreated event for user: ' . $user->email);
         event(new UserCreated($user));
+        \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');
