@@ -114,7 +114,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="inline-flex {{ 
                                             $report->status === 'paid' ? 'badge badge-success' : 
-                                            ($report->status === 'draft' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 
+                                            ($report->status === 'draft' ? 'badge badge-info-outline  dark:bg-blue-900  dark:text-blue-200' : 
                                             ($report->status === 'approved' ? 'badge badge-success-outline dark:bg-green-900 dark:text-green-200' : 
                                             ($report->status === 'submitted' ? 'badge badge-warning-outline dark:bg-yellow-900 dark:text-yellow-200' :
                                             ($report->status === 'rejected' ? 'badge badge-error-outline dark:bg-red-900 dark:text-red-200' : 
