@@ -27,6 +27,8 @@ class Leave extends Model
     const TYPES = [
         'annual' => 'Annuel',
         'sick' => 'Maladie',
+        'maternity' => 'Maternité',
+        'paternity' => 'Paternité',
         'unpaid' => 'Sans solde',
         'other' => 'Autre'
     ];

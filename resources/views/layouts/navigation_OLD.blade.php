@@ -86,11 +86,12 @@
                         <x-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
                             {{ __('Mes congés') }}
                         </x-nav-link>
-                    @endauth
-                    @auth
-                        <x-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
+                         <x-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
                             {{ __('Notes de frais') }}
                         </x-nav-link>
+                    @endauth
+                    @auth
+                       
                         <x-nav-link :href="route('payslips.index')" :active="request()->routeIs('payslips.*')">
                             {{ __('Mes bulletins de paie') }}
                         </x-nav-link>

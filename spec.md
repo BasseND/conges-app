@@ -117,3 +117,23 @@ Mettre un modal spécial pour le changement de role.
 <!-- REF NOTE DE FRAIS / CONGES -->
 Ajouter un champ ref dans la table note de frais et congés.
 Ce champ ref va permettre de faire la correspondance entre une note de frais et un congé.
+<!-- TODO LISTE -->
+1. Compteur de congés restants
+2. Affichage en calendar des congés V2
+3. Filtre par années des congés et Note de frais
+4. Sécurisé le changement de role
+7. Ajouter un champ ref dans la table note de frais et congés.
+
+9. Harmoniser les formulaires
+10. Terminer le Dashboard
+11. Refaire la page profile 
+12. Harmoniser les tables
+13. Page de détails de congés et note de frais
+14. Ajouter affichage drawer pour un user
+15. Alerte pour un contrat qui approche son terme
+16. Refaire la pagination
+17. Dialog lors de la soumission note de frais (qu'on ne pourra pas le modifier après)
+18. Prévoir un dashboard pour le Chef de département et Manager en V2
+
+
+8. Compléter le menu sidebar

@@ -54,6 +54,16 @@ trait HandlesLeaveApproval
                 if ($leaveBalance) {
                     $leaveBalance->decrement('sick_leave_days', $leave->duration);
                 }
+            } elseif ($leave->type === 'maternity') {
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('maternity_leave_days', $leave->duration);
+                }
+            } elseif ($leave->type === 'paternity') {
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('paternity_leave_days', $leave->duration);
+                }
             }
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));

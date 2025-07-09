@@ -116,8 +116,8 @@
                             </div>
 
                             <!-- Bloc congés -->
-                            <div class="bg-gray-50 dark:bg-dark-card-two rounded-xl p-7 border border-gray-100 mt-6">
-                                <div class="flex justify-between items-center mb-6">
+                            <div class="bg-white dark:bg-dark-card-two rounded-xl  border border-gray-100 mt-6">
+                                <div class="bg-gray-50 flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                         <i class="bx bx-calendar mr-2"></i>Soldes de congés définis
                                     </h3>
@@ -129,7 +129,7 @@
                                 @if($leaveBalances->count() > 0)
                                     <div class="grid gap-4">
                                         @foreach($leaveBalances as $balance)
-                                            <div class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+                                            <div class="group relative bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
                                                 <!-- Decorative background element -->
                                                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                                                 
