@@ -231,8 +231,8 @@
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-12 w-12">
-                                                <div class="h-12 w-12 rounded-full bg-green-300 dark:bg-green-700  flex items-center justify-center">
-                                                    <span class="text-sm font-bold text-white">
+                                                <div class="h-12 w-12 rounded-full border-4 border-gray-400 bg-gray-50 dark:bg-green-700  flex items-center justify-center">
+                                                    <span class="text-sm font-bold text-gray-400">
                                                         {{ substr($leave->user->first_name, 0, 1) }}{{ substr($leave->user->last_name, 0, 1) }}
                                                     </span>
                                                 </div>

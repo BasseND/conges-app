@@ -70,6 +70,7 @@ class UserController extends Controller
             $validatedData = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
+                'gender' => 'required|in:M,F',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'nullable|string|max:20',
                 'password' => 'required|string|min:8|confirmed',
@@ -88,6 +89,8 @@ class UserController extends Controller
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
+                'gender.required' => 'Le sexe est obligatoire.',
+                'gender.in' => 'Le sexe doit être Masculin ou Féminin.',
                 'email.required' => 'L\'adresse email est obligatoire.',
                 'email.email' => 'L\'adresse email doit être valide.',
                 'email.unique' => 'Cette adresse email est déjà utilisée.',
@@ -178,6 +181,8 @@ class UserController extends Controller
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
+            'gender.required' => 'Le sexe est obligatoire.',
+            'gender.in' => 'Le sexe doit être Masculin ou Féminin.',
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'L\'adresse email doit être valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
@@ -267,6 +272,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
