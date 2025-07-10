@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'first_name',
         'last_name',
+        'gender',
         'phone',
         'email',
         'password',
@@ -354,6 +355,48 @@ class User extends Authenticatable implements MustVerifyEmail
         
         // Valeur par défaut
         return 12;
+    }
+
+    /**
+     * Get the maternity leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getMaternityLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->maternity_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->maternity_leave_days;
+        }
+        
+        // Valeur par défaut (16 semaines = 112 jours)
+        return 112;
+    }
+
+    /**
+     * Get the paternity leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getPaternityLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->paternity_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->paternity_leave_days;
+        }
+        
+        // Valeur par défaut (25 jours)
+        return 25;
     }
 
     /**

@@ -138,26 +138,7 @@
                                                 <div class="text-xs text-gray-500">{{ $leave->user->department->code }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
-                                                    $leave->type === 'annual' ? 'bg-blue-100 text-blue-800' : 
-                                                    ($leave->type === 'sick' ? 'bg-green-100 text-green-800' : 
-                                                    ($leave->type === 'unpaid' ? 'bg-yellow-100 text-yellow-800' : 
-                                                    'bg-gray-100 text-gray-800')) 
-                                                }}">
-                                                    @switch($leave->type)
-                                                        @case('annual')
-                                                            Congé annuel
-                                                            @break
-                                                        @case('sick')
-                                                            Congé maladie
-                                                            @break
-                                                        @case('unpaid')
-                                                            Congé sans solde
-                                                            @break
-                                                        @default
-                                                            Autre
-                                                    @endswitch
-                                                </span>
+                                                <x-leave-type-badge :type="$leave->type" />
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 Du {{ $leave->start_date->format('d/m/Y') }}

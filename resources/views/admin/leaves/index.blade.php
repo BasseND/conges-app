@@ -231,8 +231,8 @@
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-12 w-12">
-                                                <div class="h-12 w-12 rounded-full bg-green-300 dark:bg-green-700  flex items-center justify-center">
-                                                    <span class="text-sm font-bold text-white">
+                                                <div class="h-12 w-12 rounded-full border-4 border-gray-400 bg-gray-50 dark:bg-green-700  flex items-center justify-center">
+                                                    <span class="text-sm font-bold text-gray-400">
                                                         {{ substr($leave->user->first_name, 0, 1) }}{{ substr($leave->user->last_name, 0, 1) }}
                                                     </span>
                                                 </div>
@@ -253,38 +253,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
-                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ 
-                                            $leave->type === 'annual' ? 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 dark:from-blue-900 dark:to-blue-800 dark:text-blue-200 border border-blue-300 dark:border-blue-700' : 
-                                            ($leave->type === 'sick' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 border border-green-300 dark:border-green-700' : 
-                                            ($leave->type === 'unpaid' ? 'bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800 dark:from-yellow-900 dark:to-yellow-800 dark:text-yellow-200 border border-yellow-300 dark:border-yellow-700' : 
-                                            'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-gray-900 dark:to-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700')) 
-                                        }}">
-                                            @switch($leave->type)
-                                                @case('annual')
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                    </svg>
-                                                    Congé annuel
-                                                    @break
-                                                @case('sick')
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                                    </svg>
-                                                    Congé maladie
-                                                    @break
-                                                @case('unpaid')
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                                                    </svg>
-                                                    Congé sans solde
-                                                    @break
-                                                @default
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    Autre
-                                            @endswitch
-                                        </div>
+                                        <x-leave-type-badge :type="$leave->type" />
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -328,8 +297,8 @@
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ 
-                                            $leave->status === 'approved' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 border border-green-300 dark:border-green-700' : 
-                                                ($leave->status === 'rejected' ? 'bg-gradient-to-r from-red-100 to-red-200 text-red-800 dark:from-red-900 dark:to-red-800 dark:text-red-200 border border-red-300 dark:border-red-700' : 
+                                                $leave->status === 'approved' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 border border-green-300 dark:border-green-700' : 
+                                                ($leave->status === 'rejected' ? 'bg-gradient-to-r from-red-100 to-red-200 text-red-800 dark:from-red-900 dark:to-red-800 dark:text-red-200 border border-red-300 dark:border-red-700' :
                                                 'bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800 dark:from-yellow-900 dark:to-yellow-800 dark:text-yellow-200 border border-yellow-300 dark:border-yellow-700') }}">
                                             @switch($leave->status)
                                                 @case('approved')

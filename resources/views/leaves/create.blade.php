@@ -29,8 +29,12 @@
                                 <option value="">Sélectionner un type de congé</option>
                                 <option value="annual" {{ old('type') == 'annual' ? 'selected' : '' }}>Congé annuel</option>
                                 <option value="sick" {{ old('type') == 'sick' ? 'selected' : '' }}>Congé maladie</option>
+                                <option value="maternity" {{ old('type') == 'maternity' ? 'selected' : '' }}>Congé maternité</option>
+                                <option value="paternity" {{ old('type') == 'paternity' ? 'selected' : '' }}>Congé paternité</option>
                                 <option value="unpaid" {{ old('type') == 'unpaid' ? 'selected' : '' }}>Congé sans solde</option>
                                 <option value="other" {{ old('type') == 'other' ? 'selected' : '' }}>Autre</option>
+                         
+                           
                             </select>
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
                             <p class="mt-2 text-sm text-gray-500">

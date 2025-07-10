@@ -76,7 +76,7 @@ class LeaveController extends Controller
                         }
                     }
                 ],
-                'type' => ['required', Rule::in(['annual', 'sick', 'unpaid', 'other'])],
+                'type' => ['required', Rule::in(['annual', 'sick', 'unpaid' , 'maternity', 'paternity', 'other'])],
                 'reason' => ['required', 'string', 'min:10', 'max:500'],
                 'attachments.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:2048']
             ], [

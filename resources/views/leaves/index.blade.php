@@ -66,7 +66,8 @@
                             </div>
                             </div>
                         </div>
-                       <!-- Conges Maladies -->
+
+                        <!-- Conges Maladies -->
                         <div class="rounded-xl bg-success-50 p-7 dark:bg-darkblack-500">
                             <div class="flex flex-row items-center space-x-6 md:flex-col md:space-x-0 2xl:flex-row 2xl:space-x-6">
                             <div  class="progess-bar mb-0 flex justify-center md:mb-[13px] xl:mb-0">
@@ -107,6 +108,90 @@
                             </div>
                             </div>
                         </div>
+
+                         <!-- Congé Maternité -->
+                        <div class="rounded-xl bg-pink-50 p-7 dark:bg-darkblack-500">
+                            <div class="flex flex-row items-center space-x-6 md:flex-col md:space-x-0 2xl:flex-row 2xl:space-x-6">
+                            <div  class="progess-bar mb-0 flex justify-center md:mb-[13px] xl:mb-0">
+                                <div class="bonus-per relative">
+                                <div class="bonus-outer">
+                                    <div class="bonus-inner">
+                                    <div class="number">
+                                        <span class="text-sm font-medium text-bgray-900"
+                                        >100%</span
+                                        >
+                                    </div>
+                                    </div>
+                                </div>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="80px"
+                                    height="80px"
+                                >
+                                    <circle
+                                    style="
+                                        stroke-dashoffset: calc(215 - 215 * (100 / 100));
+                                    "
+                                    cx="40"
+                                    cy="40"
+                                    r="35"
+                                    stroke-linecap="round"
+                                    />
+                                </svg>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center xl:items-start">
+                                <h4 class="text-base font-bold text-bgray-900 dark:text-white">
+                                   Congé maternité
+                                </h4>
+                                <span class="text-2xl font-bold dark:text-darkblack-300">
+                                    {{ auth()->user()->maternity_leave_days }} jours
+                                </span>
+                            </div>
+                            </div>
+                        </div>
+
+                        <!-- Congé Paternité -->
+                        <div class="rounded-xl bg-blue-50 p-7 dark:bg-darkblack-500">
+                            <div class="flex flex-row items-center space-x-6 md:flex-col md:space-x-0 2xl:flex-row 2xl:space-x-6">
+                            <div  class="progess-bar mb-0 flex justify-center md:mb-[13px] xl:mb-0">
+                                <div class="bonus-per relative">
+                                <div class="bonus-outer">
+                                    <div class="bonus-inner">
+                                    <div class="number">
+                                        <span class="text-sm font-medium text-bgray-900"
+                                        >100%</span
+                                        >
+                                    </div>
+                                    </div>
+                                </div>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="80px"
+                                    height="80px"
+                                >
+                                    <circle
+                                    style="
+                                        stroke-dashoffset: calc(215 - 215 * (100 / 100));
+                                    "
+                                    cx="40"
+                                    cy="40"
+                                    r="35"
+                                    stroke-linecap="round"
+                                    />
+                                </svg>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center xl:items-start">
+                                <h4 class="text-base font-bold text-bgray-900 dark:text-white">
+                                   Congé paternité
+                                </h4>
+                                <span class="text-2xl font-bold dark:text-darkblack-300">
+                                    {{ auth()->user()->paternity_leave_days }} jours
+                                </span>
+                            </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -131,26 +216,7 @@
                                 @forelse($leaves as $leave)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex {{ 
-                                                $leave->type === 'annual' ? 'badge badge-cg-annuel' : 
-                                                ($leave->type === 'sick' ? 'badge badge-cg-maladie' : 
-                                                ($leave->type === 'unpaid' ? 'badge badge-cg-sans-solde' : 
-                                                'badge badge-cg-autre')) 
-                                            }}">
-                                                @switch($leave->type)
-                                                    @case('annual')
-                                                        Congé annuel
-                                                        @break
-                                                    @case('sick')
-                                                        Congé maladie
-                                                        @break
-                                                    @case('unpaid')
-                                                        Congé sans solde
-                                                        @break
-                                                    @default
-                                                        Autre
-                                                @endswitch
-                                            </span>
+                                            <x-leave-type-badge :type="$leave->type" />
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $leave->start_date->format('d/m/Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $leave->end_date->format('d/m/Y') }}</td>
