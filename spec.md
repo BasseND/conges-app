@@ -134,6 +134,7 @@ Ce champ ref va permettre de faire la correspondance entre une note de frais et 
 16. Refaire la pagination
 17. Dialog lors de la soumission note de frais (qu'on ne pourra pas le modifier après)
 18. Prévoir un dashboard pour le Chef de département et Manager en V2
+19. Listing des contrats en cours
 
 
 8. Compléter le menu sidebar
