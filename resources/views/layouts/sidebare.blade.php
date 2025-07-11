@@ -54,12 +54,13 @@
     <div class="nav-wrapper mb-[36px] pr-[50px]">
         <!-- Admin Menu -->
         @auth
-            @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
+            
             <div class="item-wrapper mb-5">
                 <h4 class="border-b border-bgray-200 text-sm font-medium leading-7 text-bgray-700 dark:border-darkblack-400 dark:text-bgray-50">
                     Menu Administration
                 </h4>
                 <ul class="mt-2.5">
+                    @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
                     <!-- Settings -->
                     <li class="item py-[11px] text-bgray-900 dark:text-white">
                         <a href="{{ route('admin.company.show') }}" class="sidebar-link {{ request()->routeIs('admin.company.show') ? 'active' : '' }}">
@@ -132,6 +133,7 @@
                             </div>
                         </a>
                     </li>
+                    
 
                     <!-- Gestion des users -->
                     <li class="item py-[11px] text-bgray-900 dark:text-white">
@@ -211,7 +213,7 @@
                         </ul>
                     </li>
 
-                    <!-- Conges -->
+                    <!-- Gestion des Conges -->
                     <li class="item py-[11px] text-bgray-900 dark:text-white">
                         <a href="#" @click.prevent="toggleSubmenu('leaves')">
                             <div class="flex items-center justify-between">
@@ -306,48 +308,47 @@
                         </ul>
                     </li>
 
-                     <!-- Conges -->
+                    <!-- Note de frais -->
                     <li class="item py-[11px] text-bgray-900 dark:text-white">
-                        <a href="{{ route('leaves.index') }}" class="sidebar-link {{ request()->routeIs('leaves.*') ? 'active' : '' }}">
+                        <a href="{{ route('expense-reports.index') }}" class="sidebar-link {{ request()->routeIs('expense-reports.*') ? 'active' : '' }}">
                             <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2.5">
                                 <span class="item-ico">
                                 <svg
                                     width="18"
-                                    height="21"
-                                    viewBox="0 0 18 21"
+                                    height="20"
+                                    viewBox="0 0 18 20"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
                                     <path
-                                    d="M0 6.5C0 4.29086 1.79086 2.5 4 2.5H14C16.2091 2.5 18 4.29086 18 6.5V8V17C18 19.2091 16.2091 21 14 21H4C1.79086 21 0 19.2091 0 17V8V6.5Z"
+                                    d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
                                     fill="#1A202C"
                                     class="path-1"
                                     />
                                     <path
-                                    d="M14 2.5H4C1.79086 2.5 0 4.29086 0 6.5V8H18V6.5C18 4.29086 16.2091 2.5 14 2.5Z"
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
                                     fill="#22C55E"
                                     class="path-2"
                                     />
                                     <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"
-                                    d="M5 0.25C5.41421 0.25 5.75 0.585786 5.75 1V4C5.75 4.41421 5.41421 4.75 5 4.75C4.58579 4.75 4.25 4.41421 4.25 4V1C4.25 0.585786 4.58579 0.25 5 0.25ZM13 0.25C13.4142 0.25 13.75 0.585786 13.75 1V4C13.75 4.41421 13.4142 4.75 13 4.75C12.5858 4.75 12.25 4.41421 12.25 4V1C12.25 0.585786 12.5858 0.25 13 0.25Z"
-                                    fill="#1A202C"
-                                    class="path-2"
-                                    />
-                                    <circle cx="9" cy="14" r="1" fill="#22C55E" />
-                                    <circle
-                                    cx="13"
-                                    cy="14"
-                                    r="1"
+                                    d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
                                     fill="#22C55E"
                                     class="path-2"
                                     />
-                                    <circle
-                                    cx="5"
-                                    cy="14"
-                                    r="1"
+                                    <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
+                                    fill="#22C55E"
+                                    class="path-2"
+                                    />
+                                    <path
+                                    d="M11 0H7C5.89543 0 5 0.895431 5 2C5 3.10457 5.89543 4 7 4H11C12.1046 4 13 3.10457 13 2C13 0.895431 12.1046 0 11 0Z"
                                     fill="#22C55E"
                                     class="path-2"
                                     />
@@ -355,69 +356,125 @@
                                 </span>
                                 <span
                                 class="item-text text-lg font-medium leading-none"
-                                >Congés</span
+                                >Note de frais</span
                                 >
                             </div>
                             </div>
                         </a>
                     </li>
 
+                    @else
 
-                </ul>
-            </div>
-            @endif
-        @endauth
-        <!-- End Admin Menu -->
+                        <!-- Mes Conges -->
+                        <li class="item py-[11px] text-bgray-900 dark:text-white">
+                            <a href="{{ route('leaves.index') }}" class="sidebar-link {{ request()->routeIs('leaves.*') ? 'active' : '' }}">
+                                <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2.5">
+                                    <span class="item-ico">
+                                    <svg
+                                        width="18"
+                                        height="21"
+                                        viewBox="0 0 18 21"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M0 6.5C0 4.29086 1.79086 2.5 4 2.5H14C16.2091 2.5 18 4.29086 18 6.5V8V17C18 19.2091 16.2091 21 14 21H4C1.79086 21 0 19.2091 0 17V8V6.5Z"
+                                        fill="#1A202C"
+                                        class="path-1"
+                                        />
+                                        <path
+                                        d="M14 2.5H4C1.79086 2.5 0 4.29086 0 6.5V8H18V6.5C18 4.29086 16.2091 2.5 14 2.5Z"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                        <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M5 0.25C5.41421 0.25 5.75 0.585786 5.75 1V4C5.75 4.41421 5.41421 4.75 5 4.75C4.58579 4.75 4.25 4.41421 4.25 4V1C4.25 0.585786 4.58579 0.25 5 0.25ZM13 0.25C13.4142 0.25 13.75 0.585786 13.75 1V4C13.75 4.41421 13.4142 4.75 13 4.75C12.5858 4.75 12.25 4.41421 12.25 4V1C12.25 0.585786 12.5858 0.25 13 0.25Z"
+                                        fill="#1A202C"
+                                        class="path-2"
+                                        />
+                                        <circle cx="9" cy="14" r="1" fill="#22C55E" />
+                                        <circle
+                                        cx="13"
+                                        cy="14"
+                                        r="1"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                        <circle
+                                        cx="5"
+                                        cy="14"
+                                        r="1"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                    </svg>
+                                    </span>
+                                    <span
+                                    class="item-text text-lg font-medium leading-none"
+                                    >Congés</span
+                                    >
+                                </div>
+                                </div>
+                            </a>
+                        </li>
 
-
-     @auth
-                        @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
-                            <x-nav-link :href="route('admin.stats.index')" :active="request()->routeIs('admin.stats.*')">
-                                {{ __('Dashboard') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('admin.leaves.index')" :active="request()->routeIs('admin.leaves.*')">
-                                {{ __('Validation des congés') }}
-                            </x-nav-link>
-                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                            {{ __('Gestion des utilisateurs') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('admin.departments.index')" :active="request()->routeIs('admin.departments.*')">
-                                {{ __('Gestion des départements') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('admin.company.show')" :active="request()->routeIs('admin.company.*')">
-                                {{ __('Informations société') }}
-                            </x-nav-link>
-                            <!-- Menu déroulant pour les bulletins de paie -->
-                            <div class="hidden sm:flex sm:items-center">
-                                <x-dropdown align="right" width="48">
-                                    <x-slot name="trigger">
-                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150 {{ request()->routeIs('admin.payslips.*') ? 'border-b-2 border-indigo-400 dark:border-indigo-600' : '' }}">
-                                            <div>{{ __('Bulletins de paie') }}</div>
-                                            <div class="ml-1">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
-                                        </button>
-                                    </x-slot>
-
-                                    <x-slot name="content">
-                                        <x-dropdown-link :href="route('admin.payslips.index')">
-                                            {{ __('Liste des bulletins') }}
-                                        </x-dropdown-link>
-                                        <x-dropdown-link :href="route('admin.payslips.create')">
-                                            {{ __('Générer des bulletins') }}
-                                        </x-dropdown-link>
-                                        <x-dropdown-link :href="route('admin.payslips.batch-validate-form')">
-                                            {{ __('Validation en masse') }}
-                                        </x-dropdown-link>
-                                        <x-dropdown-link :href="route('admin.payslips.batch-pdf-form')">
-                                            {{ __('PDF en masse') }}
-                                        </x-dropdown-link>
-                                    </x-slot>
-                                </x-dropdown>
-                            </div>
-                        @endif
+                        <!-- Note de frais -->
+                        <li class="item py-[11px] text-bgray-900 dark:text-white">
+                            <a href="{{ route('expense-reports.index') }}" class="sidebar-link {{ request()->routeIs('expense-reports.*') ? 'active' : '' }}">
+                                <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2.5">
+                                    <span class="item-ico">
+                                    <svg
+                                        width="18"
+                                        height="20"
+                                        viewBox="0 0 18 20"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
+                                        fill="#1A202C"
+                                        class="path-1"
+                                        />
+                                        <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                        <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                        <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                        <path
+                                        d="M11 0H7C5.89543 0 5 0.895431 5 2C5 3.10457 5.89543 4 7 4H11C12.1046 4 13 3.10457 13 2C13 0.895431 12.1046 0 11 0Z"
+                                        fill="#22C55E"
+                                        class="path-2"
+                                        />
+                                    </svg>
+                                    </span>
+                                    <span
+                                    class="item-text text-lg font-medium leading-none"
+                                    >Note de frais</span
+                                    >
+                                </div>
+                                </div>
+                            </a>
+                        </li>
 
                         @if (auth()->user()->isManager())
                             <x-nav-link :href="route('manager.leaves.index')" :active="request()->routeIs('manager.leaves.*')">
@@ -430,18 +487,23 @@
                                 {{ __('Gestion des congés') }}
                             </x-nav-link>
                         @endif
-                    @endauth
-                    @auth
-                        <x-nav-link :href="route('leaves.index')" :active="request()->routeIs('leaves.*')">
-                            {{ __('Mes congés') }}
-                        </x-nav-link>
-                         <x-nav-link :href="route('expense-reports.index')" :active="request()->routeIs('expense-reports.*')">
-                            {{ __('Notes de frais') }}
-                        </x-nav-link>
-                    @endauth
 
 
+                    @endif
 
+                    
+
+                     
+
+
+                </ul>
+            </div>
+            
+
+              
+
+        @endauth
+        <!-- End Admin Menu -->
 
 
 
@@ -489,61 +551,6 @@
                     </a>
                 </li>
                 
-
-                <!-- Note de frais -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="{{ route('expense-reports.index') }}" class="sidebar-link {{ request()->routeIs('expense-reports.*') ? 'active' : '' }}">
-                        <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="item-ico">
-                            <svg
-                                width="18"
-                                height="20"
-                                viewBox="0 0 18 20"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
-                                fill="#1A202C"
-                                class="path-1"
-                                />
-                                <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <path
-                                d="M11 0H7C5.89543 0 5 0.895431 5 2C5 3.10457 5.89543 4 7 4H11C12.1046 4 13 3.10457 13 2C13 0.895431 12.1046 0 11 0Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                            </svg>
-                            </span>
-                            <span
-                            class="item-text text-lg font-medium leading-none"
-                            >Note de frais</span
-                            >
-                        </div>
-                        </div>
-                    </a>
-                </li>
                 <!-- Conges -->
                 <li class="item py-[11px] text-bgray-900 dark:text-white">
                     <a href="{{ route('leaves.index') }}" class="sidebar-link {{ request()->routeIs('leaves.*') ? 'active' : '' }}">
@@ -731,7 +738,6 @@
                         </div>
                     </a>
                 </li>
-            
                 
             </ul>
         </div>
@@ -742,7 +748,7 @@
             <ul class="mt-2.5">
                 <!-- Support -->
                 <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="support-ticket.html">
+                    <a href="{{ route('help.index') }}">
                         <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-2.5">
                             <span class="item-ico">
@@ -786,7 +792,7 @@
                             </span>
                             <span
                             class="item-text text-lg font-medium leading-none"
-                            >Support</span
+                            >Aides</span
                             >
                         </div>
                         </div>

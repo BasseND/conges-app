@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- En-tête avec breadcrumb -->
             <div class="mb-8">
-                <div class="bg-gradient-to-r from-green-400 via-teal-500 to-lime-300 rounded-xl p-6 mb-6">
+                <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6">
                     <div class="flex items-center space-x-4">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">

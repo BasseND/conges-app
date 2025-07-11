@@ -68,7 +68,7 @@ module.exports = {
           800: "#2D3748",
           900: "#1A202C",
         },
-        orange: "#FF784B",
+       
         bamber: {
           50: "#FFFBEB",
           100: "#FFC837",
