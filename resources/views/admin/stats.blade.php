@@ -40,7 +40,8 @@
                     </div>
                     
                      <!-- Total note de frais -->
-                    <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
+                    
+                     <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-400/20 to-cyan-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                         <div class="relative flex items-center">
                             <div class="flex-shrink-0 p-4 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl shadow-lg group-hover:shadow-teal-500/25 transition-all duration-300 group-hover:scale-105">
@@ -51,7 +52,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-teal-600 dark:text-teal-400 tracking-wider uppercase mb-1">Total notes de frais</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} €</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                             </div>
                         </div>
                     </div>
@@ -67,7 +68,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-rose-600 dark:text-rose-400 tracking-wider uppercase mb-1">Masse salariale</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} €</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                             </div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
 
                 <!-- Actions a faire -->
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                      <div class="mb-8">
+                    <div class="mb-8">
                         <h2 class="text-base xl:text-2xl text-bgray-900 dark:text-white font-bold">
                           A traiter en urgence
                         </h2>
@@ -225,10 +226,10 @@
                         </div>
                       </div>
                       
-                    </div>
+                </div>
 
 
-                <!-- Statistiques des congés -->
+                 <!-- Statistiques des congés -->
 
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
                         <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-6">Statistiques des congés</h3>
@@ -254,67 +255,67 @@
                 </div>
 
                 <!-- Statistiques des utilisateurs -->
-                  <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                    <div class="mb-4 flex items-center justify-between">
-                      <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
-                       Statistiques des utilisateurs
-                      </h3>
-                      
+                <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
+                    Statistiques des utilisateurs
+                    </h3>
+                    
+                </div>
+                <div class="items-center xl:flex xl:space-x-[26px]">
+                    <div class="mb-4 w-full xl:mb-0 xl:flex-1">
+                    <div class="mb-1 flex items-end space-x-2">
+                        <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
+                        {{ $stats['active_employees'] }}
+                        </h1>
+                        
                     </div>
-                    <div class="items-center xl:flex xl:space-x-[26px]">
-                      <div class="mb-4 w-full xl:mb-0 xl:flex-1">
-                        <div class="mb-1 flex items-end space-x-2">
-                          <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
-                           {{ $stats['active_employees'] }}
-                          </h1>
-                         
+                    <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
+                        Total employés
+                    </p>
+                    <div class="flex flex-col space-y-2.5">
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                        >
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-success-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
                         </div>
-                        <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
-                          Total employés
-                        </p>
-                        <div class="flex flex-col space-y-2.5">
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
-                          >
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-success-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
-                          </div>
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                            <div class="flex items-center space-x-2">
-                              <div class="h-2 w-2 rounded-full bg-warning-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
-                          </div>
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                            <div class="flex items-center space-x-2">
-                              <div class="h-2 w-2 rounded-full bg-purple"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
-                          </div>
-                          <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-error-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
-                          </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
+                        </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="h-2 w-2 rounded-full bg-warning-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
+                        </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                        <div class="flex items-center space-x-2">
+                            <div class="h-2 w-2 rounded-full bg-purple"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
+                        </div>
+                        <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
+                        </div>
 
-                           <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
-                          </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
                         </div>
-                      </div>
-                   
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
+                        </div>
                     </div>
-                  </div>
+                    </div>
+                
+                </div>
+                </div>
                  
 
                 <!-- Statistiques des utilisateurs -->

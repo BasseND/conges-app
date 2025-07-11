@@ -145,7 +145,7 @@
                                         <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ $report->submitted_at ? $report->submitted_at->format('d/m/Y') : 'Non soumis' }}</span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">   
-                                        <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ number_format($report->total_amount, 2, ',', ' ') }} €</span> 
+                                        <span class="font-semibold text-base text-bgray-900 dark:text-white">{{ number_format($report->total_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</span> 
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="inline-flex {{ 

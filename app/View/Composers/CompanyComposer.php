@@ -20,7 +20,8 @@ class CompanyComposer
         $view->with([
             'globalCompany' => $company,
             'globalCompanyName' => $company ? $company->name : 'Eglantine SA',
-            'globalCompanyAddress' => $company ? $this->formatAddress($company) : '23 rue de la paix, Dakar'
+            'globalCompanyAddress' => $company ? $this->formatAddress($company) : '23 rue de la paix, Dakar',
+            'globalCompanyCurrency' => $company ? $company->currency : '€'
         ]);
     }
     

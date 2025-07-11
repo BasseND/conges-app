@@ -36,7 +36,7 @@
                                                 {{ \Carbon\Carbon::parse($payslip->period_start)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($payslip->period_end)->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                {{ number_format($payslip->net_amount, 2, ',', ' ') }} €
+                                                {{ number_format($payslip->net_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $payslip->payment_date ? \Carbon\Carbon::parse($payslip->payment_date)->format('d/m/Y') : 'Non payé' }}
