@@ -58,58 +58,140 @@
                     <div class="p-6">
                     
                         @if($company)
-                            <div class="bg-gray-50 dark:bg-dark-card-two rounded-xl p-7 border border-gray-100">
-                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                                    <div class="lg:col-span-4">
-                                        <div class="text-center">
+                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-dark-card-two dark:to-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                    <!-- Logo Section -->
+                                    <div class="lg:col-span-1">
+                                        <div class="text-center relative">
                                             @if($company->logo)
-                                                <img src="{{ Storage::url($company->logo) }}" alt="Logo de la société" class="max-w-full h-auto rounded-lg max-h-48 mx-auto">
+                                                <div class="relative inline-block group">
+                                                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+                                                    <img src="{{ Storage::url($company->logo) }}" alt="Logo de la société" class="relative w-32 h-32 object-contain rounded-xl mx-auto shadow-lg bg-white p-2">
+                                                </div>
                                             @else
-                                                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center h-48">
-                                                    <i class="bx bx-building text-gray-400 text-6xl"></i>
+                                                <div class="relative group">
+                                                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+                                                    <div class="relative w-32 h-32 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-500 rounded-xl flex items-center justify-center mx-auto shadow-lg">
+                                                        <svg class="w-14 h-14 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                                        </svg>
+                                                    </div>
                                                 </div>
                                             @endif
+                                            <div class="mt-6">
+                                                <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">{{ $company->name }}</h3>
+                                                <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    Société active
+                                                </div>
+                                            </div>
+
+                                            
                                         </div>
                                     </div>
 
-                                    <div class="lg:col-span-8">
-                                        <div class="grid md:grid-cols-2 gap-x-12 gap-y-4">
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Nom :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->name }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Adresse :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->address }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Ville :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->city }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Code postal :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->postal_code }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Pays :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->country }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Email :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->contact_email }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Téléphone :</span>
-                                                <span class="text-base font-medium text-bgray-600 dark:text-bgray-50">{{ $company->contact_phone }}</span>
-                                            </div>
-                                            <div class="flex  sm:items-center flex-start flex-col sm:flex-row dark:text-dark-text-two gap-2">
-                                                <span class="font-bold text-gray-700 dark:text-dark-text w-32">Site web :</span>
-                                                @if($company->website_url)
-                                                    <a href="{{ $company->website_url }}" target="_blank" class="text-base font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline">{{ $company->website_url }}</a>
-                                                @else
-                                                    <span class="text-base font-medium text-gray-400 dark:text-gray-500">Non renseigné</span>
-                                                @endif
-                                            </div>
+                                    <!-- Information Section -->
+                                     <div class="lg:col-span-2">
+                                         <div class="space-y-8">
+                                             <!-- Contact Information -->
+                                             <div class="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-100 dark:border-gray-700">
+                                                 <div class="flex items-center mb-4">
+                                                     <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                         </svg>
+                                                     </div>
+                                                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Informations de contact</h4>
+                                                 </div>
+                                                 <div class="grid md:grid-cols-2 gap-6">
+                                                    @if($company->contact_email)
+                                                     <div class="group hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl p-3 transition-all duration-200">
+                                                         <div class="flex items-center space-x-3">
+                                                             <div class="flex-shrink-0">
+                                                                 <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                     <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                                     </svg>
+                                                                 </div>
+                                                             </div>
+                                                             <div>
+                                                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->contact_email }}</p>
+                                                                 <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">Email professionnel</p>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                     @endif
+                                                    
+                                                    @if($company->contact_phone)
+                                                     <div class="group hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl p-3 transition-all duration-200">
+                                                         <div class="flex items-center space-x-3">
+                                                             <div class="flex-shrink-0">
+                                                                 <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                     <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                                                     </svg>
+                                                                 </div>
+                                                             </div>
+                                                             <div>
+                                                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->contact_phone }}</p>
+                                                                 <p class="text-xs text-green-600 dark:text-green-400 font-medium">Téléphone principal</p>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                     @endif
+                                                    
+                                                    @if($company->website_url)
+                                                     <div class="group hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-xl p-3 transition-all duration-200">
+                                                         <div class="flex items-center space-x-3">
+                                                             <div class="flex-shrink-0">
+                                                                 <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                     <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9"></path>
+                                                                     </svg>
+                                                                 </div>
+                                                             </div>
+                                                             <div>
+                                                                 <a href="{{ $company->website_url }}" target="_blank" class="text-sm font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 hover:underline transition-colors duration-200">{{ $company->website_url }}</a>
+                                                                 <p class="text-xs text-purple-600 dark:text-purple-400 font-medium">Site web officiel</p>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                     @endif
+
+                                                    <!-- Address Information -->
+                                                    @if($company->address || $company->city || $company->country)
+                                                        <div class="group hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-xl p-4 transition-all duration-200">
+                                                            <div class="flex items-start space-x-4">
+                                                                <div class="flex-shrink-0 mt-1">
+                                                                    <div class="w-10 h-10 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                        <svg class="w-5 h-5 text-teal-800 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-1">
+                                                                    @if($company->address)
+                                                                        <p class="text-sm font-semibold text-gray-900 dark:text-white mb-1">{{ $company->address }}</p>
+                                                                    @endif
+                                                                    <div class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                                                        @if($company->city || $company->postal_code)
+                                                                            <p class="flex items-center">
+                                                                                @if($company->city){{ $company->city }}@endif
+                                                                                @if($company->postal_code && $company->city), {{ $company->postal_code }} , @endif
+                                                                                @if($company->country)  {{ $company->country }} @endif
+                                                                            </p>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                 </div>
+                                             </div>
                                         </div>
                                     </div>
                                 </div>
