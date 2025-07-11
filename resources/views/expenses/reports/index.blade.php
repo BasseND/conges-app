@@ -2,20 +2,56 @@
   
 
     <div class="pb-12">
+
+        
+
+
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
            <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+           
+
+            <!-- En-tête avec dégradé -->
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6 border-b border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-bgray-900 dark:text-white">
-                    {{ __('Notes de frais') }}
-                    </h2>
-                    <a href="{{ route('expense-reports.create') }}" class="btn btn-primary inline-flex items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h1 class="text-2xl font-bold text-white sm:text-3xl">
+                                {{ __('Notes de frais') }}
+                            </h1>
+                        </div>
+                    </div>
+                    <a href="{{ route('expense-reports.create') }}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                         <span> Nouvelle note de frais</span>
                     </a>
-                </div>
+                </div> 
+                <!-- Fil d'Ariane -->
+                <nav class="mt-3" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm">
+                        <li>
+                            <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
+                                Accueil
+                            </a>
+                        </li>
+                        <li class="text-blue-200">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </li>
+                        <li class="text-white font-medium">
+                            Notes de frais
+                        </li>
+                    </ol>
+                </nav>
             </div>
 
             <div class="p-6">

@@ -5,7 +5,7 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
             <!-- En-tête modernisé avec dégradé et icône -->
-            <div class="bg-gradient-to-r from-green-400 via-teal-500 to-lime-300 rounded-xl p-6 mb-6">
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6">
                 <div class="flex items-center space-x-4">
                     <div class="bg-white/20 backdrop-blur-sm rounded-lg p-3">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
