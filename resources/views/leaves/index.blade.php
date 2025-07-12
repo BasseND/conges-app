@@ -90,9 +90,10 @@
                         <div class="bg-gradient-to-br from-pink-50 to-rose-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-pink-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                                     </svg>
+
                                 </div>
                                 <div class="text-right">
                                     <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->maternity_leave_days }}</div>
@@ -328,7 +329,7 @@
                                                     </svg>
                                                     Voir
                                                 </a>
-                                                @if(($leave->status === 'pending' || $leave->status === 'draft') && (auth()->user()->id === $leave->user_id || auth()->user()->hasAdminAccess()))
+                                                @if($leave->status === 'draft' && (auth()->user()->id == $leave->user_id || auth()->user()->hasAdminAccess()))
                                                     <a href="{{ route('leaves.edit', ['leave' => $leave->id]) }}" 
                                                         class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -336,25 +337,23 @@
                                                         </svg>
                                                         Modifier
                                                     </a>
-                                                    @if($leave->status === 'draft')
-                                                        <button type="button"
-                                                            @click="$dispatch('submit-leave', '{{ route('leaves.update', $leave->id) }}')"
-                                                            class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
-                                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                                                            </svg>
-                                                            Soumettre
-                                                        </button>
-                                                    @endif
+                                                    <button type="button"
+                                                        @click="$dispatch('submit-leave', '{{ route('leaves.update', $leave->id) }}')"
+                                                        class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                                        </svg>
+                                                        Soumettre
+                                                    </button>
                                                     <button
                                                         @click="$dispatch('delete-dialog', '{{ route('leaves.destroy', $leave->id) }}')"
-                                                        title="{{ $leave->status === 'draft' ? 'Supprimer' : 'Annuler' }}"
+                                                        title="Supprimer"
                                                         type="button" 
                                                         class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                         </svg>
-                                                        {{ $leave->status === 'draft' ? 'Supprimer' : 'Annuler' }}
+                                                        Supprimer
                                                     </button>
                                                 @endif
                                             </div>

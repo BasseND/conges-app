@@ -195,7 +195,7 @@
                                 <div class="">
                                     <div class="flex flex-wrap gap-3">
                                         @can('update', $leave)
-                                            @if($leave->status === 'pending')
+                                            @if($leave->status === 'draft')
                                                 <a href="{{ route('leaves.edit', $leave) }}" 
                                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800 transition-colors">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
@@ -203,6 +203,14 @@
                                                     </svg>
                                                     Modifier
                                                 </a>
+                                                
+                                                <button @click="$dispatch('submit-leave', '{{ route('leaves.submit', $leave) }}')" 
+                                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-700 dark:hover:bg-cyan-800 rounded-lg border border-cyan-600 dark:border-cyan-700 transition-colors shadow-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                                    </svg>
+                                                    Soumettre
+                                                </button>
                                             @endif
                                         @endcan
                                         
@@ -241,7 +249,8 @@
 
         </div>
     </div>
-
+ 
+    <x-modals.submit-leave message="Êtes-vous sûr de vouloir soumettre cette demande de congé ? Une fois soumise, elle ne pourra plus être modifiée." />
     <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
     <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
     

@@ -375,16 +375,18 @@ class LeaveController extends Controller
      * Annule une demande de congé
      */
 
-    public function destroy($id)
+    public function destroy(Leave $leave)
     {
         try {
-            $leave = Leave::with(['user.department', 'attachments', 'approver'])
-                         ->findOrFail($id);
+            $leave->load(['user.department', 'attachments', 'approver']);
 
             $this->authorize('delete', $leave);
 
-            if ($leave->status !== 'pending') {
-                return back()->with('error', 'Vous ne pouvez supprimer que les demandes en attente.');
+            if ($leave->status !== 'draft') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vous ne pouvez supprimer que les demandes en brouillon.'
+                ], 400);
             }
 
             \Log::info('Suppression de la demande:', [
@@ -403,14 +405,19 @@ class LeaveController extends Controller
             // Supprimer la demande
             $leave->delete();
 
-            return redirect()->route('leaves.index')
-                ->with('success', 'La demande de congé a été supprimée.');
+            return response()->json([
+                'success' => true,
+                'message' => 'La demande de congé a été supprimée.'
+            ]);
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la suppression:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return back()->with('error', 'Une erreur est survenue lors de la suppression de la demande.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de la suppression de la demande.'
+            ], 500);
         }
     }
 
@@ -654,6 +661,35 @@ class LeaveController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Une erreur est survenue lors de la mise à jour de la demande.');
+        }
+    }
+
+    /**
+     * Soumet une demande de congé en brouillon
+     */
+    public function submit(Leave $leave)
+    {
+        try {
+            $this->authorize('update', $leave);
+
+            if ($leave->status !== 'draft') {
+                return back()->with('error', 'Seules les demandes en brouillon peuvent être soumises.');
+            }
+
+            $leave->update(['status' => 'pending']);
+            
+            // Déclencher l'événement de création de congé
+            event(new LeaveCreated($leave));
+            
+            return redirect()->route('leaves.index')
+                ->with('success', 'Votre demande de congé a été soumise avec succès.');
+                
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la soumission de la demande:', [
+                'error' => $e->getMessage(),
+                'leave_id' => $leave->id
+            ]);
+            return back()->with('error', 'Une erreur est survenue lors de la soumission de la demande.');
         }
     }
 }
