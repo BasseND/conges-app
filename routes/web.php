@@ -146,12 +146,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
-        Route::get('leaves', [LeaveController::class, 'managerIndex'])->name('leaves.index');
+        Route::get('leaves', [\App\Http\Controllers\Manager\LeaveController::class, 'index'])->name('leaves.index');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Manager\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Manager\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
     // Routes pour les chefs de département
     Route::middleware('role:department_head')->name('head.')->prefix('head')->group(function () {
-        Route::get('leaves', [LeaveController::class, 'headIndex'])->name('leaves.index');
+        Route::get('leaves', [\App\Http\Controllers\Head\LeaveController::class, 'index'])->name('leaves.index');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Head\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Head\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
     // Routes pour les administrateurs et RH

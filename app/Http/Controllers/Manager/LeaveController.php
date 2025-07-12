@@ -81,6 +81,8 @@ class LeaveController extends Controller
         return view('manager.leaves.index', compact('leaves'));
     }
 
+
+    // N'est pas utilisé (à supprimer)
     public function approve(Leave $leave)
     {
         if (!auth()->user()->canManageUserLeaves($leave->user)) {
@@ -92,7 +94,8 @@ class LeaveController extends Controller
         }
         return back()->withErrors(['error' => 'Échec de l\'approbation']);
     }
-
+   
+    // N'est pas utilisé (à supprimer)
     public function reject(Request $request, Leave $leave)
     {
 
