@@ -252,7 +252,7 @@
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $leave->user->department->code }}</div>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-5 whitespace-nowrap">
+                                    <td class="px-6 py-5 whitespace-nowrap max-w-[205px]">
                                         <x-leave-type-badge :type="$leave->type" />
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
@@ -271,7 +271,7 @@
                                             {{ $leave->duration }} jour(s)
                                         </div>
                                     </td>
-                                    <td class="px-6 py-5">
+                                    <td class="px-6 py-5 max-w-[100px]">
                                         <div class="max-w-xs">
                                             <div class="text-sm text-gray-900 dark:text-gray-100 truncate" title="{{ $leave->reason }}">
                                                 {{ Str::limit($leave->reason, 50) }}
@@ -296,30 +296,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
-                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ 
-                                                $leave->status === 'approved' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 border border-green-300 dark:border-green-700' : 
-                                                ($leave->status === 'rejected' ? 'bg-gradient-to-r from-red-100 to-red-200 text-red-800 dark:from-red-900 dark:to-red-800 dark:text-red-200 border border-red-300 dark:border-red-700' :
-                                                'bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800 dark:from-yellow-900 dark:to-yellow-800 dark:text-yellow-200 border border-yellow-300 dark:border-yellow-700') }}">
-                                            @switch($leave->status)
-                                                @case('approved')
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    Approuvé
-                                                    @break
-                                                @case('rejected')
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                    </svg>
-                                                    Rejeté
-                                                    @break
-                                                @default
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    En attente
-                                            @endswitch
-                                        </div>
+                                        <x-leave-status :status="$leave->status" />
                                         @if($leave->processed_at)
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                                 {{ $leave->processed_at->format('d/m/Y H:i') }}

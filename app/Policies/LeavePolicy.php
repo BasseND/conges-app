@@ -37,7 +37,7 @@ class LeavePolicy
      */
     public function update(User $user, Leave $leave): bool
     {
-        return ($user->id === $leave->user_id && $leave->status === 'pending') || $user->isAdmin();
+        return ($user->id === $leave->user_id && in_array($leave->status, ['draft', 'pending'])) || $user->isAdmin();
     }
 
     /**
@@ -45,7 +45,7 @@ class LeavePolicy
      */
     public function delete(User $user, Leave $leave): bool
     {
-        return ($user->id === $leave->user_id && $leave->status === 'pending') || $user->isAdmin();
+        return ($user->id === $leave->user_id && in_array($leave->status, ['draft', 'pending'])) || $user->isAdmin();
     }
 
     /**

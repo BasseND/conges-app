@@ -325,81 +325,108 @@
 
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Dernières activités congés -->
-                <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-5">
-                          <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl ">
-                            Dernières demandes de congés
-                          </h3>
-                          <a href="{{ route('leaves.index') }}" class="btn btn-sm btn-outlined-primary">
-                            Voir toutes
+                <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-8">
+                          <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                              </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                              Dernières demandes de congés
+                            </h3>
+                          </div>
+                          <a href="{{ route('admin.leaves.index') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                            <span>Voir toutes</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
                           </a>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-600">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Type</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Utilisateur</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Statut</th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                            </svg>
+                                            <span>Date</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+                                            </svg>
+                                            <span>Type</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                            </svg>
+                                            <span>Utilisateur</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Statut</span>
+                                          </div>
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
                                     @foreach($recentLeaves as $activity)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                <span class="font-semibold text-sm text-bgray-900 dark:text-white"> {{ $activity->created_at->format('d/m/Y H:i') }}</span>
+                                        <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200 group">
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="p-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-lg group-hover:scale-110 transition-transform duration-200">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-blue-600 dark:text-blue-400">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                  </div>
+                                                  <div>
+                                                    <span class="font-bold text-gray-900 dark:text-white text-sm">{{ $activity->created_at->format('d/m/Y') }}</span>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $activity->created_at->format('H:i') }}</div>
+                                                  </div>
+                                                </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="inline-flex  {{ 
-                                                    $activity->type === 'annual' ? 'badge badge-cg-annuel dark:bg-blue-600 dark:text-blue-200' : 
-                                                    ($activity->type === 'sick' ? 'badge badge-cg-maladie  dark:bg-green-600 dark:text-green-200' : 
-                                                    ($activity->type === 'unpaid' ? 'badge badge-cg-sans-solde dark:bg-yellow-600 dark:text-yellow-200' : 
-                                                    'badge badge-cg-autre dark:bg-gray-600 dark:text-gray-200')) 
-                                                }}">
-                                                    @switch($activity->type)
-                                                        @case('annual')
-                                                            Congé annuel
-                                                            @break
-                                                        @case('sick')
-                                                            Congé maladie
-                                                            @break
-                                                        @case('unpaid')
-                                                            Congé sans solde
-                                                            @break
-                                                        @default
-                                                            Autre
-                                                    @endswitch
-                                                </span>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <x-leave-type-badge :type="$activity->type" />
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $activity->user->first_name }}</div>
-                                                <div class="text-sm text-gray-500 dark:text-gray-100">{{ $activity->user->email }}</div>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                                    {{ substr($activity->user->first_name, 0, 1) }}{{ substr($activity->user->last_name ?? '', 0, 1) }}
+                                                  </div>
+                                                  <div>
+                                                    <div class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ $activity->user->first_name }} {{ $activity->user->last_name }}</div>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $activity->user->email }}</div>
+                                                  </div>
+                                                </div>
                                             </td>
-                                            
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span class="inline-flex  
-                                                        {{ $activity->status === 'approved' ? 'badge badge-success-light dark:bg-green-200' : 
-                                                        ($activity->status === 'rejected' ? 'badge badge-error-light dark:bg-red-200' : 
-                                                        'badge badge-warning-light dark:bg-yellow-200') }}">
-                                                        @switch($activity->status)
-                                                            @case('approved')
-                                                                Approuvé
-                                                                @break
-                                                            @case('rejected')
-                                                                Rejeté
-                                                                @break
-                                                            @default
-                                                                En attente
-                                                        @endswitch
-                                                    </span>
-                                                    @if($activity->processed_at)
-                                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                            {{ $activity->processed_at->format('d/m/Y H:i') }}
-                                                        </div>
-                                                    @endif
-                                                </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="space-y-2">
+                                                  <x-leave-status :status="$activity->status" />
+                                                  @if($activity->processed_at)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center space-x-1">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                      </svg>
+                                                      <span>{{ $activity->processed_at->format('d/m/Y H:i') }}</span>
+                                                    </div>
+                                                  @endif
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -409,77 +436,119 @@
                 </div>
                 
                 <!-- Dernières notes de frais -->
-                <div class="mt-6 bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-5">
-                          <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl ">
-                            Dernières notes de frais
-                          </h3>
-                          <a href="{{ route('expense-reports.index') }}" class="btn btn-sm btn-outlined-primary">
-                            Voir toutes
+                <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-8">
+                          <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg">
+                              <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                              </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                              Dernières notes de frais
+                            </h3>
+                          </div>
+                          <a href="{{ route('expense-reports.index') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                            <span>Voir toutes</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
                           </a>
                         </div>
                         
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-600">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Utilisateur</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Montant</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">Statut</th>
-                                            </thead>
-                                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-
-                                            @foreach($recentExpenses as $expense)
-                                                <tr> 
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                      <span class="font-semibold text-sm text-bgray-900 dark:text-white">{{ $expense->created_at->format('d/m/Y H:i') }}</span>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $expense->user->first_name }} {{ $expense->user->last_name }}</div>
-                                                        <div class="text-sm text-gray-500 dark:text-gray-100">{{ $expense->user->email }}</div>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100"><span class="text-gray-900 dark:text-gray-400 font-semibold">{{ $expense->total_amount }}</span></td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">
-                                                <span class="inline-flex badge 
-                                                        {{ $expense->status === 'approved' ? 'badge-success-light dark:bg-green-200' : 
-                                                        ($expense->status === 'draft' ? 'bg-blue-100 text-blue-800  ' : 
-                                                        ($expense->status === 'submitted' ? 'badge-warning-light text-yellow-800' : 
-                                                        ($expense->status === 'rejected' ? 'badge-red-light text-red-800' : 
-                                                        ($expense->status === 'paid' ? 'bg-green-500 text-white' : 
-                                                        'bg-gray-100 text-gray-800')))) }}">
-                                                        
-                                                        @switch($expense->status)
-                                                            @case(\App\Models\ExpenseReport::STATUS_DRAFT)
-                                                            Brouillon
-                                                            @break
-                                                            @case(\App\Models\ExpenseReport::STATUS_SUBMITTED)
-                                                            Soumis
-                                                            @break
-                                                            @case(\App\Models\ExpenseReport::STATUS_APPROVED)
-                                                            Approuvée
-                                                            @break
-                                                            @case(\App\Models\ExpenseReport::STATUS_REJECTED)  
-                                                            Rejetée
-                                                            @break
-                                                            @case(\App\Models\ExpenseReport::STATUS_PAID)
-                                                            Payée
-                                                            @break
-                                                        @endswitch
-                                                    </span>
-                                                    @if($expense->approved_at)
-                                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                            {{ $expense->approved_at->format('d/m/Y H:i') }}
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                            </svg>
+                                            <span>Date</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                            </svg>
+                                            <span>Utilisateur</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Montant</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Statut</span>
+                                          </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+                                    @foreach($recentExpenses as $expense)
+                                        <tr class="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200 group"> 
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="p-2 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 rounded-lg group-hover:scale-110 transition-transform duration-200">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-green-600 dark:text-green-400">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                  </div>
+                                                  <div>
+                                                    <span class="font-bold text-gray-900 dark:text-white text-sm">{{ $expense->created_at->format('d/m/Y') }}</span>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $expense->created_at->format('H:i') }}</div>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                                    {{ substr($expense->user->first_name, 0, 1) }}{{ substr($expense->user->last_name ?? '', 0, 1) }}
+                                                  </div>
+                                                  <div>
+                                                    <div class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ $expense->user->first_name }} {{ $expense->user->last_name }}</div>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $expense->user->email }}</div>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-2">
+                                                  <div class="p-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-lg">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-yellow-600 dark:text-yellow-400">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                  </div>
+                                                  <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($expense->total_amount, 2) }} €</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="space-y-2">
+                                                  <x-expense-status :status="$expense->status" />
+                                                  @if($expense->approved_at)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center space-x-1">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                      </svg>
+                                                      <span>{{ $expense->approved_at->format('d/m/Y H:i') }}</span>
+                                                    </div>
+                                                  @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

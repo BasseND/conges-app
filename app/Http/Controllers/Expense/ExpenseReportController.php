@@ -382,10 +382,44 @@ class ExpenseReportController extends Controller
     // Supprimer la note de frais
     public function destroy($id)
     {
-        $report = ExpenseReport::findOrFail($id);
-        $report->delete();
+        $user = Auth::user();
+        $query = ExpenseReport::query();
 
-        return redirect()->route('expense-reports.index')
-                         ->with('success', 'Note de frais supprimée');
+        // Si l'utilisateur n'est ni admin ni RH, ne permettre que la suppression de ses propres notes de frais
+        if (!$user->isAdmin() && !$user->isHR()) {
+            $query->where('user_id', $user->id);
+        }
+
+        $report = $query->findOrFail($id);
+
+        // Vérifier que la note de frais est en mode brouillon
+        if ($report->status !== 'draft') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Seules les notes de frais en brouillon peuvent être supprimées.'
+            ], 403);
+        }
+
+        try {
+            // Supprimer les fichiers de justificatifs associés
+            foreach ($report->lines as $line) {
+                if ($line->receipt_path && Storage::disk('public')->exists($line->receipt_path)) {
+                    Storage::disk('public')->delete($line->receipt_path);
+                }
+            }
+
+            $report->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Note de frais supprimée avec succès.'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la suppression de la note de frais: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de la suppression.'
+            ], 500);
+        }
     }
 }

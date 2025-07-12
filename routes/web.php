@@ -97,6 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
     Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
     Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+    Route::post('leaves/{leave}/submit', [LeaveController::class, 'submit'])->name('leaves.submit');
     Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
 
@@ -163,7 +164,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
         Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
-        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
+        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('admin.leaves.destroy');
 
         // Gestion des contrats
         Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');

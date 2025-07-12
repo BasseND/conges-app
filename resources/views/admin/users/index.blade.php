@@ -137,8 +137,8 @@
                                 <tr class="bg-gray-50/50 dark:bg-gray-700/50">
                                 @php
                                   $columns = [
-                                      'name' => 'Nom',
-                                      'last_name' => 'Prénom',
+                                      'first_name' => 'Prénom',
+                                      'last_name' => 'Nom',
                                       'email' => 'Email',
                                       'role' => 'Rôle',
                                       'department_id' => 'Département',
@@ -155,7 +155,7 @@
                                                     'direction' => request('sort') === $column && request('direction') === 'asc' ? 'desc' : 'asc'
                                                 ]
                                             )) }}" class="flex items-center space-x-2 group hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-                                                @if($column === 'name')
+                                                @if($column === 'first_name')
                                                     <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                                     </svg>

@@ -16,6 +16,7 @@ class Leave extends Model
      * Les statuts possibles pour une demande de congé
      */
     const STATUSES = [
+        'draft' => 'Brouillon',
         'pending' => 'En attente',
         'approved' => 'Approuvé',
         'rejected' => 'Rejeté'
