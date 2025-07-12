@@ -95,15 +95,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Salaire brut</p>
-                            <p class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ number_format($payslip->gross_amount, 2, ',', ' ') }} €</p>
+                            <p class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ number_format($payslip->gross_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total cotisations</p>
-                            <p class="text-xl font-bold text-red-600 dark:text-red-400">- {{ number_format($payslip->total_deductions, 2, ',', ' ') }} €</p>
+                            <p class="text-xl font-bold text-red-600 dark:text-red-400">- {{ number_format($payslip->total_deductions, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                         </div>
                         <div class="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4">
                             <p class="text-sm font-medium text-indigo-700 dark:text-indigo-300">Salaire net</p>
-                            <p class="text-xl font-bold text-indigo-700 dark:text-indigo-300">{{ number_format($payslip->net_amount, 2, ',', ' ') }} €</p>
+                            <p class="text-xl font-bold text-indigo-700 dark:text-indigo-300">{{ number_format($payslip->net_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                {{ $item->base_amount ? number_format($item->base_amount, 2, ',', ' ') . ' €' : 'N/A' }}
+                                                {{ $item->base_amount ? number_format($item->base_amount, 2, ',', ' ') . ' ' . $globalCompanyCurrency : 'N/A' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $item->rate ? $item->rate . '%' : 'N/A' }}
@@ -158,10 +158,10 @@
                                                     text-gray-900 dark:text-gray-100
                                                 @endif">
                                                 @if($item->type === 'deduction')
-                                                    - {{ number_format($item->amount, 2, ',', ' ') }} €
-                                                @else
-                                                    {{ number_format($item->amount, 2, ',', ' ') }} €
-                                                @endif
+                                    - {{ number_format($item->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
+                                @else
+                                    {{ number_format($item->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
+                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -221,7 +221,7 @@
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <x-text-input x-model="contractData.salaire_brut" id="salaire_brut" name="salaire_brut" type="number" step="0.01" min="0" class="block w-full pr-12" x-bind:required="contractData.type !== 'Freelance'" />
                                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            <span class="text-gray-500 sm:text-sm">€</span>
+                                            <span class="text-gray-500 sm:text-sm">{{ $globalCompanyCurrency }}</span>
                                         </div>
                                     </div>
                                     <x-input-error :messages="$errors->get('salaire_brut')" class="mt-2" />
@@ -233,7 +233,7 @@
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <x-text-input x-model="contractData.tjm" id="tjm" name="tjm" type="number" step="0.01" min="0" class="block w-full pr-12" x-bind:required="contractData.type === 'Freelance'" />
                                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            <span class="text-gray-500 sm:text-sm">€</span>
+                                            <span class="text-gray-500 sm:text-sm">{{ $globalCompanyCurrency }}</span>
                                         </div>
                                     </div>
                                     <x-input-error :messages="$errors->get('tjm')" class="mt-2" />
@@ -356,9 +356,9 @@
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:mt-0 sm:col-span-2">
                                 @if($contract->type !== 'Freelance')
-                                    {{ number_format($contract->salaire_brut, 2, ',', ' ') }} €
+                                    {{ number_format($contract->salaire_brut, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                 @else
-                                    {{ number_format($contract->tjm, 2, ',', ' ') }} €
+                                    {{ number_format($contract->tjm, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                 @endif
                             </dd>
                         </div>

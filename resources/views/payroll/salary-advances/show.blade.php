@@ -42,7 +42,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Montant demandé</p>
-                                    <p class="text-base font-medium text-gray-900 dark:text-gray-100">{{ number_format($salaryAdvance->amount, 2, ',', ' ') }} €</p>
+                                    <p class="text-base font-medium text-gray-900 dark:text-gray-100">{{ number_format($salaryAdvance->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de demande</p>
@@ -158,7 +158,7 @@
                                                 {{ \Carbon\Carbon::parse($repayment->date)->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                {{ number_format($repayment->amount, 2, ',', ' ') }} €
+                                                {{ number_format($repayment->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 @if($repayment->payslip)
@@ -179,7 +179,7 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">Total remboursé</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">
-                                            {{ number_format($repayments->sum('amount'), 2, ',', ' ') }} €
+                                            {{ number_format($repayments->sum('amount'), 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>
@@ -191,7 +191,7 @@
                                             @else
                                                 text-green-600 dark:text-green-400
                                             @endif">
-                                            {{ number_format(max(0, $salaryAdvance->amount - $repayments->sum('amount')), 2, ',', ' ') }} €
+                                            {{ number_format(max(0, $salaryAdvance->amount - $repayments->sum('amount')), 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>

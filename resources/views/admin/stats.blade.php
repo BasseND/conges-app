@@ -40,7 +40,8 @@
                     </div>
                     
                      <!-- Total note de frais -->
-                    <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
+                    
+                     <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-400/20 to-cyan-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                         <div class="relative flex items-center">
                             <div class="flex-shrink-0 p-4 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl shadow-lg group-hover:shadow-teal-500/25 transition-all duration-300 group-hover:scale-105">
@@ -51,7 +52,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-teal-600 dark:text-teal-400 tracking-wider uppercase mb-1">Total notes de frais</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} €</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                             </div>
                         </div>
                     </div>
@@ -67,7 +68,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-rose-600 dark:text-rose-400 tracking-wider uppercase mb-1">Masse salariale</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} €</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
                             </div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
 
                 <!-- Actions a faire -->
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                      <div class="mb-8">
+                    <div class="mb-8">
                         <h2 class="text-base xl:text-2xl text-bgray-900 dark:text-white font-bold">
                           A traiter en urgence
                         </h2>
@@ -93,143 +94,78 @@
                       </div>
                       </div>
                       <div class="flex space-x-3 rtl:space-x-reverse mb-10">
-                        <div class="w-full h-[128px] bg-success-300 flex justify-center items-center rounded-md">
+                        <!-- Congés en attente-->
+                        <a href="{{ route('admin.leaves.index', ['status' => 'pending']) }}" class="block w-full p-4 bg-gradient-to-br from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
                             <div class="flex justify-center mb-3">
-                              <span>
-                                <svg
-                                  width="40"
-                                  height="40"
-                                  viewBox="0 0 40 40"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <circle
-                                    opacity="0.5"
-                                    cx="20"
-                                    cy="20"
-                                    r="19.5"
-                                    class="stroke-white dark:stroke-bgray-900"
-                                  />
-                                  <path
-                                    opacity="0.4"
-                                    d="M21 16.86L21 14.3567C21 13.2506 20.1046 12.354 19 12.354L17.6667 12.354C17.2339 12.354 16.8129 12.2135 16.4667 11.9535L15.5333 11.2526C15.1871 10.9926 14.7661 10.8521 14.3333 10.8521L13 10.8521C11.8954 10.8521 11 11.7487 11 12.8547L11 16.86C11 17.966 11.8954 18.8626 13 18.8626L19 18.8626C20.1046 18.8626 21 17.966 21 16.86Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
-                                  <path
-                                    opacity="0.4"
-                                    d="M29 28.8758L29 26.3725C29 25.2665 28.1046 24.3699 27 24.3699L25.6667 24.3699C25.2339 24.3699 24.8129 24.2294 24.4667 23.9694L23.5333 23.2684C23.1871 23.0085 22.7661 22.8679 22.3333 22.8679L21 22.8679C19.8954 22.8679 19 23.7645 19 24.8706L19 28.8758C19 29.9819 19.8954 30.8785 21 30.8785L27 30.8785C28.1046 30.8785 29 29.9819 29 28.8758Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M22.25 14.8572C22.25 14.4424 22.5858 14.1062 23 14.1062L25 14.1062C26.5188 14.1062 27.75 15.339 27.75 16.8598L27.75 22.3671C27.75 22.7819 27.4142 23.1181 27 23.1181C26.5858 23.1181 26.25 22.7819 26.25 22.3671L26.25 16.8598C26.25 16.1686 25.6904 15.6082 25 15.6082L23 15.6082C22.5858 15.6082 22.25 15.272 22.25 14.8572ZM13 20.1141C13.4142 20.1141 13.75 20.4504 13.75 20.8651L13.75 24.8704C13.75 25.5617 14.3096 26.1221 15 26.1221L17 26.1221C17.4142 26.1221 17.75 26.4583 17.75 26.873C17.75 27.2878 17.4142 27.624 17 27.624L15 27.624C13.4812 27.624 12.25 26.3912 12.25 24.8704L12.25 20.8651C12.25 20.4504 12.5858 20.1141 13 20.1141Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
+                              <div class="p-3 bg-white/20 rounded-full group-hover:bg-white/30 transition-all duration-300">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                              </span>
+                              </div>
                             </div>
-                            <p class="text-white  dark:text-bgray-900 text-xs text-center">
-                              Absences
+                            <p class="text-white text-xs text-center font-medium mb-1">
+                              Congés en attente
                             </p>
-                            <p class="text-base dark:text-bgray-900 font-bold text-white text-center">
-                              40
+                            <p class="text-2xl font-bold text-white text-center group-hover:scale-110 transition-transform duration-300">
+                              {{ $stats['pending'] }}
+                            </p>
+                            <p class="text-white/80 text-xs text-center mt-1">
+                              Cliquez pour gérer
                             </p>
                           </div>
-                        </div>
-                        <div class="w-full h-[128px] bg-success-200 flex justify-center items-center rounded-md">
+                        </a>
+
+                        <!-- Notes de frais en attente (Soumis) -->
+                        <a href="{{ route('expense-reports.index', ['status' => 'submitted']) }}" class="block w-full p-4 bg-gradient-to-br from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
                             <div class="flex justify-center mb-3">
-                                  <span
-                                ><svg
-                                  width="40"
-                                  height="40"
-                                  viewBox="0 0 40 40"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <circle
-                                    opacity="0.5"
-                                    cx="20"
-                                    cy="20"
-                                    r="19.5"
-                                    class="stroke-white dark:stroke-bgray-900"
-                                  />
-                                  <path
-                                    opacity="0.4"
-                                    d="M21 16.86L21 14.3567C21 13.2506 20.1046 12.354 19 12.354L17.6667 12.354C17.2339 12.354 16.8129 12.2135 16.4667 11.9535L15.5333 11.2526C15.1871 10.9926 14.7661 10.8521 14.3333 10.8521L13 10.8521C11.8954 10.8521 11 11.7487 11 12.8547L11 16.86C11 17.966 11.8954 18.8626 13 18.8626L19 18.8626C20.1046 18.8626 21 17.966 21 16.86Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
-                                  <path
-                                    opacity="0.4"
-                                    d="M29 28.8758L29 26.3725C29 25.2665 28.1046 24.3699 27 24.3699L25.6667 24.3699C25.2339 24.3699 24.8129 24.2294 24.4667 23.9694L23.5333 23.2684C23.1871 23.0085 22.7661 22.8679 22.3333 22.8679L21 22.8679C19.8954 22.8679 19 23.7645 19 24.8706L19 28.8758C19 29.9819 19.8954 30.8785 21 30.8785L27 30.8785C28.1046 30.8785 29 29.9819 29 28.8758Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M22.25 14.8572C22.25 14.4424 22.5858 14.1062 23 14.1062L25 14.1062C26.5188 14.1062 27.75 15.339 27.75 16.8598L27.75 22.3671C27.75 22.7819 27.4142 23.1181 27 23.1181C26.5858 23.1181 26.25 22.7819 26.25 22.3671L26.25 16.8598C26.25 16.1686 25.6904 15.6082 25 15.6082L23 15.6082C22.5858 15.6082 22.25 15.272 22.25 14.8572ZM13 20.1141C13.4142 20.1141 13.75 20.4504 13.75 20.8651L13.75 24.8704C13.75 25.5617 14.3096 26.1221 15 26.1221L17 26.1221C17.4142 26.1221 17.75 26.4583 17.75 26.873C17.75 27.2878 17.4142 27.624 17 27.624L15 27.624C13.4812 27.624 12.25 26.3912 12.25 24.8704L12.25 20.8651C12.25 20.4504 12.5858 20.1141 13 20.1141Z"
-                                    class="fill-white dark:fill-bgray-900"
-                                  />
+                              <div class="p-3 bg-white/20 rounded-full group-hover:bg-white/30 transition-all duration-300">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
-                              </span>
+                              </div>
                             </div>
-                            <p class="text-white dark:text-bgray-900 text-xs text-center">
-                              Notes de frais
+                            <p class="text-white text-xs text-center font-medium mb-1">
+                              Notes de frais en attente
                             </p>
-                            <p class="text-base dark:text-bgray-900 font-bold text-white text-center">
-                              79
+                            <p class="text-2xl font-bold text-white text-center group-hover:scale-110 transition-transform duration-300">
+                              {{ $stats['pending_expenses'] }}
+                            </p>
+                            <p class="text-white/80 text-xs text-center mt-1">
+                              Cliquez pour traiter
                             </p>
                           </div>
-                        </div>
-                        <div class="w-full h-[128px] bg-bgray-50 dark:bg-darkblack-700 flex justify-center items-center rounded-md">
+                        </a>
+                        <!-- Contrats à terme -->
+                        <a href="{{ route('admin.contracts.index') }}" class="block w-full p-4 bg-gradient-to-br from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
                             <div class="flex justify-center mb-3">
-                              <span>
-                                <svg
-                                  width="40"
-                                  height="40"
-                                  viewBox="0 0 40 40"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <circle
-                                    opacity="0.5"
-                                    cx="20"
-                                    cy="20"
-                                    r="19.5"
-                                    stroke="#CBD5E1"
-                                  />
-                                  <path
-                                    opacity="0.4"
-                                    d="M29 25V18C29 15.7909 27.2987 14 25.2 14H22.6667C21.8445 14 21.0444 13.7193 20.3867 13.2L18.6133 11.8C17.9556 11.2807 17.1555 11 16.3333 11H13.8C11.7013 11 10 12.7909 10 15V25C10 27.2091 11.7013 29 13.8 29H25.2C27.2987 29 29 27.2091 29 25Z"
-                                    fill="#22C55E"
-                                  />
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M23.4939 18.4356C23.8056 18.7083 23.8372 19.1822 23.5645 19.4939L20.6946 22.7738C20.0779 23.4786 19.0156 23.5729 18.2843 22.9879L16.5315 21.5857C16.2081 21.3269 16.1556 20.8549 16.4144 20.5315C16.6731 20.208 17.1451 20.1556 17.4685 20.4144L19.2214 21.8166C19.3258 21.9002 19.4776 21.8867 19.5657 21.786L22.4356 18.5061C22.7084 18.1944 23.1822 18.1628 23.4939 18.4356Z"
-                                    fill="#22C55E"
-                                  />
+                              <div class="p-3 bg-white/20 rounded-full group-hover:bg-white/30 transition-all duration-300">
+                               
+                                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                                 </svg>
-                              </span>
+
+                              </div>
                             </div>
-                            <p class="text-bgray-500 text-xs text-center dark:text-bgray-50">
+                            <p class="text-white text-xs text-center font-medium mb-1">
                               Contrats à terme
                             </p>
-                            <p class="text-base font-bold text-bgray-900 dark:text-white text-center">
-                              40
+                            <p class="text-2xl font-bold text-white text-center group-hover:scale-110 transition-transform duration-300">
+                              {{ $stats['temporary_contracts'] }}
+                            </p>
+                            <p class="text-white/80 text-xs text-center mt-1">
+                              Voir les contrats
                             </p>
                           </div>
-                        </div>
+                        </a>
                       </div>
                       
-                    </div>
+                </div>
 
 
-                <!-- Statistiques des congés -->
-
+                 <!-- Statistiques des congés -->
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
                         <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl mb-6">Statistiques des congés</h3>
                         {{-- <div class="space-y-4">
@@ -254,67 +190,67 @@
                 </div>
 
                 <!-- Statistiques des utilisateurs -->
-                  <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                    <div class="mb-4 flex items-center justify-between">
-                      <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
-                       Statistiques des utilisateurs
-                      </h3>
-                      
+                <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
+                    Statistiques des utilisateurs
+                    </h3>
+                    
+                </div>
+                <div class="items-center xl:flex xl:space-x-[26px]">
+                    <div class="mb-4 w-full xl:mb-0 xl:flex-1">
+                    <div class="mb-1 flex items-end space-x-2">
+                        <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
+                        {{ $stats['active_employees'] }}
+                        </h1>
+                        
                     </div>
-                    <div class="items-center xl:flex xl:space-x-[26px]">
-                      <div class="mb-4 w-full xl:mb-0 xl:flex-1">
-                        <div class="mb-1 flex items-end space-x-2">
-                          <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
-                           {{ $stats['active_employees'] }}
-                          </h1>
-                         
+                    <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
+                        Total employés
+                    </p>
+                    <div class="flex flex-col space-y-2.5">
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                        >
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-success-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
                         </div>
-                        <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
-                          Total employés
-                        </p>
-                        <div class="flex flex-col space-y-2.5">
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
-                          >
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-success-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
-                          </div>
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                            <div class="flex items-center space-x-2">
-                              <div class="h-2 w-2 rounded-full bg-warning-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
-                          </div>
-                          <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                            <div class="flex items-center space-x-2">
-                              <div class="h-2 w-2 rounded-full bg-purple"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
-                          </div>
-                          <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-error-300"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
-                          </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
+                        </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="h-2 w-2 rounded-full bg-warning-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
+                        </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                        <div class="flex items-center space-x-2">
+                            <div class="h-2 w-2 rounded-full bg-purple"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
+                        </div>
+                        <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
+                        </div>
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
+                        </div>
 
-                           <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                            <div class="flex items-center space-x-2">
-                              <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
-                              <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
-                            </div>
-                            <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
-                          </div>
+                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                        <div class="flex items-center space-x-2">
+                            <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
+                            <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
                         </div>
-                      </div>
-                   
+                        <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
+                        </div>
                     </div>
-                  </div>
+                    </div>
+                
+                </div>
+                </div>
                  
 
                 <!-- Statistiques des utilisateurs -->

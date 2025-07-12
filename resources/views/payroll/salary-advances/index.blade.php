@@ -61,7 +61,7 @@
                                                 {{ \Carbon\Carbon::parse($advance->requested_date)->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                {{ number_format($advance->amount, 2, ',', ' ') }} €
+                                                {{ number_format($advance->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $advance->reason }}
