@@ -118,7 +118,7 @@ Mettre un modal spécial pour le changement de role.
 Ajouter un champ ref dans la table note de frais et congés.
 Ce champ ref va permettre de faire la correspondance entre une note de frais et un congé.
 <!-- TODO LISTE -->
-1. Compteur de congés restants
+
 2. Affichage en calendar des congés V2
 3. Filtre par années des congés et Note de frais
 4. Sécurisé le changement de role
@@ -140,3 +140,5 @@ Ce champ ref va permettre de faire la correspondance entre une note de frais et 
 
 8. Compléter le menu sidebar
 20. Mettre le logo dans le header
+1. Compteur de congés restants
+21. Affichage des erreurs

@@ -74,7 +74,7 @@
                                                     </svg>
                                                     Montant total
                                                 </dt>
-                                                <dd class="text-2xl font-bold text-green-600 dark:text-green-400 ml-6">{{ number_format($report->total_amount, 2, ',', ' ') }} €</dd>
+                                                <dd class="text-2xl font-bold text-green-600 dark:text-green-400 ml-6">{{ number_format($report->total_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</dd>
                                             </div>
                                             <div class="group/item hover:bg-white/50 dark:hover:bg-gray-800/50 p-3 rounded-xl transition-all duration-200">
                                                 <dt class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1 flex items-center">
@@ -230,7 +230,7 @@
                                                                 {{ $line->spent_on->format('d/m/Y') }}
                                                             </td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                                                {{ number_format($line->amount, 2, ',', ' ') }} €
+                                                                {{ number_format($line->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                                             </td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                                                 @if($line->receipt_path)
@@ -256,7 +256,7 @@
                                                             Total
                                                         </td>
                                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                            {{ number_format($report->total_amount, 2, ',', ' ') }} €
+                                                            {{ number_format($report->total_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                                         </td>
                                                         <td></td>
                                                     </tr>

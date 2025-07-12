@@ -12,6 +12,19 @@ use Illuminate\Validation\Rule;
 class ContractController extends Controller
 {
     /**
+     * Display a listing of active contracts.
+     */
+    public function index()
+    {
+        $contracts = Contract::with(['user'])
+            ->where('statut', 'actif')
+            ->orderBy('date_fin', 'asc')
+            ->get();
+
+        return view('admin.contracts.index', compact('contracts'));
+    }
+
+    /**
      * Store a newly created contract in storage.
      */
     public function store(Request $request, User $user)

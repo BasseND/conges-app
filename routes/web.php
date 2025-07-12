@@ -165,6 +165,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
         Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
 
+        // Gestion des contrats
+        Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
+
         // Paramètres de paie
         Route::resource('payroll-settings', PayrollSettingController::class);
 

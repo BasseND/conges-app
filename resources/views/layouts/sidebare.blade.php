@@ -209,6 +209,13 @@
                                 >Départements</a
                             >
                             </li>
+                            <li>
+                            <a
+                                href="{{ route('admin.contracts.index') }}"
+                                class="sidebar-sublink {{ request()->routeIs('admin.contracts.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                >Contrats actifs</a
+                            >
+                            </li>
                         
                         </ul>
                     </li>
