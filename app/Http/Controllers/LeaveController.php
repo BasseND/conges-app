@@ -159,10 +159,13 @@ class LeaveController extends Controller
                 );
             }
 
+            // Déterminer le statut selon l'action de l'utilisateur
+            $status = $request->input('action') === 'submit' ? 'pending' : 'draft';
+            
             // Création du congé
             $leave = new Leave($validated);
             $leave->user_id = auth()->id();
-            $leave->status = 'pending';
+            $leave->status = $status;
             $leave->duration = $duration;
             
             if (!$leave->save()) {
@@ -184,11 +187,17 @@ class LeaveController extends Controller
 
             DB::commit();
             
-            // Déclencher l'événement de création de congé
-            event(new LeaveCreated($leave));
+            // Déclencher l'événement de création de congé seulement si soumis
+            if ($status === 'pending') {
+                event(new LeaveCreated($leave));
+            }
+            
+            $message = $status === 'pending' 
+                ? 'Votre demande de congé a été soumise avec succès.' 
+                : 'Votre demande de congé a été sauvegardée en brouillon.';
             
             return redirect()->route('leaves.index')
-                ->with('success', 'Votre demande de congé a été soumise avec succès.');
+                ->with('success', $message);
                 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -447,12 +456,12 @@ class LeaveController extends Controller
         try {
             $this->authorize('update', $leave);
 
-            if ($leave->status !== 'pending') {
-                \Log::warning('Tentative de modification d\'une demande non en attente', [
+            if (!in_array($leave->status, ['pending', 'draft'])) {
+                \Log::warning('Tentative de modification d\'une demande non modifiable', [
                     'leave_id' => $leave->id,
                     'status' => $leave->status
                 ]);
-                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente ou en brouillon.');
             }
 
             \Log::info('Affichage du formulaire d\'édition', [
@@ -494,12 +503,21 @@ class LeaveController extends Controller
                 'status' => $leave->status
             ]);
 
-            if ($leave->status !== 'pending') {
-                \Log::warning('Tentative de modification d\'une demande non en attente:', [
+            if (!in_array($leave->status, ['pending', 'draft'])) {
+                \Log::warning('Tentative de modification d\'une demande non modifiable:', [
                     'leave_id' => $leave->id,
                     'status' => $leave->status
                 ]);
-                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente.');
+                return back()->with('error', 'Vous ne pouvez modifier que les demandes en attente ou en brouillon.');
+            }
+
+            // Gérer l'action de soumission pour les brouillons
+            $action = $request->input('action');
+            if ($action === 'submit' && $leave->status === 'draft') {
+                $leave->update(['status' => 'pending']);
+                event(new \App\Events\LeaveCreated($leave));
+                return redirect()->route('leaves.index')
+                    ->with('success', 'Votre demande de congé a été soumise avec succès.');
             }
 
             $validated = $request->validate([
@@ -523,12 +541,21 @@ class LeaveController extends Controller
 
             DB::beginTransaction();
 
+            // Déterminer le nouveau statut selon l'action
+            $newStatus = $leave->status; // Garder le statut actuel par défaut
+            if ($action === 'submit' && $leave->status === 'draft') {
+                $newStatus = 'pending';
+            } elseif ($action === 'draft') {
+                $newStatus = 'draft';
+            }
+
             $leave->update([
                 'type' => $validated['type'],
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
                 'duration' => $duration,
-                'reason' => $validated['reason']
+                'reason' => $validated['reason'],
+                'status' => $newStatus
             ]);
 
             // Gérer les pièces jointes
@@ -545,8 +572,20 @@ class LeaveController extends Controller
             }
 
             DB::commit();
+            
+            // Déclencher l'événement si le statut passe à 'pending'
+            if ($newStatus === 'pending' && $leave->wasChanged('status')) {
+                event(new \App\Events\LeaveCreated($leave));
+            }
+            
+            $message = match($newStatus) {
+                'pending' => 'Votre demande de congé a été soumise avec succès.',
+                'draft' => 'Votre demande de congé a été sauvegardée en brouillon.',
+                default => 'Demande de congé mise à jour avec succès.'
+            };
+            
             return redirect()->route('leaves.show', $leave)
-                ->with('success', 'Demande de congé mise à jour avec succès.');
+                ->with('success', $message);
 
         } catch (\Exception $e) {
             DB::rollBack();

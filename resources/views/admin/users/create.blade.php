@@ -62,7 +62,7 @@
                         @csrf
 
                         <!-- Block erreurs -->
-                        @if ($errors->any())
+                        <!-- @if ($errors->any())
                             <div class="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-l-4 border-red-500 p-6 rounded-lg shadow-sm" role="alert">
                                 <div class="flex items-start">
                                     <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -80,7 +80,9 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        @endif -->
+
+                        <x-alert type="error" :message="session('error')" />
 
                         <!-- Informations sur l'utilisateur -->
                         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">

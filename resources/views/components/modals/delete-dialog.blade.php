@@ -77,18 +77,40 @@ function deleteDialog() {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Erreur lors de la suppression');
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     this.show = false;
-                    window.location.reload();
+                    // Afficher le message de succès avant de recharger
+                    if (data.message) {
+                        // Créer une notification temporaire
+                        const notification = document.createElement('div');
+                        notification.className = 'fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+                        notification.textContent = data.message;
+                        document.body.appendChild(notification);
+                        
+                        // Supprimer la notification après 3 secondes et recharger
+                        setTimeout(() => {
+                            document.body.removeChild(notification);
+                            window.location.reload();
+                        }, 3000);
+                    } else {
+                        window.location.reload();
+                    }
                 } else {
-                    alert('Erreur lors de la suppression');
+                    alert(data.message || 'Erreur lors de la suppression');
                 }
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                alert('Erreur lors de la suppression');
+                alert(error.message || 'Erreur lors de la suppression');
             });
         }
     }

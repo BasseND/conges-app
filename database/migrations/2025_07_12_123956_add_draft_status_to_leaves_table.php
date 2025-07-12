@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'gender')) {
-                $table->enum('gender', ['M', 'F'])->nullable()->after('first_name');
-            }
+        Schema::table('leaves', function (Blueprint $table) {
+            $table->string('status', 20)->default('draft')->change();
         });
     }
 
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('gender');
+        Schema::table('leaves', function (Blueprint $table) {
+            $table->string('status', 20)->default('pending')->change();
         });
     }
 };
