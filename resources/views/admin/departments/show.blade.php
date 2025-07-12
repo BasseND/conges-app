@@ -246,14 +246,15 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-right">
                                                     <div class="flex items-center justify-end space-x-2">
                                                         <!-- Bouton Voir -->
-                                                        <a href="{{ route('admin.users.show', $user) }}" 
-                                                           title="Voir les détails"
-                                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-all duration-200 hover:scale-110">
+                                                        <button type="button"
+                                                                @click="$dispatch('open-user-drawer', {{ $user->toJson() }})"
+                                                                title="Voir les détails"
+                                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-all duration-200 hover:scale-110">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                                             </svg>
-                                                        </a>
+                                                        </button>
                                                         <!-- Bouton Modifier -->
                                                         <a href="{{ route('admin.users.edit', $user) }}" 
                                                            title="Modifier"
@@ -403,6 +404,15 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-right">
                                                     <div class="flex items-center justify-end space-x-2">
                                                         <button type="button" 
+                                                                @click="$dispatch('open-team-drawer', { teamId: {{ $team->id }}, teamName: '{{ $team->name }}', teamMembers: {{ $team->members->toJson() }}, teamManager: {{ $team->manager->toJson() }} })"
+                                                                class="inline-flex items-center px-3 py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-all duration-200">
+                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            Voir
+                                                        </button>
+                                                        <button type="button" 
                                                                 onclick="editTeam({{ $team->id }})" 
                                                                 class="inline-flex items-center px-3 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-all duration-200">
                                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -454,302 +464,10 @@
 
     </div>
 
-    <!-- Modal moderne pour ajouter/modifier une équipe -->
-    <div x-data="{ 
-            open: false, 
-            teamId: null, 
-            isEdit: false,
-            init() {
-                console.log('Modal initialisé');
-                window.addEventListener('open-team-modal', (event) => {
-                    console.log('Événement open-team-modal reçu', event.detail);
-                    this.teamId = event.detail?.teamId;
-                    this.isEdit = !!event.detail?.teamId;
-                    this.open = true;
-                });
-            }
-        }"
-        x-show="open"
-        x-cloak
-        @keydown.escape.window="open = false"
-        class="fixed inset-0 z-50 overflow-y-auto"
-        style="display: none;">
-        
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
-                @click.self="open = false">
-            <!-- Fond sombre avec effet de flou -->
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-            </div>
-
-            <!-- Contenu du modal moderne -->
-            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border-0">
-                <!-- En-tête du modal -->
-                <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg mr-3">
-                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-white" x-text="isEdit ? 'Modifier l\'équipe' : 'Ajouter une équipe'"></h3>
-                        </div>
-                        <button type="button" @click="open = false" 
-                                class="text-white/80 hover:text-white transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                
-                <form id="teamForm" x-bind:action="isEdit ? '/admin/departments/{{ $department->id }}/teams/' + teamId : '/admin/departments/{{ $department->id }}/teams'" method="POST" class="p-6">
-                    @csrf
-                    <input type="hidden" name="_method" x-bind:value="isEdit ? 'PUT' : 'POST'">
-                    <input type="hidden" name="department_id" value="{{ $department->id }}">
-
-                    <div class="space-y-6">
-                        <!-- Nom de l'équipe -->
-                        <div>
-                            <label for="name" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                <svg class="w-4 h-4 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
-                                </svg>
-                                Nom de l'équipe
-                            </label>
-                            <input type="text" name="name" id="name" 
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                    placeholder="Entrez le nom de l'équipe" required>
-                        </div>
-
-                        <!-- Responsable -->
-                        <div>
-                            <label for="manager_id" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                <svg class="w-4 h-4 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                </svg>
-                                Responsable
-                            </label>
-                            <select name="manager_id" id="manager_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200" required>
-                                <option value="">Sélectionner un responsable</option>
-                                @foreach($managers as $manager)
-                                    <option value="{{ $manager->id }}">{{ $manager->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Membres de l'équipe -->
-                        <div>
-                            <label class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                <svg class="w-4 h-4 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-                                </svg>
-                                Membres de l'équipe
-                            </label>
-                            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-300 dark:border-gray-600 p-4 max-h-60 overflow-y-auto">
-                                <div class="space-y-3">
-                                    @foreach($users as $user)
-                                        <div class="flex items-center p-2 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors">
-                                            <input type="checkbox" 
-                                                    name="members[]" 
-                                                    id="member-{{ $user->id }}" 
-                                                    value="{{ $user->id }}"
-                                                    class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                            <label for="member-{{ $user->id }}" class="ml-3 flex items-center cursor-pointer flex-1">
-                                                <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mr-3 text-white text-xs font-semibold">
-                                                    {{ strtoupper(substr($user->first_name, 0, 2)) }}
-                                                </div>
-                                                <span class="text-sm text-gray-900 dark:text-white font-medium">{{ $user->first_name }}</span>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 flex items-center">
-                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                </svg>
-                                Sélectionnez les membres qui feront partie de cette équipe
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Boutons d'action -->
-                    <div class="flex justify-end space-x-3 mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
-                        <button type="button" @click="open = false" 
-                                class="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 font-medium">
-                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            Annuler
-                        </button>
-                        <button type="submit" 
-                                class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl font-medium">
-                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"></path>
-                            </svg>
-                            <span x-text="isEdit ? 'Mettre à jour' : 'Ajouter'"></span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal moderne de confirmation de suppression -->
-    <div x-data="{
-            openDelete: false,
-            teamToDelete: null,
-            teamName: '',
-            isDeleting: false,
-
-            async confirmDelete() {
-                if (this.isDeleting) return;
-                
-                this.isDeleting = true;
-                try {
-                    const response = await fetch(`/admin/departments/{{ $department->id }}/teams/${this.teamToDelete}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Une erreur est survenue');
-                    }
-                    
-                    if (data.success) {
-                        this.openDelete = false;
-                        window.location.reload();
-                    }
-                } catch (error) {
-                    console.error('Erreur lors de la suppression:', error);
-                    alert(error.message || 'Une erreur est survenue lors de la suppression de l\'équipe.');
-                    this.openDelete = false;
-                } finally {
-                    this.isDeleting = false;
-                }
-            }
-        }"
-        @open-delete-modal.window="
-            teamToDelete = $event.detail.teamId;
-            teamName = $event.detail.teamName;
-            openDelete = true;
-        "
-        x-show="openDelete"
-        x-cloak
-        @keydown.escape.window="openDelete = false"
-        class="fixed inset-0 z-50 overflow-y-auto"
-        style="display: none;">
-        
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
-                @click.self="openDelete = false">
-            <!-- Fond sombre avec effet de flou -->
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-            </div>
-
-            <!-- Contenu du modal moderne -->
-            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border-0">
-                <!-- En-tête du modal avec icône d'alerte -->
-                <div class="bg-gradient-to-r from-red-500 to-pink-600 px-6 py-4">
-                    <div class="flex items-center">
-                        <div class="flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg mr-3">
-                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">
-                            Confirmer la suppression
-                        </h3>
-                    </div>
-                </div>
-                
-                <!-- Contenu du modal -->
-                <div class="p-6">
-                    <div class="flex items-start">
-                        <div class="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl mr-4 flex-shrink-0">
-                            <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path>
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                                Supprimer l'équipe
-                            </h4>
-                            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-4">
-                                <p class="text-sm text-red-800 dark:text-red-200">
-                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Vous êtes sur le point de supprimer l'équipe <span x-text="teamName" class="font-bold"></span>.
-                                </p>
-                            </div>
-                            <div class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span>Cette action est <strong>irréversible</strong></span>
-                                </div>
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-                                    </svg>
-                                    <span>Tous les membres seront retirés de l'équipe</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-purple-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                                    </svg>
-                                    <span>Les données associées seront supprimées</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Boutons d'action -->
-                <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end space-x-3">
-                    <button type="button" 
-                            @click="openDelete = false"
-                            :disabled="isDeleting"
-                            class="px-6 py-3 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-500 transition-all duration-200 font-medium disabled:opacity-50">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                        Annuler
-                    </button>
-                    <button type="button" 
-                            @click="confirmDelete()"
-                            :disabled="isDeleting"
-                            class="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl hover:from-red-600 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="animate-spin w-4 h-4 mr-2" x-show="isDeleting" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <svg class="w-4 h-4 mr-2" x-show="!isDeleting" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path>
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span x-text="isDeleting ? 'Suppression...' : 'Supprimer définitivement'"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-          
-                                    
+   
+    <x-team-drawer />
+    <x-user-drawer />
+                        
 
             @push('styles')
             <style>
