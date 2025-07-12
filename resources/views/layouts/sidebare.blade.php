@@ -57,7 +57,7 @@
             
             <div class="item-wrapper mb-5">
                 <h4 class="border-b border-bgray-200 text-sm font-medium leading-7 text-bgray-700 dark:border-darkblack-400 dark:text-bgray-50">
-                    Menu Administration
+                    Menu 
                 </h4>
                 <ul class="mt-2.5">
                     @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
@@ -421,12 +421,110 @@
                                     </span>
                                     <span
                                     class="item-text text-lg font-medium leading-none"
-                                    >Congés</span
+                                    >Mes congés</span
                                     >
                                 </div>
                                 </div>
                             </a>
                         </li>
+
+                        
+
+                        @if (auth()->user()->isManager())
+                            <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                <a href="route('manager.leaves.index')" class="sidebar-link {{ request()->routeIs('manager.leaves.*') ? 'active' : '' }}">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2.5">
+                                        <span class="item-ico">
+                                            <svg
+                                            width="18"
+                                            height="21"
+                                            viewBox="0 0 18 21"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                            <path
+                                                d="M17.5 12.5C17.5 17.1944 13.6944 21 9 21C4.30558 21 0.5 17.1944 0.5 12.5C0.5 7.80558 4.30558 4 9 4C13.6944 4 17.5 7.80558 17.5 12.5Z"
+                                                fill="#1A202C"
+                                                class="path-1"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M8.99995 1.75C8.02962 1.75 7.09197 1.88462 6.20407 2.13575C5.80549 2.24849 5.39099 2.01676 5.27826 1.61818C5.16553 1.21961 5.39725 0.805108 5.79583 0.692376C6.81525 0.404046 7.89023 0.25 8.99995 0.25C10.1097 0.25 11.1846 0.404046 12.2041 0.692376C12.6026 0.805108 12.8344 1.21961 12.7216 1.61818C12.6089 2.01676 12.1944 2.24849 11.7958 2.13575C10.9079 1.88462 9.97028 1.75 8.99995 1.75Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            <path
+                                                d="M11 13C11 14.1046 10.1046 15 9 15C7.89543 15 7 14.1046 7 13C7 11.8954 7.89543 11 9 11C10.1046 11 11 11.8954 11 13Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M9 7.25C9.41421 7.25 9.75 7.58579 9.75 8V12C9.75 12.4142 9.41421 12.75 9 12.75C8.58579 12.75 8.25 12.4142 8.25 12V8C8.25 7.58579 8.58579 7.25 9 7.25Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            </svg>
+                                        </span>
+                                        <span class="item-text text-lg font-medium leading-none">
+                                            {{ __('Gestion des congés') }}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (auth()->user()->isDepartmentHead())
+                            <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                <a href="route('head.leaves.index')" class="sidebar-link {{ request()->routeIs('head.leaves.*') ? 'active' : '' }}">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2.5">
+                                        <span class="item-ico">
+                                            <svg
+                                            width="18"
+                                            height="21"
+                                            viewBox="0 0 18 21"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                            <path
+                                                d="M17.5 12.5C17.5 17.1944 13.6944 21 9 21C4.30558 21 0.5 17.1944 0.5 12.5C0.5 7.80558 4.30558 4 9 4C13.6944 4 17.5 7.80558 17.5 12.5Z"
+                                                fill="#1A202C"
+                                                class="path-1"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M8.99995 1.75C8.02962 1.75 7.09197 1.88462 6.20407 2.13575C5.80549 2.24849 5.39099 2.01676 5.27826 1.61818C5.16553 1.21961 5.39725 0.805108 5.79583 0.692376C6.81525 0.404046 7.89023 0.25 8.99995 0.25C10.1097 0.25 11.1846 0.404046 12.2041 0.692376C12.6026 0.805108 12.8344 1.21961 12.7216 1.61818C12.6089 2.01676 12.1944 2.24849 11.7958 2.13575C10.9079 1.88462 9.97028 1.75 8.99995 1.75Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            <path
+                                                d="M11 13C11 14.1046 10.1046 15 9 15C7.89543 15 7 14.1046 7 13C7 11.8954 7.89543 11 9 11C10.1046 11 11 11.8954 11 13Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M9 7.25C9.41421 7.25 9.75 7.58579 9.75 8V12C9.75 12.4142 9.41421 12.75 9 12.75C8.58579 12.75 8.25 12.4142 8.25 12V8C8.25 7.58579 8.58579 7.25 9 7.25Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                            />
+                                            </svg>
+                                        </span>
+                                        <span class="item-text text-lg font-medium leading-none">
+                                            {{ __('Gestion des congés') }}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        @endif
 
                         <!-- Note de frais -->
                         <li class="item py-[11px] text-bgray-900 dark:text-white">
@@ -482,26 +580,7 @@
                                 </div>
                             </a>
                         </li>
-
-                        @if (auth()->user()->isManager())
-                            <x-nav-link :href="route('manager.leaves.index')" :active="request()->routeIs('manager.leaves.*')">
-                                {{ __('Gestion des congés') }}
-                            </x-nav-link>
-                        @endif
-
-                        @if (auth()->user()->isDepartmentHead())
-                            <x-nav-link :href="route('head.leaves.index')" :active="request()->routeIs('head.leaves.*')">
-                                {{ __('Gestion des congés') }}
-                            </x-nav-link>
-                        @endif
-
-
                     @endif
-
-                    
-
-                     
-
 
                 </ul>
             </div>
@@ -514,240 +593,6 @@
 
 
 
-        <div class="item-wrapper mb-5">
-            <h4 class="border-b border-bgray-200 text-sm font-medium leading-7 text-bgray-700 dark:border-darkblack-400 dark:text-bgray-50">
-                Menu
-            </h4>
-            <ul class="mt-2.5">
-                <!-- Dashboard -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="{{ route('admin.stats.index') }}" class="sidebar-link {{ request()->routeIs('admin.stats.*') ? 'active' : '' }}">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2.5">
-                                <span class="item-ico">
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                        d="M0 4C0 1.79086 1.79086 0 4 0H16C18.2091 0 20 1.79086 20 4V16C20 18.2091 18.2091 20 16 20H4C1.79086 20 0 18.2091 0 16V4Z"
-                                        fill="#1A202C"
-                                        class="path-1"
-                                        />
-                                        <path
-                                        d="M14 9C12.8954 9 12 9.89543 12 11L12 13C12 14.1046 12.8954 15 14 15C15.1046 15 16 14.1046 16 13V11C16 9.89543 15.1046 9 14 9Z"
-                                        fill="#22C55E"
-                                        class="path-2"
-                                        />
-                                        <path
-                                        d="M6 5C4.89543 5 4 5.89543 4 7L4 13C4 14.1046 4.89543 15 6 15C7.10457 15 8 14.1046 8 13L8 7C8 5.89543 7.10457 5 6 5Z"
-                                        fill="#22C55E"
-                                        class="path-2"
-                                        />
-                                    </svg>
-                                </span>
-                                <span
-                                class="item-text text-lg font-medium leading-none"
-                                >Dashboard</span
-                                >
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                
-                <!-- Conges -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="{{ route('leaves.index') }}" class="sidebar-link {{ request()->routeIs('leaves.*') ? 'active' : '' }}">
-                        <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="item-ico">
-                            <svg
-                                width="18"
-                                height="21"
-                                viewBox="0 0 18 21"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                d="M0 6.5C0 4.29086 1.79086 2.5 4 2.5H14C16.2091 2.5 18 4.29086 18 6.5V8V17C18 19.2091 16.2091 21 14 21H4C1.79086 21 0 19.2091 0 17V8V6.5Z"
-                                fill="#1A202C"
-                                class="path-1"
-                                />
-                                <path
-                                d="M14 2.5H4C1.79086 2.5 0 4.29086 0 6.5V8H18V6.5C18 4.29086 16.2091 2.5 14 2.5Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M5 0.25C5.41421 0.25 5.75 0.585786 5.75 1V4C5.75 4.41421 5.41421 4.75 5 4.75C4.58579 4.75 4.25 4.41421 4.25 4V1C4.25 0.585786 4.58579 0.25 5 0.25ZM13 0.25C13.4142 0.25 13.75 0.585786 13.75 1V4C13.75 4.41421 13.4142 4.75 13 4.75C12.5858 4.75 12.25 4.41421 12.25 4V1C12.25 0.585786 12.5858 0.25 13 0.25Z"
-                                fill="#1A202C"
-                                class="path-2"
-                                />
-                                <circle cx="9" cy="14" r="1" fill="#22C55E" />
-                                <circle
-                                cx="13"
-                                cy="14"
-                                r="1"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <circle
-                                cx="5"
-                                cy="14"
-                                r="1"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                            </svg>
-                            </span>
-                            <span
-                            class="item-text text-lg font-medium leading-none"
-                            >Congés</span
-                            >
-                        </div>
-                        </div>
-                    </a>
-                </li>
-            
-                <!-- paie -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white hover:text-succes-400">
-                    <a href="#" @click.prevent="toggleSubmenu('payroll')">
-                        <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="item-ico">
-                                <svg
-                                    width="20"
-                                    height="18"
-                                    viewBox="0 0 20 18"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                    d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z"
-                                    fill="#1A202C"
-                                    class="path-1"
-                                    />
-                                    <path
-                                    d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z"
-                                    fill="#22C55E"
-                                    class="path-2"
-                                    />
-                                </svg>
-                            </span>
-                            <span
-                            class="item-text text-lg font-medium leading-none"
-                            >Paie</span
-                            >
-                        </div>
-                        <span>
-                            <svg
-                            width="6"
-                            height="12"
-                            viewBox="0 0 6 12"
-                            fill="none"
-                            class="fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            >
-                            <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                fill="currentColor"
-                                d="M0.531506 0.414376C0.20806 0.673133 0.155619 1.1451 0.414376 1.46855L4.03956 6.00003L0.414376 10.5315C0.155618 10.855 0.208059 11.3269 0.531506 11.5857C0.854952 11.8444 1.32692 11.792 1.58568 11.4685L5.58568 6.46855C5.80481 6.19464 5.80481 5.80542 5.58568 5.53151L1.58568 0.531506C1.32692 0.20806 0.854953 0.155619 0.531506 0.414376Z"
-                            />
-                            </svg>
-                        </span>
-                        </div>
-                    </a>
-                    <ul
-                        class="sub-menu ml-2.5 mt-[22px] border-l border-success-100 pl-5"
-                        :class="{ 'active': isSubmenuOpen('payroll') }"
-                        x-show="isSubmenuOpen('payroll')"
-                        x-transition
-                    >
-                        <li>
-                        <a
-                            href="{{ route('payslips.index') }}" 
-                            class="sidebar-sublink  {{ request()->routeIs('payslips.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                            >Bulletins de paie</a
-                        >
-                        </li>
-                        <li>
-                        <a
-                            href="{{ route('salary-advances.index') }}"
-                            class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                            >Avances sur salaire</a
-                        >
-                        </li>
-                        <li>
-                            @if (auth()->user()->hasAdminAccess())
-                                <a
-                                    href="{{ route('admin.payroll-settings.index') }}"
-                                    class="sidebar-sublink {{ request()->routeIs('admin.payroll-settings.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                                    >Paramètres de paie</a>
-                            @endif
-                        </li>
-                    
-                    </ul>
-                </li>
-
-                <!-- Messages -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="messages.html">
-                        <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="item-ico">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                d="M11.8889 22C13.4278 22 14.737 21.0724 15.2222 19.7778H8.55554C9.04075 21.0724 10.35 22 11.8889 22Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                                <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M13.7662 2.83781C13.3045 2.32351 12.6345 2 11.8889 2C10.4959 2 9.36673 3.12921 9.36673 4.52216V4.6374C6.98629 5.45244 5.224 7.38959 4.95607 9.75021L4.4592 14.1281C4.36971 14.9165 4.03716 15.6684 3.49754 16.3024C2.27862 17.7343 3.43826 19.7778 5.46979 19.7778H18.308C20.3395 19.7778 21.4992 17.7343 20.2802 16.3024C19.7406 15.6684 19.4081 14.9165 19.3186 14.1281L18.8217 9.75021C18.8148 9.68916 18.8068 9.6284 18.7979 9.56793C18.3712 9.70421 17.9164 9.77778 17.4444 9.77778C14.9898 9.77778 13 7.78793 13 5.33333C13 4.40827 13.2826 3.54922 13.7662 2.83781Z"
-                                fill="#1A202C"
-                                class="path-1"
-                                />
-                                <circle
-                                cx="17.4444"
-                                cy="5.33333"
-                                r="3.33333"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                            </svg>
-                            </span>
-                            <span
-                            class="item-text text-lg font-medium leading-none"
-                            >Messages</span
-                            >
-                        </div>
-                        <div class="flex items-center space-x-2.5">
-                            <!--counter-->
-                            <div class="flex h-5 w-5 items-center justify-center rounded-full bg-success-300">
-                            <span class="text-[10px] font-semibold text-white"
-                                >5</span
-                            >
-                            </div>
-                        </div>
-                        </div>
-                    </a>
-                </li>
-                
-            </ul>
-        </div>
         <div class="item-wrapper mb-5">
             <h4 class="border-b border-bgray-200 text-sm font-medium leading-7 text-bgray-700 dark:border-darkblack-400 dark:text-bgray-50">
                 Autres
@@ -800,39 +645,6 @@
                             <span
                             class="item-text text-lg font-medium leading-none"
                             >Aides</span
-                            >
-                        </div>
-                        </div>
-                    </a>
-                </li>
-                <!-- Settings -->
-                <li class="item py-[11px] text-bgray-900 dark:text-white">
-                    <a href="{{ route('admin.company.show') }}" class="sidebar-link {{ request()->routeIs('admin.company.show') ? 'active' : '' }}">
-                        <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="item-ico">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                d="M13.0606 2H10.9394C9.76787 2 8.81817 2.89543 8.81817 4C8.81817 5.26401 7.46574 6.06763 6.35556 5.4633L6.24279 5.40192C5.22823 4.84963 3.93091 5.17738 3.34515 6.13397L2.28455 7.86602C1.69879 8.8226 2.0464 10.0458 3.06097 10.5981C4.17168 11.2027 4.17168 12.7973 3.06096 13.4019C2.0464 13.9542 1.69879 15.1774 2.28454 16.134L3.34515 17.866C3.93091 18.8226 5.22823 19.1504 6.24279 18.5981L6.35555 18.5367C7.46574 17.9324 8.81817 18.736 8.81817 20C8.81817 21.1046 9.76787 22 10.9394 22H13.0606C14.2321 22 15.1818 21.1046 15.1818 20C15.1818 18.736 16.5343 17.9324 17.6445 18.5367L17.7572 18.5981C18.7718 19.1504 20.0691 18.8226 20.6548 17.866L21.7155 16.134C22.3012 15.1774 21.9536 13.9542 20.939 13.4019C19.8283 12.7973 19.8283 11.2027 20.939 10.5981C21.9536 10.0458 22.3012 8.82262 21.7155 7.86603L20.6548 6.13398C20.0691 5.1774 18.7718 4.84965 17.7572 5.40193L17.6445 5.46331C16.5343 6.06765 15.1818 5.26402 15.1818 4C15.1818 2.89543 14.2321 2 13.0606 2Z"
-                                fill="#1A202C"
-                                class="path-1"
-                                />
-                                <path
-                                d="M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92893 15.75 8.25 14.0711 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C14.0711 8.25 15.75 9.92893 15.75 12Z"
-                                fill="#22C55E"
-                                class="path-2"
-                                />
-                            </svg>
-                            </span>
-                            <span
-                            class="item-text text-lg font-medium leading-none"
-                            >Paramètres</span
                             >
                         </div>
                         </div>

@@ -1,24 +1,23 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 shadow-lg">
-            <div class="flex items-center">
-                <div class="bg-white/20 rounded-lg p-3 mr-4">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-white">{{ __('Centre d\'aide') }}</h2>
-                    <p class="text-blue-100 mt-1">{{ __('Guide d\'utilisation de l\'application de gestion des congés') }}</p>
+    <div class="pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 mb-6 shadow-lg">
+                <div class="flex items-center">
+                    <div class="bg-white/20 rounded-lg p-3 mr-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">{{ __('Centre d\'aide') }}</h2>
+                        <p class="text-blue-100 mt-1">{{ __('Guide d\'utilisation de l\'application de gestion des congés') }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Introduction -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
                 <div class="p-8">
                     <div class="text-center mb-8">
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -31,6 +30,22 @@
 
                     <!-- Navigation rapide -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+                        <a href="#company" class="group bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-6 border border-cyan-200 dark:border-cyan-800 hover:shadow-lg transition-all duration-200">
+                            <div class="flex items-center mb-3">
+                                <div class="bg-cyan-100 dark:bg-cyan-900/50 rounded-lg p-2 mr-3">
+                                    <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                                    {{ __('Informations Société') }}
+                                </h3>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                {{ __('Configuration essentielle de votre organisation') }}
+                            </p>
+                        </a>
                         <a href="#settings" class="group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800 hover:shadow-lg transition-all duration-200">
                             <div class="flex items-center mb-3">
                                 <div class="bg-green-100 dark:bg-green-900/50 rounded-lg p-2 mr-3">
@@ -47,6 +62,7 @@
                                 {{ __('Configurez votre profil et vos préférences') }}
                             </p>
                         </a>
+                        
 
                         <a href="#users" class="group bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800 hover:shadow-lg transition-all duration-200">
                             <div class="flex items-center mb-3">
@@ -111,12 +127,141 @@
                                 {{ __('Soumettez vos rapports de dépenses') }}
                             </p>
                         </a>
+
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Société -->
+            <div id="company" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-6">
+                    <div class="flex items-center">
+                        <div class="bg-white/20 rounded-lg p-3 mr-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">{{ __('Informations sur la Société') }}</h2>
+                            <p class="text-blue-100 mt-1">{{ __('Configuration essentielle pour votre organisation') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="prose max-w-none dark:prose-invert">
+                        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                            {{ __('La configuration des informations de votre société est cruciale pour le bon fonctionnement de l\'application. Ces données sont utilisées pour la génération de documents officiels et la conformité légale.') }}
+                        </p>
+
+                        <!-- Importance des informations société -->
+                        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-red-100 dark:bg-red-900/50 rounded-lg p-2 mr-4">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+                                        {{ __('Important : Configuration obligatoire') }}
+                                    </h4>
+                                    <p class="text-red-700 dark:text-red-300 mb-2">
+                                        {{ __('Il est essentiel de renseigner correctement les informations de votre société pour :') }}
+                                    </p>
+                                    <ul class="text-red-700 dark:text-red-300 space-y-1">
+                                        <li>• {{ __('La génération des contrats de travail') }}</li>
+                                        <li>• {{ __('L\'édition des fiches de paie') }}</li>
+                                        <li>• {{ __('Les documents officiels de congés') }}</li>
+                                        <li>• {{ __('La conformité légale et administrative') }}</li>
+                                        <li>• {{ __('L\'identification dans les rapports') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations requises -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-blue-600 dark:text-blue-400 font-bold text-lg">1</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Informations de base requises') }}
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ __('Assurez-vous de renseigner les informations suivantes dans les paramètres de la société :') }}
+                                    </p>
+                                    
+                                    <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-2">
+                                        <li>{{ __('Nom complet de la société') }}</li>
+                                        <li>{{ __('Adresse complète du siège social') }}</li>
+                                        <li>{{ __('Numéro d\'enregistrement (SIRET, SIREN)') }}</li>
+                                        <li>{{ __('Code APE/NAF') }}</li>
+                                        <li>{{ __('Numéro de téléphone principal') }}</li>
+                                        <li>{{ __('Adresse e-mail officielle') }}</li>
+                                        <li>{{ __('Site web (optionnel)') }}</li>
+                                        <li>{{ __('Logo de l\'entreprise') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accès aux paramètres -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-blue-600 dark:text-blue-400 font-bold text-lg">2</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Accéder aux paramètres de la société') }}
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ __('Pour configurer les informations de votre société :') }}
+                                    </p>
+                                    
+                                    <ol class="list-decimal list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-2">
+                                        <li>{{ __('Connectez-vous avec un compte administrateur') }}</li>
+                                        <li>{{ __('Accédez au menu "Paramètres" dans la barre de navigation') }}</li>
+                                        <li>{{ __('Sélectionnez "Informations de la société"') }}</li>
+                                        <li>{{ __('Remplissez tous les champs obligatoires') }}</li>
+                                        <li>{{ __('Sauvegardez vos modifications') }}</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conseils de sécurité -->
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 rounded-lg p-2 mr-4">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                                        {{ __('Bonnes pratiques') }}
+                                    </h4>
+                                    <ul class="text-blue-700 dark:text-blue-300 space-y-1">
+                                        <li>• {{ __('Vérifiez l\'exactitude de toutes les informations légales') }}</li>
+                                        <li>• {{ __('Mettez à jour les informations en cas de changement') }}</li>
+                                        <li>• {{ __('Utilisez un logo en haute résolution (PNG ou SVG)') }}</li>
+                                        <li>• {{ __('Conservez une copie de sauvegarde de vos paramètres') }}</li>
+                                        <li>• {{ __('Testez la génération de documents après configuration') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Section Paramètres -->
-            <div id="settings" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div id="settings" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
                 <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
                     <div class="flex items-center">
                         <div class="bg-white/20 rounded-lg p-3 mr-4">
@@ -281,7 +426,7 @@
             </div>
 
             <!-- Section Dashboard -->
-            <div id="dashboard" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div id="dashboard" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
                 <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
                     <div class="flex items-center">
                         <div class="bg-white/20 rounded-lg p-3 mr-4">
@@ -516,7 +661,7 @@
             </div>
 
             <!-- Section Gestion des utilisateurs -->
-            <div id="users" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div id="users" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
                 <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-6">
                     <div class="flex items-center">
                         <div class="bg-white/20 rounded-lg p-3 mr-4">
@@ -713,7 +858,7 @@
             </div>
 
             <!-- Section Congés -->
-            <div id="leaves" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div id="leaves" class="bg-white dark:bg-gray-800 overflow-hidden  rounded-xl mb-8">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
                     <div class="flex items-center">
                         <div class="bg-white/20 rounded-lg p-3 mr-4">
@@ -943,7 +1088,7 @@
             </div>
 
             <!-- Section Notes de frais -->
-            <div id="expenses" class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-xl mb-8">
+            <div id="expenses" class="bg-white dark:bg-gray-800 overflow-hidden  rounded-xl mb-8">
                 <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
                     <div class="flex items-center">
                         <div class="bg-white/20 rounded-lg p-3 mr-4">
@@ -1095,7 +1240,7 @@
                                             <div>
                                                 <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">{{ __('Important') }}</h4>
                                                 <p class="text-yellow-700 dark:text-yellow-300 text-sm">
-                                                    {{ __('Les justificatifs sont obligatoires pour tous les frais supérieurs à 25 {{ $globalCompanyCurrency }}. Assurez-vous que les documents sont lisibles et complets.') }}
+                                                    {{ __('Les justificatifs sont obligatoires pour tous les frais supérieurs à 25 ' . $globalCompanyCurrency . '. Assurez-vous que les documents sont lisibles et complets.') }}
                                                 </p>
                                             </div>
                                         </div>
