@@ -8,7 +8,7 @@
             @endif
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div class="bg-gradient-to-br from-white via-cyan-50/30 to-teal-50/50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 rounded-2xl mb-8 border border-cyan-200/50 dark:border-gray-700/50 overflow-hidden">
+                    <div class="rounded-2xl mb-8 border border-cyan-200/50 dark:border-gray-700/50 overflow-hidden">
                         <!-- Header with icon -->
                         <div class="flex items-center border-b border-gray-200 dark:border-gray-700 px-6 py-4">
                             <div class="bg-gradient-to-r from-cyan-500 to-teal-600 p-4 rounded-2xl shadow-lg mr-4">

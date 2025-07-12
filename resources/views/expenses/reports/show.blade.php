@@ -1,23 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
-                {{ __('Note de frais #' . $report->id) }}
-            </h2>
-            @if($report->status === 'draft')
-                <div class="flex space-x-4">
-                    <a href="{{ route('expense-reports.edit', $report) }}" 
-                        class="btn btn-primary">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                        </svg>
-                        Modifier
-                    </a>
-                </div>
-            @endif
-        </div>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -225,54 +206,67 @@
                                     </div>
 
                                     <!-- Boutons d'action -->
-                                    <div class="mt-6 flex justify-end space-x-4">
+                                    <div class="mt-6 flex justify-between space-x-4">
                                         <a href="{{ route('expense-reports.index') }}" 
                                             class="inline-flex items-center justify-center px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                                             Retour à la liste
                                         </a>
-                                        @if($report->status === 'draft')
-                                            <button type="button"
-                                                @click="$dispatch('submit-expense', '{{ route('expense-reports.submit', $report) }}')"
-                                                class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                                Soumettre
-                                            </button>
-                                        @endif
+                                        <div class="flex justify-end gap-3">
+                                            @if($report->status === 'draft')
+                                                
+                                                    <a href="{{ route('expense-reports.edit', $report) }}" 
+                                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800 transition-colors">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                        </svg>
+                                                        Modifier
+                                                    </a>
+                                              
+                                            @endif
 
-                                        @if(auth()->user()->canApproveExpenseReports())
-                                            @if($report->status === 'submitted')
-                                                <button @click="$dispatch('approve-expense', '{{ route('expense-reports.approve', $report) }}')"
-                                                    type="button"
-                                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800 transition-colors">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            @if($report->status === 'draft')
+                                                <button @click="$dispatch('submit-expense', '{{ route('expense-reports.submit', $report) }}')" 
+                                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 rounded-lg border border-green-600 dark:border-green-700 transition-colors shadow-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                                                     </svg>
-                                                    Valider
-                                                </button>
-                                                <button @click="$dispatch('reject-expense', '{{ route('expense-reports.reject', $report) }}')"
-                                                    type="button"
-                                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800 transition-colors">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                    </svg>
-                                                    Rejeter
+                                                    Soumettre
                                                 </button>
                                             @endif
-                                            @if(auth()->user()->canPayExpenseReports())
-                                                @if($report->status === 'approved')
-                                                    <button @click="$dispatch('pay-expense', '{{ route('expense-reports.pay', $report) }}')"
+
+                                            @if(auth()->user()->canApproveExpenseReports())
+                                                @if($report->status === 'submitted')
+                                                    <button @click="$dispatch('approve-expense', '{{ route('expense-reports.approve', $report) }}')"
                                                         type="button"
-                                                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
+                                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800 transition-colors">
                                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                         </svg>
-                                                        Payer
+                                                        Valider
+                                                    </button>
+                                                    <button @click="$dispatch('reject-expense', '{{ route('expense-reports.reject', $report) }}')"
+                                                        type="button"
+                                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800 transition-colors">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                        </svg>
+                                                        Rejeter
                                                     </button>
                                                 @endif
-                                            @endcan
-                                        @endif
+                                                @if(auth()->user()->canPayExpenseReports())
+                                                    @if($report->status === 'approved')
+                                                        <button @click="$dispatch('pay-expense', '{{ route('expense-reports.pay', $report) }}')"
+                                                            type="button"
+                                                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
+                                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                            </svg>
+                                                            Payer
+                                                        </button>
+                                                    @endif
+                                                @endcan
+                                            @endif
+                                        </div>
                                     </div>
 
                                 </div>

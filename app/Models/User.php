@@ -262,9 +262,29 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canManageUserLeaves(User $user): bool
     {
-        return $this->isAdmin() || 
-               ($this->isManager() && $this->department_id === $user->department_id) ||
-               ($this->isDepartmentHead() && $this->department_id === $user->department_id);
+        // Les admins et RH peuvent gérer tous les congés
+        if ($this->isAdmin() || $this->isHR()) {
+            return true;
+        }
+        
+        // Les chefs de département peuvent gérer les congés de leur département (mais pas leurs propres congés)
+        if ($this->isDepartmentHead()) {
+            return $this->department_id === $user->department_id && $this->id !== $user->id;
+        }
+        
+        // Les managers peuvent gérer les congés des membres de leurs équipes (mais pas leurs propres congés)
+        if ($this->isManager()) {
+            // Ne peut pas gérer ses propres congés
+            if ($this->id === $user->id) {
+                return false;
+            }
+            // Vérifier si l'utilisateur fait partie d'une équipe gérée par ce manager
+            return $user->teams()->whereHas('manager', function ($query) {
+                $query->where('id', $this->id);
+            })->exists();
+        }
+        
+        return false;
     }
 
     public function canApproveExpenseReports(): bool

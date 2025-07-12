@@ -1,3 +1,7 @@
+NIXPACKS_START_CMD="php artisan migrate:fresh --seed --force  && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+// Sans perte de donnés :
+NIXPACKS_START_CMD="php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+
 J'ai ajouté plusieurs règles de validation importantes pour rendre l'application plus cohérente :
 
 Règles sur les dates :
