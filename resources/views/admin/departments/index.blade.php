@@ -12,9 +12,9 @@
                         </div>
                         <div>
                             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                                {{ __('Gestion des départements') }}
+                                {{ __('Gestion des Entités') }}
                             </h1>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les départements et leur organisation</p>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les entités et leur organisation</p>
                         </div>
                     </div>
                     <a href="{{ route('admin.departments.create') }}" 
@@ -22,7 +22,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
-                        <span>Nouveau Département</span>
+                        <span>Nouvelle Entité </span>
                     </a>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des départements</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des entités</h3>
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                         </svg>
-                                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Chef de Département</span>
+                                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Chef l'Entité</span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-4 text-left">
@@ -105,7 +105,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $department->code }}</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Code département</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Code Entité</p>
                                             </div>
                                         </div>
                                     </td>
@@ -177,7 +177,7 @@
 
                                             <!-- Bouton Supprimer -->
                                             <button @click="$dispatch('delete-dialog', '{{ route('admin.departments.destroy', $department) }}')" 
-                                                    title="Supprimer le département" 
+                                                    title="Supprimer l'Entité" 
                                                     type="button" 
                                                     class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-all duration-200 hover:scale-110">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,16 +197,16 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                                 </svg>
                                             </div>
-                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucun département trouvé</h3>
+                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aucune entité trouvée</h3>
                                             <p class="text-gray-500 dark:text-gray-400 text-center max-w-md leading-relaxed mb-6">
-                                                Il n'y a actuellement aucun département dans le système. Créez votre premier département pour commencer à organiser votre entreprise.
+                                                Il n'y a actuellement aucune entité dans le système. Créez votre premiere entité pour commencer à organiser votre entreprise.
                                             </p>
                                             <a href="{{ route('admin.departments.create') }}" 
                                                class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                                 </svg>
-                                                Créer un département
+                                                Créer une entité
                                             </a>
                                         </div>
                                     </td>
@@ -219,6 +219,6 @@
         </div>
     </div>
 
-    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer ce département ? Cette action est irréversible et toutes les données associées seront définitivement supprimées." />
+    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir supprimer cette entité ? Cette action est irréversible et toutes les données associées seront définitivement supprimées." />
 
 </x-app-layout>

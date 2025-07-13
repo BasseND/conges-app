@@ -206,7 +206,7 @@
                             <a
                                 href="{{ route('admin.departments.index') }}"
                                 class="sidebar-sublink {{ request()->routeIs('admin.departments.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                                >Départements</a
+                                >Entités</a
                             >
                             </li>
                             <li>
@@ -706,15 +706,7 @@
     <!-- Copywrite -->
     <div class="copy-write-text">
         <p class="text-sm text-[#969BA0]">© {{ date('Y') }} RH Connect. Tous droits réservés.</p>
-        <p class="text-sm font-medium text-bgray-700">
-        Made with ❤️ by
-        <a
-            href="#"
-            target="_blank"
-            class="border-b font-semibold hover:text-blue-600"
-            >BasseND</a
-        >
-        </p>
+       
     </div>
     </div>
 </aside>
@@ -821,7 +813,7 @@
                         <a
                             href="{{ route('admin.departments.index') }}"
                             class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
-                            >Départements</a
+                            >Entités</a
                         >
                         </li>
                     </ul>

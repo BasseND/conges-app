@@ -4,9 +4,7 @@
         teamId: null, 
         isEdit: false,
         init() {
-            console.log('Modal initialisé');
             window.addEventListener('open-team-modal', (event) => {
-                console.log('Événement open-team-modal reçu', event.detail);
                 this.teamId = event.detail?.teamId;
                 this.isEdit = !!event.detail?.teamId;
                 this.open = true;

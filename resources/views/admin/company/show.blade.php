@@ -369,73 +369,8 @@
                                 @endif
                             </div>
 
-                            <!-- Modal pour définir les congés  -->
-                            <div id="leaveBalanceModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
-                                <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800">
-                                    <div class="mt-3">
-                                        <div class="flex justify-between items-center mb-4">
-                                            <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalTitle">Ajouter un solde de congés</h3>
-                                            <button type="button" onclick="closeLeaveBalanceModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                <i class="bx bx-x text-2xl"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <form id="leaveBalanceForm">
-                                            @csrf
-                                            <input type="hidden" id="leaveBalanceId" name="leave_balance_id">
-                                            <input type="hidden" id="formMethod" name="_method">
-                                            
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                                <div class="md:col-span-2">
-                                                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-                                                    <input type="text" id="description" name="description" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="annual_leave_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Congés annuels (jours)</label>
-                                                    <input type="number" id="annual_leave_days" name="annual_leave_days" min="0" max="365" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="sick_leave_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Congés maladie (jours)</label>
-                                                    <input type="number" id="sick_leave_days" name="sick_leave_days" min="0" max="365" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="maternity_leave_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Congés maternité (jours)</label>
-                                                    <input type="number" id="maternity_leave_days" name="maternity_leave_days" min="0" max="365" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="paternity_leave_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Congés paternité (jours)</label>
-                                                    <input type="number" id="paternity_leave_days" name="paternity_leave_days" min="0" max="365" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div>
-                                                    <label for="special_leave_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Congés spéciaux (jours)</label>
-                                                    <input type="number" id="special_leave_days" name="special_leave_days" min="0" max="365" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                
-                                                <div class="md:col-span-2">
-                                                    <label class="flex items-center">
-                                                        <input type="checkbox" id="is_default" name="is_default" value="1" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Définir comme solde par défaut</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="flex justify-end space-x-3">
-                                                <button type="button" onclick="closeLeaveBalanceModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border border-gray-300 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-700">
-                                                    Annuler
-                                                </button>
-                                                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                    <span id="submitButtonText">Ajouter</span>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Inclusion du composant modal moderne -->
+                            <x-leave-balance-modal :company="$company" />
 
 
                         @else
@@ -456,45 +391,25 @@
 
     <script>
         let leaveBalances = @json($leaveBalances);
-        let isEditing = false;
-        let editingId = null;
 
         function openLeaveBalanceModal() {
-            isEditing = false;
-            editingId = null;
-            document.getElementById('modalTitle').textContent = 'Ajouter un solde de congés';
-            document.getElementById('submitButtonText').textContent = 'Ajouter';
-            document.getElementById('leaveBalanceForm').reset();
-            document.getElementById('leaveBalanceId').value = '';
-            document.getElementById('formMethod').value = '';
-            document.getElementById('leaveBalanceModal').classList.remove('hidden');
-        }
-
-        function closeLeaveBalanceModal() {
-            document.getElementById('leaveBalanceModal').classList.add('hidden');
+            window.dispatchEvent(new CustomEvent('open-leave-balance-modal', {
+                detail: {
+                    leaveBalanceId: null
+                }
+            }));
         }
 
         function editLeaveBalance(id) {
             const balance = leaveBalances.find(b => b.id === id);
             if (!balance) return;
 
-            isEditing = true;
-            editingId = id;
-            document.getElementById('modalTitle').textContent = 'Modifier le solde de congés';
-            document.getElementById('submitButtonText').textContent = 'Modifier';
-            
-            // Remplir le formulaire
-            document.getElementById('leaveBalanceId').value = balance.id;
-            document.getElementById('formMethod').value = 'PUT';
-            document.getElementById('description').value = balance.description;
-            document.getElementById('annual_leave_days').value = balance.annual_leave_days;
-            document.getElementById('sick_leave_days').value = balance.sick_leave_days;
-            document.getElementById('maternity_leave_days').value = balance.maternity_leave_days || '';
-            document.getElementById('paternity_leave_days').value = balance.paternity_leave_days || '';
-            document.getElementById('special_leave_days').value = balance.special_leave_days || '';
-            document.getElementById('is_default').checked = balance.is_default;
-            
-            document.getElementById('leaveBalanceModal').classList.remove('hidden');
+            window.dispatchEvent(new CustomEvent('open-leave-balance-modal', {
+                detail: {
+                    leaveBalanceId: id,
+                    data: balance
+                }
+            }));
         }
 
         function deleteLeaveBalance(id) {
@@ -527,69 +442,6 @@
             });
         }
 
-        document.getElementById('leaveBalanceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
-            
-            // Convertir les valeurs numériques
-            ['annual_leave_days', 'sick_leave_days', 'maternity_leave_days', 'paternity_leave_days', 'special_leave_days'].forEach(field => {
-                if (data[field] === '') {
-                    delete data[field];
-                } else {
-                    data[field] = parseInt(data[field]) || 0;
-                }
-            });
-            
-            // Gérer la checkbox
-            data.is_default = document.getElementById('is_default').checked;
-            
-            let url, method;
-            if (isEditing) {
-                url = `{{ route('admin.company.leave-balances.update', '') }}/${editingId}`;
-                method = 'PUT';
-            } else {
-                url = '{{ route('admin.company.leave-balances.store') }}';
-                method = 'POST';
-            }
-            
-            fetch(url, {
-                method: method,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    closeLeaveBalanceModal();
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else if (data.errors) {
-                    // Afficher les erreurs de validation
-                    let errorMessage = 'Erreurs de validation:\n';
-                    Object.values(data.errors).forEach(errors => {
-                        errors.forEach(error => {
-                            errorMessage += '- ' + error + '\n';
-                        });
-                    });
-                    showNotification(errorMessage, 'error');
-                } else {
-                    showNotification(data.error || 'Erreur lors de la sauvegarde', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Erreur lors de la sauvegarde', 'error');
-            });
-        });
-
         function showNotification(message, type = 'info') {
             // Créer la notification
             const notification = document.createElement('div');
@@ -619,12 +471,5 @@
                 }
             }, 5000);
         }
-
-        // Fermer le modal en cliquant à l'extérieur
-        document.getElementById('leaveBalanceModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeLeaveBalanceModal();
-            }
-        });
     </script>
 </x-app-layout>
