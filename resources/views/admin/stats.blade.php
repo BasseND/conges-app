@@ -52,7 +52,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-teal-600 dark:text-teal-400 tracking-wider uppercase mb-1">Total notes de frais</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">{{ number_format($stats['total_months_expenses'], 0, ',', ' ') }} <span class="text-bgray-600 dark:text-white font-bold text-xl leading-[30px]"> {{ $globalCompanyCurrency }} </span> </p>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="ml-6 flex-1">
                                 <h3 class="text-sm font-semibold text-rose-600 dark:text-rose-400 tracking-wider uppercase mb-1">Masse salariale</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors duration-300">{{ number_format($stats['total_salary_mass'], 0, ',', ' ') }} <span class="text-bgray-600 dark:text-white font-bold text-xl leading-[30px]"> {{ $globalCompanyCurrency }}</span></p>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                           En attente de traitement
                         </p>
                         <div class="flex space-x-4 rtl:space-x-reverse items-end">
-                          <span class="text-bgray-500 dark:text-white font-bold text-2xl leading-[30px]">38 au total</span>
+                          <span class="text-bgray-500 dark:text-white font-bold text-2xl leading-[30px]">{{ $stats['pending'] + $stats['pending_expenses'] + $stats['temporary_contracts'] }} au total</span>
 
                         </div>
                       </div>
@@ -529,7 +529,7 @@
                                                       <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
                                                   </div>
-                                                  <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($expense->total_amount, 2) }} €</span>
+                                                  <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($expense->total_amount, 2) }} {{ $globalCompanyCurrency }}</span>
                                                 </div>
                                             </td>
                                             <td class="px-8 py-6 whitespace-nowrap">

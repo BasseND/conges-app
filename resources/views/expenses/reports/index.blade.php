@@ -248,8 +248,8 @@
                                                 </svg>
                                             </a>
                                             
-                                            <!-- Bouton Modifier (seulement si brouillon) -->
-                                            @if($report->status === 'draft')
+                                            <!-- Bouton Modifier (seulement si brouillon et auteur) -->
+                                            @if($report->status === 'draft' && $report->user_id === auth()->id())
                                                 <a href="{{ route('expense-reports.edit', $report) }}" 
                                                    class="inline-flex items-center justify-center w-8 h-8 text-amber-600 bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/30 rounded-lg transition-all duration-200 group" 
                                                    title="Modifier">
@@ -259,8 +259,8 @@
                                                 </a>
                                             @endif
                                             
-                                            <!-- Bouton Supprimer (seulement si brouillon) -->
-                                            @if($report->status === 'draft')
+                                            <!-- Bouton Supprimer (seulement si brouillon et auteur) -->
+                                            @if($report->status === 'draft' && $report->user_id === auth()->id())
                                                 <button @click="$dispatch('delete-dialog', '{{ route('expense-reports.destroy', $report) }}')" 
                                                         type="button" 
                                                         class="inline-flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 rounded-lg transition-all duration-200 group" 
