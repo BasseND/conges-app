@@ -467,6 +467,7 @@
    
     <x-team-drawer />
     <x-user-drawer />
+    <x-team-modal :department="$department" :managers="$managers" :users="$users" />
                         
 
             @push('styles')
@@ -481,18 +482,25 @@
               
                 function openTeamModal() {
                     console.log('Ouverture du modal pour ajout d\'équipe');
-                    // Réinitialiser le formulaire
-                    document.getElementById('name').value = '';
-                    document.getElementById('manager_id').value = '';
                     
-                    // Décocher toutes les checkboxes
-                    document.querySelectorAll('input[name="members[]"]').forEach(checkbox => {
-                        checkbox.checked = false;
-                    });
-                    
+                    // Déclencher l'événement pour ouvrir le modal
                     window.dispatchEvent(new CustomEvent('open-team-modal', {
                         detail: { teamId: null }
                     }));
+                    
+                    // Attendre que le modal soit ouvert avant de réinitialiser les champs
+                    setTimeout(() => {
+                        const nameField = document.getElementById('name');
+                        const managerField = document.getElementById('manager_id');
+                        
+                        if (nameField) nameField.value = '';
+                        if (managerField) managerField.value = '';
+                        
+                        // Décocher toutes les checkboxes
+                        document.querySelectorAll('input[name="members[]"]').forEach(checkbox => {
+                            checkbox.checked = false;
+                        });
+                    }, 100);
                 }
 
                 function editTeam(teamId) {
@@ -516,17 +524,26 @@
                     })
                     .then(data => {
                         console.log('Données reçues:', data);
-                        document.getElementById('name').value = data.name;
-                        document.getElementById('manager_id').value = data.manager_id;
                         
-                        // Mettre à jour les checkboxes des membres
-                        document.querySelectorAll('input[name="members[]"]').forEach(checkbox => {
-                            checkbox.checked = data.members.includes(parseInt(checkbox.value));
-                        });
-                        
+                        // Déclencher l'événement pour ouvrir le modal
                         window.dispatchEvent(new CustomEvent('open-team-modal', {
                             detail: { teamId: teamId }
                         }));
+                        
+                        // Attendre que le modal soit ouvert avant de remplir les champs
+                        setTimeout(() => {
+                            const nameField = document.getElementById('name');
+                            const managerField = document.getElementById('manager_id');
+                            
+                            if (nameField) nameField.value = data.name;
+                            if (managerField) managerField.value = data.manager_id;
+                            
+                            // Mettre à jour les checkboxes des membres
+                            document.querySelectorAll('input[name="members[]"]').forEach(checkbox => {
+                                checkbox.checked = data.members.includes(parseInt(checkbox.value));
+                            });
+                        }, 100);
+                        
                         console.log('Modal ouvert avec ID:', teamId);
                     })
                     .catch(error => {
