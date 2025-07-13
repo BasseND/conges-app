@@ -330,14 +330,14 @@
                                     <!-- Actions -->
                                     <td class="px-6 py-5">
                                         <div class="flex items-center space-x-3">
-                                            <a href="{{ route('admin.users.show', $contract->user) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-all duration-200 group/btn">
+                                            <button @click="$dispatch('open-user-drawer', {{ $contract->user->toJson() }})" 
+                                                    class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-all duration-200 group/btn">
                                                 <svg class="w-3 h-3 mr-1.5 group-hover/btn:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 Voir Profil
-                                            </a>
+                                            </button>
                                             @if($contract->contrat_file)
                                                 <a href="{{ route('admin.users.contracts.download', [$contract->user, $contract]) }}" 
                                                    class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 transition-all duration-200 group/btn">
@@ -373,4 +373,7 @@
              </div>
          </div>
      </div>
+     
+     <!-- User Drawer Component -->
+     <x-user-drawer />
  </x-app-layout>

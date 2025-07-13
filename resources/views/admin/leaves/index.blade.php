@@ -67,11 +67,11 @@
                                 <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
-                                Département
+                                Entité
                             </label>
                             <select name="department" id="department"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 shadow-sm">
-                                <option value="">Tous les départements</option>
+                                <option value="">Tous les entités</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
                                         {{ $department->name }}
@@ -152,7 +152,7 @@
                         </a>
                         
                         <button type="submit" 
-                                class="inline-flex items-center justify-center px-6 py-3  bg-green-300 hover:bg-green-500 border border-transparent rounded-xl font-semibold text-sm text-white transition-all duration-200">
+                                class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
