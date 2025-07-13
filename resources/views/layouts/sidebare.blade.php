@@ -705,8 +705,7 @@
    
     <!-- Copywrite -->
     <div class="copy-write-text">
-        <p class="text-sm text-[#969BA0]">© {{ date('Y') }} RH Connect. Tous droits réservés.</p>
-       
+        <p class="text-sm text-[#969BA0]">© {{ date('Y') }} RH Connect. <br> Tous droits réservés.</p>
     </div>
     </div>
 </aside>

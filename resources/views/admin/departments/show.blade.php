@@ -376,10 +376,10 @@
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="flex items-center">
                                                         <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg mr-3">
-                                                                     <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                                         <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-                                                                     </svg>
-                                                                 </div>
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                                                            </svg>
+                                                        </div>
                                                         <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $team->name }}</span>
                                                     </div>
                                                 </td>
@@ -395,8 +395,8 @@
                                                     <div class="flex items-center">
                                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                                                     </svg>
+                                                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                                            </svg>
                                                             {{ $team->members->count() }} membre(s)
                                                         </span>
                                                     </div>
@@ -468,6 +468,7 @@
     <x-team-drawer />
     <x-user-drawer />
     <x-team-modal :department="$department" :managers="$managers" :users="$users" />
+    <x-team-delete-modal :department="$department" />
                         
 
             @push('styles')
