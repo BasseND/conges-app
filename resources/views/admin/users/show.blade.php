@@ -1,6 +1,4 @@
 <x-app-layout>
-    
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="py-6 px-6 space-y-6 bg-white dark:bg-gray-800">
 
@@ -323,10 +321,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Pied de page avec actions rapides -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 p-6">
+
+                <!-- Pied de page avec actions rapides -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 p-6 mt-6">
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -364,6 +361,13 @@
                     </div>
                 </div>
             </div>
+            
+            </div>
+
+            
+            
+            
+            
         </div>
     </div>
 </x-app-layout>

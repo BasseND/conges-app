@@ -177,7 +177,7 @@
             <!-- Champs cachés pour la validation du mot de passe -->
             <input type="hidden" name="password" value="">
             <input type="hidden" name="password_confirmation" value="">
-        </div>
+      
 
             <!-- Actions du modal -->
             <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 border-t border-gray-200 dark:border-gray-600 rounded-b-2xl">
