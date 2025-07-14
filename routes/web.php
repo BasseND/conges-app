@@ -191,6 +191,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Gestion des contrats
         Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
+        Route::get('contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+        Route::put('contracts/{contract}', [ContractController::class, 'updateContract'])->name('contracts.update');
 
         // Paramètres de paie
         Route::resource('payroll-settings', PayrollSettingController::class);
@@ -220,6 +222,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('users', UserController::class);
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::get('users/api', [UserController::class, 'apiIndex'])->name('users.api');
         // Route::get('users/{user}', [UserController::class, 'edit'])->name('users.edit-profile-infos');
         
         // Document routes
