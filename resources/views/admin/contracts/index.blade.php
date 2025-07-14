@@ -14,92 +14,168 @@
                     <p class="text-gray-600 dark:text-gray-400 mt-1">Suivi et gestion des contrats actifs</p>
                 </div>
             </div>
+            
+           
         </div>
     </x-slot>
 
     <div class="pb-8">
         <div class="bg-white dark:bg-darkblack-600 rounded-lg p-4 mb-8">
-            <!-- En-tête avec statistiques modernisé -->
-            <div class="mb-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Total Contrats Actifs -->
-                    <div class="group relative overflow-hidden bg-gradient-to-br from-blue-50 via-blue-100/50 to-indigo-100/50 dark:from-blue-900/20 dark:via-blue-800/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200/50 dark:border-blue-700/50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-indigo-500/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm font-semibold text-blue-700 dark:text-blue-300 mb-1">Total Contrats</p>
-                                    <p class="text-3xl font-bold text-blue-900 dark:text-blue-100">{{ $contracts->count() }}</p>
-                                </div>
+            <!-- En-tête avec statistiques compactes -->
+            <div class="mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Total Contrats -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-4 border border-blue-200/50 dark:border-blue-700/50">
+                        <div class="flex items-center justify-between">
+                            <div class="bg-blue-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
                             </div>
-                            <div class="flex items-center text-blue-600 dark:text-blue-400">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="text-right">
+                                <p class="text-xs font-medium text-blue-700 dark:text-blue-300">Total</p>
+                                <p class="text-xl font-bold text-blue-900 dark:text-blue-100">{{ $contracts->count() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contrats Actifs -->
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-4 border border-green-200/50 dark:border-green-700/50">
+                        <div class="flex items-center justify-between">
+                            <div class="bg-green-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="text-sm font-medium">Contrats actifs</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-medium text-green-700 dark:text-green-300">Actifs</p>
+                                <p class="text-xl font-bold text-green-900 dark:text-green-100">
+                                    {{ $contracts->where('statut', 'actif')->count() }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Contrats expirant bientôt -->
-                    <div class="group relative overflow-hidden bg-gradient-to-br from-orange-50 via-orange-100/50 to-red-100/50 dark:from-orange-900/20 dark:via-orange-800/20 dark:to-red-900/20 rounded-2xl p-6 border border-orange-200/50 dark:border-orange-700/50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-400/20 to-red-500/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="bg-gradient-to-r from-orange-500 to-orange-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm font-semibold text-orange-700 dark:text-orange-300 mb-1">Expirent bientôt</p>
-                                    <p class="text-3xl font-bold text-orange-900 dark:text-orange-100">
-                                        {{ $contracts->filter(function($contract) {
-                                            return $contract->date_fin && $contract->date_fin->diffInDays(now()) <= 60 && $contract->date_fin->isFuture();
-                                        })->count() }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex items-center text-orange-600 dark:text-orange-400">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl p-4 border border-orange-200/50 dark:border-orange-700/50">
+                        <div class="flex items-center justify-between">
+                            <div class="bg-orange-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                 </svg>
-                                <span class="text-sm font-medium">Dans les 2 mois</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-medium text-orange-700 dark:text-orange-300">Expirent</p>
+                                <p class="text-xl font-bold text-orange-900 dark:text-orange-100">
+                                    {{ $contracts->filter(function($contract) {
+                                        return $contract->date_fin && $contract->date_fin->diffInDays(now()) <= 60 && $contract->date_fin->isFuture();
+                                    })->count() }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Contrats expirés -->
-                    <div class="group relative overflow-hidden bg-gradient-to-br from-red-50 via-red-100/50 to-pink-100/50 dark:from-red-900/20 dark:via-red-800/20 dark:to-pink-900/20 rounded-2xl p-6 border border-red-200/50 dark:border-red-700/50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-400/20 to-pink-500/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="bg-gradient-to-r from-red-500 to-red-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm font-semibold text-red-700 dark:text-red-300 mb-1">Expirés</p>
-                                    <p class="text-3xl font-bold text-red-900 dark:text-red-100">
-                                        {{ $contracts->filter(function($contract) {
-                                            return $contract->date_fin && $contract->date_fin->isPast();
-                                        })->count() }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex items-center text-red-600 dark:text-red-400">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl p-4 border border-red-200/50 dark:border-red-700/50">
+                        <div class="flex items-center justify-between">
+                            <div class="bg-red-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span class="text-sm font-medium">Nécessitent attention</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-medium text-red-700 dark:text-red-300">Expirés</p>
+                                <p class="text-xl font-bold text-red-900 dark:text-red-100">
+                                    {{ $contracts->filter(function($contract) {
+                                        return $contract->date_fin && $contract->date_fin->isPast();
+                                    })->count() }}
+                                </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtres -->
+            <div class="mb-6" x-data="{ 
+                statusFilter: '', 
+                typeFilter: '', 
+                searchTerm: '',
+                filteredContracts: [],
+                init() {
+                    this.filterContracts();
+                },
+                filterContracts() {
+                    // Cette fonction sera utilisée côté client pour filtrer
+                    this.$nextTick(() => {
+                        const rows = document.querySelectorAll('#contracts-table tbody tr[data-contract]');
+                        rows.forEach(row => {
+                            const status = row.dataset.status;
+                            const type = row.dataset.type;
+                            const name = row.dataset.name.toLowerCase();
+                            
+                            const statusMatch = !this.statusFilter || status === this.statusFilter;
+                            const typeMatch = !this.typeFilter || type === this.typeFilter;
+                            const nameMatch = !this.searchTerm || name.includes(this.searchTerm.toLowerCase());
+                            
+                            if (statusMatch && typeMatch && nameMatch) {
+                                row.style.display = '';
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+            }">
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <!-- Recherche -->
+                        <div class="flex-1 min-w-64">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" x-model="searchTerm" @input="filterContracts()" 
+                                       class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                       placeholder="Rechercher un employé...">
+                            </div>
+                        </div>
+                        
+                        <!-- Filtre par statut -->
+                        <div class="min-w-40">
+                            <select x-model="statusFilter" @change="filterContracts()" 
+                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Tous les statuts</option>
+                                <option value="actif">Actif</option>
+                                <option value="suspendu">Suspendu</option>
+                                <option value="termine">Terminé</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Filtre par type -->
+                        <div class="min-w-40">
+                            <select x-model="typeFilter" @change="filterContracts()" 
+                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Tous les types</option>
+                                <option value="CDI">CDI</option>
+                                <option value="CDD">CDD</option>
+                                <option value="Interim">Intérim</option>
+                                <option value="Stage">Stage</option>
+                                <option value="Alternance">Alternance</option>
+                                <option value="Freelance">Freelance</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Bouton reset -->
+                        <button @click="statusFilter = ''; typeFilter = ''; searchTerm = ''; filterContracts();" 
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Réinitialiser
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,12 +187,12 @@
                         <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
-                        Liste des contrats actifs
+                        Liste de tous les contrats
                     </h3>
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table id="contracts-table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
@@ -184,7 +260,11 @@
                                     $isExpiringSoon = $contract->date_fin && $contract->date_fin->diffInDays(now()) <= 60 && $contract->date_fin->isFuture();
                                     $isExpired = $contract->date_fin && $contract->date_fin->isPast();
                                 @endphp
-                                <tr class="group hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-200 {{ $isExpired ? 'bg-red-50 dark:bg-red-900/10' : ($isExpiringSoon ? 'bg-orange-50 dark:bg-orange-900/10' : '') }}">
+                                <tr data-contract="true" 
+                                    data-status="{{ $contract->statut }}" 
+                                    data-type="{{ $contract->type }}" 
+                                    data-name="{{ $contract->user->first_name }} {{ $contract->user->last_name }}" 
+                                    class="group hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-200 {{ $isExpired ? 'bg-red-50 dark:bg-red-900/10' : ($isExpiringSoon ? 'bg-orange-50 dark:bg-orange-900/10' : '') }}">
                                     <!-- Employé -->
                                     <td class="px-6 py-5">
                                         <div class="flex items-center">
@@ -330,8 +410,18 @@
                                     <!-- Actions -->
                                     <td class="px-6 py-5">
                                         <div class="flex items-center space-x-3">
-                                            <button @click="$dispatch('open-user-drawer', {{ $contract->user->toJson() }})" 
-                                                    class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-all duration-200 group/btn">
+                                            <!-- Bouton de modification du contrat -->
+                             <button @click="$nextTick(() => $dispatch('edit-contract', { contractId: {{ $contract->id }}, userId: {{ $contract->user->id }} }))" 
+                                     class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 transition-all duration-200 group/btn">
+                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                 </svg>
+                                 Modifier contrat
+                             </button>
+                                             
+                                             <!-- Bouton de profil utilisateur -->
+                                             <button @click="$dispatch('open-user-drawer', {{ $contract->user->toJson() }})" 
+                                                     class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-all duration-200 group/btn">
                                                 <svg class="w-3 h-3 mr-1.5 group-hover/btn:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
@@ -376,4 +466,7 @@
      
      <!-- User Drawer Component -->
      <x-user-drawer />
+     
+     <!-- Contract Edit Modal Component -->
+     <x-contract-edit-modal :globalCompanyCurrency="$globalCompanyCurrency ?? '€'" />
  </x-app-layout>
