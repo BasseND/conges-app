@@ -415,4 +415,57 @@ class NotificationService
         
         \Log::info('Department change notification creation completed');
     }
+
+    /**
+      * Créer une notification pour la modification d'un contrat
+      */
+     public function createContractUpdatedNotification(Contract $contract): void
+     {
+         \Log::info('Creating contract updated notification for contract: ' . $contract->id);
+         
+         // Charger la relation user si elle n'est pas déjà chargée
+         $contract->load('user');
+         
+         // Notifier l'utilisateur concerné
+         Notification::createNotification(
+             type: Notification::TYPE_CONTRACT_UPDATED,
+             title: 'Contrat modifié',
+             message: "Votre contrat a été modifié. Veuillez consulter les détails.",
+             userId: $contract->user_id,
+             createdBy: auth()->id(),
+             data: [
+                 'contract_id' => $contract->id,
+                 'user_id' => $contract->user_id,
+                 'contract_type' => $contract->type,
+                 'url' => route('profile.show')
+             ],
+             priority: Notification::PRIORITY_NORMAL,
+             category: Notification::CATEGORY_CONTRACT
+         );
+         
+         // Notifier les admins et RH
+         $recipients = User::whereIn('role', ['admin', 'hr'])
+             ->where('id', '!=', $contract->user_id)
+             ->get();
+         
+         foreach ($recipients as $recipient) {
+             Notification::createNotification(
+                 type: Notification::TYPE_CONTRACT_UPDATED,
+                 title: 'Contrat employé modifié',
+                 message: "Le contrat de {$contract->user->first_name} {$contract->user->last_name} a été modifié.",
+                 userId: $recipient->id,
+                 createdBy: auth()->id(),
+                 data: [
+                     'contract_id' => $contract->id,
+                     'user_id' => $contract->user_id,
+                     'contract_type' => $contract->type,
+                     'url' => route('admin.users.show', $contract->user)
+                 ],
+                 priority: Notification::PRIORITY_LOW,
+                 category: Notification::CATEGORY_CONTRACT
+             );
+         }
+         
+         \Log::info('Contract updated notification creation completed');
+     }
 }

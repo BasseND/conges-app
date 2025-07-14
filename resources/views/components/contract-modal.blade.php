@@ -265,6 +265,31 @@
                                     <option value="suspendu">Suspendu</option>
                                     <option value="termine">Terminé</option>
                                 </select>
+                                
+                                <!-- Message d'avertissement pour statut terminé -->
+                                <div x-show="contractData.statut === 'termine'" 
+                                     x-transition:enter="transition ease-out duration-200"
+                                     x-transition:enter-start="opacity-0 transform scale-95"
+                                     x-transition:enter-end="opacity-100 transform scale-100"
+                                     x-transition:leave="transition ease-in duration-150"
+                                     x-transition:leave-start="opacity-100 transform scale-100"
+                                     x-transition:leave-end="opacity-0 transform scale-95"
+                                     class="mt-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="text-sm font-medium text-amber-800 dark:text-amber-200">{{ __('Attention') }}</h4>
+                                            <p class="mt-1 text-sm text-amber-700 dark:text-amber-300">
+                                                {{ __('Une fois le contrat marqué comme "Terminé" et soumis, il ne sera plus possible de le modifier.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <x-input-error :messages="$errors->get('statut')" class="mt-2" />
                             </div>
                             <!--  Document du contrat -->

@@ -91,7 +91,8 @@
                         <div class="flex-1 lg:ml-auto">
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-                                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->role }}</div>
+                                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-3"><x-role-badge :role="$user->role" /></div>
+                                    
                                     <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Rôle</div>
                                 </div>
                                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
