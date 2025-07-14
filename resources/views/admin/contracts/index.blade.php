@@ -21,6 +21,10 @@
 
     <div class="pb-8">
         <div class="bg-white dark:bg-darkblack-600 rounded-lg p-4 mb-8">
+           
+            <x-alert type="success" :message="session('success') ?: request('success')" />
+            <x-alert type="error" :message="session('error')" />
+            
             <!-- En-tête avec statistiques compactes -->
             <div class="mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -287,49 +291,64 @@
                                     </td>
                                     
                                     <!-- Type de contrat -->
-                                    <td class="px-6 py-5">
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm
-                                            @switch($contract->type)
-                                                @case('CDI')
-                                                    bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-300 dark:border-green-700
-                                                    @break
-                                                @case('CDD')
-                                                    bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300 dark:border-blue-700
-                                                    @break
-                                                @case('Interim')
-                                                    bg-gradient-to-r from-purple-100 to-violet-100 text-purple-800 border border-purple-200 dark:from-purple-900/30 dark:to-violet-900/30 dark:text-purple-300 dark:border-purple-700
-                                                    @break
-                                                @case('Stage')
-                                                    bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-200 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-yellow-300 dark:border-yellow-700
-                                                    @break
-                                                @case('Alternance')
-                                                    bg-gradient-to-r from-indigo-100 to-blue-100 text-indigo-800 border border-indigo-200 dark:from-indigo-900/30 dark:to-blue-900/30 dark:text-indigo-300 dark:border-indigo-700
-                                                    @break
-                                                @case('Freelance')
-                                                    bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 dark:from-gray-900/30 dark:to-slate-900/30 dark:text-gray-300 dark:border-gray-700
-                                                    @break
-                                                @default
-                                                    bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 dark:from-gray-900/30 dark:to-slate-900/30 dark:text-gray-300 dark:border-gray-700
-                                            @endswitch">
-                                            @switch($contract->type)
-                                                @case('CDI')
-                                                    <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    @break
-                                                @case('CDD')
-                                                    <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    @break
-                                                @case('Freelance')
-                                                    <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    @break
-                                            @endswitch
-                                            {{ $contract->type }}
-                                        </span>
+                                    <td class="px-6 py-5" x-data="{ showType: false }">
+                                        <div class="flex items-center space-x-2">
+                                            <span x-show="!showType" class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 dark:from-gray-900/30 dark:to-slate-900/30 dark:text-gray-300 dark:border-gray-700">
+                                                •••••
+                                            </span>
+                                            <span x-show="showType" class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm
+                                                @switch($contract->type)
+                                                    @case('CDI')
+                                                        bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-300 dark:border-green-700
+                                                        @break
+                                                    @case('CDD')
+                                                        bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300 dark:border-blue-700
+                                                        @break
+                                                    @case('Interim')
+                                                        bg-gradient-to-r from-purple-100 to-violet-100 text-purple-800 border border-purple-200 dark:from-purple-900/30 dark:to-violet-900/30 dark:text-purple-300 dark:border-purple-700
+                                                        @break
+                                                    @case('Stage')
+                                                        bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-200 dark:from-yellow-900/30 dark:to-orange-900/30 dark:text-yellow-300 dark:border-yellow-700
+                                                        @break
+                                                    @case('Alternance')
+                                                        bg-gradient-to-r from-indigo-100 to-blue-100 text-indigo-800 border border-indigo-200 dark:from-indigo-900/30 dark:to-blue-900/30 dark:text-indigo-300 dark:border-indigo-700
+                                                        @break
+                                                    @case('Freelance')
+                                                        bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 dark:from-gray-900/30 dark:to-slate-900/30 dark:text-gray-300 dark:border-gray-700
+                                                        @break
+                                                    @default
+                                                        bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 dark:from-gray-900/30 dark:to-slate-900/30 dark:text-gray-300 dark:border-gray-700
+                                                @endswitch">
+                                                @switch($contract->type)
+                                                    @case('CDI')
+                                                        <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        @break
+                                                    @case('CDD')
+                                                        <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        @break
+                                                    @case('Freelance')
+                                                        <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                        @break
+                                                @endswitch
+                                                {{ $contract->type }}
+                                            </span>
+                                            <button @click="showType = !showType" 
+                                                    class="inline-flex items-center p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200">
+                                                <svg x-show="!showType" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                <svg x-show="showType" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </td>
                                     
                                     <!-- Date de début -->
@@ -393,31 +412,56 @@
                                     </td>
                                     
                                     <!-- Rémunération -->
-                                    <td class="px-6 py-5">
-                                        <div class="flex items-center text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                            <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            @if($contract->type === 'Freelance')
-                                                {{ number_format($contract->tjm, 2) }}€/jour
-                                            @else
-                                                {{ number_format($contract->salaire_brut, 2) }}€/mois
-                                            @endif
+                                    <td class="px-6 py-5" x-data="{ showSalary: false }">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="flex items-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                                <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <span x-show="!showSalary">•••••</span>
+                                                <span x-show="showSalary">
+                                                    @if($contract->type === 'Freelance')
+                                                        {{ number_format($contract->tjm, 2) }} {{ $globalCompanyCurrency }} / jour
+                                                    @else
+                                                        {{ number_format($contract->salaire_brut, 2) }} {{ $globalCompanyCurrency }} / Brut an
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <button @click="showSalary = !showSalary" 
+                                                    class="inline-flex items-center p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200">
+                                                <svg x-show="!showSalary" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                <svg x-show="showSalary" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </td>
                                     
                                     <!-- Actions -->
                                     <td class="px-6 py-5">
                                         <div class="flex items-center space-x-3">
-                                            <!-- Bouton de modification du contrat -->
-                             <button @click="$nextTick(() => $dispatch('edit-contract', { contractId: {{ $contract->id }}, userId: {{ $contract->user->id }} }))" 
-                                     class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 transition-all duration-200 group/btn">
-                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                 </svg>
-                                 Modifier contrat
-                             </button>
+                                            @if($contract->statut !== 'termine')
+                                                <!-- Bouton de modification du contrat -->
+                                                <button @click="$nextTick(() => $dispatch('edit-contract', { contractId: {{ $contract->id }}, userId: {{ $contract->user->id }} }))" 
+                                                        class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 transition-all duration-200 group/btn">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                    Modifier contrat
+                                                </button>
+                                            @else
+                                                <!-- Message pour contrat terminé -->
+                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                                                    </svg>
+                                                    Non modifiable
+                                                </span>
+                                            @endif
                                              
                                              <!-- Bouton de profil utilisateur -->
                                              <button @click="$dispatch('open-user-drawer', {{ $contract->user->toJson() }})" 

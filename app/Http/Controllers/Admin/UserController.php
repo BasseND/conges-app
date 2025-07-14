@@ -357,8 +357,16 @@ class UserController extends Controller
         event(new UserUpdated($user, $oldData, $newData));
         \Log::info('UserUpdated event dispatched for user: ' . $user->email);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur modifié avec succès.');
+        // Redirection conditionnelle selon la source de la requête
+        if ($request->has('source') && $request->input('source') === 'modal') {
+            // Si la requête provient du modal, rester sur la page de détail
+            return redirect()->route('admin.users.show', $user)
+                ->with('success', 'Utilisateur modifié avec succès.');
+        } else {
+            // Si la requête provient des formulaires classiques, retourner à la liste
+            return redirect()->route('admin.users.index')
+                ->with('success', 'Utilisateur modifié avec succès.');
+        }
     }
 
     // public function destroy(User $user)

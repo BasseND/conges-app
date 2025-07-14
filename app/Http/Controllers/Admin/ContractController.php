@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\User;
 use App\Models\Company;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -161,7 +162,7 @@ class ContractController extends Controller
          
          // Mettre à jour le contrat - sans modifier le type
          $contract->date_debut = $validated['date_debut'];
-         $contract->date_fin = $validated['date_fin'];
+         $contract->date_fin = $validated['date_fin'] ?? null;
          $contract->statut = $validated['statut'];
          
          // Mettre à jour les champs financiers selon le type de contrat existant
@@ -187,6 +188,10 @@ class ContractController extends Controller
          }
          
          $contract->save();
+         
+         // Créer une notification pour la modification du contrat
+         $notificationService = app(NotificationService::class);
+         $notificationService->createContractUpdatedNotification($contract);
          
          if ($request->ajax() || $request->wantsJson()) {
              return response()->json([
@@ -226,7 +231,7 @@ class ContractController extends Controller
         
         // Mettre à jour le contrat
         $contract->date_debut = $validated['date_debut'];
-        $contract->date_fin = $validated['date_fin'];
+        $contract->date_fin = $validated['date_fin'] ?? null;
         $contract->statut = $validated['statut'];
         
         // Mettre à jour les champs financiers selon le type de contrat existant
@@ -251,6 +256,10 @@ class ContractController extends Controller
         }
         
         $contract->save();
+        
+        // Créer une notification pour la modification du contrat
+        $notificationService = app(NotificationService::class);
+        $notificationService->createContractUpdatedNotification($contract);
         
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([

@@ -130,12 +130,7 @@
                     <div class="flex-1">
                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Rôle d'accès</p>
                         <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {{ $user->role === 'admin' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 
-                                   ($user->role === 'manager' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 
-                                    'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200') }}">
-                                {{ ucfirst($user->role) }}
-                            </span>
+                            <x-role-badge :role="$user->role" />
                         </p>
                     </div>
                 </div>

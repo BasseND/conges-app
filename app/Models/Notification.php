@@ -44,6 +44,7 @@ class Notification extends Model
     const TYPE_USER_DEPARTMENT_CHANGED = 'user_department_changed';
     const TYPE_CONTRACT_EXPIRING = 'contract_expiring';
     const TYPE_CONTRACT_EXPIRED = 'contract_expired';
+    const TYPE_CONTRACT_UPDATED = 'contract_updated';
 
     // Catégories
     const CATEGORY_LEAVE = 'leave';
@@ -184,7 +185,7 @@ class Notification extends Model
             self::TYPE_EXPENSE_REQUEST, self::TYPE_EXPENSE_APPROVED, self::TYPE_EXPENSE_REJECTED, self::TYPE_EXPENSE_PAID => 'receipt',
             self::TYPE_USER_CREATED => 'user-plus',
             self::TYPE_USER_ROLE_CHANGED, self::TYPE_USER_DEPARTMENT_CHANGED => 'user-edit',
-            self::TYPE_CONTRACT_EXPIRING, self::TYPE_CONTRACT_EXPIRED => 'document',
+            self::TYPE_CONTRACT_EXPIRING, self::TYPE_CONTRACT_EXPIRED, self::TYPE_CONTRACT_UPDATED => 'document',
             default => 'bell',
         };
     }
