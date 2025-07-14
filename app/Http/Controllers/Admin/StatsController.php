@@ -76,9 +76,10 @@ class StatsController extends Controller
                       ->where('type', '!=', Contract::CONTRACT_FREELANCE)
                       ->where('statut', 'actif')
                       ->sum('salaire_brut'),
-            'temporary_contracts' => Contract::where('is_expired', false)
-                      ->where('statut', 'actif')
-                      ->whereIn('type', [Contract::CONTRACT_CDD, Contract::CONTRACT_INTERIM, Contract::CONTRACT_STAGE, Contract::CONTRACT_ALTERNANCE])
+            'temporary_contracts' => Contract::where('statut', 'actif')
+                      ->whereNotNull('date_fin')
+                      ->where('date_fin', '>', Carbon::now())
+                      ->where('date_fin', '<=', Carbon::now()->addDays(60))
                       ->count()
         ];
 
