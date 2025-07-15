@@ -143,7 +143,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-bold text-white">{{ __('Informations sur la Société') }}</h2>
+                            <h2 class="text-2xl font-bold text-white">{{ __('Informations sur la Société / Structure / Organisme') }}</h2>
                             <p class="text-blue-100 mt-1">{{ __('Configuration essentielle pour votre organisation') }}</p>
                         </div>
                     </div>
@@ -198,13 +198,14 @@
                                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-2">
                                         <li>{{ __('Nom complet de la société') }}</li>
                                         <li>{{ __('Adresse complète du siège social') }}</li>
-                                        <li>{{ __('Numéro d\'enregistrement (SIRET, SIREN)') }}</li>
-                                        <li>{{ __('Code APE/NAF') }}</li>
+                                        <!-- <li>{{ __('Numéro d\'enregistrement (SIRET, SIREN)') }}</li>
+                                        <li>{{ __('Code APE/NAF') }}</li> -->
                                         <li>{{ __('Numéro de téléphone principal') }}</li>
                                         <li>{{ __('Adresse e-mail officielle') }}</li>
                                         <li>{{ __('Site web (optionnel)') }}</li>
                                         <li>{{ __('Logo de l\'entreprise') }}</li>
                                     </ul>
+                                    <!-- On se base sur le pays pour mettre le bon currency -->
                                 </div>
                             </div>
                         </div>
