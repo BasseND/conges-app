@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\LeaveBalanceController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Expense\ExpenseLineController;
 use App\Http\Controllers\Payroll\PayslipController;
 use App\Http\Controllers\Payroll\SalaryAdvanceController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -28,6 +31,8 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +44,23 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// Route pour servir les fichiers storage (contournement du lien symbolique)
+Route::get('/storage/{path}', function ($path) {
+    $file = storage_path('app/public/' . $path);
+    
+    if (!file_exists($file)) {
+        abort(404);
+    }
+    
+    $mimeType = mime_content_type($file);
+    
+    return response()->file($file, [
+        'Content-Type' => $mimeType,
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*');
+
 
 // Routes d'authentification
 Route::middleware('guest')->group(function () {
@@ -94,6 +116,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('leaves/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
     Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
     Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+    Route::post('leaves/{leave}/submit', [LeaveController::class, 'submit'])->name('leaves.submit');
     Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
 
@@ -131,14 +154,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('salary-advances/{salaryAdvance}', [SalaryAdvanceController::class, 'show'])->name('salary-advances.show');
     Route::post('salary-advances/{salaryAdvance}/cancel', [SalaryAdvanceController::class, 'cancel'])->name('salary-advances.cancel');
 
+    // Routes pour les notifications
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{notification}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::delete('notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
+    Route::get('notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::get('notifications/recent', [NotificationController::class, 'getRecent'])->name('notifications.recent');
+    Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
-        Route::get('leaves', [LeaveController::class, 'managerIndex'])->name('leaves.index');
+        Route::get('leaves', [\App\Http\Controllers\Manager\LeaveController::class, 'index'])->name('leaves.index');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Manager\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Manager\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
     // Routes pour les chefs de département
     Route::middleware('role:department_head')->name('head.')->prefix('head')->group(function () {
-        Route::get('leaves', [LeaveController::class, 'headIndex'])->name('leaves.index');
+        Route::get('leaves', [\App\Http\Controllers\Head\LeaveController::class, 'index'])->name('leaves.index');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Head\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Head\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
     // Routes pour les administrateurs et RH
@@ -151,7 +187,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
         Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
-        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
+        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('admin.leaves.destroy');
+
+        // Gestion des contrats
+        Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
+        Route::get('contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+        Route::put('contracts/{contract}', [ContractController::class, 'updateContract'])->name('contracts.update');
 
         // Paramètres de paie
         Route::resource('payroll-settings', PayrollSettingController::class);
@@ -180,6 +221,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Gestion des utilisateurs
         Route::resource('users', UserController::class);
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::get('users/api', [UserController::class, 'apiIndex'])->name('users.api');
         // Route::get('users/{user}', [UserController::class, 'edit'])->name('users.edit-profile-infos');
         
         // Document routes
@@ -203,5 +246,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('departments/{department}/teams/{team}/edit', [TeamController::class, 'edit'])->name('departments.teams.edit');
         Route::put('departments/{department}/teams/{team}', [TeamController::class, 'update'])->name('departments.teams.update');
         Route::delete('departments/{department}/teams/{team}', [TeamController::class, 'destroy'])->name('departments.teams.destroy');
+        Route::get('departments/{department}/leave-balances', [LeaveBalanceController::class, 'getByCompany'])->name('departments.leave-balances');
+
+        // Gestion des soldes de congés
+        Route::resource('leave-balances', LeaveBalanceController::class);
+
+        // Gestion de la société
+        Route::get('company', [CompanyController::class, 'show'])->name('company.show');
+        Route::get('company/create', [CompanyController::class, 'create'])->name('company.create');
+        Route::post('company', [CompanyController::class, 'store'])->name('company.store');
+        Route::get('company/edit', [CompanyController::class, 'edit'])->name('company.edit');
+        Route::put('company', [CompanyController::class, 'update'])->name('company.update');
+        
+        // Routes pour les soldes de congés de la société
+        Route::post('company/leave-balances', [CompanyController::class, 'storeLeaveBalance'])->name('company.leave-balances.store');
+        Route::put('company/leave-balances/{leaveBalance}', [CompanyController::class, 'updateLeaveBalance'])->name('company.leave-balances.update');
+        Route::delete('company/leave-balances/{leaveBalance}', [CompanyController::class, 'destroyLeaveBalance'])->name('company.leave-balances.destroy');
     });
 });

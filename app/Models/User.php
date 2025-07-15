@@ -37,17 +37,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'first_name',
         'last_name',
+        'gender',
         'phone',
         'email',
         'password',
         'role',
         'employee_id',
         'department_id',
-        'role',
-        'employee_id',
-        'department_id',
-        'annual_leave_days',
-        'sick_leave_days',
+        'company_id',
+        'leave_balance_id',
+
         'is_active',
         'position',
         'is_prestataire'
@@ -88,6 +87,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    /**
+     * Get the company that the user belongs to.
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the leave balance that the user belongs to.
+     */
+    public function leaveBalance()
+    {
+        return $this->belongsTo(LeaveBalance::class);
     }
 
     /**
@@ -203,6 +218,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the notifications for the user.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * Get the notifications created by the user.
+     */
+    public function createdNotifications()
+    {
+        return $this->hasMany(Notification::class, 'created_by');
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isManager()
@@ -231,9 +262,29 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canManageUserLeaves(User $user): bool
     {
-        return $this->isAdmin() || 
-               ($this->isManager() && $this->department_id === $user->department_id) ||
-               ($this->isDepartmentHead() && $this->department_id === $user->department_id);
+        // Les admins et RH peuvent gérer tous les congés
+        if ($this->isAdmin() || $this->isHR()) {
+            return true;
+        }
+        
+        // Les chefs de département peuvent gérer les congés de leur département (mais pas leurs propres congés)
+        if ($this->isDepartmentHead()) {
+            return $this->department_id === $user->department_id && $this->id !== $user->id;
+        }
+        
+        // Les managers peuvent gérer les congés des membres de leurs équipes (mais pas leurs propres congés)
+        if ($this->isManager()) {
+            // Ne peut pas gérer ses propres congés
+            if ($this->id === $user->id) {
+                return false;
+            }
+            // Vérifier si l'utilisateur fait partie d'une équipe gérée par ce manager
+            return $user->teams()->whereHas('manager', function ($query) {
+                $query->where('id', $this->id);
+            })->exists();
+        }
+        
+        return false;
     }
 
     public function canApproveExpenseReports(): bool
@@ -267,14 +318,105 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getRemainingDaysAttribute()
     {
-        // Récupérer les congés déjà pris cette année
+        // Si l'utilisateur a un solde de congés spécifique, utiliser le solde actuel
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->annual_leave_days;
+        }
+        
+        // Sinon, calculer à partir du solde par défaut moins les congés utilisés
         $usedLeaves = $this->leaves()
             ->whereYear('start_date', now()->year)
             ->where('status', 'approved')
+            ->where('type', 'annual')
             ->sum('duration');
 
-        // Calculer les jours restants
-        return $this->annual_leave_days - $usedLeaves;
+        $annualLeaveDays = $this->getAnnualLeaveDaysAttribute();
+        
+        return max(0, $annualLeaveDays - $usedLeaves);
+    }
+
+    /**
+     * Get the annual leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getAnnualLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->annual_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->annual_leave_days;
+        }
+        
+        // Valeur par défaut
+        return 25;
+    }
+
+    /**
+     * Get the sick leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getSickLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->sick_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->sick_leave_days;
+        }
+        
+        // Valeur par défaut
+        return 12;
+    }
+
+    /**
+     * Get the maternity leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getMaternityLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->maternity_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->maternity_leave_days;
+        }
+        
+        // Valeur par défaut (16 semaines = 112 jours)
+        return 112;
+    }
+
+    /**
+     * Get the paternity leave days for the user (from leave balance)
+     * 
+     * @return int
+     */
+    public function getPaternityLeaveDaysAttribute()
+    {
+        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
+        if ($this->leaveBalance) {
+            return $this->leaveBalance->paternity_leave_days;
+        }
+        
+        // Sinon, utiliser le solde par défaut de l'entreprise
+        if ($this->company && $this->company->defaultLeaveBalance()) {
+            return $this->company->defaultLeaveBalance()->paternity_leave_days;
+        }
+        
+        // Valeur par défaut (25 jours)
+        return 25;
     }
 
     /**
@@ -333,5 +475,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'email' => $this->email
         ]);
         return $this->email;
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

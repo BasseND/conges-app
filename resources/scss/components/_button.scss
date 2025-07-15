@@ -1,0 +1,174 @@
+// Import Sass modules
+@use "sass:color";
+@use "sass:math";
+
+// Import variables
+@use "../base/variables" as *;
+
+// Additional variables specific to buttons
+
+
+
+
+
+// Mixins Sass utiles
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+@mixin button-style($bg-color, $text-color: white) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  @include transition();
+  
+  &:hover {
+    background-color: color.adjust($bg-color, $lightness: -10%);
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
+  }
+}
+
+@mixin button-style-outlined($bg-color) {
+  background-color: transparent;
+  color: $bg-color;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid $bg-color;
+  cursor: pointer;
+  @include transition();
+  
+  &:hover {
+    background-color: color.adjust($bg-color, $lightness: -10%);
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($bg-color, 0.2);
+  }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    pointer-events: none;
+  }
+
+
+}
+
+.btn {
+  position: relative;
+ 
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 0.375rem;
+
+  &.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.275rem;
+  }
+
+  &.btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+// Styles personnalisés
+.btn-primary {
+  @include button-style($primary-color);
+}
+
+.btn-secondary {
+  @include button-style($secondary-color);
+}
+
+.btn-success {
+  @include button-style($success-color);
+}
+
+.btn-warning {
+  @include button-style($warning-color);
+}
+
+.btn-error {
+  @include button-style($error-color);
+}
+.btn-info {
+  @include button-style($info-color);
+}
+.btn-light {
+  @include button-style($light-color);
+}
+.btn-dark {
+  @include button-style($dark-color);
+}
+
+
+
+.btn-vert-extra {
+  @include button-style($vert-extra);
+}
+
+.btn-violet-extra {
+  @include button-style($violet-extra);
+}
+
+
+
+.btn-outlined-primary {
+  @include button-style-outlined($primary-color);
+}
+
+.btn-outlined-secondary {
+  @include button-style-outlined($secondary-color);
+}
+
+.btn-outlined-success {
+  @include button-style-outlined($success-color);
+}
+
+.btn-outlined-warning {
+  @include button-style-outlined($warning-color);
+}
+
+.btn-outlined-error {
+  @include button-style-outlined($error-color);
+}
+.btn-outlined-info {
+  @include button-style-outlined($info-color);
+}
+.btn-outlined-light {
+  @include button-style-outlined($light-color);
+}
+.btn-outlined-dark {
+  @include button-style-outlined($dark-color);
+}
+.btn-outlined-vert-extra {
+  @include button-style-outlined($vert-extra);
+}
+
+
+
+
+  
+
+
+
+
+
+
+
+

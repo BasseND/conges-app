@@ -53,9 +53,12 @@ class StatsController extends Controller
             'pending' => Leave::where('status', 'pending')->count(),
             'approved' => Leave::where('status', 'approved')->count(),
             'rejected' => Leave::where('status', 'rejected')->count(),
+            'pending_expenses' => ExpenseReport::where('status', ExpenseReport::STATUS_SUBMITTED)->count(),
             'employees' => User::where('role', 'employee')->count(),
             'managers' => User::where('role', 'manager')->count(),
             'admins' => User::where('role', 'admin')->count(),
+            'hr_users' => User::where('role', 'hr')->count(),
+            'department_heads' => Department::whereNotNull('head_id')->count(),
             'active_employees' => User::where('is_active', true)
                                       ->where('is_prestataire', false)
                                       ->count(),
@@ -72,7 +75,12 @@ class StatsController extends Controller
             'total_salary_mass' => Contract::where('is_expired', false)
                       ->where('type', '!=', Contract::CONTRACT_FREELANCE)
                       ->where('statut', 'actif')
-                      ->sum('salaire_brut')
+                      ->sum('salaire_brut'),
+            'temporary_contracts' => Contract::where('statut', 'actif')
+                      ->whereNotNull('date_fin')
+                      ->where('date_fin', '>', Carbon::now())
+                      ->where('date_fin', '<=', Carbon::now()->addDays(60))
+                      ->count()
         ];
 
         // Dernières notes de frais

@@ -5,6 +5,16 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use App\Listeners\RedirectAfterRegistration;
+use App\Events\LeaveCreated;
+use App\Events\LeaveStatusUpdated;
+use App\Events\ExpenseReportCreated;
+use App\Events\ExpenseReportStatusUpdated;
+use App\Events\UserCreated;
+use App\Events\UserUpdated;
+use App\Listeners\SendLeaveNotification;
+use App\Listeners\SendExpenseNotification;
+use App\Listeners\SendUserNotification;
+use App\Listeners\SendUserUpdateNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -19,6 +29,24 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
             RedirectAfterRegistration::class,
+        ],
+        LeaveCreated::class => [
+            SendLeaveNotification::class,
+        ],
+        LeaveStatusUpdated::class => [
+            SendLeaveNotification::class,
+        ],
+        ExpenseReportCreated::class => [
+            SendExpenseNotification::class,
+        ],
+        ExpenseReportStatusUpdated::class => [
+            SendExpenseNotification::class,
+        ],
+        UserCreated::class => [
+            SendUserNotification::class,
+        ],
+        UserUpdated::class => [
+            SendUserUpdateNotification::class,
         ],
     ];
 

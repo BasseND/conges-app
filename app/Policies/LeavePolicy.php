@@ -21,7 +21,7 @@ class LeavePolicy
      */
     public function view(User $user, Leave $leave): bool
     {
-        return $user->id === $leave->user_id || $user->isAdmin() || $user->isDepartmentHead();
+        return $user->id === $leave->user_id || $user->isAdmin() || $user->isHR() || $user->isDepartmentHead();
     }
 
     /**
@@ -37,7 +37,7 @@ class LeavePolicy
      */
     public function update(User $user, Leave $leave): bool
     {
-        return ($user->id === $leave->user_id && $leave->status === 'pending') || $user->isAdmin();
+        return ($user->id === $leave->user_id && in_array($leave->status, ['draft', 'pending'])) || $user->isAdmin() || $user->isHR();
     }
 
     /**
@@ -45,7 +45,7 @@ class LeavePolicy
      */
     public function delete(User $user, Leave $leave): bool
     {
-        return ($user->id === $leave->user_id && $leave->status === 'pending') || $user->isAdmin();
+        return ($user->id === $leave->user_id && in_array($leave->status, ['draft', 'pending'])) || $user->isAdmin() || $user->isHR();
     }
 
     /**
@@ -53,6 +53,6 @@ class LeavePolicy
      */
     public function approveLeaves(User $user): bool
     {
-        return $user->isAdmin() || $user->isManager();
+        return $user->isAdmin() || $user->isHR() || $user->isManager();
     }
 }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
                 {{ __('Détails du bulletin de paie') }}
             </h2>
             <div>
@@ -88,23 +88,23 @@
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">Salaire brut</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->gross_salary, 2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->gross_salary, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</td>
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">Charges sociales et fiscales</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">-{{ number_format($payslip->tax_amount, 2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">-{{ number_format($payslip->tax_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</td>
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">Primes</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->bonus_amount, 2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->bonus_amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</td>
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">Remboursement de frais</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->expense_reimbursement, 2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->expense_reimbursement, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</td>
                                     </tr>
                                     <tr class="bg-gray-50 dark:bg-gray-700">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">Salaire net</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->net_salary, 2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-right text-gray-900 dark:text-gray-100">{{ number_format($payslip->net_salary, 2, ',', ' ') }} {{ $globalCompanyCurrency }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -145,10 +145,10 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-gray-100">
                                                     @if ($item->type === 'earning')
-                                                        {{ number_format($item->amount, 2, ',', ' ') }} €
-                                                    @else
-                                                        -{{ number_format($item->amount, 2, ',', ' ') }} €
-                                                    @endif
+                                {{ number_format($item->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
+                                @else
+                                -{{ number_format($item->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
+                                @endif
                                                 </td>
                                             </tr>
                                         @endforeach

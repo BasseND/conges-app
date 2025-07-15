@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
                 {{ __('Mes avances sur salaire') }}
             </h2>
             <a href="{{ route('salary-advances.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
@@ -61,7 +61,7 @@
                                                 {{ \Carbon\Carbon::parse($advance->requested_date)->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                {{ number_format($advance->amount, 2, ',', ' ') }} €
+                                                {{ number_format($advance->amount, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $advance->reason }}

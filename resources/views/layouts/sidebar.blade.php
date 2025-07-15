@@ -85,7 +85,7 @@
                             Liste des employés
                         </a>
                         <a href="{{ route('admin.departments.index') }}" class="sidebar-sublink {{ request()->routeIs('admin.departments.*') ? 'active' : '' }}">
-                            Départements
+                            Entités
                         </a>
                     </div>
                 </div>

@@ -2,6 +2,8 @@ Pour voir les changements Tailwind, nous devons recompiler les assets CSS. Je va
 
 To restart Windsurf, please reload the window (Ctrl+Shift+P, then select "Reload Window").
 
+
+taskkill /f /im node.exe
 npm run dev
 
 // Pour creer un template

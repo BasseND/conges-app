@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Validator;
+use App\Events\UserCreated;
+use App\Events\UserUpdated;
 
 class UserController extends Controller
 {
@@ -60,12 +62,15 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info('UserController store method called');
+        
         Log::info('Request data:', $request->all());
 
         try {
             $validatedData = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
+                'gender' => 'required|in:M,F',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'nullable|string|max:20',
                 'password' => 'required|string|min:8|confirmed',
@@ -79,12 +84,13 @@ class UserController extends Controller
                 ])],
                 'department_id' => 'required|exists:departments,id',
                 'team_id' => 'nullable|exists:teams,id',
-                'annual_leave_days' => 'required|integer|min:0',
-                'sick_leave_days' => 'required|integer|min:0',
+                'leave_balance_id' => 'nullable|exists:leave_balances,id',
                 'is_prestataire' => 'nullable'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
+                'gender.required' => 'Le sexe est obligatoire.',
+                'gender.in' => 'Le sexe doit être Masculin ou Féminin.',
                 'email.required' => 'L\'adresse email est obligatoire.',
                 'email.email' => 'L\'adresse email doit être valide.',
                 'email.unique' => 'Cette adresse email est déjà utilisée.',
@@ -97,12 +103,7 @@ class UserController extends Controller
                 'department_id.required' => 'Le département est obligatoire.',
                 'department_id.exists' => 'Le département sélectionné n\'existe pas.',
                 'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
-                'annual_leave_days.required' => 'Le nombre de jours de congés annuels est obligatoire.',
-                'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
-                'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
-                'sick_leave_days.required' => 'Le nombre de jours de congés maladie est obligatoire.',
-                'sick_leave_days.integer' => 'Le nombre de jours de congés maladie doit être un nombre entier.',
-                'sick_leave_days.min' => 'Le nombre de jours de congés maladie ne peut pas être négatif.'
+                'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.'
             ]);
 
             Log::info('Validated data:', $validatedData);
@@ -136,6 +137,11 @@ class UserController extends Controller
             if ($teamId) {
                 $user->teams()->attach($teamId);
             }
+            
+            // Déclencher l'événement de création d'utilisateur
+            \Log::info('About to trigger UserCreated event for user: ' . $user->email);
+            event(new UserCreated($user));
+            \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -171,12 +177,12 @@ class UserController extends Controller
             ])],
             'department_id' => 'required|exists:departments,id',
             'team_id' => 'nullable|exists:teams,id',
-            'annual_leave_days' => 'required|integer|min:0',
-            'sick_leave_days' => 'required|integer|min:0',
             'is_prestataire' => 'nullable'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
+            'gender.required' => 'Le sexe est obligatoire.',
+            'gender.in' => 'Le sexe doit être Masculin ou Féminin.',
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'L\'adresse email doit être valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
@@ -188,13 +194,7 @@ class UserController extends Controller
             'role.in' => 'Le rôle sélectionné n\'est pas valide.',
             'department_id.required' => 'Le département est obligatoire.',
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
-            'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
-            'annual_leave_days.required' => 'Le nombre de jours de congés annuels est obligatoire.',
-            'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
-            'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
-            'sick_leave_days.required' => 'Le nombre de jours de congés maladie est obligatoire.',
-            'sick_leave_days.integer' => 'Le nombre de jours de congés maladie doit être un nombre entier.',
-            'sick_leave_days.min' => 'Le nombre de jours de congés maladie ne peut pas être négatif.'
+            'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.'
         ]);
 
         Log::info('Validated data:', $validatedData);
@@ -228,6 +228,11 @@ class UserController extends Controller
         if ($teamId) {
             $user->teams()->attach($teamId);
         }
+        
+        // Déclencher l'événement de création d'utilisateur
+        \Log::info('About to trigger UserCreated event for user: ' . $user->email);
+        event(new UserCreated($user));
+        \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -247,9 +252,17 @@ class UserController extends Controller
         $departments = Department::all();
         $teams = Team::all();
         // Charger les relations nécessaires
-        $user->load(['department', 'teams', 'contracts' => function($query) {
-            $query->orderBy('date_debut', 'desc');
-        }]);
+        $user->load([
+            'department', 
+            'teams', 
+            'leaveBalance',
+            'company.leaveBalances' => function($query) {
+                $query->where('is_default', true);
+            },
+            'contracts' => function($query) {
+                $query->orderBy('date_debut', 'desc');
+            }
+        ]);
 
         return view('admin.users.show', compact('user', 'departments', 'teams'));
     }
@@ -259,6 +272,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
@@ -272,8 +286,10 @@ class UserController extends Controller
             ])],
             'department_id' => 'required|exists:departments,id',
             'team_id' => 'nullable|exists:teams,id',
-            'annual_leave_days' => 'required|integer|min:0',
-            'sick_leave_days' => 'required|integer|min:0',
+            'leave_balance_id' => 'nullable|exists:leave_balances,id',
+            'maternity_leave_days' => 'nullable|integer|min:0',
+            'paternity_leave_days' => 'nullable|integer|min:0',
+            'special_leave_days' => 'nullable|integer|min:0',
             'is_prestataire' => 'nullable'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
@@ -289,13 +305,14 @@ class UserController extends Controller
             'department_id.required' => 'Le département est obligatoire.',
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
             'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
-            'annual_leave_days.required' => 'Le nombre de jours de congés annuels est obligatoire.',
-            'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
-            'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
-            'sick_leave_days.required' => 'Le nombre de jours de congés maladie est obligatoire.',
-            'sick_leave_days.integer' => 'Le nombre de jours de congés maladie doit être un nombre entier.',
-            'sick_leave_days.min' => 'Le nombre de jours de congés maladie ne peut pas être négatif.'
+            'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.'
         ]);
+
+        // Sauvegarder les anciennes données
+        $oldData = $user->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
+        
+        \Log::info('User update - Old data: ' . json_encode($oldData));
+        \Log::info('User update - New data: ' . json_encode($validatedData));
 
         // Traiter la valeur is_prestataire
         $validatedData['is_prestataire'] = $request->has('is_prestataire');
@@ -332,9 +349,24 @@ class UserController extends Controller
         } else {
             $user->teams()->detach();
         }
+        
+        // Récupérer les nouvelles données
+        $newData = $user->fresh()->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
+        
+        // Déclencher l'événement UserUpdated
+        event(new UserUpdated($user, $oldData, $newData));
+        \Log::info('UserUpdated event dispatched for user: ' . $user->email);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur modifié avec succès.');
+        // Redirection conditionnelle selon la source de la requête
+        if ($request->has('source') && $request->input('source') === 'modal') {
+            // Si la requête provient du modal, rester sur la page de détail
+            return redirect()->route('admin.users.show', $user)
+                ->with('success', 'Utilisateur modifié avec succès.');
+        } else {
+            // Si la requête provient des formulaires classiques, retourner à la liste
+            return redirect()->route('admin.users.index')
+                ->with('success', 'Utilisateur modifié avec succès.');
+        }
     }
 
     // public function destroy(User $user)
@@ -347,24 +379,55 @@ class UserController extends Controller
     public function destroy(Request $request, User $user)
     {
         $request->validate([
-            'confirm_first_name' => 'required|string',
-            'confirm_last_name' => 'required|string',
+            'confirm_text' => 'required|string',
         ]);
 
-        // Vérifier que les noms et prénoms correspondent
-        if ($request->confirm_first_name !== $user->first_name || 
-            $request->confirm_last_name !== $user->last_name) {
-            return back()
-                ->withErrors(['userDeletion' => [
-                    'confirm_first_name' => 'Le prénom saisi ne correspond pas.',
-                    'confirm_last_name' => 'Le nom saisi ne correspond pas.'
-                ]])
-                ->with('error', 'Les informations saisies ne correspondent pas à l\'utilisateur.');
+        // Vérifier que le texte de confirmation correspond
+        if ($request->confirm_text !== 'CONFIRMER') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Le texte de confirmation ne correspond pas. Veuillez saisir "CONFIRMER" pour confirmer la suppression.'
+            ], 422);
         }
 
+        // Vérifier que l'utilisateur ne peut pas supprimer son propre compte
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas supprimer votre propre compte.'
+            ], 403);
+        }
+
+        $userName = $user->first_name . ' ' . $user->last_name;
         $user->delete();
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur supprimé avec succès');
+        
+        return response()->json([
+            'success' => true,
+            'message' => "L'utilisateur {$userName} a été supprimé avec succès."
+        ]);
+    }
+
+    public function toggleStatus(Request $request, User $user)
+    {
+        // Vérifier que l'utilisateur ne peut pas désactiver son propre compte
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas modifier votre propre statut.'
+            ], 403);
+        }
+
+        // Basculer le statut
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        $status = $user->is_active ? 'activé' : 'désactivé';
+        
+        return response()->json([
+            'success' => true,
+            'message' => "L'utilisateur {$user->first_name} {$user->last_name} a été {$status} avec succès.",
+            'is_active' => $user->is_active
+        ]);
     }
 
     private function generateEmployeeId()
@@ -383,4 +446,23 @@ class UserController extends Controller
 
     // Profile Infos Dialog Edit
     
+    /**
+     * Récupérer la liste des utilisateurs pour l'API
+     */
+    public function apiIndex()
+    {
+        $users = User::select('id', 'first_name', 'last_name', 'email')
+            ->orderBy('first_name')
+            ->orderBy('last_name')
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'email' => $user->email
+                ];
+            });
+
+        return response()->json($users);
+    }
 }

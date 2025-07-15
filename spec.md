@@ -1,3 +1,7 @@
+NIXPACKS_START_CMD="php artisan migrate:fresh --seed --force  && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+// Sans perte de donnés :
+NIXPACKS_START_CMD="php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+
 J'ai ajouté plusieurs règles de validation importantes pour rendre l'application plus cohérente :
 
 Règles sur les dates :
@@ -97,3 +101,48 @@ last_name
 phone ) dans la table user.   
  
 Le champs frist_name va remplacer le champs name.
+
+
+Je voudrais mettre en place des notifications. 
+A chaque ajout d'une note de frais, congé, d'un nouveau user, on ajoute dans la table notification une nouvelle ligne. A chaque fois qu'un contrat d'un salarie approche son terme on ajoute une nouvelle ligne dans la table notification. A chaque paiement d'une note de frais, on ajoute une nouvelle ligne dans la table notification. A chaque validation d'un congés on ajoute une nouvelle ligne dans la table notification. A chaque validation d'une note de frais on ajoute une nouvelle ligne dans la table notification.
+
+
+
+Je voudrais également une table pour historiser les changements impportants qui interviennent dans l'app. Comme les changes de contrat, les changements de salaire, les changements de congés, etc. 
+
+<!-- Affichage en calendar des congés -->
+
+<!-- Filtre par années des congés et Note de frais -->
+
+<!-- Sécurisé le changement de role -->
+Enlever les champs de modification de role.
+Mettre un modal spécial pour le changement de role.
+
+<!-- REF NOTE DE FRAIS / CONGES -->
+Ajouter un champ ref dans la table note de frais et congés.
+Ce champ ref va permettre de faire la correspondance entre une note de frais et un congé.
+<!-- TODO LISTE -->
+
+2. Affichage en calendar des congés V2
+3. Filtre par années des congés et Note de frais
+4. Sécurisé le changement de role
+7. Ajouter un champ ref dans la table note de frais et congés.
+
+9. Harmoniser les formulaires
+10. Terminer le Dashboard
+11. Refaire la page profile 
+12. Harmoniser les tables
+13. Page de détails de congés et note de frais
+14. Ajouter affichage drawer pour un user
+15. Alerte pour un contrat qui approche son terme
+16. Refaire la pagination
+17. Dialog lors de la soumission note de frais (qu'on ne pourra pas le modifier après)
+18. Prévoir un dashboard pour le Chef de département et Manager en V2
+19. Listing des contrats en cours
+
+
+
+8. Compléter le menu sidebar
+20. Mettre le logo dans le header
+1. Compteur de congés restants
+21. Affichage des erreurs

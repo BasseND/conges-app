@@ -26,11 +26,16 @@
 
         <!-- Scripts -->
         @vite([
-            'resources/css/app.css',
-            'resources/css/sidebar.css',
-            'resources/css/header.css',
-            'resources/js/app.js'
+           'resources/assets/css/slick.css',
+           'resources/assets/css/aos.css',
+           'resources/assets/css/flatpickr.min.css',
+           'resources/assets/css/layout.css',
+           'resources/css/app.css',
+           'resources/js/app.js',
+           'resources/js/sensitive-actions.js',
         ])
+
+     
         
         <!-- Dark Mode Script -->
         <script>
@@ -61,7 +66,33 @@
                         localStorage.setItem('sidebarOpen', this.open);
                     }
                 });
+
+                Alpine.store('drawer', {
+                    active: false,
+                    toggle() {
+                        this.active = !this.active;
+                        const layoutWrapper = document.querySelector('.layout-wrapper');
+                        if (layoutWrapper) {
+                            if (this.active) {
+                                layoutWrapper.classList.add('active');
+                            } else {
+                                layoutWrapper.classList.remove('active');
+                            }
+                        }
+                    }
+                });
+
+                // Navigation store n'est plus nécessaire car nous utilisons x-data local
             });
+
+
+            // Navigation submenu géré par Alpine.js
+            // La logique est maintenant dans les directives Alpine.js des éléments de navigation
+            
+            
+
+
+
         </script>
 
         <!-- Styles pour le dark mode -->
@@ -104,56 +135,65 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased bg-[#f7f9ff] dark:bg-gray-900" x-data x-init="$store.darkMode.init()">
-        <!-- Sidebar Navigation -->
-        @auth
-            @include('layouts.sidebar')
-        @endauth
-    
-        <div class="min-h-screen flex flex-col navbar-sticky">
-          
-            <div class="main-content flex-1 flex flex-col overflow-x-hidden" :class="{'lg:ml-64': $store.sidebar.open, 'lg:ml-0': !$store.sidebar.open}">
-                 <!-- Top Navigation -->
-            <header class="w-full z-30 app-header">
-                @include('layouts.navigation')
-            </header>
+    <body class="font-sans antialiased" x-data="{}" x-init="$store.darkMode.init()" @keydown.ctrl.b.window.prevent="$store.drawer.toggle()">
+        <div class="layout-wrapper active w-full">
+            <div class="relative flex w-full">
+                <!-- Sidebar Navigation -->
+                @auth
+                    @include('layouts.sidebare')
+                @endauth
+
+               
 
                 <!-- Main Content Container -->
-                <main role="main" class="">
-                    <!-- Page Heading -->
-                    @if (isset($header))
-                        <div class="bg-white dark:bg-gray-800 shadow ">
-                            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                                {{ $header }}
-                            </div>
-                        </div>
-                    @endif
+                <div class="body-wrapper flex-1 overflow-x-hidden dark:bg-darkblack-500">
+                    <!-- Top Navigation -->
+                    @include('layouts.header')
+                  
+                    <!-- Main Content Container -->
+                    <main role="main" class="w-full px-6 pb-6 pt-[100px] sm:pt-[156px] xl:px-12 xl:pb-12">
+                         <!-- write your code here-->
+                        <div class="2xl:flex 2xl:space-x-[48px]">
+                            <section class="mb-6 w-full">
 
-                    <!-- Affichage des erreurs de validation en haut de la page -->
-                    @if ($errors->any())
-                        <div class="mx-auto mt-4 px-4 sm:px-6 lg:px-8">
-                            <div class="alert-error">
-                                <div class="font-medium">{{ __('Veuillez corriger les erreurs suivantes:') }}</div>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    @endif
+                                <!-- Page Heading -->
+                                @if (isset($header))
+                                    <div class="bg-white dark:bg-darkblack-600 rounded-lg p-4 mb-8">
+                                        {{ $header }}
+                                    </div>
+                                @endif
 
-                    <!-- Page Content -->
-                    <div  class="flex-1 py-4 px-4 sm:px-6 lg:px-8">
-                        <div class="mx-auto">
-                            {{ $slot }}
+                                <!-- Affichage des erreurs de validation en haut de la page -->
+                                <!-- @if ($errors->any())
+                                    <div class="mx-auto mt-4 px-4 sm:px-6 lg:px-8">
+                                        <div class="alert-error">
+                                            <div class="font-medium">{{ __('Veuillez corriger les erreurs suivantes:') }}</div>
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                @endif -->
+
+                                <div class="mx-auto">
+                                    {{ $slot }}
+                                </div>
+
+                            </section>
                         </div>
-                    </div>
-                </main>
+                    </main>
+
+                </div>
+              
             </div>
         </div>
 
         @stack('scripts')
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+        
+        <!-- Modal pour les actions sensibles -->
+        <x-modals.sensitive-action-dialog />
     </body>
 </html>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Events\LeaveStatusUpdated;
 
 trait HandlesLeaveApproval
 {
@@ -31,17 +32,38 @@ trait HandlesLeaveApproval
                 return back()->with('error', 'Cette demande de congé a déjà été traitée.');
             }
 
+            $oldStatus = $leave->status;
+            
             $leave->update([
                 'status' => 'approved',
                 'processed_by' => auth()->id(),
                 'processed_at' => now(),
             ]);
+            
+            // Déclencher l'événement de mise à jour du statut
+            event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
-            // Mettre à jour le solde de congés de l'employé
+            // Mettre à jour le solde de congés de l'employé via LeaveBalance
             if ($leave->type === 'annual') {
-                $leave->user->decrement('annual_leave_days', $leave->duration);
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('annual_leave_days', $leave->duration);
+                }
             } elseif ($leave->type === 'sick') {
-                $leave->user->decrement('sick_leave_days', $leave->duration);
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('sick_leave_days', $leave->duration);
+                }
+            } elseif ($leave->type === 'maternity') {
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('maternity_leave_days', $leave->duration);
+                }
+            } elseif ($leave->type === 'paternity') {
+                $leaveBalance = $leave->user->leaveBalance;
+                if ($leaveBalance) {
+                    $leaveBalance->decrement('paternity_leave_days', $leave->duration);
+                }
             }
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
@@ -67,12 +89,17 @@ trait HandlesLeaveApproval
         ]);
 
         try {
+            $oldStatus = $leave->status;
+            
             $leave->update([
                 'status' => 'rejected',
                 'rejection_reason' => $validated['rejection_reason'],
                 'processed_by' => auth()->id(),
                 'processed_at' => now(),
             ]);
+            
+            // Déclencher l'événement de mise à jour du statut
+            event(new LeaveStatusUpdated($leave, $oldStatus, 'rejected'));
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
             return true;

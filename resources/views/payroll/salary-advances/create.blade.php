@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
             {{ __('Demande d\'avance sur salaire') }}
         </h2>
     </x-slot>
@@ -42,7 +42,7 @@
 
                             <!-- Montant -->
                             <div class="mb-6">
-                                <x-input-label for="amount" :value="__('Montant demandé (€)')" />
+                                <x-input-label for="amount" :value="__('Montant demandé (' . $globalCompanyCurrency . ')')" />
                                 <x-text-input id="amount" class="block mt-1 w-full" type="number" name="amount" :value="old('amount')" step="0.01" min="0" required autofocus />
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Le montant maximum autorisé dépend de votre salaire et des avances en cours.</p>
                             </div>

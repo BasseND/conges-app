@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
             {{ __('Mes bulletins de paie') }}
         </h2>
     </x-slot>
@@ -82,10 +82,10 @@
                                             {{ \Carbon\Carbon::create()->month($payslip->period_month)->locale('fr_FR')->monthName }} {{ $payslip->period_year }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ number_format($payslip->gross_salary, 2, ',', ' ') }} €
+                                            {{ number_format($payslip->gross_salary, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ number_format($payslip->net_salary, 2, ',', ' ') }} €
+                                            {{ number_format($payslip->net_salary, 2, ',', ' ') }} {{ $globalCompanyCurrency }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             @if ($payslip->status === 'draft')
