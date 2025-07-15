@@ -171,7 +171,7 @@ class TeamController extends Controller
         Log::info('Récupération des équipes pour le département: ' . $department->id);
         
         try {
-            $teams = $department->teams()->with('manager:id,name')->get();
+            $teams = $department->teams()->with('manager:id,first_name,last_name')->get();
             Log::info('Équipes trouvées: ' . $teams->count(), ['teams' => $teams->toArray()]);
             
             return response()->json($teams);
