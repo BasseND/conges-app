@@ -322,7 +322,7 @@
                             
 
                                 <td class="px-6 py-5 whitespace-nowrap">
-                                    @if($leave->status === 'pending' && auth()->user()->canManageUserLeaves($leave->user))
+                                    @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
                                         <div class="flex space-x-2">
                                             <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" 
                                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">

@@ -2,7 +2,7 @@
     <div class="pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 mb-6 shadow-lg">
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6 shadow-lg">
                 <div class="flex items-center">
                     <div class="bg-white/20 rounded-lg p-3 mr-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,22 +96,6 @@
                             </p>
                         </a>
 
-                        <a href="#dashboard" class="group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition-all duration-200">
-                            <div class="flex items-center mb-3">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-lg p-2 mr-3">
-                                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                    {{ __('Dashboard') }}
-                                </h3>
-                            </div>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                {{ __('Comprendre les statistiques et indicateurs') }}
-                            </p>
-                        </a>
-
                         <a href="#expenses" class="group bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800 hover:shadow-lg transition-all duration-200">
                             <div class="flex items-center mb-3">
                                 <div class="bg-orange-100 dark:bg-orange-900/50 rounded-lg p-2 mr-3">
@@ -125,6 +109,22 @@
                             </div>
                             <p class="text-sm text-gray-600 dark:text-gray-400">
                                 {{ __('Soumettez vos rapports de dépenses') }}
+                            </p>
+                        </a>
+
+                        <a href="#dashboard" class="group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition-all duration-200">
+                            <div class="flex items-center mb-3">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-lg p-2 mr-3">
+                                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                    {{ __('Dashboard') }}
+                                </h3>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                {{ __('Comprendre les statistiques et indicateurs') }}
                             </p>
                         </a>
 
@@ -418,241 +418,6 @@
                                         <li>• {{ __('Utilisez une adresse e-mail que vous consultez fréquemment') }}</li>
                                         <li>• {{ __('Contactez votre administrateur si vous ne trouvez pas votre département') }}</li>
                                         <li>• {{ __('Activez l\'authentification à deux facteurs pour plus de sécurité') }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section Dashboard -->
-            <div id="dashboard" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
-                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
-                    <div class="flex items-center">
-                        <div class="bg-white/20 rounded-lg p-3 mr-4">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold text-white">{{ __('Comprendre le Dashboard') }}</h2>
-                            <p class="text-indigo-100 mt-1">{{ __('Guide des statistiques et indicateurs de performance') }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-8">
-                    <div class="prose max-w-none dark:prose-invert">
-                        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                            {{ __('Le dashboard administrateur vous offre une vue d\'ensemble complète de l\'activité de votre organisation. Découvrez comment interpréter chaque élément pour optimiser la gestion de vos équipes.') }}
-                        </p>
-
-                        <!-- Indicateurs principaux -->
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
-                            <div class="flex items-start">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">📊</span>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        {{ __('Indicateurs clés de performance (KPI)') }}
-                                    </h3>
-                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                        {{ __('Les quatre cartes principales en haut du dashboard affichent les métriques essentielles :') }}
-                                    </p>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
-                                            <div class="flex items-center mb-2">
-                                                <div class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
-                                                <h4 class="font-semibold text-emerald-800 dark:text-emerald-200">{{ __('Total employés') }}</h4>
-                                            </div>
-                                            <p class="text-sm text-emerald-700 dark:text-emerald-300">
-                                                {{ __('Nombre d\'employés actifs dans l\'organisation. Indicateur de la taille de votre équipe.') }}
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                                            <div class="flex items-center mb-2">
-                                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                                                <h4 class="font-semibold text-blue-800 dark:text-blue-200">{{ __('Total congés') }}</h4>
-                                            </div>
-                                            <p class="text-sm text-blue-700 dark:text-blue-300">
-                                                {{ __('Nombre total de demandes de congés soumises. Permet de suivre l\'activité des demandes.') }}
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg p-4">
-                                            <div class="flex items-center mb-2">
-                                                <div class="w-3 h-3 bg-teal-500 rounded-full mr-2"></div>
-                                                <h4 class="font-semibold text-teal-800 dark:text-teal-200">{{ __('Total notes de frais') }}</h4>
-                                            </div>
-                                            <p class="text-sm text-teal-700 dark:text-teal-300">
-                                                {{ __('Montant total des notes de frais du mois en cours. Essentiel pour le suivi budgétaire.') }}
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg p-4">
-                                            <div class="flex items-center mb-2">
-                                                <div class="w-3 h-3 bg-rose-500 rounded-full mr-2"></div>
-                                                <h4 class="font-semibold text-rose-800 dark:text-rose-200">{{ __('Masse salariale') }}</h4>
-                                            </div>
-                                            <p class="text-sm text-rose-700 dark:text-rose-300">
-                                                {{ __('Coût total des salaires de l\'organisation. Indicateur financier majeur pour la gestion RH.') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Graphiques et analyses -->
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
-                            <div class="flex items-start">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">📈</span>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        {{ __('Graphiques et analyses visuelles') }}
-                                    </h3>
-                                    
-                                    <div class="space-y-6">
-                                        <div class="border-l-4 border-yellow-400 pl-4">
-                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique en donut - Statut des congés') }}</h4>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">
-                                                {{ __('Répartition des demandes de congés par statut (En attente, Approuvés, Rejetés). Permet d\'identifier rapidement les demandes nécessitant une action.') }}
-                                            </p>
-                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                                <li>• <span class="text-yellow-600 font-medium">{{ __('Jaune') }}</span> : {{ __('Demandes en attente de validation') }}</li>
-                                                <li>• <span class="text-green-600 font-medium">{{ __('Vert') }}</span> : {{ __('Demandes approuvées') }}</li>
-                                                <li>• <span class="text-red-600 font-medium">{{ __('Rouge') }}</span> : {{ __('Demandes rejetées') }}</li>
-                                            </ul>
-                                        </div>
-                                        
-                                        <div class="border-l-4 border-teal-400 pl-4">
-                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique en barres - Congés par département') }}</h4>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                {{ __('Comparaison du nombre de jours de congés pris par département. Utile pour identifier les départements avec une charge de travail élevée ou des besoins de renfort.') }}
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="border-l-4 border-green-400 pl-4">
-                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique linéaire - Évolution mensuelle') }}</h4>
-                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
-                                                {{ __('Tendance des congés sur l\'année. Permet d\'anticiper les périodes de forte demande et de planifier les ressources en conséquence.') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Statistiques détaillées -->
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
-                            <div class="flex items-start">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">👥</span>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        {{ __('Répartition des utilisateurs par rôle') }}
-                                    </h3>
-                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                        {{ __('Cette section détaille la composition de votre organisation par type d\'utilisateur :') }}
-                                    </p>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                                            <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Total employés') }}</span>
-                                        </div>
-                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                                            <div class="w-3 h-3 bg-yellow-400 rounded-full mr-3"></div>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Managers') }}</span>
-                                        </div>
-                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                                            <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Administrateurs') }}</span>
-                                        </div>
-                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                                            <div class="w-3 h-3 bg-red-400 rounded-full mr-3"></div>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Chefs de département') }}</span>
-                                        </div>
-                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                                            <div class="w-3 h-3 bg-cyan-400 rounded-full mr-3"></div>
-                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Ressources Humaines') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Activités récentes -->
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
-                            <div class="flex items-start">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">🕒</span>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                        {{ __('Tableaux d\'activités récentes') }}
-                                    </h3>
-                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                        {{ __('Deux tableaux vous permettent de suivre l\'activité en temps réel :') }}
-                                    </p>
-                                    
-                                    <div class="space-y-4">
-                                        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Dernières demandes de congés') }}</h4>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                                {{ __('Affiche les demandes les plus récentes avec :') }}
-                                            </p>
-                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                                <li>• {{ __('Date de soumission') }}</li>
-                                                <li>• {{ __('Type de congé (annuel, maladie, sans solde, autre)') }}</li>
-                                                <li>• {{ __('Informations de l\'employé') }}</li>
-                                                <li>• {{ __('Statut actuel avec badges colorés') }}</li>
-                                            </ul>
-                                        </div>
-                                        
-                                        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Dernières notes de frais') }}</h4>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                                {{ __('Suivi des notes de frais récentes avec :') }}
-                                            </p>
-                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                                <li>• {{ __('Date de création') }}</li>
-                                                <li>• {{ __('Employé concerné') }}</li>
-                                                <li>• {{ __('Montant total') }}</li>
-                                                <li>• {{ __('Statut (brouillon, soumis, approuvé, rejeté, payé)') }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Conseils d'utilisation -->
-                        <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl p-6">
-                            <div class="flex items-start">
-                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-lg p-2 mr-4">
-                                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-2">
-                                        {{ __('Conseils pour optimiser l\'utilisation du dashboard') }}
-                                    </h4>
-                                    <ul class="text-indigo-700 dark:text-indigo-300 space-y-1">
-                                        <li>• {{ __('Consultez le dashboard quotidiennement pour rester informé des activités') }}</li>
-                                        <li>• {{ __('Utilisez les graphiques pour identifier les tendances et anticiper les besoins') }}</li>
-                                        <li>• {{ __('Surveillez les demandes en attente pour maintenir un bon niveau de service') }}</li>
-                                        <li>• {{ __('Analysez la répartition par département pour équilibrer les charges de travail') }}</li>
-                                        <li>• {{ __('Suivez l\'évolution mensuelle pour planifier les périodes de congés') }}</li>
-                                        <li>• {{ __('Utilisez les liens "Voir toutes" pour accéder aux vues détaillées') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -1125,13 +890,8 @@
                                     </p>
                                     
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Tableau de bord des notes de frais') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/note_add.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -1159,14 +919,10 @@
                                     </ul>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Formulaire de création de note de frais') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/note_form.png') }}" alt="">
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1383,6 +1139,255 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Section Dashboard -->
+            <div id="dashboard" class="bg-white dark:bg-gray-800 overflow-hidden rounded-xl mb-8">
+                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
+                    <div class="flex items-center">
+                        <div class="bg-white/20 rounded-lg p-3 mr-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">{{ __('Comprendre le Dashboard') }}</h2>
+                            <p class="text-indigo-100 mt-1">{{ __('Guide des statistiques et indicateurs de performance') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="prose max-w-none dark:prose-invert">
+                        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                            {{ __('Le dashboard administrateur vous offre une vue d\'ensemble complète de l\'activité de votre organisation. Découvrez comment interpréter chaque élément pour optimiser la gestion de vos équipes.') }}
+                        </p>
+
+                        <!-- Indicateurs principaux -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">📊</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Indicateurs clés de performance (KPI)') }}
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ __('Les quatre cartes principales en haut du dashboard affichent les métriques essentielles :') }}
+                                    </p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
+                                                <h4 class="font-semibold text-emerald-800 dark:text-emerald-200">{{ __('Total employés') }}</h4>
+                                            </div>
+                                            <p class="text-sm text-emerald-700 dark:text-emerald-300">
+                                                {{ __('Nombre d\'employés actifs dans l\'organisation. Indicateur de la taille de votre équipe.') }}
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                                <h4 class="font-semibold text-blue-800 dark:text-blue-200">{{ __('Total congés') }}</h4>
+                                            </div>
+                                            <p class="text-sm text-blue-700 dark:text-blue-300">
+                                                {{ __('Nombre total de demandes de congés soumises. Permet de suivre l\'activité des demandes.') }}
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg p-4">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-3 h-3 bg-teal-500 rounded-full mr-2"></div>
+                                                <h4 class="font-semibold text-teal-800 dark:text-teal-200">{{ __('Total notes de frais') }}</h4>
+                                            </div>
+                                            <p class="text-sm text-teal-700 dark:text-teal-300">
+                                                {{ __('Montant total des notes de frais du mois en cours. Essentiel pour le suivi budgétaire.') }}
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg p-4">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-3 h-3 bg-rose-500 rounded-full mr-2"></div>
+                                                <h4 class="font-semibold text-rose-800 dark:text-rose-200">{{ __('Masse salariale') }}</h4>
+                                            </div>
+                                            <p class="text-sm text-rose-700 dark:text-rose-300">
+                                                {{ __('Coût total des salaires de l\'organisation. Indicateur financier majeur pour la gestion RH.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/dash_indicateurs_cles.png') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graphiques et analyses -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">📈</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Graphiques et analyses visuelles') }}
+                                    </h3>
+                                    
+                                    <div class="space-y-6 mb-5">
+                                        <div class="border-l-4 border-yellow-400 pl-4">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique en donut - Statut des congés') }}</h4>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">
+                                                {{ __('Répartition des demandes de congés par statut (En attente, Approuvés, Rejetés). Permet d\'identifier rapidement les demandes nécessitant une action.') }}
+                                            </p>
+                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                                <li>• <span class="text-yellow-600 font-medium">{{ __('Jaune') }}</span> : {{ __('Demandes en attente de validation') }}</li>
+                                                <li>• <span class="text-green-600 font-medium">{{ __('Vert') }}</span> : {{ __('Demandes approuvées') }}</li>
+                                                <li>• <span class="text-red-600 font-medium">{{ __('Rouge') }}</span> : {{ __('Demandes rejetées') }}</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="border-l-4 border-teal-400 pl-4">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique en barres - Congés par département') }}</h4>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                                {{ __('Comparaison du nombre de jours de congés pris par département. Utile pour identifier les départements avec une charge de travail élevée ou des besoins de renfort.') }}
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="border-l-4 border-green-400 pl-4">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Graphique linéaire - Évolution mensuelle') }}</h4>
+                                            <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                                {{ __('Tendance des congés sur l\'année. Permet d\'anticiper les périodes de forte demande et de planifier les ressources en conséquence.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/dash_conges-status.png') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistiques détaillées -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start mb-5">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">👥</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Répartition des utilisateurs par rôle') }}
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ __('Cette section détaille la composition de votre organisation par type d\'utilisateur :') }}
+                                    </p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                            <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Total employés') }}</span>
+                                        </div>
+                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                            <div class="w-3 h-3 bg-yellow-400 rounded-full mr-3"></div>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Managers') }}</span>
+                                        </div>
+                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                            <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Administrateurs') }}</span>
+                                        </div>
+                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                            <div class="w-3 h-3 bg-red-400 rounded-full mr-3"></div>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Chefs de département') }}</span>
+                                        </div>
+                                        <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                                            <div class="w-3 h-3 bg-cyan-400 rounded-full mr-3"></div>
+                                            <span class="text-sm font-medium text-gray-900 dark:text-white">{{ __('Ressources Humaines') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                <img src="{{ asset('images/guides/dash_roles_distributions.png') }}" alt="">
+                            </div>
+
+                            
+                        </div>
+
+                        <!-- Activités récentes -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4 mt-1">
+                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">🕒</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                        {{ __('Tableaux d\'activités récentes') }}
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                        {{ __('Deux tableaux vous permettent de suivre l\'activité en temps réel :') }}
+                                    </p>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Dernières demandes de congés') }}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                                {{ __('Affiche les demandes les plus récentes avec :') }}
+                                            </p>
+                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                                <li>• {{ __('Date de soumission') }}</li>
+                                                <li>• {{ __('Type de congé (annuel, maladie, sans solde, autre)') }}</li>
+                                                <li>• {{ __('Informations de l\'employé') }}</li>
+                                                <li>• {{ __('Statut actuel avec badges colorés') }}</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('Dernières notes de frais') }}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                                {{ __('Suivi des notes de frais récentes avec :') }}
+                                            </p>
+                                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                                <li>• {{ __('Date de création') }}</li>
+                                                <li>• {{ __('Employé concerné') }}</li>
+                                                <li>• {{ __('Montant total') }}</li>
+                                                <li>• {{ __('Statut (brouillon, soumis, approuvé, rejeté, payé)') }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conseils d'utilisation -->
+                        <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl p-6">
+                            <div class="flex items-start">
+                                <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-lg p-2 mr-4">
+                                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-2">
+                                        {{ __('Conseils pour optimiser l\'utilisation du dashboard') }}
+                                    </h4>
+                                    <ul class="text-indigo-700 dark:text-indigo-300 space-y-1">
+                                        <li>• {{ __('Consultez le dashboard quotidiennement pour rester informé des activités') }}</li>
+                                        <li>• {{ __('Utilisez les graphiques pour identifier les tendances et anticiper les besoins') }}</li>
+                                        <li>• {{ __('Surveillez les demandes en attente pour maintenir un bon niveau de service') }}</li>
+                                        <li>• {{ __('Analysez la répartition par département pour équilibrer les charges de travail') }}</li>
+                                        <li>• {{ __('Suivez l\'évolution mensuelle pour planifier les périodes de congés') }}</li>
+                                        <li>• {{ __('Utilisez les liens "Voir toutes" pour accéder aux vues détaillées') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>

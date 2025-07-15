@@ -282,7 +282,7 @@
                                                     </svg>
                                                 </a>
 
-                                            @if($user->id !== auth()->id())
+                                            @if(Auth::check() && $user->id !== auth()->id())
                                                 <!-- Bouton Changer le statut -->
                                                 <button @click="$dispatch('sensitive-action-dialog', {
                                                             url: '{{ route('admin.users.toggle-status', $user) }}',

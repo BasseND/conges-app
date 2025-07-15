@@ -131,11 +131,11 @@
                                 <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">{{ __('Solde disponible') }}</h4>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="text-center">
-                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="annual_balance">{{ auth()->user()->annual_leave_days }}</div>
+                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="annual_balance">{{ Auth::check() ? auth()->user()->annual_leave_days : 0 }}</div>
                                         <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés annuels') }}</div>
                                     </div>
                                     <div class="text-center">
-                                        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="sick_balance">{{ auth()->user()->sick_leave_days }}</div>
+                                        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="sick_balance">{{ Auth::check() ? auth()->user()->sick_leave_days : 0 }}</div>
                                         <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés maladie') }}</div>
                                     </div>
                                 </div>
