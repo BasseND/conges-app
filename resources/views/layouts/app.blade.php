@@ -163,19 +163,6 @@
                                     </div>
                                 @endif
 
-                                <!-- Affichage des erreurs de validation en haut de la page -->
-                                <!-- @if ($errors->any())
-                                    <div class="mx-auto mt-4 px-4 sm:px-6 lg:px-8">
-                                        <div class="alert-error">
-                                            <div class="font-medium">{{ __('Veuillez corriger les erreurs suivantes:') }}</div>
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                @endif -->
 
                                 <div class="mx-auto">
                                     {{ $slot }}
