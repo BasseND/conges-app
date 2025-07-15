@@ -12,8 +12,9 @@ use App\Models\SalaryAdvance;
 use App\Models\ExpenseReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use PDF;
+
 
 class PayslipController extends Controller
 {
