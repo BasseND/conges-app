@@ -243,7 +243,9 @@
                                         <option value="{{ App\Models\User::ROLE_MANAGER }}">Manager</option>
                                         <option value="{{ App\Models\User::ROLE_DEPARTMENT_HEAD }}">Chef de Département</option>
                                         <option value="{{ App\Models\User::ROLE_HR }}">Ressources Humaines</option>
+                                        @if(Auth::check() && auth()->user()->role === App\Models\User::ROLE_ADMIN)
                                         <option value="{{ App\Models\User::ROLE_ADMIN }}">Administrateur</option>
+                                        @endif
                                     </select>
                                     <x-input-error :messages="$errors->get('role')" class="mt-2" />
                                 </div>
@@ -434,7 +436,8 @@
                     teams.forEach(team => {
                         const option = document.createElement('option');
                         option.value = team.id;
-                        option.textContent = `${team.name} (Responsable: ${team.manager.name})`;
+                        const managerName = team.manager ? team.manager.name : 'Aucun responsable';
+                        option.textContent = `${team.name} (Responsable: ${managerName})`;
                         select.appendChild(option);
                     });
                     console.log('Liste des équipes mise à jour');

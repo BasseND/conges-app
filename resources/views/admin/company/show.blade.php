@@ -45,11 +45,11 @@
                                 {{ __('Informations de la société') }}
                             </h2>
                             @if($company)
-                                <a href="{{ route('admin.company.edit') }}" class="inline-flex items-center btn btn-primary">
+                                <a href="{{ route('admin.company.edit') }}" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
                                     <i class="bx bx-edit-alt mr-1"></i> Modifier
                                 </a>
                             @else
-                                <a href="{{ route('admin.company.create') }}" class="inline-flex items-center btn btn-primary">
+                                <a href="{{ route('admin.company.create') }}" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
                                     <i class="bx bx-plus mr-1"></i> Créer
                                 </a>
                             @endif
@@ -203,7 +203,7 @@
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                         <i class="bx bx-calendar mr-2"></i>Soldes de congés définis
                                     </h3>
-                                    <button type="button" onclick="openLeaveBalanceModal()" class="inline-flex items-center btn btn-primary">
+                                    <button type="button" onclick="openLeaveBalanceModal()" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
                                         <i class="bx bx-plus mr-1"></i> Ajouter un solde
                                     </button>
                                 </div>
@@ -442,7 +442,8 @@
             });
         }
 
-        function showNotification(message, type = 'info') {
+        // Fonction globale pour les notifications
+        window.showNotification = function(message, type = 'info') {
             // Créer la notification
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg max-w-sm ${
@@ -470,6 +471,11 @@
                     notification.remove();
                 }
             }, 5000);
+        };
+        
+        // Alias local pour compatibilité
+        function showNotification(message, type = 'info') {
+            window.showNotification(message, type);
         }
     </script>
 </x-app-layout>

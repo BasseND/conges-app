@@ -1,8 +1,69 @@
+<!-- Variables pour les routes -->
+<script>
+    window.leaveBalanceRoutes = {
+        store: '{{ route("admin.company.leave-balances.store") }}',
+        update: '{{ route("admin.company.leave-balances.update", "") }}'
+    };
+    
+    // Fonction de soumission du formulaire
+    window.submitLeaveBalanceForm = async function(modalContext) {
+        modalContext.submitting = true;
+        
+        const form = document.getElementById('leaveBalanceForm');
+        const formData = new FormData(form);
+        
+        const url = modalContext.isEdit ? 
+            window.leaveBalanceRoutes.update + '/' + modalContext.leaveBalanceId : 
+            window.leaveBalanceRoutes.store;
+        
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                if (typeof window.showNotification === 'function') {
+                    window.showNotification(data.message, 'success');
+                }
+                modalContext.open = false;
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                if (data.errors) {
+                    let errorMessage = 'Erreurs de validation:\n';
+                    Object.values(data.errors).forEach(errors => {
+                        errors.forEach(error => {
+                            errorMessage += '- ' + error + '\n';
+                        });
+                    });
+                    alert(errorMessage);
+                } else {
+                    alert(data.message || 'Une erreur est survenue');
+                }
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Erreur de connexion. Veuillez réessayer.');
+        } finally {
+            modalContext.submitting = false;
+        }
+    };
+</script>
+
 <!-- Modal moderne pour ajouter/modifier un solde de congés -->
 <div x-data="{ 
         open: false, 
         leaveBalanceId: null, 
         isEdit: false,
+        submitting: false,
         init() {
             console.log('Modal leave balance initialisé');
             window.addEventListener('open-leave-balance-modal', (event) => {
@@ -11,7 +72,6 @@
                 this.isEdit = !!event.detail?.leaveBalanceId;
                 this.open = true;
                 
-                // Pré-remplir les champs si c'est une édition
                 if (this.isEdit && event.detail?.data) {
                     this.$nextTick(() => {
                         const data = event.detail.data;
@@ -62,7 +122,7 @@
                 </div>
             </div>
             
-            <form id="leaveBalanceForm" x-bind:action="isEdit ? '/admin/companies/{{ $company->id }}/leave-balances/' + leaveBalanceId : '/admin/companies/{{ $company->id }}/leave-balances'" method="POST" class="p-6">
+            <form id="leaveBalanceForm" @submit.prevent="window.submitLeaveBalanceForm($data)" class="p-6">
                 @csrf
                 <input type="hidden" name="_method" x-bind:value="isEdit ? 'PUT' : 'POST'">
                 <input type="hidden" name="company_id" value="{{ $company->id }}">
@@ -176,12 +236,16 @@
                         </svg>
                         Annuler
                     </button>
-                    <button type="submit" 
-                            class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <button type="submit" :disabled="submitting"
+                            class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg x-show="!submitting" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"></path>
                         </svg>
-                        <span x-text="isEdit ? 'Mettre à jour' : 'Ajouter'"></span>
+                        <svg x-show="submitting" class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span x-text="submitting ? 'En cours...' : (isEdit ? 'Mettre à jour' : 'Ajouter')"></span>
                     </button>
                 </div>
             </form>
