@@ -20,7 +20,7 @@ class ContractController extends Controller
     {
         $contracts = Contract::with(['user'])
             ->orderBy('date_fin', 'asc')
-            ->get();
+            ->paginate(10);
 
         // Récupérer la devise de l'entreprise
         $company = Company::first();

@@ -16,6 +16,7 @@
     }
 }"
      @open-user-drawer.window="openDrawer($event.detail)"
+     x-cloak
      class="relative z-50">
     
     <!-- Overlay moderne -->
@@ -65,22 +66,24 @@
         <div class="flex-1 overflow-y-auto" x-show="user">
             <!-- Profil utilisateur -->
             <div class="px-6 py-6 border-b border-gray-100 dark:border-gray-800">
-                <div class="text-center">
-                    <div class="relative inline-block">
+                <div class="flex items-center justify-start">
+                    <div class="relative inline-block me-6">
                         <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl mx-auto mb-4 text-white text-xl font-bold shadow-xl">
                             <span x-text="user?.first_name?.charAt(0) + (user?.last_name?.charAt(0) || '')"></span>
                         </div>
                         <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-2 border-white dark:border-gray-900"
                              :class="user?.is_active ? 'bg-green-500' : 'bg-red-500'"></div>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1" x-text="(user?.first_name || '') + ' ' + (user?.last_name || '')"></h3>
-                    <p class="text-gray-500 dark:text-gray-400 mb-3" x-text="user?.email"></p>
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold"
-                          :class="user?.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'">
-                        <div class="w-2 h-2 rounded-full mr-2"
-                             :class="user?.is_active ? 'bg-green-500 animate-pulse' : 'bg-red-500'"></div>
-                        <span x-text="user?.is_active ? 'Actif' : 'Inactif'"></span>
-                    </span>
+                    <div class="">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1" x-text="(user?.first_name || '') + ' ' + (user?.last_name || '')"></h3>
+                        <p class="text-gray-500 dark:text-gray-400 mb-3" x-text="user?.email"></p>
+                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold"
+                            :class="user?.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'">
+                            <div class="w-2 h-2 rounded-full mr-2"
+                                :class="user?.is_active ? 'bg-green-500 animate-pulse' : 'bg-red-500'"></div>
+                            <span x-text="user?.is_active ? 'Actif' : 'Inactif'"></span>
+                        </span>
+                    </div>
                 </div>
             </div>
 

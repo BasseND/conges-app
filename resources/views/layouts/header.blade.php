@@ -115,7 +115,7 @@
                                   class="relative flex h-[52px] w-[52px] items-center justify-center rounded-[12px] border border-success-300 dark:border-darkblack-400"
                                 >
                                   @php
-                                    $unreadCount = Auth::user()->notifications()->where('is_read', false)->count();
+                                    $unreadCount = Auth::check() ? Auth::user()->notifications()->where('is_read', false)->count() : 0;
                                   @endphp
                                   @if($unreadCount > 0)
                                     <span class="absolute -right-[5px] -top-[2px] h-5 w-5 rounded-full border-2 border-white bg-red-500 text-white text-xs flex items-center justify-center font-bold min-w-[20px]">
@@ -180,10 +180,10 @@
                                     class="scroll-style-1 h-[335px] w-full overflow-y-scroll"
                                   >
                                     @php
-                                      $userNotifications = Auth::user()->notifications()
+                                      $userNotifications = Auth::check() ? Auth::user()->notifications()
                                         ->orderBy('created_at', 'desc')
                                         ->limit(10)
-                                        ->get();
+                                        ->get() : collect();
                                     @endphp
                                     
                                     @forelse($userNotifications as $notification)
@@ -355,7 +355,7 @@
                                   </span>
                                 </div>
                               
-                                 <span class="text-base font-bold leading-[28px] text-bgray-900 dark:text-white mr-2">{{ Auth::user()->first_name }}</span>
+                                 <span class="text-base font-bold leading-[28px] text-bgray-900 dark:text-white mr-2">{{ Auth::check() ? Auth::user()->first_name : 'Invité' }}</span>
 
                                   <div class="ml-1">
                                       <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
