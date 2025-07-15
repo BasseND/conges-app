@@ -329,7 +329,7 @@
                                         <li>{{ __('Prénom et nom de famille') }}</li>
                                         <li>{{ __('Adresse e-mail professionnelle') }}</li>
                                         <li>{{ __('Numéro de téléphone') }}</li>
-                                        <li>{{ __('Genre (optionnel)') }}</li>
+                                        <li>{{ __('Sexe') }}</li>
                                         <li>{{ __('Département') }}</li>
                                         <li>{{ __('Poste occupé') }}</li>
                                     </ul>
@@ -660,13 +660,8 @@
                                     </p>
                                     
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Tableau de bord des congés') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/conges_add.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -694,13 +689,9 @@
                                     </ul>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Formulaire de demande de congé') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/conges_form_01.png') }}" alt="">
+                                        <img src="{{ asset('images/guides/conges_form_02.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -721,6 +712,19 @@
                                     </p>
                                     
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <!-- Status brouillon -->
+                                        <div class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                                            <div class="flex items-center">
+                                                <div class="bg-gray-100 dark:bg-gray-600 rounded-full p-1 mr-2">
+                                                    <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-gray-800 dark:text-gray-200 font-medium">{{ __('Brouillon') }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Status en attente -->
                                         <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-yellow-100 dark:bg-yellow-900/50 rounded-full p-1 mr-2">
@@ -731,6 +735,7 @@
                                                 <span class="text-yellow-800 dark:text-yellow-200 font-medium">{{ __('En attente') }}</span>
                                             </div>
                                         </div>
+                                        <!-- Status accepté -->
                                         <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-green-100 dark:bg-green-900/50 rounded-full p-1 mr-2">
@@ -741,6 +746,7 @@
                                                 <span class="text-green-800 dark:text-green-200 font-medium">{{ __('Approuvé') }}</span>
                                             </div>
                                         </div>
+                                        <!-- Status refusé -->
                                         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-red-100 dark:bg-red-900/50 rounded-full p-1 mr-2">
@@ -748,29 +754,15 @@
                                                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                     </svg>
                                                 </div>
-                                                <span class="text-red-800 dark:text-red-200 font-medium">{{ __('Refusé') }}</span>
+                                                <span class="text-red-800 dark:text-red-200 font-medium">{{ __('Rejeté') }}</span>
                                             </div>
                                         </div>
-                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-                                            <div class="flex items-center">
-                                                <div class="bg-blue-100 dark:bg-blue-900/50 rounded-full p-1 mr-2">
-                                                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
-                                                <span class="text-blue-800 dark:text-blue-200 font-medium">{{ __('En cours') }}</span>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Liste des demandes avec statuts') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/conges_status.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -963,13 +955,8 @@
                                     </div>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Ajout de lignes de frais') }}
-                                        </p>
+                                     <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/note_line_add.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -1004,13 +991,8 @@
                                     </div>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Upload de justificatifs') }}
-                                        </p>
+                                     <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/note_line_justif.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -1031,6 +1013,7 @@
                                     </p>
                                     
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <!-- Status brouillon -->
                                         <div class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-gray-100 dark:bg-gray-600 rounded-full p-1 mr-2">
@@ -1041,27 +1024,20 @@
                                                 <span class="text-gray-800 dark:text-gray-200 font-medium">{{ __('Brouillon') }}</span>
                                             </div>
                                         </div>
-                                        <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
-                                            <div class="flex items-center">
-                                                <div class="bg-yellow-100 dark:bg-yellow-900/50 rounded-full p-1 mr-2">
-                                                    <svg class="w-4 h-4 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
-                                                <span class="text-yellow-800 dark:text-yellow-200 font-medium">{{ __('En attente') }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                                        <!-- Status Soumis -->
+                                         <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-blue-100 dark:bg-blue-900/50 rounded-full p-1 mr-2">
                                                     <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                                                     </svg>
                                                 </div>
-                                                <span class="text-blue-800 dark:text-blue-200 font-medium">{{ __('En cours de traitement') }}</span>
+                                                <span class="text-blue-800 dark:text-blue-200 font-medium">{{ __('Soumise') }}</span>
                                             </div>
                                         </div>
-                                        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                                      
+                                        <!-- Status Approuvée -->
+                                         <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
                                             <div class="flex items-center">
                                                 <div class="bg-green-100 dark:bg-green-900/50 rounded-full p-1 mr-2">
                                                     <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -1071,16 +1047,38 @@
                                                 <span class="text-green-800 dark:text-green-200 font-medium">{{ __('Approuvé') }}</span>
                                             </div>
                                         </div>
+
+                                        <!-- Rejetée -->
+                                        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                                            <div class="flex items-center">
+                                                <div class="bg-red-100 dark:bg-red-900/50 rounded-full p-1 mr-2">
+                                                    <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-red-800 dark:text-red-200 font-medium">{{ __('Refusé') }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Status Payée -->
+                                        <div class="bg-green-500 dark:bg-green-900/20 border border-green-600 dark:border-green-800 rounded-lg p-3">
+                                            <div class="flex items-center">
+                                                <div class="bg-green-50 dark:bg-green-900/50 rounded-full p-1 mr-2">
+                                                    <svg class="w-4 h-4 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-white dark:text-green-200 font-medium">{{ __('Payée') }}</span>
+                                            </div>
+                                        </div>
+
+                                        
+
                                     </div>
 
                                     <!-- Placeholder pour capture d'écran -->
-                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-lg p-8 text-center mb-4">
-                                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {{ __('Capture d\'écran : Suivi des notes de frais') }}
-                                        </p>
+                                    <div class="illusta_img bg-gray-200 dark:bg-gray-600 rounded-lg p-2 text-center mb-4">
+                                        <img src="{{ asset('images/guides/note_detail.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>

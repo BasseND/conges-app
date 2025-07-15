@@ -260,7 +260,10 @@
                                              <option value="{{ App\Models\User::ROLE_MANAGER }}" {{ old('role', $user->role) == App\Models\User::ROLE_MANAGER ? 'selected' : '' }}>Manager</option>
                                              <option value="{{ App\Models\User::ROLE_DEPARTMENT_HEAD }}" {{ old('role', $user->role) == App\Models\User::ROLE_DEPARTMENT_HEAD ? 'selected' : '' }}>Chef de Département</option>
                                              <option value="{{ App\Models\User::ROLE_HR }}" {{ old('role', $user->role) == App\Models\User::ROLE_HR ? 'selected' : '' }}>Ressources Humaines</option>
-                                             <option value="{{ App\Models\User::ROLE_ADMIN }}" {{ old('role', $user->role) == App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Administrateur</option>
+                                             @if(Auth::check() && auth()->user()->role === App\Models\User::ROLE_ADMIN)
+                                               <option value="{{ App\Models\User::ROLE_ADMIN }}" {{ old('role', $user->role) == App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Administrateur</option>
+                                             @endif
+                                             
                                          </select>
                                          <p class="text-xs text-gray-500 dark:text-gray-400">Niveau d'accès dans l'application</p>
                                          <x-input-error :messages="$errors->get('role')" class="mt-2" />
