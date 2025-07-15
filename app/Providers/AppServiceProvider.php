@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         }
         
         // Créer le lien symbolique storage si il n'existe pas (nécessaire sur Railway)
-        $this->createStorageLink();
+        // $this->createStorageLink();
         
         // Enregistrer le View Composer pour les données de la société
         View::composer('*', CompanyComposer::class);
