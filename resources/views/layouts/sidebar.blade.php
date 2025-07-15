@@ -59,7 +59,7 @@
                         <a href="{{ route('salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }}">
                             Avances sur salaire
                         </a>
-                        @if (auth()->user()->hasAdminAccess())
+                        @if (Auth::check() && auth()->user()->hasAdminAccess())
                         <a href="{{ route('admin.payroll-settings.index') }}" class="sidebar-sublink {{ request()->routeIs('admin.payroll-settings.*') ? 'active' : '' }}">
                             Paramètres de paie
                         </a>
@@ -112,10 +112,10 @@
         <div class="p-4 border-t border-indigo-100 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ auth()->user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->first_name.' '.auth()->user()->last_name).'&color=7F9CF5&background=EBF4FF' }}" alt="{{ auth()->user()->first_name }}" class="h-8 w-8 rounded-full">
+                    <img src="{{ Auth::check() ? (auth()->user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->first_name.' '.auth()->user()->last_name).'&color=7F9CF5&background=EBF4FF') : 'https://ui-avatars.com/api/?name=Invité&color=7F9CF5&background=EBF4FF' }}" alt="{{ Auth::check() ? auth()->user()->first_name : 'Invité' }}" class="h-8 w-8 rounded-full">
                     <div>
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->role }}</p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ Auth::check() ? auth()->user()->first_name.' '.auth()->user()->last_name : 'Invité' }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ Auth::check() ? auth()->user()->role : 'Non connecté' }}</p>
                     </div>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">

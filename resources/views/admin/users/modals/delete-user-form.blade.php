@@ -1,4 +1,4 @@
-@if(auth()->user()->role === 'admin' || auth()->user()->role === 'rh')
+@if(Auth::check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'rh'))
 <section class="space-y-6">
     <div class="p-6">
         <header>

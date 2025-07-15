@@ -60,7 +60,7 @@
                     Menu 
                 </h4>
                 <ul class="mt-2.5">
-                    @if (auth()->user()->role === 'admin' || auth()->user()->role === 'hr')
+                    @if (Auth::check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'hr'))
                     <!-- Settings -->
                     <li class="item py-[11px] text-bgray-900 dark:text-white">
                         <a href="{{ route('admin.company.show') }}" class="sidebar-link {{ request()->routeIs('admin.company.show') ? 'active' : '' }}">
@@ -361,10 +361,9 @@
                                     />
                                 </svg>
                                 </span>
-                                <span
-                                class="item-text text-lg font-medium leading-none"
-                                >Note de frais</span
-                                >
+                                <span class="item-text text-lg font-medium leading-none">
+                                   Note de frais
+                                </span>
                             </div>
                             </div>
                         </a>
@@ -430,9 +429,9 @@
 
                         
 
-                        @if (auth()->user()->isManager())
+                        @if (Auth::check() && auth()->user()->isManager())
                             <li class="item py-[11px] text-bgray-900 dark:text-white">
-                                <a href="route('manager.leaves.index')" class="sidebar-link {{ request()->routeIs('manager.leaves.*') ? 'active' : '' }}">
+                                <a href="{{ route('manager.leaves.index') }}" class="sidebar-link {{ request()->routeIs('manager.leaves.*') ? 'active' : '' }}">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-2.5">
                                         <span class="item-ico">
@@ -478,9 +477,9 @@
                             </li>
                         @endif
 
-                        @if (auth()->user()->isDepartmentHead())
+                        @if (Auth::check() && auth()->user()->isDepartmentHead())
                             <li class="item py-[11px] text-bgray-900 dark:text-white">
-                                <a href="route('head.leaves.index')" class="sidebar-link {{ request()->routeIs('head.leaves.*') ? 'active' : '' }}">
+                                <a href="{{ route('head.leaves.index') }}" class="sidebar-link {{ request()->routeIs('head.leaves.*') ? 'active' : '' }}">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-2.5">
                                         <span class="item-ico">

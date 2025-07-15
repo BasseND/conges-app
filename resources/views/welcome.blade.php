@@ -178,7 +178,7 @@
                     <div class="ml-6 flex-1">
                         <h3 class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mb-1">Congés restants</h3>
                        <div class="mt-2 flex items-baseline">
-                            <span class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">{{ auth()->user()->remaining_days }}</span>
+                            <span class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">{{ Auth::check() ? auth()->user()->remaining_days : 0 }}</span>
                             <span class="ml-2 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">jours</span>
                         </div>
                     </div>
@@ -198,7 +198,7 @@
                         <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wider uppercase mb-1">Notes en attente</h3>
                         
                         <div class="mt-2 flex items-baseline">
-                            <span class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{{ auth()->user()->pending_notes }}</span>
+                            <span class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{{ Auth::check() ? auth()->user()->pending_notes : 0 }}</span>
                             <span class="ml-2 text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">notes</span>
                         </div>
                    
@@ -221,11 +221,11 @@
                      
                     <div class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
                         @php
-                            $nextLeave = auth()->user()->leaves()
+                            $nextLeave = Auth::check() ? auth()->user()->leaves()
                                 ->where('start_date', '>=', now())
                                 ->where('status', 'approved')
                                 ->orderBy('start_date', 'asc')
-                                ->first();
+                                ->first() : null;
 
                             $mois = [
                                 1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',

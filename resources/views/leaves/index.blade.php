@@ -57,7 +57,7 @@
                                     </svg>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->annual_leave_days }}</div>
+                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->annual_leave_days : 0 }}</div>
                                     <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                     </svg>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->sick_leave_days }}</div>
+                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->sick_leave_days : 0 }}</div>
                                     <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
 
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->maternity_leave_days }}</div>
+                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->maternity_leave_days : 0 }}</div>
                                     <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                     </svg>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->paternity_leave_days }}</div>
+                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->paternity_leave_days : 0 }}</div>
                                     <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
                                 </div>
                             </div>
@@ -329,7 +329,7 @@
                                                     </svg>
                                                     Voir
                                                 </a>
-                                                @if($leave->status === 'draft' && (auth()->user()->id == $leave->user_id || auth()->user()->hasAdminAccess()))
+                                                @if($leave->status === 'draft' && (Auth::check() && (auth()->user()->id == $leave->user_id || auth()->user()->hasAdminAccess())))
                                                     <a href="{{ route('leaves.edit', ['leave' => $leave->id]) }}" 
                                                         class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

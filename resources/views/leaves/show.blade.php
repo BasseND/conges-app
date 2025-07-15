@@ -191,7 +191,7 @@
                             </a>
 
                             <!-- Actions -->
-                            @if(auth()->user()->can('update', $leave) || auth()->user()->can('approve-leaves'))
+                            @if(Auth::check() && (auth()->user()->can('update', $leave) || auth()->user()->can('approve-leaves')))
                                 <div class="">
                                     <div class="flex flex-wrap gap-3">
                                         @can('update', $leave)
@@ -214,7 +214,7 @@
                                             @endif
                                         @endcan
                                         
-                                        @if(auth()->user()->can('approve-leaves') && $leave->status === 'pending')
+                                        @if(Auth::check() && auth()->user()->can('approve-leaves') && $leave->status === 'pending')
                                             <button @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" 
                                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800 transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
