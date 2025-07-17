@@ -42,8 +42,6 @@ class LeaveRequestController extends Controller
         $user = $leave->user;
         if ($leave->type === 'annual') {
             $user->annual_leave_days -= $leave->duration;
-        } elseif ($leave->type === 'sick') {
-            $user->sick_leave_days -= $leave->duration;
         }
         $user->save();
 

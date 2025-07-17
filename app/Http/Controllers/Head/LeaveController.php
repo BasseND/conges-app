@@ -90,8 +90,6 @@ class LeaveController extends Controller
         // Mettre à jour le solde de congés de l'employé
         if ($leave->type === 'annual') {
             $leave->user->decrement('annual_leave_days', $leave->duration);
-        } elseif ($leave->type === 'sick') {
-            $leave->user->decrement('sick_leave_days', $leave->duration);
         }
 
         return back()->with('success', 'La demande de congé a été approuvée.');

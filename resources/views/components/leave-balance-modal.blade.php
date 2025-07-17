@@ -77,7 +77,7 @@
                         const data = event.detail.data;
                         document.getElementById('description').value = data.description || '';
                         document.getElementById('annual_leave_days').value = data.annual_leave_days || '';
-                        document.getElementById('sick_leave_days').value = data.sick_leave_days || '';
+
                         document.getElementById('maternity_leave_days').value = data.maternity_leave_days || '';
                         document.getElementById('paternity_leave_days').value = data.paternity_leave_days || '';
                         document.getElementById('special_leave_days').value = data.special_leave_days || '';
@@ -156,18 +156,7 @@
                                     placeholder="25">
                         </div>
                         
-                        <!-- Congés maladie -->
-                        <div>
-                            <label for="sick_leave_days" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                <svg class="w-4 h-4 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                </svg>
-                                Congés maladie (jours)
-                            </label>
-                            <input type="number" id="sick_leave_days" name="sick_leave_days" min="0" max="365" required 
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                    placeholder="10">
-                        </div>
+
                         
                         <!-- Congés maternité -->
                         <div>

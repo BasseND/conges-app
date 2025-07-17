@@ -1,3 +1,4 @@
+@section('title', 'Nouvelle demande de congé')
 <x-app-layout>
     <div class="py-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -129,16 +130,29 @@
                             <!-- Solde de congés -->
                             <div class="mt-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-blue-200 dark:border-blue-700">
                                 <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">{{ __('Solde disponible') }}</h4>
+                                
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="text-center">
                                         <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="annual_balance">{{ Auth::check() ? auth()->user()->annual_leave_days : 0 }}</div>
                                         <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés annuels') }}</div>
                                     </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="sick_balance">{{ Auth::check() ? auth()->user()->sick_leave_days : 0 }}</div>
-                                        <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés maladie') }}</div>
-                                    </div>
+                                    
+                                    @if(Auth::check())
+                                        @if(auth()->user()->gender === 'F')
+                                            <div class="text-center">
+                                                <div class="text-2xl font-bold text-pink-600 dark:text-pink-400" id="maternity_balance">{{ auth()->user()->maternity_leave_days ?? 0 }}</div>
+                                                <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés maternité') }}</div>
+                                            </div>
+                                        @else
+                                            <div class="text-center">
+                                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="paternity_balance">{{ auth()->user()->paternity_leave_days ?? 0 }}</div>
+                                                <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés paternité') }}</div>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
+                                
+                                
                             </div>
                         </div>
                     </div>

@@ -17,7 +17,8 @@ class Department extends Model
         'code',
         'description',
         'head_id',
-        'company_id'
+        'company_id',
+        'leave_balance_id'
     ];
 
     /**
@@ -57,5 +58,13 @@ class Department extends Model
     public function teams()
     {
         return $this->hasMany(Team::class);
+    }
+
+    /**
+     * Get the default leave balance for this department.
+     */
+    public function leaveBalance()
+    {
+        return $this->belongsTo(LeaveBalance::class);
     }
 }

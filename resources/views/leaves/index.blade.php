@@ -1,3 +1,4 @@
+@section('title', 'Mes demandes de congés')
 <x-app-layout>
     <div class="pb-12">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -47,7 +48,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Solde de congés</h3>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                         <!-- Congés annuels -->
                         <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-blue-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
                             <div class="flex items-center justify-between mb-4">
@@ -66,64 +67,53 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
                             </div>
                         </div>
+                        
+                        @if(Auth::check())
+                            @if(auth()->user()->gender === 'F')
+                                <!-- Congé Maternité -->
+                                <div class="bg-gradient-to-br from-pink-50 to-rose-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-pink-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                            </svg>
 
-                        <!-- Congés Maladie -->
-                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-green-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                    </svg>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->maternity_leave_days : 0 }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-1">Congé maternité</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
+                                    </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->sick_leave_days : 0 }}</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
+                            @else
+                                <!-- Congé Paternité -->
+                                <div class="bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-cyan-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->paternity_leave_days : 0 }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-1">Congé paternité</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-1">Congés maladie</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
-                            </div>
-                        </div>
+                            @endif
+                        @endif
 
-                         <!-- Congé Maternité -->
-                        <div class="bg-gradient-to-br from-pink-50 to-rose-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-pink-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                                    </svg>
+                        
 
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->maternity_leave_days : 0 }}</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-1">Congé maternité</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
-                            </div>
-                        </div>
-
-                        <!-- Congé Paternité -->
-                        <div class="bg-gradient-to-br from-cyan-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-cyan-200/50 dark:border-gray-600 hover:shadow-lg transition-all duration-200">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ Auth::check() ? auth()->user()->paternity_leave_days : 0 }}</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">jours</div>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="text-base font-semibold text-gray-900 dark:text-white mb-1">Congé paternité</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Solde disponible</p>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
 

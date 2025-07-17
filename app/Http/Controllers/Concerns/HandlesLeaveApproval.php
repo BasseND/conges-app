@@ -49,11 +49,6 @@ trait HandlesLeaveApproval
                 if ($leaveBalance) {
                     $leaveBalance->decrement('annual_leave_days', $leave->duration);
                 }
-            } elseif ($leave->type === 'sick') {
-                $leaveBalance = $leave->user->leaveBalance;
-                if ($leaveBalance) {
-                    $leaveBalance->decrement('sick_leave_days', $leave->duration);
-                }
             } elseif ($leave->type === 'maternity') {
                 $leaveBalance = $leave->user->leaveBalance;
                 if ($leaveBalance) {

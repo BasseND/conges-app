@@ -131,6 +131,14 @@ class UserController extends Controller
             $validatedData['password'] = Hash::make($validatedData['password']);
             $validatedData['employee_id'] = $this->generateEmployeeId();
             
+            // Si aucun solde de congés n'est sélectionné, utiliser celui du département s'il existe
+            if (empty($validatedData['leave_balance_id'])) {
+                $department = Department::find($validatedData['department_id']);
+                if ($department && $department->leave_balance_id) {
+                    $validatedData['leave_balance_id'] = $department->leave_balance_id;
+                }
+            }
+            
             $user = User::create($validatedData);
 
             // Attach team if one was selected

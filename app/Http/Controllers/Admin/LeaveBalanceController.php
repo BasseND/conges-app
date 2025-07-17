@@ -40,7 +40,6 @@ class LeaveBalanceController extends Controller
         $validatedData = $request->validate([
             'company_id' => 'required|exists:companies,id',
             'annual_leave_days' => 'required|integer|min:0|max:365',
-            'sick_leave_days' => 'required|integer|min:0|max:365',
             'maternity_leave_days' => 'required|integer|min:0|max:365',
             'paternity_leave_days' => 'required|integer|min:0|max:365',
             'special_leave_days' => 'required|integer|min:0|max:365',
@@ -53,10 +52,6 @@ class LeaveBalanceController extends Controller
             'annual_leave_days.integer' => 'Le nombre de jours de congés annuels doit être un nombre entier.',
             'annual_leave_days.min' => 'Le nombre de jours de congés annuels ne peut pas être négatif.',
             'annual_leave_days.max' => 'Le nombre de jours de congés annuels ne peut pas dépasser 365.',
-            'sick_leave_days.required' => 'Le nombre de jours de congés maladie est obligatoire.',
-            'sick_leave_days.integer' => 'Le nombre de jours de congés maladie doit être un nombre entier.',
-            'sick_leave_days.min' => 'Le nombre de jours de congés maladie ne peut pas être négatif.',
-            'sick_leave_days.max' => 'Le nombre de jours de congés maladie ne peut pas dépasser 365.',
         ]);
 
         try {
@@ -106,7 +101,6 @@ class LeaveBalanceController extends Controller
         $validatedData = $request->validate([
             'company_id' => 'required|exists:companies,id',
             'annual_leave_days' => 'required|integer|min:0|max:365',
-            'sick_leave_days' => 'required|integer|min:0|max:365',
             'maternity_leave_days' => 'required|integer|min:0|max:365',
             'paternity_leave_days' => 'required|integer|min:0|max:365',
             'special_leave_days' => 'required|integer|min:0|max:365',
@@ -162,11 +156,34 @@ class LeaveBalanceController extends Controller
     }
 
     /**
-     * Get leave balances for a specific company (AJAX)
+     * Get leave balances for a specific company via department (AJAX)
      */
-    public function getByCompany(Company $company)
+    public function getByCompany($departmentId)
     {
-        $leaveBalances = $company->leaveBalances()->orderBy('is_default', 'desc')->get();
-        return response()->json($leaveBalances);
+        $department = \App\Models\Department::with(['company', 'leaveBalance'])->findOrFail($departmentId);
+        
+        if (!$department->company) {
+            return response()->json([]);
+        }
+        
+        $leaveBalances = $department->company->leaveBalances()
+            ->select('id', 'annual_leave_days', 'maternity_leave_days', 'paternity_leave_days', 'special_leave_days', 'is_default', 'description')
+            ->orderBy('is_default', 'desc')
+            ->get();
+        
+        $response = [
+            'leave_balances' => $leaveBalances,
+            'department_default_balance' => null
+        ];
+        
+        // Ajouter le solde par défaut du département s'il existe
+        if ($department->leaveBalance) {
+            $response['department_default_balance'] = $department->leaveBalance->only([
+                'id', 'annual_leave_days', 'maternity_leave_days', 
+                'paternity_leave_days', 'special_leave_days', 'description'
+            ]);
+        }
+            
+        return response()->json($response);
     }
 }

@@ -1,3 +1,5 @@
+@section('title', 'Vérification de l\'email')
+
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Merci de votre inscription ! Avant de commencer, pourriez-vous vérifier votre adresse e-mail en cliquant sur le lien que nous venons de vous envoyer ? Si vous n\'avez pas reçu l\'e-mail, nous vous en enverrons un autre avec plaisir.') }}

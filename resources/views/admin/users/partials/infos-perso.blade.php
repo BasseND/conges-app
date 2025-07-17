@@ -170,21 +170,7 @@
                     </div>
                 </div>
 
-                <!-- Congés maladie -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Maladie</p>
-                            <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $user->leaveBalance->sick_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours</p>
-                        </div>
-                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Congés maternité -->
                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
@@ -265,21 +251,7 @@
                     </div>
                 </div>
 
-                <!-- Autres types de congés par défaut... -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Maladie</p>
-                            <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $user->company->defaultLeaveBalance()->sick_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours (défaut)</p>
-                        </div>
-                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
                     <div class="flex items-center justify-between">
