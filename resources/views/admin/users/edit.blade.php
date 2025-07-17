@@ -532,7 +532,7 @@
                 teams.forEach(team => {
                     const option = document.createElement('option');
                     option.value = team.id;
-                    option.textContent = `${team.name} (Responsable: ${team.manager.name})`;
+                    option.textContent = `${team.name} (Responsable: ${team.manager.first_name} ${team.manager.last_name})`;
                     if (selectedTeamId && team.id == selectedTeamId) {
                         option.selected = true;
                     }

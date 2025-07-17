@@ -165,7 +165,9 @@
                         <select id="role" name="role" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
                             <option value="employee" {{ $user->role === 'employee' ? 'selected' : '' }}>Employé</option>
                             <option value="manager" {{ $user->role === 'manager' ? 'selected' : '' }}>Manager</option>
-                            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Administrateur</option>
+                            @if(Auth::check() && auth()->user()->role === App\Models\User::ROLE_ADMIN)         
+                               <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Administrateur</option>
+                            @endif
                             <option value="hr" {{ $user->role === 'hr' ? 'selected' : '' }}>Ressources Humaines</option>
                             <option value="department_head" {{ $user->role === 'department_head' ? 'selected' : '' }}>Chef de département</option>
                         </select>

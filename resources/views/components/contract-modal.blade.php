@@ -263,7 +263,7 @@
                                 <select x-model="contractData.statut" id="statut" name="statut" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                                     <option value="actif">Actif</option>
                                     <option value="suspendu">Suspendu</option>
-                                    <option value="termine">Terminé</option>
+                                    <option x-show="isEditing" value="termine">Terminé</option>
                                 </select>
                                 
                                 <!-- Message d'avertissement pour statut terminé -->

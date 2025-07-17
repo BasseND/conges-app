@@ -436,7 +436,7 @@
                     teams.forEach(team => {
                         const option = document.createElement('option');
                         option.value = team.id;
-                        const managerName = team.manager ? team.manager.name : 'Aucun responsable';
+                        const managerName = team.manager ? team.manager.first_name : 'Aucun responsable';
                         option.textContent = `${team.name} (Responsable: ${managerName})`;
                         select.appendChild(option);
                     });
