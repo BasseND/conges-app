@@ -1,28 +1,5 @@
 <x-app-layout>
 
-    <div class="w-full px-4">
-        <!-- <div class="flex flex-col">
-            <div class="w-full">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Informations de la société</h4>
-                    <nav class="flex" aria-label="Breadcrumb">
-                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                            <li class="inline-flex items-center">
-                                <a href="{{ route('welcome.index') }}" class="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white">Accueil</a>
-                            </li>
-                            <li>
-                                <div class="flex items-center">
-                                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                    </svg>
-                                    <span class="text-gray-500 dark:text-gray-400">Société</span>
-                                </div>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </div> -->
-        </div>
 
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -58,7 +35,7 @@
                     <div class="p-6">
                     
                         @if($company)
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-dark-card-two dark:to-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-600">
+                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                     <!-- Logo Section -->
                                     <div class="lg:col-span-1">
@@ -198,8 +175,8 @@
                             </div>
 
                             <!-- Bloc congés -->
-                            <div class="bg-white dark:bg-dark-card-two rounded-xl  border border-gray-100 mt-6">
-                                <div class="bg-gray-50 flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl  border border-gray-100 dark:border-gray-600 mt-6">
+                                <div class="bg-gray-50 dark:bg-gray-900 flex justify-between items-center p-6 rounded-xl border-b border-gray-200 dark:border-gray-700">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                         <i class="bx bx-calendar mr-2"></i>Soldes de congés définis
                                     </h3>
