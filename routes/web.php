@@ -257,6 +257,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('company', [CompanyController::class, 'store'])->name('company.store');
         Route::get('company/edit', [CompanyController::class, 'edit'])->name('company.edit');
         Route::put('company', [CompanyController::class, 'update'])->name('company.update');
+        Route::delete('company/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');
         
         // Routes pour les soldes de congés de la société
         Route::post('company/leave-balances', [CompanyController::class, 'storeLeaveBalance'])->name('company.leave-balances.store');

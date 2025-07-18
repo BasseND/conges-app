@@ -16,48 +16,52 @@
         <div class="flex flex-col">
             <div class="w-full">
                 <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
-                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-bgray-900 dark:text-white sm:text-2xl text-xl font-bold">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
+                            <h2 class="text-gray-900 dark:text-white text-lg sm:text-xl lg:text-2xl font-bold truncate">
                                 {{ __('Informations de la société') }}
                             </h2>
                             @if($company)
-                                <a href="{{ route('admin.company.edit') }}" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
-                                    <i class="bx bx-edit-alt mr-1"></i> Modifier
+                                <a href="{{ route('admin.company.edit') }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
+                                    <i class="bx bx-edit-alt mr-1 lg:mr-2"></i> 
+                                    <span class="hidden sm:inline">Modifier</span>
+                                    <span class="sm:hidden">Éditer</span>
                                 </a>
                             @else
-                                <a href="{{ route('admin.company.create') }}" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
-                                    <i class="bx bx-plus mr-1"></i> Créer
+                                <a href="{{ route('admin.company.create') }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
+                                    <i class="bx bx-plus mr-1 lg:mr-2"></i> 
+                                    <span class="hidden sm:inline">Créer</span>
+                                    <span class="sm:hidden">Nouveau</span>
                                 </a>
                             @endif
                         </div>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                     
                         @if($company)
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-600">
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200 dark:border-gray-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                                     <!-- Logo Section -->
                                     <div class="lg:col-span-1">
                                         <div class="text-center relative">
                                             @if($company->logo)
                                                 <div class="relative inline-block group">
                                                     <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-                                                    <img src="{{ Storage::url($company->logo) }}" alt="Logo de la société" class="relative w-32 h-32 object-contain rounded-xl mx-auto shadow-lg bg-white p-2">
+                                                    <img src="{{ Storage::url($company->logo) }}" alt="Logo de la société" class="relative w-24 h-24 sm:w-32 sm:h-32 object-contain rounded-xl mx-auto shadow-lg bg-white p-2">
                                                 </div>
                                             @else
                                                 <div class="relative group">
                                                     <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-                                                    <div class="relative w-32 h-32 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-500 rounded-xl flex items-center justify-center mx-auto shadow-lg">
-                                                        <svg class="w-14 h-14 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <div class="relative w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-500 rounded-xl flex items-center justify-center mx-auto shadow-lg">
+                                                        <svg class="w-10 h-10 sm:w-14 sm:h-14 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                                         </svg>
                                                     </div>
                                                 </div>
                                             @endif
-                                            <div class="mt-6">
-                                                <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">{{ $company->name }}</h3>
-                                                <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            <div class="mt-4 lg:mt-6">
+                                                <h3 class="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent truncate">{{ $company->name }}</h3>
+                                                <div class="mt-2 inline-flex items-center px-2 lg:px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                     </svg>
@@ -71,18 +75,18 @@
 
                                     <!-- Information Section -->
                                      <div class="lg:col-span-2">
-                                         <div class="space-y-8">
+                                         <div class="space-y-6 lg:space-y-8">
                                              <!-- Contact Information -->
-                                             <div class="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-100 dark:border-gray-700">
-                                                 <div class="flex items-center mb-4">
-                                                     <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
-                                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl lg:rounded-2xl p-4 lg:p-6 backdrop-blur-sm border border-gray-100 dark:border-gray-700">
+                                                 <div class="flex items-center mb-3 lg:mb-4">
+                                                     <div class="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-2 lg:mr-3">
+                                                         <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                                          </svg>
                                                      </div>
-                                                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Informations de contact</h4>
+                                                     <h4 class="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">Informations de contact</h4>
                                                  </div>
-                                                 <div class="grid md:grid-cols-2 gap-6">
+                                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
                                                     @if($company->contact_email)
                                                      <div class="group hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl p-3 transition-all duration-200">
                                                          <div class="flex items-center space-x-3">
@@ -175,8 +179,8 @@
                             </div>
 
                             <!-- Bloc congés -->
-                            <div class="bg-white dark:bg-gray-800 rounded-xl  border border-gray-100 dark:border-gray-600 mt-6">
-                                <div class="bg-gray-50 dark:bg-gray-900 flex justify-between items-center p-6 rounded-xl border-b border-gray-200 dark:border-gray-700">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-600 mt-4 lg:mt-6">
+                                <div class="bg-gray-50 dark:bg-gray-900 flex flex-col md:flex-row justify-between items-center p-6 rounded-xl border-b border-gray-200 dark:border-gray-700">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                         <i class="bx bx-calendar mr-2"></i>Soldes de congés définis
                                     </h3>
@@ -215,18 +219,18 @@
                                                         </div>
                                                         
                                                         <!-- Leave types grid -->
-                                                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+                                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
                                                             <!-- Congés annuels -->
-                                                            <div class="group/card relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-4 rounded-xl border border-blue-200/50 dark:border-blue-700/50">
+                                                            <div class="group/card relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-3 lg:p-4 rounded-xl border border-blue-200/50 dark:border-blue-700/50">
                                                                 <div class="flex items-center">
-                                                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-lg shadow-lg mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+                                                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                                                                         </svg>
                                                                     </div>
                                                                     <div>
-                                                                        <p class="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">Congés annuels</p>
-                                                                        <p class="text-2xl font-bold text-blue-900 dark:text-blue-100">{{ $balance->annual_leave_days }}</p>
+                                                                        <p class="text-xs lg:text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">Congés annuels</p>
+                                                                        <p class="text-lg lg:text-2xl font-bold text-blue-900 dark:text-blue-100">{{ $balance->annual_leave_days }}</p>
                                                                         <p class="text-xs text-blue-600 dark:text-blue-400">jours</p>
                                                                     </div>
                                                                 </div>
@@ -236,16 +240,16 @@
 
                                                             @if($balance->maternity_leave_days)
                                                             <!-- Congés maternité -->
-                                                            <div class="group/card relative bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 p-4 rounded-xl border border-pink-200/50 dark:border-pink-700/50">
+                                                            <div class="group/card relative bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 p-3 lg:p-4 rounded-xl border border-pink-200/50 dark:border-pink-700/50">
                                                                 <div class="flex items-center">
-                                                                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-3 rounded-lg shadow-lg mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+                                                                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                                                         </svg>
                                                                     </div>
                                                                     <div>
-                                                                        <p class="text-sm font-medium text-pink-700 dark:text-pink-300 mb-1">Congés maternité</p>
-                                                                        <p class="text-2xl font-bold text-pink-900 dark:text-pink-100">{{ $balance->maternity_leave_days }}</p>
+                                                                        <p class="text-xs lg:text-sm font-medium text-pink-700 dark:text-pink-300 mb-1">Congés maternité</p>
+                                                                        <p class="text-lg lg:text-2xl font-bold text-pink-900 dark:text-pink-100">{{ $balance->maternity_leave_days }}</p>
                                                                         <p class="text-xs text-pink-600 dark:text-pink-400">jours</p>
                                                                     </div>
                                                                 </div>
@@ -254,16 +258,16 @@
 
                                                             @if($balance->paternity_leave_days)
                                                             <!-- Congés paternité -->
-                                                            <div class="group/card relative bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 p-4 rounded-xl border border-indigo-200/50 dark:border-indigo-700/50">
+                                                            <div class="group/card relative bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 p-3 lg:p-4 rounded-xl border border-indigo-200/50 dark:border-indigo-700/50">
                                                                 <div class="flex items-center">
-                                                                    <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-3 rounded-lg shadow-lg mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+                                                                    <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                                                         </svg>
                                                                     </div>
                                                                     <div>
-                                                                        <p class="text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Congés paternité</p>
-                                                                        <p class="text-2xl font-bold text-indigo-900 dark:text-indigo-100">{{ $balance->paternity_leave_days }}</p>
+                                                                        <p class="text-xs lg:text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Congés paternité</p>
+                                                                        <p class="text-lg lg:text-2xl font-bold text-indigo-900 dark:text-indigo-100">{{ $balance->paternity_leave_days }}</p>
                                                                         <p class="text-xs text-indigo-600 dark:text-indigo-400">jours</p>
                                                                     </div>
                                                                 </div>
@@ -272,16 +276,16 @@
 
                                                             @if($balance->special_leave_days)
                                                             <!-- Congés spéciaux -->
-                                                            <div class="group/card relative bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 p-4 rounded-xl border border-teal-200/50 dark:border-teal-700/50">
+                                                            <div class="group/card relative bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 p-3 lg:p-4 rounded-xl border border-teal-200/50 dark:border-teal-700/50">
                                                                 <div class="flex items-center">
-                                                                    <div class="bg-gradient-to-br from-teal-500 to-teal-600 p-3 rounded-lg shadow-lg mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+                                                                    <div class="bg-gradient-to-br from-teal-500 to-teal-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                                                                         </svg>
                                                                     </div>
                                                                     <div>
-                                                                        <p class="text-sm font-medium text-teal-700 dark:text-teal-300 mb-1">Congés spéciaux</p>
-                                                                        <p class="text-2xl font-bold text-teal-900 dark:text-teal-100">{{ $balance->special_leave_days }}</p>
+                                                                        <p class="text-xs lg:text-sm font-medium text-teal-700 dark:text-teal-300 mb-1">Congés spéciaux</p>
+                                                                        <p class="text-lg lg:text-2xl font-bold text-teal-900 dark:text-teal-100">{{ $balance->special_leave_days }}</p>
                                                                         <p class="text-xs text-teal-600 dark:text-teal-400">jours</p>
                                                                     </div>
                                                                 </div>
@@ -290,31 +294,31 @@
                                                         </div>
                                                         
                                                         <!-- Total summary -->
-                                                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-700/50 p-4 rounded-xl border border-gray-200/50 dark:border-gray-600/50">
+                                                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-700/50 p-3 lg:p-4 rounded-xl border border-gray-200/50 dark:border-gray-600/50">
                                                             <div class="flex items-center justify-center">
-                                                                <div class="bg-gradient-to-br from-gray-600 to-gray-700 p-3 rounded-lg shadow-lg mr-4">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
+                                                                <div class="bg-gradient-to-br from-gray-600 to-gray-700 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 lg:w-6 lg:h-6 text-white">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l-1-3m1 3l-1-3m-16.5-3h9.75" />
                                                                     </svg>
                                                                 </div>
                                                                 <div class="text-center">
-                                                                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total des congés</p>
-                                                                    <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ $balance->total_leave_days }}</p>
-                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">jours par an</p>
+                                                                    <p class="text-xs lg:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total des congés</p>
+                                                                    <p class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">{{ $balance->total_leave_days }}</p>
+                                                                    <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400">jours par an</p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     
                                                     <!-- Action buttons -->
-                                                    <div class="flex flex-col space-y-2 ml-6">
-                                                        <button type="button" onclick="editLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300">
+                                                    <div class="flex flex-col gap-2 lg:gap-3 lg:ml-4 mt-3 lg:mt-0 justify-end lg:justify-start">
+                                                        <button type="button" onclick="editLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                             </svg>
                                                         </button>
-                                                        <button type="button" onclick="deleteLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300">
+                                                        <button type="button" onclick="deleteLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                             </svg>
                                                         </button>
@@ -335,6 +339,13 @@
                             <!-- Inclusion du composant modal moderne -->
                             <x-leave-balance-modal :company="$company" />
 
+                            <!-- Action buttons -->
+                            <div class="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4 mt-6 lg:mt-8">
+                                <a href="{{ route('admin.company.edit', $company->id) }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
+                                    <i class="bx bx-edit mr-1 lg:mr-2"></i> Modifier
+                                </a>
+                               
+                            </div>
 
                         @else
                             <div class="text-center py-12">
