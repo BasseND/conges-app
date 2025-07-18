@@ -5,50 +5,56 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
          <!-- En-tête avec dégradé -->
-        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6"> 
-            <div class="flex items-center space-x-4">
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 sm:p-6 mb-6"> 
+            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                         </svg>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h1 class="text-2xl font-bold text-white sm:text-3xl">
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                         {{ __('Créer un utilisateur') }}
                     </h1>
-                    <p class="mt-1 text-blue-100">
-                        
+                    <p class="mt-1 text-sm sm:text-base text-blue-100">
+                        Ajoutez un nouvel utilisateur au système
                     </p>
                 </div>
             </div>
             
             <!-- Fil d'Ariane -->
-            <nav class="mt-6" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-2 text-sm">
-                    <li>
-                        <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
-                            Accueil
+            <nav class="mt-4 sm:mt-6 overflow-x-auto" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm whitespace-nowrap">
+                    <li class="flex-shrink-0">
+                        <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200 flex items-center">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            <span class="hidden sm:inline">Accueil</span>
+                            <span class="sm:hidden">Acc.</span>
                         </a>
                     </li>
-                    <li class="text-blue-200">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <li class="text-blue-200 flex-shrink-0">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </li>
-                    <li>
+                    <li class="flex-shrink-0">
                         <a href="{{ route('admin.users.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
-                            Utilisateurs
+                            <span class="hidden sm:inline">Utilisateurs</span>
+                            <span class="sm:hidden">Users</span>
                         </a>
                     </li>
-                    <li class="text-blue-200">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <li class="text-blue-200 flex-shrink-0">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </li>
-                    <li class="text-white font-medium">
-                        Ajouter un utilisateur
+                    <li class="text-white font-medium truncate">
+                        <span class="hidden sm:inline">Ajouter un utilisateur</span>
+                        <span class="sm:hidden">Ajouter</span>
                     </li>
                 </ol>
             </nav>
@@ -56,9 +62,8 @@
         <!-- END Header -->
 
 
-            <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                <div class="p-8">
-                    <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-8">
+            <div class="md:bg-white dark:bg-gray-800 rounded-2xl overflow-hidden md:border border-gray-200 dark:border-gray-700">
+                <form method="POST" action="{{ route('admin.users.store') }}" class="md:p-8 space-y-8">
                         @csrf
 
                         <!-- Block erreurs -->
@@ -303,28 +308,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Solde de congés -->
-                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 border border-purple-200 dark:border-purple-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <div class="flex items-center space-x-3">
-                                <div class="flex-shrink-0">
-                                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
-                                        <svg  class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ __('Solde de congés') }}
-                                    </h2>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Configurez les droits aux congés de l'utilisateur</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    
-                        <div class="flex items-center justify-end mt-8 gap-4">
+                        <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                             <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 shadow-sm hover:shadow-md">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -340,7 +324,6 @@
                         </div>
                 </form>
             </div>
-        </div>
     </div>
 
     <script>
