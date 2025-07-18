@@ -162,7 +162,33 @@
                 </form>
             </div>
 
-            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <!-- Boutons de basculement vue -->
+            <div class="flex justify-end mb-6">
+                <div class="view-toggle-container">
+                    <button id="table-view-btn" class="view-toggle-btn active">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18m-9 8h9"/>
+                        </svg>
+                        <span>Vue Tableau</span>
+                    </button>
+                    <button id="calendar-view-btn" class="view-toggle-btn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Vue Calendrier</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vue Calendrier (cachée par défaut) -->
+            <div id="calendar-view" class="hidden calendar-container mb-6">
+                <div class="p-6">
+                    <div id="calendar" class="relative"></div>
+                </div>
+            </div>
+
+            <!-- Vue Tableau -->
+            <div id="table-view" class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
@@ -385,4 +411,269 @@
 
     <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
     <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
+
+    @push('styles')
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+    <!-- Les styles du calendrier sont maintenant dans le fichier SCSS _calendar.scss -->
+    @endpush
+
+    @push('scripts')
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableViewBtn = document.getElementById('table-view-btn');
+            const calendarViewBtn = document.getElementById('calendar-view-btn');
+            const tableView = document.getElementById('table-view');
+            const calendarView = document.getElementById('calendar-view');
+            const calendarEl = document.getElementById('calendar');
+            
+            let calendar;
+            let currentView = 'table';
+
+            // Fonction pour basculer entre les vues
+            function switchView(view) {
+                if (view === 'calendar') {
+                    // Transition avec animation
+                    tableView.classList.add('view-transition-exit-active');
+                    setTimeout(() => {
+                        tableView.classList.add('hidden');
+                        tableView.classList.remove('view-transition-exit-active');
+                        
+                        calendarView.classList.remove('hidden');
+                        calendarView.classList.add('view-transition-enter-active');
+                        
+                        setTimeout(() => {
+                            calendarView.classList.remove('view-transition-enter-active');
+                        }, 300);
+                    }, 150);
+                    
+                    // Mettre à jour les styles des boutons
+                    tableViewBtn.classList.remove('active');
+                    calendarViewBtn.classList.add('active');
+                    
+                    // Initialiser le calendrier si ce n'est pas déjà fait
+                    if (!calendar) {
+                        setTimeout(() => {
+                            initializeCalendar();
+                        }, 200);
+                    }
+                    
+                    currentView = 'calendar';
+                } else {
+                    // Transition avec animation
+                    calendarView.classList.add('view-transition-exit-active');
+                    setTimeout(() => {
+                        calendarView.classList.add('hidden');
+                        calendarView.classList.remove('view-transition-exit-active');
+                        
+                        tableView.classList.remove('hidden');
+                        tableView.classList.add('view-transition-enter-active');
+                        
+                        setTimeout(() => {
+                            tableView.classList.remove('view-transition-enter-active');
+                        }, 300);
+                    }, 150);
+                    
+                    // Mettre à jour les styles des boutons
+                    calendarViewBtn.classList.remove('active');
+                    tableViewBtn.classList.add('active');
+                    
+                    currentView = 'table';
+                }
+            }
+
+            // Variable pour suivre la vue actuelle du calendrier
+            let currentCalendarView = 'dayGridMonth';
+
+            // Fonction pour initialiser le calendrier
+            function initializeCalendar() {
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'fr',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,dayGridWeek,listWeek'
+                    },
+                    views: {
+                        dayGridMonth: {
+                            buttonText: 'Mois'
+                        },
+                        dayGridWeek: {
+                            buttonText: 'Semaine'
+                        },
+                        listWeek: {
+                            buttonText: 'Liste'
+                        }
+                    },
+                    buttonText: {
+                        today: 'Aujourd\'hui',
+                        month: 'Mois',
+                        week: 'Semaine',
+                        list: 'Liste'
+                    },
+                    viewDidMount: function(info) {
+                        // Mettre à jour la vue actuelle quand elle change
+                        currentCalendarView = info.view.type;
+                    },
+                    customButtons: {
+                        dayGridMonth: {
+                            text: 'Mois',
+                            click: function() {
+                                if (currentCalendarView === 'dayGridMonth') {
+                                    // Si on est déjà en vue mois, ne rien faire (c'est la vue par défaut)
+                                    return;
+                                }
+                                calendar.changeView('dayGridMonth');
+                            }
+                        },
+                        dayGridWeek: {
+                            text: 'Semaine',
+                            click: function() {
+                                if (currentCalendarView === 'dayGridWeek') {
+                                    // Si on est déjà en vue semaine, revenir à la vue mois
+                                    calendar.changeView('dayGridMonth');
+                                } else {
+                                    calendar.changeView('dayGridWeek');
+                                }
+                            }
+                        },
+                        listWeek: {
+                            text: 'Liste',
+                            click: function() {
+                                if (currentCalendarView === 'listWeek') {
+                                    // Si on est déjà en vue liste, revenir à la vue mois
+                                    calendar.changeView('dayGridMonth');
+                                } else {
+                                    calendar.changeView('listWeek');
+                                }
+                            }
+                        }
+                    },
+                    events: function(fetchInfo, successCallback, failureCallback) {
+                        // Récupérer les paramètres de filtrage actuels
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const filterParams = {
+                            search: urlParams.get('search') || '',
+                            department: urlParams.get('department') || '',
+                            status: urlParams.get('status') || '',
+                            type: urlParams.get('type') || '',
+                            date_from: urlParams.get('date_from') || '',
+                            date_to: urlParams.get('date_to') || ''
+                        };
+
+                        fetch('{{ route("admin.leaves.calendar-data") }}?' + new URLSearchParams(filterParams))
+                            .then(response => response.json())
+                            .then(data => {
+                                successCallback(data);
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors du chargement des données:', error);
+                                failureCallback(error);
+                            });
+                    },
+                    eventClick: function(info) {
+                        // Rediriger vers la page de détail du congé
+                        if (info.event.extendedProps.url) {
+                            window.location.href = info.event.extendedProps.url;
+                        }
+                    },
+                    eventMouseEnter: function(info) {
+                        // Créer un tooltip avec les nouvelles classes CSS
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'fc-tooltip';
+                        tooltip.style.position = 'absolute';
+                        tooltip.style.zIndex = '1000';
+                        tooltip.style.pointerEvents = 'none';
+                        
+                        const props = info.event.extendedProps;
+                        tooltip.innerHTML = `
+                            <div class="tooltip-header">${props.employee}</div>
+                            <div class="tooltip-row">
+                                <div class="tooltip-label">Département:</div>
+                                <div class="tooltip-value">${props.department}</div>
+                            </div>
+                            <div class="tooltip-row">
+                                <div class="tooltip-label">Type:</div>
+                                <div class="tooltip-value">${props.type}</div>
+                            </div>
+                            <div class="tooltip-row">
+                                <div class="tooltip-label">Statut:</div>
+                                <div class="tooltip-value">${props.status}</div>
+                            </div>
+                            <div class="tooltip-row">
+                                <div class="tooltip-label">Durée:</div>
+                                <div class="tooltip-value">${props.duration} jour(s)</div>
+                            </div>
+                            ${props.reason ? `
+                                <div class="tooltip-row">
+                                    <div class="tooltip-label">Motif:</div>
+                                    <div class="tooltip-value">${props.reason}</div>
+                                </div>
+                            ` : ''}
+                        `;
+                        
+                        document.body.appendChild(tooltip);
+                        info.el.tooltip = tooltip;
+                        
+                        // Positionner le tooltip
+                        const rect = info.el.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                        
+                        tooltip.style.left = (rect.left + scrollLeft) + 'px';
+                        tooltip.style.top = (rect.bottom + scrollTop + 5) + 'px';
+                        
+                        // Ajuster la position si le tooltip dépasse de l'écran
+                        setTimeout(() => {
+                            const tooltipRect = tooltip.getBoundingClientRect();
+                            if (tooltipRect.right > window.innerWidth) {
+                                tooltip.style.left = (rect.right + scrollLeft - tooltipRect.width) + 'px';
+                            }
+                            if (tooltipRect.bottom > window.innerHeight) {
+                                tooltip.style.top = (rect.top + scrollTop - tooltipRect.height - 5) + 'px';
+                            }
+                        }, 0);
+                    },
+                    eventMouseLeave: function(info) {
+                        // Supprimer le tooltip
+                        if (info.el.tooltip) {
+                            document.body.removeChild(info.el.tooltip);
+                            info.el.tooltip = null;
+                        }
+                    }
+                });
+                
+                calendar.render();
+            }
+
+            // Gestionnaires d'événements pour les boutons
+            tableViewBtn.addEventListener('click', () => switchView('table'));
+            calendarViewBtn.addEventListener('click', () => switchView('calendar'));
+
+            // Recharger le calendrier quand les filtres changent
+            const form = document.querySelector('form[action="{{ route('admin.leaves.index') }}"]');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (currentView === 'calendar' && calendar) {
+                        e.preventDefault();
+                        
+                        // Mettre à jour l'URL avec les nouveaux paramètres
+                        const formData = new FormData(form);
+                        const params = new URLSearchParams();
+                        for (let [key, value] of formData.entries()) {
+                            if (value) params.append(key, value);
+                        }
+                        
+                        const newUrl = window.location.pathname + '?' + params.toString();
+                        window.history.pushState({}, '', newUrl);
+                        
+                        // Recharger les événements du calendrier
+                        calendar.refetchEvents();
+                    }
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>

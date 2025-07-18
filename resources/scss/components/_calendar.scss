@@ -1,0 +1,366 @@
+// Calendar Component Styles
+// Modern and beautiful calendar styling for leave management
+
+.calendar-container {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    @apply shadow-xl;
+    transform: translateY(-2px);
+  }
+}
+
+// View Toggle Buttons
+.view-toggle-container {
+  @apply flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg;
+  
+  .view-toggle-btn {
+    @apply px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 ease-in-out;
+    @apply flex items-center space-x-2;
+    
+    &.active {
+      @apply bg-blue-600 text-white shadow-md transform scale-105;
+    }
+    
+    &:not(.active) {
+      @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white;
+      @apply hover:bg-white dark:hover:bg-gray-600;
+    }
+    
+    svg {
+      @apply w-4 h-4;
+    }
+  }
+}
+
+// FullCalendar Custom Styling
+.fc {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  // Toolbar styling
+  .fc-toolbar {
+    @apply mb-6 flex-wrap gap-4;
+    
+    .fc-toolbar-title {
+      @apply text-2xl font-bold text-gray-800 dark:text-white;
+    }
+    
+    .fc-toolbar-chunk {
+      @apply flex items-center gap-2;
+    }
+    
+    .fc-button-group {
+      @apply flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600;
+    }
+    
+    .fc-button {
+      @apply bg-white hover:bg-blue-50 text-gray-700 font-medium;
+      @apply px-4 py-2 border-0 transition-all duration-200;
+      @apply border-r border-gray-300 last:border-r-0;
+      
+      .dark & {
+        @apply bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600;
+      }
+      
+      &:disabled {
+        @apply bg-gray-100 text-gray-400 cursor-not-allowed;
+        
+        .dark & {
+          @apply bg-gray-800 text-gray-600;
+        }
+      }
+      
+      &.fc-button-active {
+        @apply bg-blue-600 text-white;
+        
+        &:hover {
+          @apply bg-blue-700;
+        }
+      }
+      
+      // Bouton "Aujourd'hui"
+      &.fc-today-button {
+        @apply bg-green-600 text-white hover:bg-green-700;
+        @apply rounded-lg border-0 px-4 py-2;
+        
+        .dark & {
+          @apply bg-green-600 hover:bg-green-700;
+        }
+      }
+      
+      // Boutons de navigation
+      &.fc-prev-button,
+      &.fc-next-button {
+        @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+        @apply w-10 h-10 rounded-lg flex items-center justify-center;
+        
+        .dark & {
+          @apply bg-gray-600 text-gray-300 hover:bg-gray-500;
+        }
+      }
+    }
+  }
+  
+  // Calendar grid
+  .fc-scrollgrid {
+    @apply rounded-xl overflow-hidden;
+    border: 1px solid #e5e7eb;
+    
+    .dark & {
+      border-color: #374151;
+    }
+  }
+  
+  // Day cells
+  .fc-daygrid-day {
+    @apply border-gray-200 dark:border-gray-600;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      @apply bg-gray-50 dark:bg-gray-700;
+    }
+  }
+  
+  .fc-daygrid-day-number {
+    @apply text-gray-700 dark:text-gray-300 font-medium;
+    padding: 8px;
+  }
+  
+  // Today highlighting
+  .fc-day-today {
+    @apply bg-blue-50 dark:bg-blue-900/20;
+    
+    .fc-daygrid-day-number {
+      @apply text-blue-600 dark:text-blue-400 font-bold;
+    }
+  }
+  
+  // Weekend styling
+  .fc-day-sat,
+  .fc-day-sun {
+    @apply bg-gray-50/50 dark:bg-gray-800/50;
+  }
+  
+  // Column headers
+  .fc-col-header-cell {
+    @apply bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600;
+    
+    .fc-col-header-cell-cushion {
+      @apply text-gray-700 dark:text-gray-300 font-semibold text-sm py-3;
+    }
+  }
+}
+
+// Event styling with status colors
+.fc-event {
+  @apply border-0 rounded-md shadow-sm;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 6px;
+  margin: 1px 2px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  // Status-based colors
+  &.status-pending {
+    @apply bg-yellow-100 text-yellow-800 border-l-4 border-yellow-400;
+    
+    .dark & {
+      @apply bg-yellow-900/30 text-yellow-300 border-yellow-500;
+    }
+  }
+  
+  &.status-approved {
+    @apply bg-green-100 text-green-800 border-l-4 border-green-400;
+    
+    .dark & {
+      @apply bg-green-900/30 text-green-300 border-green-500;
+    }
+  }
+  
+  &.status-rejected {
+    @apply bg-red-100 text-red-800 border-l-4 border-red-400;
+    
+    .dark & {
+      @apply bg-red-900/30 text-red-300 border-red-500;
+    }
+  }
+  
+  &.status-draft {
+    @apply bg-gray-100 text-gray-800 border-l-4 border-gray-400;
+    
+    .dark & {
+      @apply bg-gray-700 text-gray-300 border-gray-500;
+    }
+  }
+}
+
+// Custom tooltip styling
+.fc-tooltip {
+  position: absolute;
+  @apply bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg;
+  @apply border border-gray-700;
+  font-size: 13px;
+  line-height: 1.4;
+  max-width: 280px;
+  z-index: 1000;
+  pointer-events: none;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #1f2937;
+  }
+  
+  .tooltip-header {
+    @apply font-semibold text-blue-300 mb-2;
+  }
+  
+  .tooltip-row {
+    @apply flex justify-between items-center mb-1 last:mb-0;
+    
+    .tooltip-label {
+      @apply text-gray-400 text-xs mr-2;
+    }
+    
+    .tooltip-value {
+      @apply text-white font-medium text-xs;
+    }
+  }
+  
+  // Dark mode support
+  .dark & {
+    @apply bg-gray-800 border-gray-600;
+    
+    &::before {
+      border-bottom-color: #1f2937;
+    }
+  }
+}
+
+// Loading state
+.calendar-loading {
+  @apply flex items-center justify-center py-12;
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600;
+  }
+  
+  .loading-text {
+    @apply ml-3 text-gray-600 dark:text-gray-400;
+  }
+}
+
+// Empty state
+.calendar-empty {
+  @apply text-center py-12;
+  
+  .empty-icon {
+    @apply mx-auto h-12 w-12 text-gray-400 mb-4;
+  }
+  
+  .empty-title {
+    @apply text-lg font-medium text-gray-900 dark:text-white mb-2;
+  }
+  
+  .empty-description {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .fc {
+    .fc-toolbar {
+      @apply flex-col space-y-2;
+      
+      .fc-toolbar-chunk {
+        @apply justify-center;
+      }
+    }
+    
+    .fc-toolbar-title {
+      @apply text-xl;
+    }
+    
+    .fc-button {
+      @apply px-3 py-1 text-sm;
+    }
+  }
+  
+  .view-toggle-container {
+    @apply w-full justify-center;
+    
+    .view-toggle-btn {
+      @apply flex-1 justify-center;
+    }
+  }
+}
+
+// Animation for view transitions
+.view-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.view-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.view-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.view-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+// Print styles
+@media print {
+  .view-toggle-container,
+  .fc-toolbar {
+    display: none !important;
+  }
+  
+  .fc {
+    .fc-scrollgrid {
+      border: 1px solid #000 !important;
+    }
+    
+    .fc-event {
+      background: #fff !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+    }
+  }
+}
+.fc-event-time {
+  display: none !important;
+}
+.fc-header-toolbar {
+  .fc-toolbar-chunk {
+    .fc-button-group {
+      border :0;
+      padding: 2px;
+      .fc-button {
+        @apply text-white border border-blue-600 bg-gradient-to-r from-teal-500 to-cyan-600 p-3 rounded-xl shadow-lg mr-2;
+      }
+    }
+  }
+}

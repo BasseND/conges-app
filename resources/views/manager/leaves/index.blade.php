@@ -126,222 +126,261 @@
                     </div>
                 </form>
             </div>
+
+            
+
+            <!-- Vue Calendrier (cachée par défaut) -->
+            
         </div>
 
-        <div class="bg-white/80 backdrop-blur-sm overflow-hidden sm:rounded-2xl border border-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/50">
-            <div class="p-8 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center">
-                        <div class="bg-green-100 dark:bg-green-900/30 rounded-xl p-3 mr-4">
-                            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Demandes de congés</h3>
-                    </div>
-                </div>
-                @if(session('success'))
-                    <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-xl" role="alert">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-green-700 font-medium">{{ session('success') }}</span>
-                        </div>
-                    </div>
-                @endif
+        <div class="p-6 bg-white/80 backdrop-blur-sm overflow-hidden sm:rounded-2xl border border-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/50">
 
-                @if(session('error'))
-                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl" role="alert">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-red-700 font-medium">{{ session('error') }}</span>
-                        </div>
-                    </div>
-                @endif
-
-                @if($leaves->isEmpty())
-                    <div class="text-center py-12">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="bg-green-100 dark:bg-green-900/30 rounded-xl p-3 mr-4">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Aucune demande trouvée</h3>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aucune demande de congé ne correspond à vos critères de recherche.</p>
                     </div>
-                @else
-                    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
-                                <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                            </svg>
-                                            Employé
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                            </svg>
-                                            Département
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                            </svg>
-                                            Type
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                            </svg>
-                                            Période
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                            Durée
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                            Statut
-                                        </div>
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                            </svg>
-                                            Actions
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach($leaves as $leave)
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 group">
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="flex-shrink-0 h-12 w-12">
-                                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                                                        {{ strtoupper(substr($leave->user->first_name, 0, 1)) }}
-                                                    </div>
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ $leave->user->first_name }} {{ $leave->user->last_name }}</div>
-                                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ $leave->user->email }}</div>
-                                                    <div class="text-xs text-gray-400 dark:text-gray-500">ID: {{ $leave->user->employee_id }}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $leave->user->department->name }}</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md inline-block mt-1">{{ $leave->user->department->code }}</div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <x-leave-type-badge :type="$leave->type" />
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 dark:text-white font-medium">
-                                                <div class="flex items-center mb-1">
-                                                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                    </svg>
-                                                    {{ $leave->start_date->format('d/m/Y') }}
-                                                </div>
-                                                <div class="flex items-center text-gray-500 dark:text-gray-400">
-                                                    <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                    </svg>
-                                                    {{ $leave->end_date->format('d/m/Y') }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $leave->duration }}</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">jour(s)</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <x-leave-status :status="$leave->status" />
-                                            @if($leave->processed_at)
-                                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-center">
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    {{ $leave->processed_at->format('d/m/Y H:i') }}
-                                                </div>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap text-right">
-                                            @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
-                                                <div class="flex justify-end space-x-3">
-                                                    <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('manager.leaves.approve', $leave) }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
-                                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                        </svg>
-                                                        Approuver
-                                                    </button>
-                                                    <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('manager.leaves.reject', $leave) }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
-                                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                        </svg>
-                                                        Rejeter
-                                                    </button>
-                                                </div>
-                                            @else
-                                                <div class="flex justify-end">
-                                                    @if($leave->status === 'approved')
-                                                        <span class="inline-flex items-center px-3 py-2 text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-lg">
-                                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                            </svg>
-                                                            Approuvé
-                                                        </span>
-                                                    @elseif($leave->status === 'rejected')
-                                                        <span class="inline-flex items-center px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
-                                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                            </svg>
-                                                            Rejeté
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Demandes de congés</h3>
+                </div>
+
+                 <!-- Boutons de basculement vue -->
+                <div class="flex justify-end mb-6">
+                    <div class="view-toggle-container">
+                        <button id="table-view-btn" class="view-toggle-btn active">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18m-9 8h9"/>
+                            </svg>
+                            <span>Vue Tableau</span>
+                        </button>
+                        <button id="calendar-view-btn" class="view-toggle-btn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>Vue Calendrier</span>
+                        </button>
                     </div>
-                    @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                        <div class="mt-8 flex justify-center">
-                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
-                                {{ $leaves->links() }}
+                </div>
+
+            </div>
+
+           
+
+            <!-- Vue Calendrier -->
+            <div id="calendar-view" class="hidden calendar-container mb-6">
+                <div class="p-6">
+                    <div id="calendar" class="relative"></div>
+                </div>
+            </div>
+
+            <!-- Vue Tableau -->
+            <div id="table-view" >
+                <div class="bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
+                    
+                    @if(session('success'))
+                        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-xl" role="alert">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-green-700 font-medium">{{ session('success') }}</span>
                             </div>
                         </div>
                     @endif
-                @endif
+
+                    @if(session('error'))
+                        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl" role="alert">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-red-700 font-medium">{{ session('error') }}</span>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($leaves->isEmpty())
+                        <div class="text-center py-12">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Aucune demande trouvée</h3>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aucune demande de congé ne correspond à vos critères de recherche.</p>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                                </svg>
+                                                Employé
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                                </svg>
+                                                Département
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                                </svg>
+                                                Type
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                Période
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                Durée
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                Statut
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                                </svg>
+                                                Actions
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                    @foreach($leaves as $leave)
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 group">
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="flex-shrink-0 h-12 w-12">
+                                                        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                                                            {{ strtoupper(substr($leave->user->first_name, 0, 1)) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ $leave->user->first_name }} {{ $leave->user->last_name }}</div>
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ $leave->user->email }}</div>
+                                                        <div class="text-xs text-gray-400 dark:text-gray-500">ID: {{ $leave->user->employee_id }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $leave->user->department->name }}</div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md inline-block mt-1">{{ $leave->user->department->code }}</div>
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <x-leave-type-badge :type="$leave->type" />
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900 dark:text-white font-medium">
+                                                    <div class="flex items-center mb-1">
+                                                        <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                        </svg>
+                                                        {{ $leave->start_date->format('d/m/Y') }}
+                                                    </div>
+                                                    <div class="flex items-center text-gray-500 dark:text-gray-400">
+                                                        <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                        </svg>
+                                                        {{ $leave->end_date->format('d/m/Y') }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $leave->duration }}</span>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">jour(s)</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap">
+                                                <x-leave-status :status="$leave->status" />
+                                                @if($leave->processed_at)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-center">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                        </svg>
+                                                        {{ $leave->processed_at->format('d/m/Y H:i') }}
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-5 whitespace-nowrap text-right">
+                                                @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
+                                                    <div class="flex justify-end space-x-3">
+                                                        <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('manager.leaves.approve', $leave) }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                            </svg>
+                                                            Approuver
+                                                        </button>
+                                                        <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('manager.leaves.reject', $leave) }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                            </svg>
+                                                            Rejeter
+                                                        </button>
+                                                    </div>
+                                                @else
+                                                    <div class="flex justify-end">
+                                                        @if($leave->status === 'approved')
+                                                            <span class="inline-flex items-center px-3 py-2 text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-lg">
+                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                                </svg>
+                                                                Approuvé
+                                                            </span>
+                                                        @elseif($leave->status === 'rejected')
+                                                            <span class="inline-flex items-center px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
+                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                                </svg>
+                                                                Rejeté
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                            <div class="mt-8 flex justify-center">
+                                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
+                                    {{ $leaves->links() }}
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                </div>
             </div>
         </div>
       
@@ -350,5 +389,149 @@
     <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ?" />
     <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
 
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/fr.global.min.js'></script>
+
+   
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableViewBtn = document.getElementById('table-view-btn');
+            const calendarViewBtn = document.getElementById('calendar-view-btn');
+            const tableView = document.getElementById('table-view');
+            const calendarView = document.getElementById('calendar-view');
+            const calendarEl = document.getElementById('calendar');
+            let calendar;
+            let tooltip;
+
+            // Fonction pour basculer entre les vues
+            function switchView(viewType) {
+                if (viewType === 'table') {
+                    tableView.classList.remove('hidden');
+                    calendarView.classList.add('hidden');
+                    tableViewBtn.classList.add('active');
+                    calendarViewBtn.classList.remove('active');
+                } else {
+                    tableView.classList.add('hidden');
+                    calendarView.classList.remove('hidden');
+                    tableViewBtn.classList.remove('active');
+                    calendarViewBtn.classList.add('active');
+                    
+                    // Initialiser le calendrier si ce n'est pas déjà fait
+                    if (!calendar) {
+                        initCalendar();
+                    }
+                }
+            }
+
+            // Gestionnaires d'événements pour les boutons
+            tableViewBtn.addEventListener('click', () => switchView('table'));
+            calendarViewBtn.addEventListener('click', () => switchView('calendar'));
+
+            // Fonction pour initialiser le calendrier
+            function initCalendar() {
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'fr',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,listWeek'
+                    },
+                    buttonText: {
+                        today: 'Aujourd\'hui',
+                        month: 'Mois',
+                        week: 'Semaine',
+                        list: 'Liste'
+                    },
+                    height: 'auto',
+                    events: function(fetchInfo, successCallback, failureCallback) {
+                        // Récupérer les paramètres de filtrage actuels
+                        const formData = new FormData(document.querySelector('form'));
+                        const params = new URLSearchParams();
+                        
+                        for (let [key, value] of formData.entries()) {
+                            if (value) {
+                                params.append(key, value);
+                            }
+                        }
+                        
+                        params.append('start', fetchInfo.startStr);
+                        params.append('end', fetchInfo.endStr);
+                        
+                        fetch(`{{ route('manager.leaves.calendar-data') }}?${params.toString()}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                successCallback(data);
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors du chargement des événements:', error);
+                                failureCallback(error);
+                            });
+                    },
+                    eventClick: function(info) {
+                        // Rediriger vers la page de détail du congé
+                        if (info.event.extendedProps.leave_id) {
+                            window.location.href = `{{ url('manager/leaves') }}/${info.event.extendedProps.leave_id}`;
+                        }
+                    },
+                    eventMouseEnter: function(info) {
+                        // Créer et afficher le tooltip
+                        tooltip = document.createElement('div');
+                        tooltip.className = 'tooltip';
+                        tooltip.innerHTML = `
+                            <div style="font-weight: 600; margin-bottom: 4px;">${info.event.title}</div>
+                            <div style="font-size: 12px; opacity: 0.9;">
+                                <div><strong>Type:</strong> ${info.event.extendedProps.type_label}</div>
+                                <div><strong>Durée:</strong> ${info.event.extendedProps.duration} jour(s)</div>
+                                <div><strong>Statut:</strong> ${info.event.extendedProps.status_label}</div>
+                                ${info.event.extendedProps.reason ? `<div><strong>Motif:</strong> ${info.event.extendedProps.reason}</div>` : ''}
+                            </div>
+                        `;
+                        document.body.appendChild(tooltip);
+                        
+                        // Positionner le tooltip
+                        const rect = info.el.getBoundingClientRect();
+                        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+                        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+                    },
+                    eventMouseLeave: function(info) {
+                        // Supprimer le tooltip
+                        if (tooltip) {
+                            tooltip.remove();
+                            tooltip = null;
+                        }
+                    }
+                });
+                
+                calendar.render();
+            }
+
+            // Recharger le calendrier lors des changements de filtres
+            const filterInputs = document.querySelectorAll('input[name="start_date"], input[name="end_date"], select[name="status"], select[name="type"], select[name="department_id"]');
+            filterInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (calendar && !calendarView.classList.contains('hidden')) {
+                        calendar.refetchEvents();
+                    }
+                });
+            });
+
+            // Recharger le calendrier lors du clic sur les boutons de filtre
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('button[type="submit"]') || e.target.closest('button[type="submit"]')) {
+                    setTimeout(() => {
+                        if (calendar && !calendarView.classList.contains('hidden')) {
+                            calendar.refetchEvents();
+                        }
+                    }, 100);
+                }
+            });
+        });
+    </script>
 
 </x-app-layout>
