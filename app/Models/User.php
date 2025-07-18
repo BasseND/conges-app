@@ -16,6 +16,7 @@ use App\Models\ExpenseReport;
 use App\Models\ExpenseLine;
 use App\Models\Payslip;
 use App\Models\SalaryAdvance;
+use App\Models\LeaveTransaction;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -234,6 +235,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the leave transactions for the user.
+     */
+    public function leaveTransactions()
+    {
+        return $this->hasMany(LeaveTransaction::class);
+    }
+
+    /**
+     * Get the leave transactions created by the user.
+     */
+    public function createdLeaveTransactions()
+    {
+        return $this->hasMany(LeaveTransaction::class, 'created_by');
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isManager()
@@ -314,21 +331,51 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get the remaining days of leave for the user
      * 
-     * @return int
+     * @return float
      */
     public function getRemainingDaysAttribute()
     {
-        // Calculer les congés utilisés cette année
-        $usedLeaves = $this->leaves()
-            ->whereYear('start_date', now()->year)
-            ->where('status', 'approved')
-            ->where('type', 'annual')
-            ->sum('duration');
+        return LeaveTransaction::getCurrentBalance($this->id, 'annual');
+    }
 
-        // Obtenir le nombre total de jours de congés annuels
-        $annualLeaveDays = $this->getAnnualLeaveDaysAttribute();
-        
-        return max(0, $annualLeaveDays - $usedLeaves);
+    /**
+     * Get the remaining maternity leave days for the user
+     * 
+     * @return float
+     */
+    public function getRemainingMaternityDaysAttribute()
+    {
+        return LeaveTransaction::getCurrentBalance($this->id, 'maternity');
+    }
+
+    /**
+     * Get the remaining paternity leave days for the user
+     * 
+     * @return float
+     */
+    public function getRemainingPaternityDaysAttribute()
+    {
+        return LeaveTransaction::getCurrentBalance($this->id, 'paternity');
+    }
+
+    /**
+     * Get the remaining special leave days for the user
+     * 
+     * @return float
+     */
+    public function getRemainingSpecialDaysAttribute()
+    {
+        return LeaveTransaction::getCurrentBalance($this->id, 'special');
+    }
+
+    /**
+     * Get the remaining sick leave days for the user
+     * 
+     * @return float
+     */
+    public function getRemainingSickDaysAttribute()
+    {
+        return LeaveTransaction::getCurrentBalance($this->id, 'sick');
     }
 
     /**

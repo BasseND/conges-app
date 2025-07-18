@@ -120,8 +120,13 @@
                                 <option value="">Sélectionner un type de congé</option>
                                 <option value="annual" {{ old('type') == 'annual' ? 'selected' : '' }}>Congé annuel</option>
                                 <option value="sick" {{ old('type') == 'sick' ? 'selected' : '' }}>Congé maladie</option>
-                                <option value="maternity" {{ old('type') == 'maternity' ? 'selected' : '' }}>Congé maternité</option>
-                                <option value="paternity" {{ old('type') == 'paternity' ? 'selected' : '' }}>Congé paternité</option>
+                                 @if(Auth::check())
+                                    @if(auth()->user()->gender === 'F')
+                                    <option value="maternity" {{ old('type') == 'maternity' ? 'selected' : '' }}>Congé maternité</option>
+                                    @else
+                                    <option value="paternity" {{ old('type') == 'paternity' ? 'selected' : '' }}>Congé paternité</option>
+                                    @endif
+                                @endif
                                 <option value="unpaid" {{ old('type') == 'unpaid' ? 'selected' : '' }}>Congé sans solde</option>
                                 <option value="other" {{ old('type') == 'other' ? 'selected' : '' }}>Autre</option>
                             </select>
@@ -133,19 +138,19 @@
                                 
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="text-center">
-                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="annual_balance">{{ Auth::check() ? auth()->user()->annual_leave_days : 0 }}</div>
+                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="annual_balance">{{ Auth::check() ? auth()->user()->remaining_days : 0 }}</div>
                                         <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés annuels') }}</div>
                                     </div>
                                     
                                     @if(Auth::check())
                                         @if(auth()->user()->gender === 'F')
                                             <div class="text-center">
-                                                <div class="text-2xl font-bold text-pink-600 dark:text-pink-400" id="maternity_balance">{{ auth()->user()->maternity_leave_days ?? 0 }}</div>
+                                                <div class="text-2xl font-bold text-pink-600 dark:text-pink-400" id="maternity_balance">{{ Auth::check() ? auth()->user()->remaining_maternity_days : 0 }}</div>
                                                 <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés maternité') }}</div>
                                             </div>
                                         @else
                                             <div class="text-center">
-                                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="paternity_balance">{{ auth()->user()->paternity_leave_days ?? 0 }}</div>
+                                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="paternity_balance">{{ Auth::check() ? auth()->user()->remaining_paternity_days : 0 }}</div>
                                                 <div class="text-xs text-gray-600 dark:text-gray-400">{{ __('Congés paternité') }}</div>
                                             </div>
                                         @endif
