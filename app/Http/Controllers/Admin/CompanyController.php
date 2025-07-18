@@ -154,7 +154,6 @@ class CompanyController extends Controller
 
         $validator = Validator::make($request->all(), [
             'annual_leave_days' => 'required|integer|min:0|max:365',
-            'sick_leave_days' => 'required|integer|min:0|max:365',
             'maternity_leave_days' => 'nullable|integer|min:0|max:365',
             'paternity_leave_days' => 'nullable|integer|min:0|max:365',
             'special_leave_days' => 'nullable|integer|min:0|max:365',
@@ -198,7 +197,6 @@ class CompanyController extends Controller
 
         $validator = Validator::make($request->all(), [
             'annual_leave_days' => 'required|integer|min:0|max:365',
-            'sick_leave_days' => 'required|integer|min:0|max:365',
             'maternity_leave_days' => 'nullable|integer|min:0|max:365',
             'paternity_leave_days' => 'nullable|integer|min:0|max:365',
             'special_leave_days' => 'nullable|integer|min:0|max:365',

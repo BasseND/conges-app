@@ -1,3 +1,5 @@
+@section('title', 'Authentification à deux facteurs')
+
 <x-guest-layout>
     <div x-data="{ recovery: false }">
         <div class="mb-4 text-sm text-gray-600" x-show="! recovery">

@@ -232,21 +232,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Congés maladie -->
-                                                            <div class="group/card relative bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 p-4 rounded-xl border border-red-200/50 dark:border-red-700/50">
-                                                                <div class="flex items-center">
-                                                                    <div class="bg-gradient-to-br from-red-500 to-red-600 p-3 rounded-lg shadow-lg mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div>
-                                                                        <p class="text-sm font-medium text-red-700 dark:text-red-300 mb-1">Congés maladie</p>
-                                                                        <p class="text-2xl font-bold text-red-900 dark:text-red-100">{{ $balance->sick_leave_days }}</p>
-                                                                        <p class="text-xs text-red-600 dark:text-red-400">jours</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+
 
                                                             @if($balance->maternity_leave_days)
                                                             <!-- Congés maternité -->

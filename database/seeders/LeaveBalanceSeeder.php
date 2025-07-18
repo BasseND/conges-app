@@ -27,7 +27,6 @@ class LeaveBalanceSeeder extends Seeder
                 LeaveBalance::create([
                     'company_id' => $company->id,
                     'annual_leave_days' => 25,
-                    'sick_leave_days' => 12,
                     'maternity_leave_days' => 112, // 16 semaines
                     'paternity_leave_days' => 25,
                     'special_leave_days' => 5,
@@ -44,7 +43,6 @@ class LeaveBalanceSeeder extends Seeder
             LeaveBalance::create([
                 'company_id' => $firstCompany->id,
                 'annual_leave_days' => 30,
-                'sick_leave_days' => 15,
                 'maternity_leave_days' => 112,
                 'paternity_leave_days' => 25,
                 'special_leave_days' => 8,
@@ -56,7 +54,6 @@ class LeaveBalanceSeeder extends Seeder
             LeaveBalance::create([
                 'company_id' => $firstCompany->id,
                 'annual_leave_days' => 15,
-                'sick_leave_days' => 8,
                 'maternity_leave_days' => 112,
                 'paternity_leave_days' => 25,
                 'special_leave_days' => 3,

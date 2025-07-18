@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Concerns;
 
 use App\Models\Leave;
+use App\Models\LeaveTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\LeaveStatusNotification;
@@ -43,27 +44,23 @@ trait HandlesLeaveApproval
             // Déclencher l'événement de mise à jour du statut
             event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
-            // Mettre à jour le solde de congés de l'employé via LeaveBalance
-            if ($leave->type === 'annual') {
-                $leaveBalance = $leave->user->leaveBalance;
-                if ($leaveBalance) {
-                    $leaveBalance->decrement('annual_leave_days', $leave->duration);
-                }
-            } elseif ($leave->type === 'sick') {
-                $leaveBalance = $leave->user->leaveBalance;
-                if ($leaveBalance) {
-                    $leaveBalance->decrement('sick_leave_days', $leave->duration);
-                }
-            } elseif ($leave->type === 'maternity') {
-                $leaveBalance = $leave->user->leaveBalance;
-                if ($leaveBalance) {
-                    $leaveBalance->decrement('maternity_leave_days', $leave->duration);
-                }
-            } elseif ($leave->type === 'paternity') {
-                $leaveBalance = $leave->user->leaveBalance;
-                if ($leaveBalance) {
-                    $leaveBalance->decrement('paternity_leave_days', $leave->duration);
-                }
+            // Créer une transaction de déduction pour le congé approuvé
+            if (in_array($leave->type, ['annual', 'maternity', 'paternity', 'special', 'sick'])) {
+                LeaveTransaction::createTransaction(
+                    userId: $leave->user_id,
+                    leaveType: $leave->type,
+                    transactionType: 'deduction',
+                    amount: -$leave->duration, // Négatif car c'est une déduction
+                    leaveId: $leave->id,
+                    description: "Déduction pour congé approuvé (ID: {$leave->id})",
+                    metadata: [
+                        'leave_start_date' => $leave->start_date->format('Y-m-d'),
+                        'leave_end_date' => $leave->end_date->format('Y-m-d'),
+                        'leave_duration' => $leave->duration,
+                        'leave_type' => $leave->type
+                    ],
+                    createdBy: auth()->id()
+                );
             }
 
             Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));

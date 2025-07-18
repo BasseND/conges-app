@@ -108,6 +108,36 @@
                                     <x-input-error :messages="$errors->get('head_id')" class="mt-2" />
                                 </div>
 
+                                <!-- Solde de congés par défaut -->
+                                <div class="space-y-2">
+                                    <label for="leave_balance_id" class="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V6a2 2 0 012-2h4a2 2 0 012 2v1m-6 0h8m-8 0H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-2m-8 0V7a2 2 0 012-2h4a2 2 0 012 2v0"/>
+                                        </svg>
+                                        <span>{{ __('Solde de congés par défaut') }}</span>
+                                    </label>
+                                    <select id="leave_balance_id" name="leave_balance_id"
+                                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200">
+                                        <option value="">Utiliser le solde par défaut de l'entreprise</option>
+                                        @foreach($leaveBalances as $leaveBalance)
+                                            <option value="{{ $leaveBalance->id }}" {{ old('leave_balance_id') == $leaveBalance->id ? 'selected' : '' }}>
+                                                {{ $leaveBalance->description }} 
+                                                @if($leaveBalance->is_default)
+                                                    (Par défaut)
+                                                @endif
+                                                - {{ $leaveBalance->annual_leave_days }} jours/an
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Ce solde sera appliqué par défaut à tous les nouveaux utilisateurs de cette entité. Si aucun n'est sélectionné, le solde par défaut de l'entreprise sera utilisé.</span>
+                                    </p>
+                                    <x-input-error :messages="$errors->get('leave_balance_id')" class="mt-2" />
+                                </div>
+
                         {{-- <div>
                             <x-input-label for="manager_id" :value="__('Manager')" />
                             <select id="manager_id" name="manager_id" class="block mt-1 w-full rounded-md border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">

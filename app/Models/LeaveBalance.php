@@ -14,7 +14,6 @@ class LeaveBalance extends Model
     protected $fillable = [
         'company_id',
         'annual_leave_days',
-        'sick_leave_days',
         'maternity_leave_days',
         'paternity_leave_days',
         'special_leave_days',
@@ -45,6 +44,14 @@ class LeaveBalance extends Model
     }
 
     /**
+     * Get the departments that use this leave balance as default.
+     */
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class);
+    }
+
+    /**
      * Scope to get default leave balance for a company.
      */
     public function scopeDefault($query, $companyId)
@@ -57,7 +64,7 @@ class LeaveBalance extends Model
      */
     public function getTotalLeaveDaysAttribute()
     {
-        return $this->annual_leave_days + $this->sick_leave_days + 
+        return $this->annual_leave_days + 
                $this->maternity_leave_days + $this->paternity_leave_days + 
                $this->special_leave_days;
     }
