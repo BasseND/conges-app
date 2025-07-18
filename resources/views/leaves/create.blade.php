@@ -4,48 +4,51 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
 
              <!-- HEADER -->
-            <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6">
-                <div class="flex items-center space-x-4">
-                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 sm:p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2 sm:p-3 flex-shrink-0">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
                     </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-white">
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white break-words">
                             {{ __('Nouvelle demande de congé') }}
                         </h2>
-                        <p class="text-blue-100 mt-1">
+                        <p class="text-blue-100 mt-1 text-sm sm:text-base">
                             {{ __('Créez une nouvelle demande de congé') }}
                         </p>
                     </div>
                 </div>
                 
                 <!-- Fil d'Ariane -->
-                <nav class="flex mt-4 text-sm" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <nav class="flex mt-4 text-xs sm:text-sm overflow-x-auto" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 sm:space-x-2 md:space-x-3 whitespace-nowrap">
                         <li class="inline-flex items-center">
-                            <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
-                               
+                            <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200 truncate flex items-center">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
                                 {{ __('Accueil') }}
                             </a>
                         </li>
-                        <li>
+                        <li class="flex-shrink-0">
                             <div class="flex items-center">
-                                <svg class="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <a href="{{ route('leaves.index') }}" class="ml-1 text-blue-100 hover:text-white transition-colors duration-200 md:ml-2">
-                                    {{ __('Demandes de congé') }}
+                                <a href="{{ route('leaves.index') }}" class="ml-1 text-blue-100 hover:text-white transition-colors duration-200 sm:ml-2 truncate">
+                                    <span class="hidden sm:inline">{{ __('Demandes de congé') }}</span>
+                                    <span class="sm:hidden">{{ __('Congés') }}</span>
                                 </a>
                             </div>
                         </li>
-                        <li>
+                        <li class="flex-shrink-0">
                             <div class="flex items-center">
-                                <svg class="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="ml-1 text-white font-medium md:ml-2">
+                                <span class="ml-1 text-white font-medium sm:ml-2 truncate">
                                     {{ __('Nouvelle demande') }}
                                 </span>
                             </div>
@@ -57,7 +60,7 @@
 
 
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden sm:rounded-xl border border-gray-200 dark:border-gray-700">
+            <div class="md:bg-white dark:bg-gray-800 overflow-hidden sm:rounded-xl md:border border-gray-200 dark:border-gray-700">
                
                 <!-- Messages d'erreur stylisés -->
                 @if (session('error'))
@@ -95,7 +98,7 @@
                     </div>
                 @endif
             
-                <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data" class="p-8 space-y-8">
+                <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data" class="md:p-8 space-y-8">
                     @csrf
 
                     <input type="hidden" name="debug" value="1">

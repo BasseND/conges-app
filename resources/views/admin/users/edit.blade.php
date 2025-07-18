@@ -2,47 +2,53 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- HEDARE  -->
-        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 mb-6">
-            <div class="flex items-center space-x-4">
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 sm:p-6 mb-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <div class="flex-shrink-0">
-                    <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <svg  class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                        <svg  class="w-5 h-5 sm:w-6 sm:h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
                     </div>
                 </div>
-                <div>
-                    <h2 class="text-3xl font-bold text-white">
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                         {{ __('Modifier l\'utilisateur') }}
                     </h2>
-                    <p class="text-blue-100 mt-2">Modifiez les informations de {{ $user->first_name }} {{ $user->last_name }}</p>
+                    <p class="text-sm sm:text-base text-blue-100 mt-1 sm:mt-2">Modifiez les informations de {{ $user->first_name }} {{ $user->last_name }}</p>
                 </div>
             </div>
                 <!-- Fil d'Ariane -->
-            <nav class="mt-6" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-2 text-sm">
-                    <li>
-                        <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
-                            Accueil
+            <nav class="mt-4 sm:mt-6 overflow-x-auto" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm whitespace-nowrap">
+                    <li class="flex-shrink-0">
+                        <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200 flex items-center">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            <span class="hidden sm:inline">Accueil</span>
+                            <span class="sm:hidden">Acc.</span>
                         </a>
                     </li>
-                    <li class="text-blue-200">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <li class="text-blue-200 flex-shrink-0">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </li>
-                    <li>
+                    <li class="flex-shrink-0">
                         <a href="{{ route('admin.users.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200">
-                            Utilisateurs
+                            <span class="hidden sm:inline">Utilisateurs</span>
+                            <span class="sm:hidden">Users</span>
                         </a>
                     </li>
-                    <li class="text-blue-200">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <li class="text-blue-200 flex-shrink-0">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </li>
-                    <li class="text-white font-medium">
-                        Modifier #{{ $user->id }}
+                    <li class="text-white font-medium truncate">
+                        <span class="hidden sm:inline">Modifier #{{ $user->id }}</span>
+                        <span class="sm:hidden">Mod. #{{ $user->id }}</span>
                     </li>
                 </ol>
             </nav>
@@ -50,9 +56,9 @@
         <!-- END HEDARE  -->
 
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden sm:rounded-2xl border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden sm:rounded-2xl md:border border-gray-200 dark:border-gray-700">
          
-        <div class="p-8 text-gray-900 dark:text-gray-100">
+        <div class="md:p-8 text-gray-900 dark:text-gray-100">
                 <!-- Messages d'erreur globaux -->
                 @if ($errors->any())
                     <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
@@ -367,7 +373,7 @@
                              </div>
 
                              <!-- Boutons d'action -->
-                             <div class="flex items-center justify-end mt-8 gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+                             <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                                  <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-900 transition-all duration-200 shadow-sm hover:shadow-md">
                                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
