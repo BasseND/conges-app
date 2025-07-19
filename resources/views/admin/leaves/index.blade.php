@@ -162,250 +162,279 @@
                 </form>
             </div>
 
-            <!-- Boutons de basculement vue -->
-            <div class="flex justify-end mb-6">
-                <div class="view-toggle-container">
-                    <button id="table-view-btn" class="view-toggle-btn active">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18m-9 8h9"/>
-                        </svg>
-                        <span>Vue Tableau</span>
-                    </button>
-                    <button id="calendar-view-btn" class="view-toggle-btn">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <span>Vue Calendrier</span>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Vue Calendrier (cachée par défaut) -->
-            <div id="calendar-view" class="hidden calendar-container mb-6">
-                <div class="p-6">
-                    <div id="calendar" class="relative"></div>
-                </div>
-            </div>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 dark:bg-green-900/30 rounded-xl p-3 mr-4">
+                            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Demandes de congés</h3>
+                    </div>
 
-            <!-- Vue Tableau -->
-            <div id="table-view" class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
-                        <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
-                            <tr>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                        Employé
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                        </svg>
-                                        Département
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                        Type
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                        Période
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        Durée
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                        Motif
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
-                                        </svg>
-                                        Pièces jointes
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        Statut
-                                    </div>
-                                </th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
-                                        </svg>
-                                        Actions
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-700">
-                        @forelse($leaves as $leave)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-12 w-12">
-                                            <div class="h-12 w-12 rounded-full border-4 border-gray-400 bg-gray-50 dark:bg-green-700  flex items-center justify-center">
-                                                <span class="text-sm font-bold text-gray-400">
-                                                    {{ substr($leave->user->first_name, 0, 1) }}{{ substr($leave->user->last_name, 0, 1) }}
-                                                </span>
+                    <!-- Boutons de basculement vue -->
+                    <div class="flex justify-end mb-6">
+                        <div class="view-toggle-container">
+                            <button id="table-view-btn" class="view-toggle-btn active">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18m-9 8h9"/>
+                                </svg>
+                                <span>Vue Tableau</span>
+                            </button>
+                            <button id="calendar-view-btn" class="view-toggle-btn">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span>Vue Calendrier</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Vue Calendrier (cachée par défaut) -->
+                <div id="calendar-view" class="hidden calendar-container mb-6">
+                    <div class="p-6">
+                        <div id="calendar" class="relative"></div>
+                    </div>
+                </div>
+
+                <!-- Vue Tableau -->
+                <div id="table-view" class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                            Employé
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                            </svg>
+                                            Département
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            Type
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            Période
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Durée
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            Motif
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                                            </svg>
+                                            Pièces jointes
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Statut
+                                        </div>
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                                            </svg>
+                                            Actions
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-700">
+                            @forelse($leaves as $leave)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-12 w-12">
+                                                <div class="h-12 w-12 rounded-full border-4 border-gray-400 bg-gray-50 dark:bg-green-700  flex items-center justify-center">
+                                                    <span class="text-sm font-bold text-gray-400">
+                                                        {{ substr($leave->user->first_name, 0, 1) }}{{ substr($leave->user->last_name, 0, 1) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $leave->user->first_name }}</div>
+                                                <div class="text-sm text-gray-500 dark:text-gray-400">{{ $leave->user->email }}</div>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500">ID: {{ $leave->user->employee_id }}</div>
                                             </div>
                                         </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $leave->user->first_name }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $leave->user->email }}</div>
-                                            <div class="text-xs text-gray-400 dark:text-gray-500">ID: {{ $leave->user->employee_id }}</div>
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            {{ $leave->user->department?->name ?? 'Non assigné' }}
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                        {{ $leave->user->department?->name ?? 'Non assigné' }}
-                                    </div>
-                                    @if($leave->user->department?->code)
-                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $leave->user->department->code }}</div>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap max-w-[205px]">
-                                    <x-leave-type-badge :type="$leave->type" />
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        {{ $leave->start_date->format('d/m/Y') }}
-                                    </div>
-                                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                                        au {{ $leave->end_date->format('d/m/Y') }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        {{ $leave->duration }} jour(s)
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 max-w-[100px]">
-                                    <div class="max-w-xs">
-                                        <div class="text-sm text-gray-900 dark:text-gray-100 truncate" title="{{ $leave->reason }}">
-                                            {{ Str::limit($leave->reason, 50) }}
+                                        @if($leave->user->department?->code)
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $leave->user->department->code }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap max-w-[205px]">
+                                        <x-leave-type-badge :type="$leave->type" />
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            {{ $leave->start_date->format('d/m/Y') }}
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    @if($leave->attachments->count() > 0)
-                                        <div class="flex flex-col space-y-1">
-                                            @foreach($leave->attachments as $attachment)
-                                                <a href="{{ route('leaves.attachment.download', $attachment) }}" 
-                                                    class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 hover:bg-pink-200 dark:hover:bg-pink-800 transition-colors duration-200">
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    {{ Str::limit($attachment->original_filename, 15) }}
-                                                </a>
-                                            @endforeach
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            au {{ $leave->end_date->format('d/m/Y') }}
                                         </div>
-                                    @else
-                                        <span class="text-gray-400 dark:text-gray-500 text-sm">Aucune pièce jointe</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    <x-leave-status :status="$leave->status" />
-                                    @if($leave->processed_at)
-                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                            {{ $leave->processed_at->format('d/m/Y H:i') }}
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            {{ $leave->duration }} jour(s)
                                         </div>
-                                    @endif
-                                </td>
-                            
-
-                                <td class="px-6 py-5 whitespace-nowrap">
-                                    @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
-                                        <div class="flex space-x-2">
-                                            <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" 
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                                Approuver
-                                            </button>
-                                            <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('leaves.reject', $leave) }}')" 
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                                Rejeter
-                                            </button>
-                                        </div>
-                                    @else
-                                        @if($leave->status === 'approved')
-                                            <div class="inline-flex items-center px-3 py-2 text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-lg">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                                Approuvé
+                                    </td>
+                                    <td class="px-6 py-5 max-w-[100px]">
+                                        <div class="max-w-xs">
+                                            <div class="text-sm text-gray-900 dark:text-gray-100 truncate" title="{{ $leave->reason }}">
+                                                {{ Str::limit($leave->reason, 50) }}
                                             </div>
-                                        @elseif($leave->status === 'rejected')
-                                            <div class="inline-flex items-center px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                                Rejeté
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        @if($leave->attachments->count() > 0)
+                                            <div class="flex flex-col space-y-1">
+                                                @foreach($leave->attachments as $attachment)
+                                                    <a href="{{ route('leaves.attachment.download', $attachment) }}" 
+                                                        class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 hover:bg-pink-200 dark:hover:bg-pink-800 transition-colors duration-200">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                        {{ Str::limit($attachment->original_filename, 15) }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400 dark:text-gray-500 text-sm">Aucune pièce jointe</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <x-leave-status :status="$leave->status" />
+                                        @if($leave->processed_at)
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                {{ $leave->processed_at->format('d/m/Y H:i') }}
                                             </div>
                                         @endif
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center justify-center">
-                                        <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Aucune demande de congé</h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Il n'y a actuellement aucune demande de congé à afficher.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                        {{ $leaves->links() }}
+                                    </td>
+                                
+
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
+                                            <div class="flex space-x-2">
+                                                <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" 
+                                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    Approuver
+                                                </button>
+                                                <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('leaves.reject', $leave) }}')" 
+                                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                    Rejeter
+                                                </button>
+                                            </div>
+                                        @else
+                                            @if($leave->status === 'approved')
+                                                <div class="inline-flex items-center px-3 py-2 text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-lg">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    Approuvé
+                                                </div>
+                                            @elseif($leave->status === 'rejected')
+                                                <div class="inline-flex items-center px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                    Rejeté
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="px-6 py-12 text-center">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Aucune demande de congé</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Il n'y a actuellement aucune demande de congé à afficher.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                @endif
+                    @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                        <!-- Pagination -->
+                        <x-pagination :paginator="$leaves" entity-name="congés" />
+                    @endif
+                </div>
+
+
+
             </div>
+
+
+
+
+            
+
+            
+
+           
+
+
         </div>
     </div>
 

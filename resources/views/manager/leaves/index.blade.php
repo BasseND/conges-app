@@ -129,13 +129,13 @@
 
             
 
-            <!-- Vue Calendrier (cachée par défaut) -->
+            
             
         </div>
 
-        <div class="p-6 bg-white/80 backdrop-blur-sm overflow-hidden sm:rounded-2xl border border-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/50">
-
-            <div class="flex items-center justify-between mb-6">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4">
                 <div class="flex items-center">
                     <div class="bg-green-100 dark:bg-green-900/30 rounded-xl p-3 mr-4">
                         <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +209,7 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Aucune demande de congé ne correspond à vos critères de recherche.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
                                     <tr>
@@ -373,11 +373,8 @@
                             </table>
                         </div>
                         @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                            <div class="mt-8 flex justify-center">
-                                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
-                                    {{ $leaves->links() }}
-                                </div>
-                            </div>
+                            <!-- Pagination -->
+                            <x-pagination :paginator="$leaves" entity-name="congés" />
                         @endif
                     @endif
                 </div>
@@ -396,6 +393,34 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/fr.global.min.js'></script>
 
+    <!-- Styles pour le tooltip -->
+    <style>
+        .tooltip {
+            position: absolute;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.4;
+            max-width: 250px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+        }
+    </style>
+
    
 
     <script>
@@ -407,6 +432,7 @@
             const calendarEl = document.getElementById('calendar');
             let calendar;
             let tooltip;
+            let currentCalendarView = 'dayGridMonth';
 
             // Fonction pour basculer entre les vues
             function switchView(viewType) {
@@ -440,13 +466,59 @@
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,listWeek'
+                        right: 'dayGridMonth,dayGridWeek,listWeek'
+                    },
+                    views: {
+                        dayGridMonth: {
+                            buttonText: 'Mois'
+                        },
+                        dayGridWeek: {
+                            buttonText: 'Semaine'
+                        },
+                        listWeek: {
+                            buttonText: 'Liste'
+                        }
                     },
                     buttonText: {
                         today: 'Aujourd\'hui',
                         month: 'Mois',
                         week: 'Semaine',
                         list: 'Liste'
+                    },
+                    viewDidMount: function(info) {
+                        // Mettre à jour la vue actuelle quand elle change
+                        currentCalendarView = info.view.type;
+                    },
+                    customButtons: {
+                        dayGridMonth: {
+                            text: 'Mois',
+                            click: function() {
+                                if (currentCalendarView === 'dayGridMonth') {
+                                    return;
+                                }
+                                calendar.changeView('dayGridMonth');
+                            }
+                        },
+                        dayGridWeek: {
+                            text: 'Semaine',
+                            click: function() {
+                                if (currentCalendarView === 'dayGridWeek') {
+                                    calendar.changeView('dayGridMonth');
+                                } else {
+                                    calendar.changeView('dayGridWeek');
+                                }
+                            }
+                        },
+                        listWeek: {
+                            text: 'Liste',
+                            click: function() {
+                                if (currentCalendarView === 'listWeek') {
+                                    calendar.changeView('dayGridMonth');
+                                } else {
+                                    calendar.changeView('listWeek');
+                                }
+                            }
+                        }
                     },
                     height: 'auto',
                     events: function(fetchInfo, successCallback, failureCallback) {
@@ -475,8 +547,8 @@
                     },
                     eventClick: function(info) {
                         // Rediriger vers la page de détail du congé
-                        if (info.event.extendedProps.leave_id) {
-                            window.location.href = `{{ url('manager/leaves') }}/${info.event.extendedProps.leave_id}`;
+                        if (info.event.extendedProps.url) {
+                            window.location.href = info.event.extendedProps.url;
                         }
                     },
                     eventMouseEnter: function(info) {
@@ -484,11 +556,12 @@
                         tooltip = document.createElement('div');
                         tooltip.className = 'tooltip';
                         tooltip.innerHTML = `
-                            <div style="font-weight: 600; margin-bottom: 4px;">${info.event.title}</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">${info.event.extendedProps.employee}</div>
                             <div style="font-size: 12px; opacity: 0.9;">
-                                <div><strong>Type:</strong> ${info.event.extendedProps.type_label}</div>
+                                <div><strong>Département:</strong> ${info.event.extendedProps.department}</div>
+                                <div><strong>Type:</strong> ${info.event.extendedProps.type}</div>
                                 <div><strong>Durée:</strong> ${info.event.extendedProps.duration} jour(s)</div>
-                                <div><strong>Statut:</strong> ${info.event.extendedProps.status_label}</div>
+                                <div><strong>Statut:</strong> ${info.event.extendedProps.status}</div>
                                 ${info.event.extendedProps.reason ? `<div><strong>Motif:</strong> ${info.event.extendedProps.reason}</div>` : ''}
                             </div>
                         `;
@@ -496,8 +569,22 @@
                         
                         // Positionner le tooltip
                         const rect = info.el.getBoundingClientRect();
-                        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-                        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+                        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        
+                        tooltip.style.left = (rect.left + scrollLeft + (rect.width / 2)) + 'px';
+                        tooltip.style.top = (rect.top + scrollTop - tooltip.offsetHeight - 10) + 'px';
+                        
+                        // Ajuster la position si le tooltip dépasse de l'écran
+                        setTimeout(() => {
+                            const tooltipRect = tooltip.getBoundingClientRect();
+                            if (tooltipRect.right > window.innerWidth) {
+                                tooltip.style.left = (rect.right + scrollLeft - tooltipRect.width) + 'px';
+                            }
+                            if (tooltipRect.top < 0) {
+                                tooltip.style.top = (rect.bottom + scrollTop + 5) + 'px';
+                            }
+                        }, 0);
                     },
                     eventMouseLeave: function(info) {
                         // Supprimer le tooltip
