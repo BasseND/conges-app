@@ -15,6 +15,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\Validator;
 use App\Events\UserCreated;
 use App\Events\UserUpdated;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -472,5 +474,63 @@ class UserController extends Controller
             });
 
         return response()->json($users);
+    }
+
+    /**
+     * Affiche la page d'import en masse
+     */
+    public function showImport()
+    {
+        return view('admin.users.import');
+    }
+
+    /**
+     * Traite l'import en masse d'utilisateurs
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ], [
+            'file.required' => 'Veuillez sélectionner un fichier.',
+            'file.mimes' => 'Le fichier doit être au format Excel (.xlsx, .xls) ou CSV.',
+            'file.max' => 'Le fichier ne doit pas dépasser 2 Mo.'
+        ]);
+
+        try {
+            $import = new UsersImport();
+            Excel::import($import, $request->file('file'));
+
+            $successCount = $import->getSuccessCount();
+            $errorCount = $import->getErrorCount();
+            $errors = $import->getErrors();
+
+            if ($errorCount > 0) {
+                return redirect()->route('admin.users.import')
+                    ->with('warning', "Import terminé avec {$successCount} utilisateurs créés et {$errorCount} erreurs.")
+                    ->with('import_errors', $errors);
+            }
+
+            return redirect()->route('admin.users.index')
+                ->with('success', "{$successCount} utilisateurs ont été importés avec succès.");
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'import d\'utilisateurs: ' . $e->getMessage());
+            return redirect()->route('admin.users.import')
+                ->with('error', 'Erreur lors de l\'import: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Télécharge le modèle Excel pour l'import
+     */
+    public function downloadTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="modele_import_utilisateurs.xlsx"'
+        ];
+
+        return Excel::download(new \App\Exports\UsersTemplateExport(), 'modele_import_utilisateurs.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
     }
 }

@@ -222,10 +222,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         // Gestion des utilisateurs
+        // Routes pour l'import en masse des utilisateurs (doivent être avant la route resource)
+        Route::get('users/import', [UserController::class, 'showImport'])->name('users.import.form');
+        Route::post('users/import', [UserController::class, 'import'])->name('users.import');
+        Route::get('users/download-template', [UserController::class, 'downloadTemplate'])->name('users.download-template');
+        Route::get('users/api', [UserController::class, 'apiIndex'])->name('users.api');
+        
         Route::resource('users', UserController::class);
         Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
-        Route::get('users/api', [UserController::class, 'apiIndex'])->name('users.api');
         // Route::get('users/{user}', [UserController::class, 'edit'])->name('users.edit-profile-infos');
         
         // Document routes
