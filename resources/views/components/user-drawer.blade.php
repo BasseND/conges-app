@@ -88,57 +88,57 @@
             </div>
 
             <!-- Informations personnelles -->
-            <div class="px-6 py-4">
-                <div class="flex items-center mb-4">
-                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
-                        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+            <div class="px-6 py-3">
+                <div class="flex items-center mb-3">
+                    <div class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-md flex items-center justify-center mr-2">
+                        <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Informations personnelles</h4>
+                    <h4 class="text-base font-semibold text-gray-900 dark:text-white">Informations personnelles</h4>
                 </div>
-                <div class="space-y-4">
-                    <div class="group">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Prénom</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.first_name || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.first_name || 'Non renseigné'"></p>
                     </div>
-                    <div class="group">
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nom</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.last_name || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.last_name || 'Non renseigné'"></p>
                     </div>
-                    <div class="group">
-                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Genre</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.gender || 'Non renseigné'"></p>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sexe</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.gender || 'Non renseigné'"></p>
                     </div>
-                    <div class="group">
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Poste</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.poste || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.poste || 'Non renseigné'"></p>
                     </div>
                 </div>
             </div>
 
             <!-- Informations professionnelles -->
-            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800">
-                <div class="flex items-center mb-4">
-                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-3">
-                        <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+            <div class="px-6 py-3 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center mb-3">
+                    <div class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-md flex items-center justify-center mr-2">
+                        <svg class="w-3 h-3 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Informations professionnelles</h4>
+                    <h4 class="text-base font-semibold text-gray-900 dark:text-white">Informations professionnelles</h4>
                 </div>
-                <div class="space-y-4">
-                    <div class="group">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rôle</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.role || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.role || 'Non renseigné'"></p>
                     </div>
-                    <div class="group">
+                    <div class="flex justify-between items-center">
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.is_prestataire ? 'Prestataire' : 'Employé'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.is_prestataire ? 'Prestataire' : 'Employé'"></p>
                     </div>
-                    <div class="group">
+                    <div class="flex justify-between items-center">
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Membre depuis</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1" x-text="user?.created_at ? new Date(user.created_at).toLocaleDateString('fr-FR') : 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.created_at ? new Date(user.created_at).toLocaleDateString('fr-FR') : 'Non renseigné'"></p>
                     </div>
                 </div>
             </div>

@@ -1,21 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-2xl shadow-lg">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg">
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
                         {{ __('Gestion des Contrats') }}
                     </h2>
-                    <p class="text-gray-600 dark:text-gray-400 mt-1">Suivi et gestion des contrats actifs</p>
+                    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">Suivi et gestion des contrats actifs</p>
                 </div>
             </div>
-            
-           
         </div>
     </x-slot>
 
@@ -157,9 +155,9 @@
                     <!-- Effet de brillance subtil -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-1000 ease-out"></div>
                     
-                    <div class="flex flex-wrap items-center gap-6 relative z-10">
+                    <div class="flex flex-col lg:flex-row lg:flex-wrap items-stretch lg:items-center gap-4 lg:gap-6 relative z-10">
                         <!-- Recherche -->
-                        <div class="flex-1 min-w-72">
+                        <div class="w-full lg:flex-1 lg:min-w-72">
                             <div class="relative group">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -172,69 +170,74 @@
                             </div>
                         </div>
                         
-                        <!-- Filtre par statut -->
-                        <div class="min-w-48">
-                            <div class="relative group">
-                                <select x-model="statusFilter" @change="filterContracts()" 
-                                        class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
-                                    <option value="">📊 Tous les statuts</option>
-                                    <option value="actif">✅ Actif</option>
-                                    <option value="suspendu">⏸️ Suspendu</option>
-                                    <option value="termine">🔚 Terminé</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                    </svg>
+                        <!-- Conteneur des filtres -->
+                        <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                            <!-- Filtre par statut -->
+                            <div class="w-full sm:min-w-48">
+                                <div class="relative group">
+                                    <select x-model="statusFilter" @change="filterContracts()" 
+                                            class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
+                                        <option value="">📊 Tous les statuts</option>
+                                        <option value="actif">✅ Actif</option>
+                                        <option value="suspendu">⏸️ Suspendu</option>
+                                        <option value="termine">🔚 Terminé</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Filtre par type -->
-                        <div class="min-w-48">
-                            <div class="relative group">
-                                <select x-model="typeFilter" @change="filterContracts()" 
-                                        class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
-                                    <option value="">📋 Tous les types</option>
-                                    <option value="CDI">🏢 CDI</option>
-                                    <option value="CDD">📅 CDD</option>
-                                    <option value="Interim">⚡ Intérim</option>
-                                    <option value="Stage">🎓 Stage</option>
-                                    <option value="Alternance">🔄 Alternance</option>
-                                    <option value="Freelance">💼 Freelance</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                    </svg>
+                            
+                            <!-- Filtre par type -->
+                            <div class="w-full sm:min-w-48">
+                                <div class="relative group">
+                                    <select x-model="typeFilter" @change="filterContracts()" 
+                                            class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
+                                        <option value="">📋 Tous les types</option>
+                                        <option value="CDI">🏢 CDI</option>
+                                        <option value="CDD">📅 CDD</option>
+                                        <option value="Interim">⚡ Intérim</option>
+                                        <option value="Stage">🎓 Stage</option>
+                                        <option value="Alternance">🔄 Alternance</option>
+                                        <option value="Freelance">💼 Freelance</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="h-4 w-4 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Filtre par expiration -->
-                        <div class="min-w-48">
-                            <div class="relative group">
-                                <select x-model="expiringFilter" @change="filterContracts()" 
-                                        class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
-                                    <option value="">⏰ Toutes les expirations</option>
-                                    <option value="expiring">⚠️ Expirent bientôt</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-red-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                    </svg>
+                            
+                            <!-- Filtre par expiration -->
+                            <div class="w-full sm:min-w-48">
+                                <div class="relative group">
+                                    <select x-model="expiringFilter" @change="filterContracts()" 
+                                            class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/80 dark:bg-slate-700/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
+                                        <option value="">⏰ Toutes les expirations</option>
+                                        <option value="expiring">⚠️ Expirent bientôt</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="h-4 w-4 text-slate-400 group-focus-within:text-red-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Bouton reset -->
-                        <button @click="statusFilter = ''; typeFilter = ''; searchTerm = ''; expiringFilter = ''; filterContracts();" 
-                                class="group inline-flex items-center px-6 py-3 border border-rose-300/60 dark:border-rose-600/60 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 text-rose-700 dark:text-rose-300 hover:from-rose-100 hover:to-pink-100 dark:hover:from-rose-800/30 dark:hover:to-pink-800/30 focus:outline-none focus:ring-2 focus:ring-rose-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm hover:scale-105">
-                            <svg class="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                            </svg>
-                            <span class="font-medium">Réinitialiser</span>
-                        </button>
+                        <div class="w-full lg:w-auto">
+                            <button @click="statusFilter = ''; typeFilter = ''; searchTerm = ''; expiringFilter = ''; filterContracts();" 
+                                    class="group inline-flex items-center justify-center w-full lg:w-auto px-6 py-3 border border-rose-300/60 dark:border-rose-600/60 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 text-rose-700 dark:text-rose-300 hover:from-rose-100 hover:to-pink-100 dark:hover:from-rose-800/30 dark:hover:to-pink-800/30 focus:outline-none focus:ring-2 focus:ring-rose-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm hover:scale-105">
+                                <svg class="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                                <span class="font-medium">Réinitialiser</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

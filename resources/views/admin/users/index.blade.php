@@ -17,13 +17,22 @@
                             <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les comptes et permissions des utilisateurs</p>
                         </div>
                     </div>
-                    <a href="{{ route('admin.users.create') }}" 
-                       class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        <span>Nouvel Utilisateur</span>
-                    </a>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="{{ route('admin.users.import.form') }}" 
+                           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                            <span>Import Excel</span>
+                        </a>
+                        <a href="{{ route('admin.users.create') }}" 
+                           class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span>Nouvel Utilisateur</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

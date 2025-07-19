@@ -2,12 +2,7 @@
   
 
     <div class="pb-12">
-
-        
-
-
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-           <!-- Header -->
            
 
         <!-- En-tête moderne avec dégradé -->
@@ -314,23 +309,14 @@
 
                 <!-- Pagination modernisée -->
                 @if($expenseReports->hasPages())
-                    <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/50 border-t border-gray-200/50 dark:border-gray-600/50">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                <span>
-                                    Affichage de {{ $expenseReports->firstItem() }} à {{ $expenseReports->lastItem() }} 
-                                    sur {{ $expenseReports->total() }} résultats
-                                </span>
-                            </div>
-                            <div class="flex justify-center sm:justify-end">
-                                {{ $expenseReports->appends(request()->query())->links('pagination::tailwind') }}
-                            </div>
-                        </div>
-                    </div>
+                    @if($expenseReports instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                        <!-- Pagination -->
+                        <x-pagination :paginator="$expenseReports" entity-name="notes de frais" />
+                    @endif
                 @endif
+
+                
+
             </div>
         </div>
     </div>
