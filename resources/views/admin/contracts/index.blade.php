@@ -563,72 +563,7 @@
              </div>
              
              <!-- Pagination -->
-             @if($contracts->hasPages())
-                 <div class="mt-6 px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border-t border-gray-200 dark:border-gray-600">
-                     <div class="flex items-center justify-between">
-                         <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                             <span class="mr-2">Affichage de</span>
-                             <span class="font-semibold text-blue-600 dark:text-blue-400">{{ $contracts->firstItem() }}</span>
-                             <span class="mx-1">à</span>
-                             <span class="font-semibold text-blue-600 dark:text-blue-400">{{ $contracts->lastItem() }}</span>
-                             <span class="mx-1">sur</span>
-                             <span class="font-semibold text-blue-600 dark:text-blue-400">{{ $contracts->total() }}</span>
-                             <span class="ml-1">contrats</span>
-                         </div>
-                         
-                         <div class="flex items-center space-x-2">
-                             {{-- Bouton Précédent --}}
-                             @if($contracts->onFirstPage())
-                                 <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg cursor-not-allowed">
-                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                     </svg>
-                                     Précédent
-                                 </span>
-                             @else
-                                 <a href="{{ $contracts->previousPageUrl() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105">
-                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                     </svg>
-                                     Précédent
-                                 </a>
-                             @endif
-                             
-                             {{-- Numéros de pages --}}
-                             <div class="flex items-center space-x-1">
-                                 @foreach($contracts->getUrlRange(1, $contracts->lastPage()) as $page => $url)
-                                     @if($page == $contracts->currentPage())
-                                         <span class="inline-flex items-center px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 border border-blue-500 rounded-lg shadow-sm">
-                                             {{ $page }}
-                                         </span>
-                                     @else
-                                         <a href="{{ $url }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105">
-                                             {{ $page }}
-                                         </a>
-                                     @endif
-                                 @endforeach
-                             </div>
-                             
-                             {{-- Bouton Suivant --}}
-                             @if($contracts->hasMorePages())
-                                 <a href="{{ $contracts->nextPageUrl() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105">
-                                     Suivant
-                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                     </svg>
-                                 </a>
-                             @else
-                                 <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg cursor-not-allowed">
-                                     Suivant
-                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                     </svg>
-                                 </span>
-                             @endif
-                         </div>
-                     </div>
-                 </div>
-             @endif
+             <x-pagination :paginator="$contracts" entity-name="contrats" />
          </div>
      </div>
      

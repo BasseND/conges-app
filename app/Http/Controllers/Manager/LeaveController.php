@@ -108,5 +108,81 @@ class LeaveController extends Controller
         return back()->withErrors(['error' => 'Échec du rejet']);
     }
 
+    /**
+     * Retourne les données de congés au format JSON pour le calendrier
+     */
+    public function getCalendarData(Request $request)
+    {
+        $user = auth()->user();
+        
+        $query = Leave::with(['user', 'user.teams']);
+
+        // Si c'est un manager, il ne voit que les demandes des membres de son équipe
+        if (!$user->isAdmin()) {
+            $query->whereHas('user.teams', function ($q) use ($user) {
+                $q->whereHas('manager', function ($q) use ($user) {
+                    $q->where('id', $user->id);
+                });
+            });
+        }
+
+        // Appliquer les mêmes filtres que dans la méthode index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status') && array_key_exists($request->status, Leave::STATUSES)) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('type') && array_key_exists($request->type, Leave::TYPES)) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->where('start_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->where('end_date', '<=', $request->date_to);
+        }
+
+        $leaves = $query->get();
+
+        // Transformer les données pour FullCalendar
+        $events = $leaves->map(function ($leave) {
+            $statusColors = [
+                'pending' => '#f59e0b', // orange
+                'approved' => '#10b981', // vert
+                'rejected' => '#ef4444', // rouge
+                'draft' => '#6b7280', // gris
+            ];
+
+            return [
+                'id' => $leave->id,
+                'title' => $leave->user->first_name . ' ' . $leave->user->last_name . ' - ' . Leave::TYPES[$leave->type],
+                'start' => $leave->start_date,
+                'end' => $leave->end_date,
+                'backgroundColor' => $statusColors[$leave->status] ?? '#6b7280',
+                'borderColor' => $statusColors[$leave->status] ?? '#6b7280',
+                'extendedProps' => [
+                    'employee' => $leave->user->first_name . ' ' . $leave->user->last_name,
+                    'department' => $leave->user->teams->first()->name ?? 'N/A',
+                    'type' => Leave::TYPES[$leave->type],
+                    'status' => Leave::STATUSES[$leave->status],
+                    'duration' => $leave->duration,
+                    'reason' => $leave->reason,
+                    'url' => route('leaves.show', $leave)
+                 ]
+            ];
+        });
+
+        return response()->json($events);
+    }
 
 }

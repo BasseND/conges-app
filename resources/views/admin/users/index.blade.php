@@ -339,21 +339,9 @@
                     </table>
 
                     @if($users->count() > 0)
-                        <!-- Pagination modernisée -->
-                        @if($users->hasPages())
-                            <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-t border-gray-200/50 dark:border-gray-600/50">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                        </svg>
-                                        <span>Affichage de {{ $users->firstItem() }} à {{ $users->lastItem() }} sur {{ $users->total() }} résultats</span>
-                                    </div>
-                                    <div class="flex items-center space-x-1">
-                                        {{ $users->appends(request()->query())->links('pagination::tailwind') }}
-                                    </div>
-                                </div>
-                            </div>
+                        @if($users instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                            <!-- Pagination -->
+                            <x-pagination :paginator="$users" entity-name="Utilisateurs" />
                         @endif
                     @else
                         <!-- État vide modernisé -->

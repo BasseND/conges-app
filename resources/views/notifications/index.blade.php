@@ -86,7 +86,10 @@
                         </div>
                         
                         <div class="mt-6">
-                            {{ $notifications->links() }}
+                            @if($notifications instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                                <!-- Pagination -->
+                                <x-pagination :paginator="$notifications" entity-name="notifications" />
+                            @endif
                         </div>
                     @else
                         <div class="text-center py-8">
