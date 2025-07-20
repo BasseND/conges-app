@@ -41,6 +41,7 @@ class ContractController extends Controller
             'date_fin' => ['nullable', 'date', 'after:date_debut'],
             'statut' => ['required', Rule::in(['actif', 'termine', 'suspendu'])],
             'contrat_file' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'is_active' => ['nullable', 'boolean'],
         ];
 
         // Ajout des règles conditionnelles selon le type de contrat
@@ -77,7 +78,25 @@ class ContractController extends Controller
             $validated['contrat_file'] = $path;
         }
 
+        // Convertir is_active en booléen
+        if (isset($validated['is_active'])) {
+            $validated['is_active'] = in_array($validated['is_active'], [1, '1', true, 'true'], true);
+            
+            // Vérifier que seuls les contrats avec statut 'actif' peuvent être définis comme en vigueur
+            if ($validated['is_active'] && $validated['statut'] !== 'actif') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Seuls les contrats ayant le statut "actif" peuvent être définis comme contrat en vigueur.'
+                ], 422);
+            }
+        }
+
         $contract = $user->contracts()->create($validated);
+
+        // Si le contrat est marqué comme actif, désactiver les autres
+        if (isset($validated['is_active']) && $validated['is_active']) {
+            $contract->setAsActive();
+        }
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
@@ -105,7 +124,8 @@ class ContractController extends Controller
             'salaire_brut' => $contract->salaire_brut,
             'tjm' => $contract->tjm,
             'statut' => $contract->statut,
-            'user_id' => $contract->user_id
+            'user_id' => $contract->user_id,
+            'is_active' => $contract->is_active
         ]);
     }
 
@@ -127,6 +147,7 @@ class ContractController extends Controller
             'salaire_brut' => $contract->salaire_brut,
             'tjm' => $contract->tjm,
             'statut' => $contract->statut,
+            'is_active' => $contract->is_active,
         ]);
     }
 
@@ -146,6 +167,7 @@ class ContractController extends Controller
              'date_debut' => 'required|date',
              'date_fin' => 'nullable|date|after:date_debut',
              'statut' => 'required|string|in:actif,suspendu,termine',
+             'is_active' => 'nullable|in:0,1,true,false',
          ];
          
          // Ajout des règles conditionnelles selon le type de contrat existant
@@ -187,6 +209,30 @@ class ContractController extends Controller
              
          }
          
+         // Gérer le statut actif si spécifié
+         if (isset($validated['is_active'])) {
+             // Convertir is_active en booléen
+             $validated['is_active'] = in_array($validated['is_active'], [1, '1', true, 'true'], true);
+             
+             // Vérifier que seuls les contrats avec statut 'actif' peuvent être définis comme en vigueur
+             if ($validated['is_active'] && $validated['statut'] !== 'actif') {
+                 if ($request->ajax() || $request->wantsJson()) {
+                     return response()->json([
+                         'success' => false,
+                         'message' => 'Seuls les contrats ayant le statut "actif" peuvent être définis comme contrat en vigueur.'
+                     ], 422);
+                 }
+                 return redirect()->back()->withErrors([
+                     'is_active' => 'Seuls les contrats ayant le statut "actif" peuvent être définis comme contrat en vigueur.'
+                 ]);
+             }
+             
+             $contract->is_active = $validated['is_active'];
+             if ($validated['is_active']) {
+                 $contract->setAsActive();
+             }
+         }
+         
          $contract->save();
          
          // Créer une notification pour la modification du contrat
@@ -215,6 +261,7 @@ class ContractController extends Controller
             'date_debut' => 'required|date',
             'date_fin' => 'nullable|date|after:date_debut',
             'statut' => 'required|string|in:actif,suspendu,termine',
+            'is_active' => 'nullable|in:0,1,true,false',
         ];
         
         // Ajout des règles conditionnelles selon le type de contrat existant
@@ -253,6 +300,30 @@ class ContractController extends Controller
             // Stocker le nouveau fichier
             $path = $request->file('contrat_file')->store('contracts');
             $contract->contrat_file = $path;
+        }
+        
+        // Gérer le statut actif si spécifié
+        if (isset($validated['is_active'])) {
+            // Convertir is_active en booléen
+            $validated['is_active'] = in_array($validated['is_active'], [1, '1', true, 'true'], true);
+            
+            // Vérifier que seuls les contrats avec statut 'actif' peuvent être définis comme en vigueur
+            if ($validated['is_active'] && $validated['statut'] !== 'actif') {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Seuls les contrats ayant le statut "actif" peuvent être définis comme contrat en vigueur.'
+                    ], 422);
+                }
+                return redirect()->back()->withErrors([
+                    'is_active' => 'Seuls les contrats ayant le statut "actif" peuvent être définis comme contrat en vigueur.'
+                ]);
+            }
+            
+            $contract->is_active = $validated['is_active'];
+            if ($validated['is_active']) {
+                $contract->setAsActive();
+            }
         }
         
         $contract->save();

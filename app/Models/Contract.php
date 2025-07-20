@@ -24,6 +24,7 @@ class Contract  extends Model
         'user_id',
         'type',
         'is_expired',
+        'is_active',
         'date_debut',
         'date_fin',
         'salaire_brut',
@@ -37,7 +38,8 @@ class Contract  extends Model
         'date_fin' => 'datetime',
         'salaire_brut' => 'decimal:2',
         'tjm' => 'decimal:2',
-        'is_expired' => 'boolean'
+        'is_expired' => 'boolean',
+        'is_active' => 'boolean'
     ];
 
     // Relation avec l'utilisateur
@@ -60,5 +62,35 @@ class Contract  extends Model
             self::CONTRACT_ALTERNANCE => 'Alternance',
             self::CONTRACT_FREELANCE => 'Freelance',
         ];
+    }
+
+    /**
+     * Scope to get active contract for a user.
+     */
+    public function scopeActive($query, $userId)
+    {
+        return $query->where('user_id', $userId)->where('is_active', true);
+    }
+
+    /**
+     * Set this contract as active and deactivate all other contracts for the same user.
+     */
+    public function setAsActive()
+    {
+        // Désactiver tous les autres contrats de cet utilisateur
+        static::where('user_id', $this->user_id)
+            ->where('id', '!=', $this->id)
+            ->update(['is_active' => false]);
+        
+        // Activer ce contrat
+        $this->update(['is_active' => true]);
+    }
+
+    /**
+     * Get the active contract for a user.
+     */
+    public static function getActiveForUser($userId)
+    {
+        return static::active($userId)->first();
     }
 }
