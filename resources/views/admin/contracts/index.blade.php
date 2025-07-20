@@ -159,116 +159,118 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-1000 ease-out"></div>
                     
                     <!-- En-tête des filtres -->
-                    <div class="px-6 py-4 border-b border-slate-200/60 dark:border-slate-600/40 relative z-10">
-                        <div class="flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-600/40 relative z-10">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div class="flex items-center space-x-3">
                                 <div class="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-sm">
                                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
                                     </svg>
                                 </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Filtres de recherche</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">Affinez votre recherche de contrats</p>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 truncate">Filtres de recherche</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">Affinez votre recherche de contrats</p>
                                 </div>
                             </div>
                             
                             <!-- Bouton de réinitialisation -->
                             <button @click="statusFilter = ''; typeFilter = ''; searchTerm = ''; expiringFilter = ''; activeFilter = ''; filterContracts()" 
-                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white/80 dark:bg-slate-700/80 border border-slate-300/60 dark:border-slate-600/60 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600/80 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 shadow-sm hover:shadow-md">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    class="group inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 border border-rose-300/60 dark:border-rose-600/60 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 text-rose-700 dark:text-rose-300 hover:from-rose-100 hover:to-pink-100 dark:hover:from-rose-800/30 dark:hover:to-pink-800/30 focus:outline-none focus:ring-2 focus:ring-rose-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm hover:scale-105 text-sm sm:text-base">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
-                                Réinitialiser
+                                <span class="inline">Réinitialiser</span>
                             </button>
                         </div>
                     </div>
                     
                     <!-- Corps des filtres -->
                     <div class="p-6 space-y-6 relative z-10">
-                        <!-- Recherche principale -->
-                        <div class="w-full">
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        <div class="">
+                            <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                Recherche par employé
-                            </label>
-                            <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
+                                Filtres de base
+                            </h4>
+                        
+                            <div class="flex flex-col lg:flex-row lg:flex-wrap items-stretch lg:items-center gap-4 lg:gap-6 relative z-10">
+                                <!-- Recherche principale -->
+                                <div class="w-full lg:flex-1 lg:min-w-80">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                        Recherche par employé
+                                    </label>
+                                    <div class="relative group">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                            </svg>
+                                        </div>
+                                        <input type="text" x-model="searchTerm" @input="filterContracts()" 
+                                            class="block w-full pl-12 pr-4 py-3.5 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm text-base" 
+                                            placeholder="Tapez le nom ou prénom de l'employé...">
+                                    </div>
                                 </div>
-                                <input type="text" x-model="searchTerm" @input="filterContracts()" 
-                                       class="block w-full pl-12 pr-4 py-3.5 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm text-base" 
-                                       placeholder="Tapez le nom ou prénom de l'employé...">
+                                
+                                <div class="flex flex-col sm:flex-row gap-4 w-full lg:flex-1 lg:min-w-96">
+                                    <!-- Filtre par statut -->
+                                    <div class="flex-1 min-w-48">
+                                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Statut du contrat</label>
+                                        <div class="relative group">
+                                            <select x-model="statusFilter" @change="filterContracts()" 
+                                                    class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
+                                                <option value="">📊 Tous les statuts</option>
+                                                <option value="actif">✅ Actif</option>
+                                                <option value="suspendu">⏸️ Suspendu</option>
+                                                <option value="termine">🔚 Terminé</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <!-- Filtre par type -->
+                                    <div class="flex-1 min-w-48">
+                                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Type de contrat</label>
+                                        <div class="relative group">
+                                            <select x-model="typeFilter" @change="filterContracts()" 
+                                                    class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
+                                                <option value="">📋 Tous les types</option>
+                                                <option value="CDI">🏢 CDI</option>
+                                                <option value="CDD">📅 CDD</option>
+                                                <option value="Interim">⚡ Intérim</option>
+                                                <option value="Stage">🎓 Stage</option>
+                                                <option value="Alternance">🔄 Alternance</option>
+                                                <option value="Freelance">💼 Freelance</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-4 w-4 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                       
                         
                         <!-- Filtres par catégorie -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Groupe 1: Filtres de base -->
-                            <div class="space-y-4">
-                                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center">
-                                    <svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Filtres de base
-                                </h4>
-                                
-                                <!-- Filtre par statut -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Statut du contrat</label>
-                                    <div class="relative group">
-                                        <select x-model="statusFilter" @change="filterContracts()" 
-                                                class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
-                                            <option value="">📊 Tous les statuts</option>
-                                            <option value="actif">✅ Actif</option>
-                                            <option value="suspendu">⏸️ Suspendu</option>
-                                            <option value="termine">🔚 Terminé</option>
-                                        </select>
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <svg class="h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Filtre par type -->
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Type de contrat</label>
-                                    <div class="relative group">
-                                        <select x-model="typeFilter" @change="filterContracts()" 
-                                                class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
-                                            <option value="">📋 Tous les types</option>
-                                            <option value="CDI">🏢 CDI</option>
-                                            <option value="CDD">📅 CDD</option>
-                                            <option value="Interim">⚡ Intérim</option>
-                                            <option value="Stage">🎓 Stage</option>
-                                            <option value="Alternance">🔄 Alternance</option>
-                                            <option value="Freelance">💼 Freelance</option>
-                                        </select>
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <svg class="h-4 w-4 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Groupe 2: Filtres avancés -->
-                            <div class="space-y-4">
-                                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center">
-                                    <svg class="w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Filtres avancés
-                                </h4>
-                                
-                                <!-- Filtres switch -->
+                         <div>
+                            <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center mb-4">
+                                <svg class="w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                Filtres avancés
+                            </h4>
+                         
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <!-- Groupe 1: Filtres de base -->
                                 <div class="space-y-4">
                                     <!-- Filtre Expiration -->
                                     <div class="flex items-center justify-between p-4 bg-orange-50/50 dark:bg-orange-900/10 rounded-xl border border-orange-200/50 dark:border-orange-700/30">
@@ -287,10 +289,14 @@
                                                 :class="expiringFilter === 'expiring' ? 'bg-orange-500 shadow-orange-500/25' : 'bg-slate-300 dark:bg-slate-600'"
                                                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 shadow-sm">
                                             <span :class="expiringFilter === 'expiring' ? 'translate-x-6' : 'translate-x-1'"
-                                                  class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200"></span>
+                                                    class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200"></span>
                                         </button>
                                     </div>
-                                    
+                                
+                                </div>
+                                
+                                <!-- Groupe 2: Filtres avancés -->
+                                <div class="space-y-4"> 
                                     <!-- Filtre Contrats en vigueur -->
                                     <div class="flex items-center justify-between p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-200/50 dark:border-blue-700/30">
                                         <div class="flex items-center space-x-3">
@@ -308,9 +314,10 @@
                                                 :class="activeFilter === 'active' ? 'bg-blue-500 shadow-blue-500/25' : 'bg-slate-300 dark:bg-slate-600'"
                                                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 shadow-sm">
                                             <span :class="activeFilter === 'active' ? 'translate-x-6' : 'translate-x-1'"
-                                                  class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200"></span>
+                                                    class="inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200"></span>
                                         </button>
                                     </div>
+                                
                                 </div>
                             </div>
                         </div>
