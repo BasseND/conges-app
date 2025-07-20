@@ -14,7 +14,8 @@
         date_fin: '',
         statut: 'actif',
         contrat_file: null,
-        user_id: ''
+        user_id: '',
+        is_active: false
     },
     users: [],
     
@@ -33,7 +34,8 @@
                 date_fin: contractData.date_fin || '',
                 statut: contractData.statut || 'actif',
                 contrat_file: null,
-                user_id: userId || ''
+                user_id: userId || '',
+                is_active: contractData.is_active || false
             };
         } else {
             this.isEditing = false;
@@ -61,7 +63,8 @@
             date_fin: '',
             statut: 'actif',
             contrat_file: null,
-            user_id: ''
+            user_id: '',
+            is_active: false
         };
         this.submitting = false;
     },
@@ -94,6 +97,9 @@
                     } else {
                         formData.append(key, this.formData[key] || '');
                     }
+                } else if (key === 'is_active') {
+                    // Toujours envoyer is_active, même si false
+                    formData.append(key, this.formData[key] ? '1' : '0');
                 } else if (this.formData[key] !== null && this.formData[key] !== '') {
                     formData.append(key, this.formData[key]);
                 }
@@ -296,6 +302,7 @@ aria-modal="true">
                 <div>
                     <label for="statut" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('Statut') }}</label>
                     <select x-model="formData.statut" 
+                            @change="if (formData.statut !== 'actif') formData.is_active = false"
                             id="statut" 
                             name="statut" 
                             required 
@@ -328,6 +335,24 @@ aria-modal="true">
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Contrat en vigueur -->
+                <div x-show="formData.statut === 'actif'">
+                    <div class="flex items-center space-x-3">
+                        <input x-model="formData.is_active" 
+                               id="is_active" 
+                               name="is_active" 
+                               type="checkbox" 
+                               value="1"
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded">
+                        <label for="is_active" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {{ __('Définir comme contrat en vigueur') }}
+                        </label>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        {{ __('Un seul contrat peut être en vigueur par employé. Cocher cette case désactivera automatiquement les autres contrats.') }}
+                    </p>
                 </div>
 
                 <!-- Document du contrat -->

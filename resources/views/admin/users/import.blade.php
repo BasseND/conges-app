@@ -1,34 +1,36 @@
 
 <x-app-layout>
 <div class="min-h-screen py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto md:px-8">
         <!-- En-tête moderne -->
         <div class="bg-white relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 mb-8">
-            <div class="relative px-8 py-10">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-6">
-                        <div class="relative">
+            <div class="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0">
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6">
+                        <div class="relative flex-shrink-0 self-center sm:self-auto">
                             <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 animate-pulse"></div>
-                            <div class="relative p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg">
-                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="relative p-3 sm:p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div>
-                            <h1 class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                        <div class="text-center sm:text-left">
+                            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                                 Import en masse d'utilisateurs
                             </h1>
-                            <p class="text-gray-600 dark:text-gray-400 mt-2 text-lg">Importez plusieurs utilisateurs à la fois via un fichier Excel</p>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-base sm:text-lg">Importez plusieurs utilisateurs à la fois via un fichier Excel</p>
                         </div>
                     </div>
-                    <a href="{{ route('admin.users.index') }}" 
-                       class="group inline-flex items-center px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-700/80 dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl font-medium text-gray-700 dark:text-gray-300 transition-all duration-300 hover:shadow-lg hover:scale-105">
-                        <svg class="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Retour
-                    </a>
+                    <div class="flex justify-center lg:justify-end">
+                        <a href="{{ route('admin.users.index') }}" 
+                           class="group inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-white/80 hover:bg-white dark:bg-gray-700/80 dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl font-medium text-gray-700 dark:text-gray-300 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            <span class="text-sm sm:text-base">Retour</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

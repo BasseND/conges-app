@@ -595,52 +595,13 @@
                         </table>
                     </div>
                         
-                        <!-- Pagination -->
-                        @if($leaves->hasPages())
-                            <div class="bg-white dark:bg-gray-800 px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-200 dark:border-gray-700">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 flex justify-between sm:hidden">
-                                        @if ($leaves->onFirstPage())
-                                            <span class="relative inline-flex items-center px-3 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-                                                Précédent
-                                            </span>
-                                        @else
-                                            <a href="{{ $leaves->previousPageUrl() }}" class="relative inline-flex items-center px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:text-gray-400">
-                                                Précédent
-                                            </a>
-                                        @endif
-                                        
-                                        @if ($leaves->hasMorePages())
-                                            <a href="{{ $leaves->nextPageUrl() }}" class="relative inline-flex items-center px-3 py-2 ml-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:text-gray-400">
-                                                Suivant
-                                            </a>
-                                        @else
-                                            <span class="relative inline-flex items-center px-3 py-2 ml-2 text-xs font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-                                                Suivant
-                                            </span>
-                                        @endif
-                                    </div>
-                                    
-                                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                                        <div>
-                                            <p class="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-5">
-                                                Affichage de
-                                                <span class="font-medium">{{ $leaves->firstItem() ?? 0 }}</span>
-                                                à
-                                                <span class="font-medium">{{ $leaves->lastItem() ?? 0 }}</span>
-                                                sur
-                                                <span class="font-medium">{{ $leaves->total() }}</span>
-                                                résultats
-                                            </p>
-                                        </div>
-                                        
-                                        <div>
-                                            {{ $leaves->links() }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Pagination -->
+                    @if($leaves->hasPages())
+                            @if($leaves instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                            <!-- Pagination -->
+                            <x-pagination :paginator="$leaves" entity-name="congés" />
                         @endif
+                    @endif
                     </div>
                 </div>
             </div>

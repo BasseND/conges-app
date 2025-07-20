@@ -7,13 +7,18 @@
         isEditing: false,
         contractId: null,
         userId: {{ $user ? $user->id : 'null' }},
+        successMessage: '',
+        errorMessage: '',
+        showSuccess: false,
+        showError: false,
         contractData: {
             type: '',
             date_debut: '',
             date_fin: '',
             salaire_brut: '',
-            statut: 'actif',
             tjm: '',
+            statut: 'actif',
+            is_active: false
         },
         resetForm() {
             this.contractData = {
@@ -21,11 +26,14 @@
                 date_debut: '',
                 date_fin: '',
                 salaire_brut: '',
-                statut: 'actif',
                 tjm: '',
+                statut: 'actif',
+                is_active: false
             };
             this.isEditing = false;
             this.contractId = null;
+            this.showSuccess = false;
+            this.showError = false;
             // Ne pas réinitialiser userId car il vient des props
         },
         openModal(contractId = null, contractData = null, userId = null) {
@@ -37,6 +45,57 @@
                 this.contractData = contractData;
             }
             this.showContractModal = true;
+        },
+        submitForm(event) {
+            event.preventDefault();
+            this.submitting = true;
+            this.showSuccess = false;
+            this.showError = false;
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // S'assurer que is_active est toujours envoyé
+            const isActiveCheckbox = form.querySelector('input[name=is_active]');
+            if (isActiveCheckbox) {
+                formData.set('is_active', isActiveCheckbox.checked ? '1' : '0');
+            } else {
+                // Si la checkbox n'est pas visible (statut non actif), envoyer 0
+                formData.set('is_active', '0');
+            }
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.submitting = false;
+                if (data.success) {
+                    this.successMessage = data.message;
+                    this.showSuccess = true;
+                    form.reset();
+                    // Fermer le modal après 2 secondes
+                    setTimeout(() => {
+                        this.showContractModal = false;
+                        // Recharger la page pour afficher le nouveau contrat
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    this.errorMessage = data.message || 'Une erreur est survenue.';
+                    this.showError = true;
+                }
+            })
+            .catch(error => {
+                this.submitting = false;
+                this.errorMessage = 'Une erreur est survenue lors de la communication avec le serveur.';
+                this.showError = true;
+                console.error('Error:', error);
+            });
         }
     }" 
         @open-contract-modal.window="openModal()"
@@ -105,64 +164,14 @@
                 </div>
             </div>
 
-                <form x-data="{ 
-                    submitting: false,
-                    successMessage: '',
-                    errorMessage: '',
-                    showSuccess: false,
-                    showError: false,
-                    submitForm(event) {
-                        event.preventDefault();
-                        this.submitting = true;
-                        this.showSuccess = false;
-                        this.showError = false;
-                        
-                        const form = event.target;
-                        const formData = new FormData(form);
-                        
-                        fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            this.submitting = false;
-                            if (data.success) {
-                                this.successMessage = data.message;
-                                this.showSuccess = true;
-                                form.reset();
-                                // Fermer le modal après 2 secondes
-                                setTimeout(() => {
-                                    showContractModal = false;
-                                    // Recharger la page pour afficher le nouveau contrat
-                                    window.location.reload();
-                                }, 2000);
-                            } else {
-                                this.errorMessage = data.message || 'Une erreur est survenue.';
-                                this.showError = true;
-                            }
-                        })
-                        .catch(error => {
-                            this.submitting = false;
-                            this.errorMessage = 'Une erreur est survenue lors de la communication avec le serveur.';
-                            this.showError = true;
-                            console.error('Error:', error);
-                        });
-                    }
-                }" 
+                <form 
                 x-bind:action="isEditing ? `/admin/users/${userId}/contracts/${contractId}` : `/admin/users/${userId}/contracts`"
                 method="POST" 
                 @submit="submitForm($event)"
                 class="mt-6 space-y-6" 
                 enctype="multipart/form-data">
                     @csrf
-                    <template x-if="isEditing">
-                        @method('PUT')
-                    </template>
+                    <input x-show="isEditing" type="hidden" name="_method" value="PUT">
 
                     <!-- Message de succès -->
                     <div x-show="showSuccess" x-cloak class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
@@ -260,7 +269,7 @@
                          <!--  Statut -->
                          <div>
                                 <label for="statut" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('Statut') }}</label>
-                                <select x-model="contractData.statut" id="statut" name="statut" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                <select x-model="contractData.statut" @change="if (contractData.statut !== 'actif') contractData.is_active = false" id="statut" name="statut" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                                     <option value="actif">Actif</option>
                                     <option value="suspendu">Suspendu</option>
                                     <option x-show="isEditing" value="termine">Terminé</option>
@@ -292,6 +301,26 @@
                                 
                                 <x-input-error :messages="$errors->get('statut')" class="mt-2" />
                             </div>
+
+                            <!-- Contrat en vigueur -->
+                            <div x-show="contractData.statut === 'actif'">
+                                <div class="flex items-center space-x-3">
+                                    <input x-model="contractData.is_active" 
+                                           id="is_active" 
+                                           name="is_active" 
+                                           type="checkbox" 
+                                           value="1"
+                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded">
+                                    <label for="is_active" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {{ __('Définir comme contrat en vigueur') }}
+                                    </label>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('Un seul contrat peut être en vigueur par employé. Cocher cette case désactivera automatiquement les autres contrats.') }}
+                                </p>
+                                <x-input-error :messages="$errors->get('is_active')" class="mt-2" />
+                            </div>
+
                             <!--  Document du contrat -->
                             <div>
                                 <label for="contrat_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('Document du contrat') }}</label>
