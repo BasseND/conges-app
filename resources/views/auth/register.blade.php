@@ -1,3 +1,4 @@
+@section('title', 'S\'inscrire')
 <x-auth-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf

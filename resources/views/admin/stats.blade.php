@@ -1,6 +1,5 @@
+@section('title', 'Tableau de bord')
 <x-app-layout>
-    
-
     <div class="pb-8">
         <div class="">
            <!-- General Stats -->

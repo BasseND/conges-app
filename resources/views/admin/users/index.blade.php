@@ -1,3 +1,4 @@
+@section('title', 'Gestion des utilisateurs')
 <x-app-layout>
     <div class="min-h-screen">
         <!-- En-tête moderne avec dégradé -->

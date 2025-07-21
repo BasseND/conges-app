@@ -1,3 +1,4 @@
+@section('title', 'Mon Profil')
 <x-app-layout>
     <x-slot name="header">
         <div class="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 rounded-2xl p-6">

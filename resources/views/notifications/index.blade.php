@@ -1,6 +1,5 @@
+@section('title', 'Les notifications')
 <x-app-layout>
-   
-
     <div class="pb-12">
         <div class="mx-auto">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

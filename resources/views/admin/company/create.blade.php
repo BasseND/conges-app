@@ -1,3 +1,4 @@
+@section('title', 'Ajouter les informations de la structure')
 <x-app-layout>
     <div class="min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,7 +15,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <h1 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">
-                                {{ __('Créer les informations de la société') }}
+                                {{ __('Ajouter les informations de la structure') }}
                             </h1>
                             <p class="text-sm sm:text-base text-blue-100">Configurez les informations de base de votre entreprise</p>
                         </div>

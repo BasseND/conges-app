@@ -247,6 +247,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/users/{user}/contracts/{contract}', [ContractController::class, 'destroy'])->name('users.contracts.destroy');
 
         // Gestion des départements
+        // Routes pour l'import en masse des départements (doivent être avant la route resource)
+        Route::get('departments/import', [DepartmentController::class, 'showImport'])->name('departments.import.form');
+        Route::post('departments/import', [DepartmentController::class, 'import'])->name('departments.import');
+        Route::get('departments/download-template', [DepartmentController::class, 'downloadTemplate'])->name('departments.download-template');
+        
         Route::resource('departments', DepartmentController::class);
         Route::get('departments/{department}/teams', [TeamController::class, 'index'])->name('departments.teams.index');
         Route::post('departments/{department}/teams', [TeamController::class, 'store'])->name('departments.teams.store');

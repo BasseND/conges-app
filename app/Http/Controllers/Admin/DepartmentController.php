@@ -9,6 +9,10 @@ use App\Models\LeaveBalance;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DepartmentsImport;
+use App\Exports\DepartmentsTemplateExport;
 
 
 class DepartmentController extends Controller
@@ -140,5 +144,63 @@ class DepartmentController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur est survenue lors de la suppression du département.');
         }
+    }
+
+    /**
+     * Affiche la page d'import en masse
+     */
+    public function showImport()
+    {
+        return view('admin.departments.import');
+    }
+
+    /**
+     * Traite l'import en masse de départements
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ], [
+            'file.required' => 'Veuillez sélectionner un fichier.',
+            'file.mimes' => 'Le fichier doit être au format Excel (.xlsx, .xls) ou CSV.',
+            'file.max' => 'Le fichier ne doit pas dépasser 2 Mo.'
+        ]);
+
+        try {
+            $import = new DepartmentsImport();
+            Excel::import($import, $request->file('file'));
+
+            $successCount = $import->getSuccessCount();
+            $errorCount = $import->getErrorCount();
+            $errors = $import->getErrors();
+
+            if ($errorCount > 0) {
+                return redirect()->route('admin.departments.import')
+                    ->with('warning', "Import terminé avec {$successCount} départements créés et {$errorCount} erreurs.")
+                    ->with('import_errors', $errors);
+            }
+
+            return redirect()->route('admin.departments.index')
+                ->with('success', "{$successCount} départements ont été importés avec succès.");
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'import de départements: ' . $e->getMessage());
+            return redirect()->route('admin.departments.import')
+                ->with('error', 'Erreur lors de l\'import: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Télécharge le modèle Excel pour l'import
+     */
+    public function downloadTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="modele_import_departements.xlsx"'
+        ];
+
+        return Excel::download(new DepartmentsTemplateExport(), 'modele_import_departements.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
     }
 }

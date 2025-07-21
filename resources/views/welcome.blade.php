@@ -1,4 +1,5 @@
 <!-- Page d'accueil -->
+ @section('title', 'Accueil')
 <x-app-layout>
 <div class="pb-12">
     <div class="bg-lime-50 dark:bg-darkblack-600 border-2 border-lime-200 rounded-2xl mb-10">

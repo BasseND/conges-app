@@ -1,3 +1,4 @@
+@section('title', 'Profile')
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-2xl font-bold pb-5 text-bgray-900 dark:text-white">
