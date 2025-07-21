@@ -1,3 +1,4 @@
+@section('title', 'Validation des congés')
 <x-app-layout>
     <div class="pb-8">
         <!-- Header -->

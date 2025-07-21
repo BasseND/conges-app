@@ -1,3 +1,4 @@
+@section('title', 'Gestion des Contrats')
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
@@ -187,7 +188,7 @@
                     <!-- Corps des filtres -->
                     <div class="p-6 space-y-6 relative z-10">
                         <div class="">
-                            <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center">
+                            <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center mb-4">
                                 <svg class="w-4 h-4 mr-2 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
