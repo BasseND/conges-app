@@ -549,7 +549,7 @@
                                                         <span class="hidden sm:inline">Modifier</span>
                                                     </a>
                                                     <button type="button"
-                                                        @click="$dispatch('submit-leave', '{{ route('leaves.update', $leave->id) }}')"
+                                                        @click="$dispatch('submit-leave', '{{ route('leaves.submit', $leave) }}')"
                                                         class="inline-flex items-center px-2 sm:px-3 py-1 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
                                                         <svg class="w-3 h-3 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
