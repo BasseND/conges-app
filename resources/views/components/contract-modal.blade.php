@@ -171,7 +171,9 @@
                 class="mt-6 space-y-6" 
                 enctype="multipart/form-data">
                     @csrf
-                    <input x-show="isEditing" type="hidden" name="_method" value="PUT">
+                    <template x-if="isEditing">
+                        <input type="hidden" name="_method" value="PUT">
+                    </template>
 
                     <!-- Message de succès -->
                     <div x-show="showSuccess" x-cloak class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
