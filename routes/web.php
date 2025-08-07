@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\LeaveBalanceController;
+use App\Http\Controllers\Admin\SalaryAdvanceController as AdminSalaryAdvanceController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Payroll\PayslipController;
 use App\Http\Controllers\Payroll\SalaryAdvanceController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -152,7 +154,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('salary-advances/create', [SalaryAdvanceController::class, 'create'])->name('salary-advances.create');
     Route::post('salary-advances', [SalaryAdvanceController::class, 'store'])->name('salary-advances.store');
     Route::get('salary-advances/{salaryAdvance}', [SalaryAdvanceController::class, 'show'])->name('salary-advances.show');
+    Route::post('salary-advances/{salaryAdvance}/submit', [SalaryAdvanceController::class, 'submit'])->name('salary-advances.submit');
     Route::post('salary-advances/{salaryAdvance}/cancel', [SalaryAdvanceController::class, 'cancel'])->name('salary-advances.cancel');
+    
+    // Routes pour les RH (approbation/rejet des avances sur salaire)
+    Route::middleware('role:hr,admin')->group(function () {
+        Route::post('salary-advances/{salaryAdvance}/approve', [SalaryAdvanceController::class, 'approve'])->name('salary-advances.approve');
+        Route::post('salary-advances/{salaryAdvance}/reject', [SalaryAdvanceController::class, 'reject'])->name('salary-advances.reject');
+    });
 
     // Routes pour les notifications
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -162,6 +171,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
     Route::get('notifications/recent', [NotificationController::class, 'getRecent'])->name('notifications.recent');
     Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // Routes pour la messagerie
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/create', [MessageController::class, 'create'])->name('messages.create');
+    Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('messages/{user}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
+    Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+    Route::post('messages/{message}/mark-read', [MessageController::class, 'markAsRead'])->name('messages.mark-read');
+    Route::get('messages/unread/count', [MessageController::class, 'unreadCount'])->name('messages.unread-count');
 
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
@@ -263,6 +282,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Gestion des soldes de congés
         Route::resource('leave-balances', LeaveBalanceController::class);
+
+        // Gestion des avances sur salaire
+        Route::prefix('salary-advances')->name('salary-advances.')->group(function () {
+            Route::get('/', [AdminSalaryAdvanceController::class, 'index'])->name('index');
+            Route::get('/stats', [AdminSalaryAdvanceController::class, 'getStats'])->name('stats');
+            Route::get('/export', [AdminSalaryAdvanceController::class, 'export'])->name('export');
+            Route::get('/{salaryAdvance}', [AdminSalaryAdvanceController::class, 'show'])->name('show');
+            Route::post('/{salaryAdvance}/approve', [AdminSalaryAdvanceController::class, 'approve'])->name('approve');
+            Route::post('/{salaryAdvance}/reject', [AdminSalaryAdvanceController::class, 'reject'])->name('reject');
+        });
 
         // Gestion de la société
         Route::get('company', [CompanyController::class, 'show'])->name('company.show');

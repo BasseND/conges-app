@@ -366,6 +366,48 @@
                                         </div>
                                     </a>
                                 </li>
+                                <!-- Salaires -->
+                                 
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="{{ route('salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }}">
+                                        Avances sur salaire
+                                    </a>
+                                </li>
+                                
+                                @if (Auth::check() && auth()->user()->hasAdminAccess())
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="{{ route('admin.salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('admin.salary-advances.*') ? 'active' : '' }}">
+                                        Gestion des avances
+                                    </a>
+                                </li>
+                                @endif
+
+
+                                <!-- Messagerie -->
+                                 <!-- Messagerie / Messages -->
+                <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" x-data="{ unreadCount: 0 }" x-init="
+                    // Récupérer le nombre de messages non lus
+                    fetch('{{ route('messages.unread-count') }}')
+                        .then(response => response.json())
+                        .then(data => unreadCount = data.count)
+                        .catch(error => console.error('Erreur:', error));
+                    
+                    // Actualiser toutes les 30 secondes
+                    setInterval(() => {
+                        fetch('{{ route('messages.unread-count') }}')
+                            .then(response => response.json())
+                            .then(data => unreadCount = data.count)
+                            .catch(error => console.error('Erreur:', error));
+                    }, 30000);
+                ">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    <span>Messagerie</span>
+                    <span x-show="unreadCount > 0" x-text="unreadCount" class="sidebar-badge" x-cloak></span>
+                </a>
+
 
                             @else
 
@@ -903,7 +945,6 @@
                                             </ul>
                                         </li>
                                         <!-- Notes de frais -->
-                                         
                                         <li class="item px-[43px] py-[11px]">
                                             <a href="{{ route('expense-reports.index') }}">
                                                 <span class="item-ico">
@@ -947,6 +988,11 @@
                                                         />
                                                     </svg>
                                                 </span>
+                                            </a>
+                                        </li>
+                                        <li class="item px-[43px] py-[11px]">
+                                            <a href="{{ route('salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }}">
+                                                Avances sur salaire
                                             </a>
                                         </li>
 
