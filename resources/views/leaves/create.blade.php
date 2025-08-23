@@ -2,7 +2,6 @@
 <x-app-layout>
     <div class="py-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-
              <!-- HEADER -->
             <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 sm:p-6 mb-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">

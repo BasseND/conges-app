@@ -1,26 +1,69 @@
+@section('title', 'Demande d\'avance sur salaire')
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
-                    {{ __('Demande d\'avance sur salaire') }}
-                </h2>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Soumettez votre demande d'avance sur salaire en remplissant le formulaire ci-dessous
-                </p>
-            </div>
-            <div class="hidden sm:flex items-center space-x-2">
-                <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
-                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </x-slot>
-
     <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+             <!-- HEADER -->
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 sm:p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2 sm:p-3 flex-shrink-0">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white break-words">
+                            {{ __('Demande d\'avance sur salaire') }}
+                        </h2>
+                        <p class="text-blue-100 mt-1 text-sm sm:text-base">
+                            {{ __('Soumettez votre demande d\'avance sur salaire en remplissant le formulaire ci-dessous.') }}
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Fil d'Ariane -->
+                <nav class="flex mt-4 text-xs sm:text-sm overflow-x-auto" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 sm:space-x-2 md:space-x-3 whitespace-nowrap">
+                        <li class="inline-flex items-center">
+                            <a href="{{ route('welcome.index') }}" class="text-blue-100 hover:text-white transition-colors duration-200 truncate flex items-center">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
+                                {{ __('Accueil') }}
+                            </a>
+                        </li>
+                        <li class="flex-shrink-0">
+                            <div class="flex items-center">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <a href="{{ route('leaves.index') }}" class="ml-1 text-blue-100 hover:text-white transition-colors duration-200 sm:ml-2 truncate">
+                                    <span class="hidden sm:inline">{{ __('Demandes d\'avance sur salaire') }}</span>
+                                    <span class="sm:hidden">{{ __('Avances sur salaire') }}</span>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="flex-shrink-0">
+                            <div class="flex items-center">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="ml-1 text-white font-medium sm:ml-2 truncate">
+                                    {{ __('Nouvelle demande') }}
+                                </span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- END HEADER -->
+
+
+
+
+   
             <!-- Affichage des erreurs de validation -->
             @if ($errors->any())
                 <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4" role="alert">
