@@ -29,6 +29,11 @@ class SalaryAdvancePolicy
             return true;
         }
 
+        // Les RH peuvent voir toutes les avances sur salaire
+        if ($user->isHR()) {
+            return true;
+        }
+
         return false;
     }
 

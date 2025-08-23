@@ -408,20 +408,22 @@
                                         x-transition
                                     >
                                         <li>
-                                        <a
-                                            href="{{ route('salary-advances.index') }}"
-                                            class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                                            > Avances sur salaire</a
-                                        >
+                                            <a
+                                                href="{{ route('salary-advances.index') }}"
+                                                class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                                > Avances sur salaire</a
+                                            >
                                         </li>
 
+                                        @if (Auth::check() && auth()->user()->isHR())
                                         <li>
-                                        <a
-                                            href="{{ route('admin.salary-advances.index') }}"
-                                            class="sidebar-sublink {{ request()->routeIs('admin.salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
-                                            >Gestion des avances</a
-                                        >
+                                            <a
+                                                href="{{ route('admin.salary-advances.index') }}"
+                                                class="sidebar-sublink {{ request()->routeIs('admin.salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                                >Gestion des avances</a
+                                            >
                                         </li>
+                                        @endif
                                     
                                     </ul>
                                 </li>
@@ -675,23 +677,24 @@
                          <!-- Messagerie -->
 
 
-                         <li class="item py-[11px] text-bgray-900 dark:text-white">
-                            <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}
-                                x-data="{ unreadCount: 0 }" x-init="
-                                    // Récupérer le nombre de messages non lus
-                                    fetch('{{ route('messages.unread-count') }}')
-                                        .then(response => response.json())
-                                        .then(data => unreadCount = data.count)
-                                        .catch(error => console.error('Erreur:', error));
-                                    
-                                    // Actualiser toutes les 30 secondes
-                                    setInterval(() => {
-                                        fetch('{{ route('messages.unread-count') }}')
-                                            .then(response => response.json())
-                                            .then(data => unreadCount = data.count)
-                                            .catch(error => console.error('Erreur:', error));
-                                    }, 30000);
-                                ">
+                         <li class="item py-[11px] text-bgray-900 dark:text-white" 
+                             x-data="{ unreadCount: 0 }" 
+                             x-init="
+                                 // Récupérer le nombre de messages non lus
+                                 fetch('{{ route('messages.unread-count') }}')
+                                     .then(response => response.json())
+                                     .then(data => unreadCount = data.count)
+                                     .catch(error => console.error('Erreur:', error));
+                                 
+                                 // Actualiser toutes les 30 secondes
+                                 setInterval(() => {
+                                     fetch('{{ route('messages.unread-count') }}')
+                                         .then(response => response.json())
+                                         .then(data => unreadCount = data.count)
+                                         .catch(error => console.error('Erreur:', error));
+                                 }, 30000);
+                             ">
+                            <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}">
 
                               <div class="flex items-center justify-between">
                                 <div class="flex space-x-2.5 items-center">

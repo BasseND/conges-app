@@ -74,6 +74,13 @@ class MessageController extends Controller
     {
         $currentUser = Auth::user();
         
+        // Vérifier que l'utilisateur peut communiquer avec cet utilisateur
+        // Les RH peuvent voir toutes les conversations
+        // Les employés ne peuvent voir que leurs conversations avec les RH
+        if (!$currentUser->isHR() && !$user->isHR()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir cette conversation.');
+        }
+        
         // Récupérer tous les messages entre les deux utilisateurs
         $messages = Message::conversation($currentUser->id, $user->id)
             ->with(['sender', 'recipient'])
@@ -133,15 +140,25 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'recipient_ids' => 'required|array|min:1',
-            'recipient_ids.*' => 'exists:users,id',
-            'subject' => 'required|string|max:255',
-            'content' => 'required|string|max:5000',
-        ]);
+        // Gérer les deux formats : recipient_id (simple) et recipient_ids (multiple)
+        if ($request->has('recipient_id')) {
+            $request->validate([
+                'recipient_id' => 'required|exists:users,id',
+                'subject' => 'required|string|max:255',
+                'content' => 'required|string|max:5000',
+            ]);
+            $recipientIds = [$request->recipient_id];
+        } else {
+            $request->validate([
+                'recipient_ids' => 'required|array|min:1',
+                'recipient_ids.*' => 'exists:users,id',
+                'subject' => 'required|string|max:255',
+                'content' => 'required|string|max:5000',
+            ]);
+            $recipientIds = $request->recipient_ids;
+        }
 
         $currentUser = Auth::user();
-        $recipientIds = $request->recipient_ids;
         
         // Vérifier que l'utilisateur peut envoyer un message à tous les destinataires
         foreach ($recipientIds as $recipientId) {
