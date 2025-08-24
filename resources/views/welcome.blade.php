@@ -70,7 +70,7 @@
 
 
     <div class="mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <!-- Carte Congés -->
             <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-1 shadow-xl hover:shadow-2xl transition-all duration-500">
                 <div class="relative h-full rounded-xl bg-white dark:bg-gray-900 p-8 transition-all duration-300">
@@ -122,6 +122,35 @@
                         <a href="{{ route('expense-reports.create') }}" class="group/btn relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                             <span class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
                             <span class="relative z-10">Nouvelle note</span>
+                            <svg class="relative z-10 ml-2 w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Avances sur Salaire -->
+            <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 via-violet-500 to-fuchsia-500 p-1 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div class="relative h-full rounded-xl bg-white dark:bg-gray-900 p-8 transition-all duration-300">
+                    <!-- Effet de particules animées -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute top-6 right-4 w-2 h-2 bg-purple-400 rounded-full animate-ping animation-delay-200"></div>
+                        <div class="absolute top-12 left-6 w-1 h-1 bg-violet-400 rounded-full animate-pulse animation-delay-500"></div>
+                        <div class="absolute bottom-8 right-8 w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce animation-delay-700"></div>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900 dark:to-violet-900 rounded-2xl mb-6 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-purple-600 dark:text-purple-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-3">Avances sur Salaire</h2>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">Demandez une avance sur votre salaire facilement 💳</p>
+                        <a href="{{ route('salary-advances.create') }}" class="group/btn relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-violet-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                            <span class="absolute inset-0 bg-gradient-to-r from-violet-600 to-fuchsia-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
+                            <span class="relative z-10">Nouvelle demande</span>
                             <svg class="relative z-10 ml-2 w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                             </svg>

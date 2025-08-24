@@ -1073,10 +1073,41 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="item px-[43px] py-[11px]">
-                                            <a href="{{ route('salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }}">
-                                                Avances sur salaire
+                                       
+
+                                         <!-- Salaires -->
+                                         <li class="item px-[43px] py-[11px]">
+                                            <a href="javascript:void(0);">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                        <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
                                             </a>
+                                            <ul
+                                                class="sub-menu min-w-[200px] rounded-lg border-l border-success-100 bg-white px-5 py-2 shadow-lg"
+                                            
+                                            >
+
+                                               @if (Auth::check() && auth()->user()->isHR())
+                                                <li>
+                                                <a
+                                                    href="{{ route('salary-advances.index') }}"
+                                                    class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                    >Avances sur salaire</a
+                                                >
+                                                </li>
+                                                @endif
+                                                <li>
+                                                    <a
+                                                        href="{{ route('admin.salary-advances.index') }}"
+                                                        class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                        >Gestion des accomptes</a
+                                                    >
+                                                </li>
+                                               
+                                            </ul>
                                         </li>
 
                                     @else
@@ -1273,6 +1304,18 @@
                                             </a>
                                         </li>
 
+                                         <!-- Avances sur salaire -->
+                                         <li class="item px-[43px] py-[11px]">
+                                            <a href="{{ route('salary-advances.index') }}">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                        <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                        </li>
+
                                     @endif
                                 @endauth
                             </ul>
@@ -1281,9 +1324,22 @@
                         <!-- Autres -->
                         <div class="item-wrapper mb-5">
                             <ul class="mt-2.5 flex flex-col items-center justify-center">
+                                 <!-- Messages -->
+                                 <li class="item px-[43px] py-[11px]">
+                                    <a href="{{ route('messages.index') }}">
+                                        <span class="item-ico">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <path d="M11.8889 22C13.4278 22 14.737 21.0724 15.2222 19.7778H8.55554C9.04075 21.0724 10.35 22 11.8889 22Z" fill="#22C55E" class="path-2"></path>
+                                              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.7662 2.83781C13.3045 2.32351 12.6345 2 11.8889 2C10.4959 2 9.36673 3.12921 9.36673 4.52216V4.6374C6.98629 5.45244 5.224 7.38959 4.95607 9.75021L4.4592 14.1281C4.36971 14.9165 4.03716 15.6684 3.49754 16.3024C2.27862 17.7343 3.43826 19.7778 5.46979 19.7778H18.308C20.3395 19.7778 21.4992 17.7343 20.2802 16.3024C19.7406 15.6684 19.4081 14.9165 19.3186 14.1281L18.8217 9.75021C18.8148 9.68916 18.8068 9.6284 18.7979 9.56793C18.3712 9.70421 17.9164 9.77778 17.4444 9.77778C14.9898 9.77778 13 7.78793 13 5.33333C13 4.40827 13.2826 3.54922 13.7662 2.83781Z" fill="#1A202C" class="path-1"></path>
+                                              <circle cx="17.4444" cy="5.33333" r="3.33333" fill="#22C55E" class="path-2"></circle>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+
                                 <!-- Support -->
                                 <li class="item px-[43px] py-[11px]">
-                                    <a href="settings.html">
+                                    <a href="{{ route('help.index') }}">
                                         <span class="item-ico">
                                             <svg
                                             width="20"
