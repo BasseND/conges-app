@@ -680,19 +680,38 @@
                          <li class="item py-[11px] text-bgray-900 dark:text-white" 
                              x-data="{ unreadCount: 0 }" 
                              x-init="
-                                 // Récupérer le nombre de messages non lus
-                                 fetch('{{ route('messages.unread-count') }}')
-                                     .then(response => response.json())
-                                     .then(data => unreadCount = data.count)
-                                     .catch(error => console.error('Erreur:', error));
-                                 
-                                 // Actualiser toutes les 30 secondes
-                                 setInterval(() => {
-                                     fetch('{{ route('messages.unread-count') }}')
-                                         .then(response => response.json())
-                                         .then(data => unreadCount = data.count)
-                                         .catch(error => console.error('Erreur:', error));
-                                 }, 30000);
+                                 // Fonction pour récupérer le nombre de messages non lus
+                                  function fetchUnreadCount() {
+                                      fetch('{{ route('messages.unread-count') }}', {
+                                          method: 'GET',
+                                          headers: {
+                                              'Accept': 'application/json',
+                                              'X-Requested-With': 'XMLHttpRequest'
+                                          },
+                                          credentials: 'same-origin'
+                                      })
+                                      .then(function(response) {
+                                          if (response.ok) {
+                                              return response.json();
+                                          }
+                                          throw new Error('Erreur réseau: ' + response.status);
+                                      })
+                                      .then(function(data) {
+                                          if (data && typeof data.count !== 'undefined') {
+                                              unreadCount = data.count;
+                                          }
+                                      })
+                                      .catch(function(error) {
+                                          console.error('Erreur lors de la récupération des messages non lus:', error);
+                                          // Ne pas modifier unreadCount en cas d'erreur
+                                      });
+                                  }
+                                  
+                                  // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
+                                  setTimeout(fetchUnreadCount, 1000);
+                                  
+                                  // Actualiser toutes les 30 secondes
+                                  setInterval(fetchUnreadCount, 30000);
                              ">
                             <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}">
 

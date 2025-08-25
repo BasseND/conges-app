@@ -253,10 +253,20 @@ class MessageController extends Controller
      */
     public function unreadCount()
     {
-        $count = Message::where('recipient_id', Auth::id())
-            ->where('is_read', false)
-            ->count();
-            
-        return response()->json(['count' => $count]);
+        // Vérifier que l'utilisateur est authentifié
+        if (!Auth::check()) {
+            return response()->json(['count' => 0], 401);
+        }
+        
+        try {
+            $count = Message::where('recipient_id', Auth::id())
+                ->where('is_read', false)
+                ->count();
+                
+            return response()->json(['count' => $count]);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la récupération du nombre de messages non lus: ' . $e->getMessage());
+            return response()->json(['count' => 0], 500);
+        }
     }
 }

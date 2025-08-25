@@ -249,7 +249,7 @@
                                                         @can('submit', $advance)
                                                             <form action="{{ route('salary-advances.submit', $advance) }}" method="POST" class="inline">
                                                                 @csrf
-                                                                <button type="submit" class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:hover:text-blue-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir soumettre cette demande ? Vous ne pourrez plus la modifier après.')">
+                                                                <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:hover:text-blue-300 transition-all duration-200" @click="$dispatch('submit-salary-advance', { id: {{ $advance->id }}, form: $el.closest('form') })"
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                                                                     </svg>
@@ -262,7 +262,7 @@
                                                         @can('cancel', $advance)
                                                             <form action="{{ route('salary-advances.cancel', $advance) }}" method="POST" class="inline">
                                                                 @csrf
-                                                                <button type="submit" class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 hover:text-red-700 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette demande ?')">
+                                                                <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 hover:text-red-700 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-all duration-200" @click="$dispatch('cancel-salary-advance', { id: {{ $advance->id }}, form: $el.closest('form') })"
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                                     </svg>
@@ -277,7 +277,7 @@
                                                         @can('approve', $advance)
                                                             <form action="{{ route('salary-advances.approve', $advance) }}" method="POST" class="inline">
                                                                 @csrf
-                                                                <button type="submit" class="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir approuver cette demande ?')">
+                                                                <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', '{{ route('salary-advances.approve', $advance) }}')">
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                                     </svg>
@@ -422,7 +422,7 @@
                                                 @can('submit', $advance)
                                                     <form action="{{ route('salary-advances.submit', $advance) }}" method="POST" class="flex-1">
                                                         @csrf
-                                                        <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:hover:text-blue-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir soumettre cette demande ? Vous ne pourrez plus la modifier après.')">
+                                                        <button type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:hover:text-blue-300 transition-all duration-200" @click="$dispatch('submit-salary-advance', { id: {{ $advance->id }}, form: $el.closest('form') })"
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                                                             </svg>
@@ -434,7 +434,7 @@
                                                 @can('cancel', $advance)
                                                     <form action="{{ route('salary-advances.cancel', $advance) }}" method="POST" class="flex-1">
                                                         @csrf
-                                                        <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 hover:text-red-700 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette demande ?')">
+                                                        <button type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 hover:text-red-700 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-all duration-200" @click="$dispatch('cancel-salary-advance', { id: {{ $advance->id }}, form: $el.closest('form') })"
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                             </svg>
@@ -448,7 +448,7 @@
                                                 @can('approve', $advance)
                                                     <form action="{{ route('salary-advances.approve', $advance) }}" method="POST" class="flex-1">
                                                         @csrf
-                                                        <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" onclick="return confirm('Êtes-vous sûr de vouloir approuver cette demande ?')">
+                                                        <button type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', '{{ route('salary-advances.approve', $advance) }}')">
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                             </svg>
@@ -481,69 +481,9 @@
         </div>
     </div>
 
-    <!-- Modal de rejet modernisé -->
-    <div id="rejectModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center p-4">
-        <div class="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
-            <!-- En-tête du modal -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center space-x-3">
-                    <div class="p-2 bg-gradient-to-br from-red-100 to-pink-200 dark:from-red-900/30 dark:to-pink-900/30 rounded-full">
-                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Rejeter la demande</h3>
-                </div>
-                <button type="button" onclick="closeRejectModal()" class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Contenu du modal -->
-            <form id="rejectForm" method="POST" class="p-6">
-                @csrf
-                <div class="space-y-4">
-                    <div>
-                        <label for="rejection_reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            <div class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                <span>Motif du rejet</span>
-                            </div>
-                        </label>
-                        <textarea 
-                            id="rejection_reason" 
-                            name="rejection_reason" 
-                            rows="4" 
-                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200" 
-                            placeholder="Veuillez expliquer les raisons du rejet de cette demande..."
-                            required
-                        ></textarea>
-                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Ce motif sera communiqué au demandeur.</p>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <button type="button" onclick="closeRejectModal()" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 hover:text-gray-800 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-200 transition-all duration-200">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                        Annuler
-                    </button>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-600 to-pink-600 border border-transparent rounded-lg hover:from-red-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                        Rejeter la demande
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <x-modals.submit-salary-advance message="Êtes-vous sûr de vouloir soumettre cette demande ? Vous ne pourrez plus la modifier après soumission." />
+    <x-modals.cancel-salary-advance message="Êtes-vous sûr de vouloir annuler cette demande d'avance sur salaire ? Cette action est irréversible." />
+    
 
     <script>
         function openRejectModal(advanceId) {
