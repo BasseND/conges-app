@@ -366,6 +366,67 @@
                                         </div>
                                     </a>
                                 </li>
+                                <!-- Salaires -->
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="#" @click.prevent="toggleSubmenu('salary-advances')" class="sidebar-sublink {{ request()->routeIs('salary-advances.*' ) || request()->routeIs('admin.salary-advances.*') ? 'active' : '' }}">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2.5">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                        <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
+                                                <span
+                                                class="item-text text-lg font-medium leading-none"
+                                                >Salaires</span
+                                                >
+                                            </div>
+                                            <span>
+                                                <svg
+                                                width="6"
+                                                height="12"
+                                                viewBox="0 0 6 12"
+                                                fill="none"
+                                                class="fill-current"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    fill="currentColor"
+                                                    d="M0.531506 0.414376C0.20806 0.673133 0.155619 1.1451 0.414376 1.46855L4.03956 6.00003L0.414376 10.5315C0.155618 10.855 0.208059 11.3269 0.531506 11.5857C0.854952 11.8444 1.32692 11.792 1.58568 11.4685L5.58568 6.46855C5.80481 6.19464 5.80481 5.80542 5.58568 5.53151L1.58568 0.531506C1.32692 0.20806 0.854953 0.155619 0.531506 0.414376Z"
+                                                />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <ul
+                                        class="sub-menu ml-2.5 mt-[22px] border-l border-success-100 pl-5"
+                                        :class="{ 'active': isSubmenuOpen('salary-advances') }"
+                                        x-show="isSubmenuOpen('salary-advances')"
+                                        x-transition
+                                    >
+                                        <li>
+                                            <a
+                                                href="{{ route('salary-advances.index') }}"
+                                                class="sidebar-sublink {{ request()->routeIs('salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                                > Avances sur salaire</a
+                                            >
+                                        </li>
+
+                                        @if (Auth::check() && auth()->user()->isHR())
+                                        <li>
+                                            <a
+                                                href="{{ route('admin.salary-advances.index') }}"
+                                                class="sidebar-sublink {{ request()->routeIs('admin.salary-advances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                                >Gestion des avances</a
+                                            >
+                                        </li>
+                                        @endif
+                                    
+                                    </ul>
+                                </li>
 
                             @else
 
@@ -577,6 +638,27 @@
                                         </div>
                                     </a>
                                 </li>
+
+                                <!-- Avances sur salaire -->
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="{{ route('salary-advances.index') }}" class="sidebar-link {{ request()->routeIs('salary-advances.*') ? 'active' : '' }}">
+                                        <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2.5">
+                                            <span class="item-ico">
+                                                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                    <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                </svg>
+                                            </span>
+                                            <span
+                                            class="item-text text-lg font-medium leading-none"
+                                            >Avances sur salaire</span
+                                            >
+                                        </div>
+                                        </div>
+                                    </a>
+                                </li>
+
                             @endif
                          @endauth
 
@@ -592,6 +674,68 @@
                         Autres
                     </h4>
                     <ul class="mt-2.5">
+                         <!-- Messagerie -->
+
+
+                         <li class="item py-[11px] text-bgray-900 dark:text-white" 
+                             x-data="{ unreadCount: 0 }" 
+                             x-init="
+                                 // Fonction pour récupérer le nombre de messages non lus
+                                  function fetchUnreadCount() {
+                                      fetch('{{ route('messages.unread-count') }}', {
+                                          method: 'GET',
+                                          headers: {
+                                              'Accept': 'application/json',
+                                              'X-Requested-With': 'XMLHttpRequest'
+                                          },
+                                          credentials: 'same-origin'
+                                      })
+                                      .then(function(response) {
+                                          if (response.ok) {
+                                              return response.json();
+                                          }
+                                          throw new Error('Erreur réseau: ' + response.status);
+                                      })
+                                      .then(function(data) {
+                                          if (data && typeof data.count !== 'undefined') {
+                                              unreadCount = data.count;
+                                          }
+                                      })
+                                      .catch(function(error) {
+                                          console.error('Erreur lors de la récupération des messages non lus:', error);
+                                          // Ne pas modifier unreadCount en cas d'erreur
+                                      });
+                                  }
+                                  
+                                  // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
+                                  setTimeout(fetchUnreadCount, 1000);
+                                  
+                                  // Actualiser toutes les 30 secondes
+                                  setInterval(fetchUnreadCount, 30000);
+                             ">
+                            <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}">
+
+                              <div class="flex items-center justify-between">
+                                <div class="flex space-x-2.5 items-center">
+                                  <span class="item-ico">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M11.8889 22C13.4278 22 14.737 21.0724 15.2222 19.7778H8.55554C9.04075 21.0724 10.35 22 11.8889 22Z" fill="#22C55E" class="path-2"></path>
+                                      <path fill-rule="evenodd" clip-rule="evenodd" d="M13.7662 2.83781C13.3045 2.32351 12.6345 2 11.8889 2C10.4959 2 9.36673 3.12921 9.36673 4.52216V4.6374C6.98629 5.45244 5.224 7.38959 4.95607 9.75021L4.4592 14.1281C4.36971 14.9165 4.03716 15.6684 3.49754 16.3024C2.27862 17.7343 3.43826 19.7778 5.46979 19.7778H18.308C20.3395 19.7778 21.4992 17.7343 20.2802 16.3024C19.7406 15.6684 19.4081 14.9165 19.3186 14.1281L18.8217 9.75021C18.8148 9.68916 18.8068 9.6284 18.7979 9.56793C18.3712 9.70421 17.9164 9.77778 17.4444 9.77778C14.9898 9.77778 13 7.78793 13 5.33333C13 4.40827 13.2826 3.54922 13.7662 2.83781Z" fill="#1A202C" class="path-1"></path>
+                                      <circle cx="17.4444" cy="5.33333" r="3.33333" fill="#22C55E" class="path-2"></circle>
+                                    </svg>
+                                  </span>
+                                  <span class="item-text text-lg font-medium leading-none">Messagerie</span>
+                                </div>
+                                <div class="flex space-x-2.5 items-center">
+                                  <!--counter-->
+                                  <div x-show="unreadCount > 0" class="w-5 h-5 rounded-full bg-success-300 flex justify-center items-center">
+                                    <span  x-text="unreadCount" class="text-[10px] font-semibold text-white" x-cloak></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        
                         <!-- Support -->
                         <li class="item py-[11px] text-bgray-900 dark:text-white">
                             <a href="{{ route('help.index') }}">
@@ -646,7 +790,7 @@
                         </li>
                         <!-- Déconnexion -->
                         <li class="item py-[11px] text-bgray-900 dark:text-white">
-                        <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit">
                                     <div class="flex items-center justify-between">
@@ -903,7 +1047,6 @@
                                             </ul>
                                         </li>
                                         <!-- Notes de frais -->
-                                         
                                         <li class="item px-[43px] py-[11px]">
                                             <a href="{{ route('expense-reports.index') }}">
                                                 <span class="item-ico">
@@ -948,6 +1091,42 @@
                                                     </svg>
                                                 </span>
                                             </a>
+                                        </li>
+                                       
+
+                                         <!-- Salaires -->
+                                         <li class="item px-[43px] py-[11px]">
+                                            <a href="javascript:void(0);">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                        <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                            <ul
+                                                class="sub-menu min-w-[200px] rounded-lg border-l border-success-100 bg-white px-5 py-2 shadow-lg"
+                                            
+                                            >
+
+                                               @if (Auth::check() && auth()->user()->isHR())
+                                                <li>
+                                                <a
+                                                    href="{{ route('salary-advances.index') }}"
+                                                    class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                    >Avances sur salaire</a
+                                                >
+                                                </li>
+                                                @endif
+                                                <li>
+                                                    <a
+                                                        href="{{ route('admin.salary-advances.index') }}"
+                                                        class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                        >Gestion des accomptes</a
+                                                    >
+                                                </li>
+                                               
+                                            </ul>
                                         </li>
 
                                     @else
@@ -1144,6 +1323,18 @@
                                             </a>
                                         </li>
 
+                                         <!-- Avances sur salaire -->
+                                         <li class="item px-[43px] py-[11px]">
+                                            <a href="{{ route('salary-advances.index') }}">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
+                                                        <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                        </li>
+
                                     @endif
                                 @endauth
                             </ul>
@@ -1152,9 +1343,22 @@
                         <!-- Autres -->
                         <div class="item-wrapper mb-5">
                             <ul class="mt-2.5 flex flex-col items-center justify-center">
+                                 <!-- Messages -->
+                                 <li class="item px-[43px] py-[11px]">
+                                    <a href="{{ route('messages.index') }}">
+                                        <span class="item-ico">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <path d="M11.8889 22C13.4278 22 14.737 21.0724 15.2222 19.7778H8.55554C9.04075 21.0724 10.35 22 11.8889 22Z" fill="#22C55E" class="path-2"></path>
+                                              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.7662 2.83781C13.3045 2.32351 12.6345 2 11.8889 2C10.4959 2 9.36673 3.12921 9.36673 4.52216V4.6374C6.98629 5.45244 5.224 7.38959 4.95607 9.75021L4.4592 14.1281C4.36971 14.9165 4.03716 15.6684 3.49754 16.3024C2.27862 17.7343 3.43826 19.7778 5.46979 19.7778H18.308C20.3395 19.7778 21.4992 17.7343 20.2802 16.3024C19.7406 15.6684 19.4081 14.9165 19.3186 14.1281L18.8217 9.75021C18.8148 9.68916 18.8068 9.6284 18.7979 9.56793C18.3712 9.70421 17.9164 9.77778 17.4444 9.77778C14.9898 9.77778 13 7.78793 13 5.33333C13 4.40827 13.2826 3.54922 13.7662 2.83781Z" fill="#1A202C" class="path-1"></path>
+                                              <circle cx="17.4444" cy="5.33333" r="3.33333" fill="#22C55E" class="path-2"></circle>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </li>
+
                                 <!-- Support -->
                                 <li class="item px-[43px] py-[11px]">
-                                    <a href="settings.html">
+                                    <a href="{{ route('help.index') }}">
                                         <span class="item-ico">
                                             <svg
                                             width="20"

@@ -45,12 +45,15 @@ class Notification extends Model
     const TYPE_CONTRACT_EXPIRING = 'contract_expiring';
     const TYPE_CONTRACT_EXPIRED = 'contract_expired';
     const TYPE_CONTRACT_UPDATED = 'contract_updated';
+    const TYPE_SALARY_ADVANCE_REQUEST = 'salary_advance_request';
+    const TYPE_SALARY_ADVANCE_STATUS_UPDATED = 'salary_advance_status_updated';
 
     // Catégories
     const CATEGORY_LEAVE = 'leave';
     const CATEGORY_EXPENSE = 'expense';
     const CATEGORY_USER = 'user';
     const CATEGORY_CONTRACT = 'contract';
+    const CATEGORY_SALARY_ADVANCE = 'salary_advance';
 
     // Priorités
     const PRIORITY_LOW = 'low';
@@ -186,6 +189,8 @@ class Notification extends Model
             self::TYPE_USER_CREATED => 'user-plus',
             self::TYPE_USER_ROLE_CHANGED, self::TYPE_USER_DEPARTMENT_CHANGED => 'user-edit',
             self::TYPE_CONTRACT_EXPIRING, self::TYPE_CONTRACT_EXPIRED, self::TYPE_CONTRACT_UPDATED => 'document',
+            self::TYPE_SALARY_ADVANCE_REQUEST => 'currency-dollar',
+            self::TYPE_SALARY_ADVANCE_STATUS_UPDATED => 'currency-dollar',
             default => 'bell',
         };
     }
@@ -214,6 +219,7 @@ class Notification extends Model
             self::CATEGORY_EXPENSE => 'Notes de frais',
             self::CATEGORY_USER => 'Utilisateur',
             self::CATEGORY_CONTRACT => 'Contrat',
+            self::CATEGORY_SALARY_ADVANCE => 'Avances sur salaire',
             default => 'Général',
         };
     }

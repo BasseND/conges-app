@@ -9,10 +9,12 @@ use App\Models\Leave;
 use App\Models\SalaryAdvance;
 use App\Models\PayrollSetting;
 use App\Models\Payslip;
+use App\Models\Message;
 use App\Policies\LeavePolicy;
 use App\Policies\SalaryAdvancePolicy;
 use App\Policies\PayrollSettingPolicy;
 use App\Policies\PayslipPolicy;
+use App\Policies\MessagePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         SalaryAdvance::class => SalaryAdvancePolicy::class,
         PayrollSetting::class => PayrollSettingPolicy::class,
         Payslip::class => PayslipPolicy::class,
+        Message::class => MessagePolicy::class,
     ];
 
     /**

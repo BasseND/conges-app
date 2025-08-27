@@ -13,6 +13,7 @@ class SalaryAdvance extends Model
 
     // Constantes pour les statuts
     const STATUS_PENDING = 'pending';     // En attente
+    const STATUS_SUBMITTED = 'submitted'; // Soumis
     const STATUS_APPROVED = 'approved';   // Approuvé
     const STATUS_REJECTED = 'rejected';   // Rejeté
     const STATUS_PAID = 'paid';           // Payé
@@ -75,6 +76,7 @@ class SalaryAdvance extends Model
     {
         return [
             self::STATUS_PENDING => 'En attente',
+            self::STATUS_SUBMITTED => 'Soumis',
             self::STATUS_APPROVED => 'Approuvé',
             self::STATUS_REJECTED => 'Rejeté',
             self::STATUS_PAID => 'Payé',

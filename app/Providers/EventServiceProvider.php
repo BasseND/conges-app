@@ -11,10 +11,14 @@ use App\Events\ExpenseReportCreated;
 use App\Events\ExpenseReportStatusUpdated;
 use App\Events\UserCreated;
 use App\Events\UserUpdated;
+use App\Events\SalaryAdvanceCreated;
+use App\Events\SalaryAdvanceStatusUpdated;
 use App\Listeners\SendLeaveNotification;
 use App\Listeners\SendExpenseNotification;
 use App\Listeners\SendUserNotification;
 use App\Listeners\SendUserUpdateNotification;
+use App\Listeners\SendSalaryAdvanceNotification;
+use App\Listeners\SendSalaryAdvanceStatusNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -47,6 +51,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserUpdated::class => [
             SendUserUpdateNotification::class,
+        ],
+        SalaryAdvanceCreated::class => [
+            SendSalaryAdvanceNotification::class,
+        ],
+        SalaryAdvanceStatusUpdated::class => [
+            SendSalaryAdvanceStatusNotification::class,
         ],
     ];
 

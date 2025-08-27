@@ -51,6 +51,7 @@ class CompanyController extends Controller
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:20',
             'currency' => 'nullable|string|max:10',
+            'salary_advance_deadline_day' => 'nullable|integer|min:1|max:31',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 

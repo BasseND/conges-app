@@ -22,6 +22,7 @@ class Company extends Model
         'contact_email',
         'contact_phone',
         'currency',
+        'salary_advance_deadline_day',
     ];
 
     protected $casts = [

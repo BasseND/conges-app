@@ -60,6 +60,9 @@
                             Avances sur salaire
                         </a>
                         @if (Auth::check() && auth()->user()->hasAdminAccess())
+                        <a href="{{ route('admin.salary-advances.index') }}" class="sidebar-sublink {{ request()->routeIs('admin.salary-advances.*') ? 'active' : '' }}">
+                            Gestion des avances
+                        </a>
                         <a href="{{ route('admin.payroll-settings.index') }}" class="sidebar-sublink {{ request()->routeIs('admin.payroll-settings.*') ? 'active' : '' }}">
                             Paramètres de paie
                         </a>
@@ -104,6 +107,49 @@
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                     </svg>
                     <span>Notes de frais</span>
+                </a>
+
+                <!-- Messagerie / Messages -->
+                <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" x-data="{ unreadCount: 0 }" x-init="
+                    // Fonction pour récupérer le nombre de messages non lus
+                    function fetchUnreadCount() {
+                        fetch('{{ route('messages.unread-count') }}', {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            credentials: 'same-origin'
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Erreur réseau: ' + response.status);
+                        })
+                        .then(function(data) {
+                            if (data && typeof data.count !== 'undefined') {
+                                unreadCount = data.count;
+                            }
+                        })
+                        .catch(function(error) {
+                            console.error('Erreur lors de la récupération des messages non lus:', error);
+                            // Ne pas modifier unreadCount en cas d'erreur
+                        });
+                    }
+                    
+                    // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
+                    setTimeout(fetchUnreadCount, 1000);
+                    
+                    // Actualiser toutes les 30 secondes
+                    setInterval(fetchUnreadCount, 30000);
+                ">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    <span>Messagerie</span>
+                    <span x-show="unreadCount > 0" x-text="unreadCount" class="sidebar-badge" x-cloak></span>
                 </a>
             </nav>
         </div>

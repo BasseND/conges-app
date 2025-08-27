@@ -325,6 +325,46 @@
                         </div>
                     </div>
 
+                    <!-- Paramètres de paie -->
+                    <div class="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/10 dark:to-amber-900/10 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                    {{ __('Paramètres de paie') }}
+                                </h2>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Configuration des règles de paie et avances</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <label for="salary_advance_deadline_day" class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                                    {{ __('Date limite de demande d\'avance sur salaire') }}
+                                    <span class="text-red-500 ml-1">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <input type="number" id="salary_advance_deadline_day" name="salary_advance_deadline_day" value="{{ old('salary_advance_deadline_day', $company->salary_advance_deadline_day ?? 20) }}" min="1" max="31" required class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" placeholder="20">
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Les employés doivent soumettre leur demande d'avance avant le jour {{ old('salary_advance_deadline_day', $company->salary_advance_deadline_day ?? 20) }} du mois concerné</p>
+                                @error('salary_advance_deadline_day')
+                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Logo de la société -->
                     <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/10 dark:to-red-900/10 border border-orange-200 dark:border-orange-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="flex items-center space-x-3">
