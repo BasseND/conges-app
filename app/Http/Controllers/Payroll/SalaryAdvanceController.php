@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Payroll;
 use App\Http\Controllers\Controller;
 use App\Models\SalaryAdvance;
 use App\Models\User;
+use App\Models\Company;
 use App\Events\SalaryAdvanceCreated;
 use App\Events\SalaryAdvanceStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class SalaryAdvanceController extends Controller
 {
@@ -32,7 +34,8 @@ class SalaryAdvanceController extends Controller
      */
     public function create()
     {
-        return view('salary-advances.create');
+        $company = Company::first();
+        return view('salary-advances.create', compact('company'));
     }
 
     /**
@@ -49,8 +52,47 @@ class SalaryAdvanceController extends Controller
             'request_date' => 'required|date',
         ]);
         
+        $user = Auth::user();
+        $requestDate = Carbon::parse($validated['request_date']);
+        $company = Company::first(); // Récupérer les paramètres de l'entreprise
+        
+        // Validation 1: Vérifier qu'il n'y a pas déjà une demande pour ce mois
+        $existingAdvance = SalaryAdvance::where('user_id', $user->id)
+            ->whereYear('request_date', $requestDate->year)
+            ->whereMonth('request_date', $requestDate->month)
+            ->whereIn('status', ['pending', 'submitted', 'approved'])
+            ->first();
+            
+        if ($existingAdvance) {
+            // Configurer la locale française pour Carbon
+            $requestDate->locale('fr');
+            return back()->withErrors([
+                'request_date' => 'Vous avez déjà une demande d\'avance pour le mois de ' . $requestDate->translatedFormat('F Y') . '.'
+            ])->withInput();
+        }
+        
+        // Validation 2: Vérifier que la demande est faite avant la date limite
+        $deadlineDay = $company ? $company->salary_advance_deadline_day : 20;
+        $currentDate = Carbon::now();
+        
+        // Si la demande est pour le mois en cours, vérifier la date limite
+        if ($requestDate->year == $currentDate->year && $requestDate->month == $currentDate->month) {
+            if ($currentDate->day > $deadlineDay) {
+                return back()->withErrors([
+                    'request_date' => 'La date limite pour soumettre une demande d\'avance pour ce mois était le ' . $deadlineDay . '. Vous pouvez faire une demande pour le mois prochain.'
+                ])->withInput();
+            }
+        }
+        
+        // Si la demande est pour un mois passé, la rejeter
+        if ($requestDate->isPast() && !($requestDate->year == $currentDate->year && $requestDate->month == $currentDate->month)) {
+            return back()->withErrors([
+                'request_date' => 'Vous ne pouvez pas faire une demande d\'avance pour un mois passé.'
+            ])->withInput();
+        }
+        
         $salaryAdvance = new SalaryAdvance();
-        $salaryAdvance->user_id = Auth::id();
+        $salaryAdvance->user_id = $user->id;
         $salaryAdvance->amount = $validated['amount'];
         $salaryAdvance->reason = $validated['reason'];
         $salaryAdvance->request_date = $validated['request_date'];

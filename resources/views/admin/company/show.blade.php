@@ -335,6 +335,8 @@
                             @endif
                         </div>
 
+                        {{-- Paramètre date limite de soumission d'une demande d'avance sur salaire --}}
+
                         <!-- Inclusion du composant modal moderne -->
                         <x-leave-balance-modal :company="$company" />
 

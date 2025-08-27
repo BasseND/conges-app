@@ -92,9 +92,17 @@
                     </div>
                     <div class="ml-4">
                         <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200 mb-2">Informations importantes</h3>
-                        <p class="text-amber-700 dark:text-amber-300 leading-relaxed">
-                            Les avances sur salaire sont soumises à approbation. Le montant sera déduit de vos prochains salaires selon les modalités définies par l'entreprise.
-                        </p>
+                        <div class="text-amber-700 dark:text-amber-300 leading-relaxed space-y-2">
+                            <p>Les avances sur salaire sont soumises à approbation. Le montant sera déduit de vos prochains salaires selon les modalités définies par l'entreprise.</p>
+                            <div class="mt-4 p-4 bg-amber-100 dark:bg-amber-900/30 rounded-lg border border-amber-200 dark:border-amber-700">
+                                <h4 class="font-semibold text-amber-800 dark:text-amber-200 mb-2">Règles de soumission :</h4>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>Une seule demande par mois est autorisée</li>
+                                    <li>Les demandes doivent être soumises avant le {{ $company->salary_advance_deadline_day ?? 20 }} du mois concerné</li>
+                                    <li>Aucune demande rétroactive n'est acceptée</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
