@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SalaryAdvance;
 use App\Models\User;
 use App\Models\Department;
+use App\Events\SalaryAdvanceStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -90,20 +91,29 @@ class SalaryAdvanceController extends Controller
     public function approve(SalaryAdvance $salaryAdvance)
     {
         // Vérifier que la demande peut être approuvée
-        if ($salaryAdvance->status !== SalaryAdvance::STATUS_SUBMITTED) {
+        if (!in_array($salaryAdvance->status, [SalaryAdvance::STATUS_PENDING, SalaryAdvance::STATUS_SUBMITTED])) {
             return back()->with('error', 'Cette demande ne peut pas être approuvée dans son état actuel.');
         }
 
         try {
+            $previousStatus = $salaryAdvance->status;
             $salaryAdvance->update([
                 'status' => SalaryAdvance::STATUS_APPROVED,
                 'approval_date' => now(),
                 'approved_by' => Auth::id(),
             ]);
 
+            // Déclencher l'événement pour notifier l'auteur de la demande
+            event(new SalaryAdvanceStatusUpdated($salaryAdvance, $previousStatus));
+
             return back()->with('success', 'La demande d\'avance sur salaire a été approuvée avec succès.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Une erreur est survenue lors de l\'approbation de la demande.');
+            \Log::error('Erreur lors de l\'approbation de la demande d\'avance sur salaire: ' . $e->getMessage(), [
+                'salary_advance_id' => $salaryAdvance->id,
+                'user_id' => Auth::id(),
+                'exception' => $e
+            ]);
+            return back()->with('error', 'Une erreur est survenue lors de l\'approbation de la demande: ' . $e->getMessage());
         }
     }
 
@@ -113,7 +123,7 @@ class SalaryAdvanceController extends Controller
     public function reject(Request $request, SalaryAdvance $salaryAdvance)
     {
         // Vérifier que la demande peut être rejetée
-        if ($salaryAdvance->status !== SalaryAdvance::STATUS_SUBMITTED) {
+        if (!in_array($salaryAdvance->status, [SalaryAdvance::STATUS_PENDING, SalaryAdvance::STATUS_SUBMITTED])) {
             return back()->with('error', 'Cette demande ne peut pas être rejetée dans son état actuel.');
         }
 
@@ -122,6 +132,7 @@ class SalaryAdvanceController extends Controller
         ]);
 
         try {
+            $previousStatus = $salaryAdvance->status;
             $salaryAdvance->update([
                 'status' => SalaryAdvance::STATUS_REJECTED,
                 'notes' => $request->notes,
@@ -129,9 +140,17 @@ class SalaryAdvanceController extends Controller
                 'approval_date' => now(),
             ]);
 
+            // Déclencher l'événement pour notifier l'auteur de la demande
+            event(new SalaryAdvanceStatusUpdated($salaryAdvance, $previousStatus));
+
             return back()->with('success', 'La demande d\'avance sur salaire a été rejetée.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Une erreur est survenue lors du rejet de la demande.');
+            \Log::error('Erreur lors du rejet de la demande d\'avance sur salaire: ' . $e->getMessage(), [
+                'salary_advance_id' => $salaryAdvance->id,
+                'user_id' => Auth::id(),
+                'exception' => $e
+            ]);
+            return back()->with('error', 'Une erreur est survenue lors du rejet de la demande: ' . $e->getMessage());
         }
     }
 

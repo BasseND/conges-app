@@ -277,7 +277,7 @@
                                                         @can('approve', $advance)
                                                             <form action="{{ route('salary-advances.approve', $advance) }}" method="POST" class="inline">
                                                                 @csrf
-                                                                <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', '{{ route('salary-advances.approve', $advance) }}')">
+                                                                <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', { form: { action: '{{ route('salary-advances.approve', $advance) }}' } })">
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                                     </svg>
@@ -448,7 +448,7 @@
                                                 @can('approve', $advance)
                                                     <form action="{{ route('salary-advances.approve', $advance) }}" method="POST" class="flex-1">
                                                         @csrf
-                                                        <button type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', '{{ route('salary-advances.approve', $advance) }}')">
+                                                        <button type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:hover:text-green-300 transition-all duration-200" @click="$dispatch('approve-salary-advance', { form: { action: '{{ route('salary-advances.approve', $advance) }}' } })">
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                             </svg>

@@ -2,7 +2,7 @@
 
 <div x-data="{ show: false, url: '', method: 'POST' }" 
      x-show="show" 
-     @reject-salary-advance.window="show = true; url = $event.detail; method = 'POST'"
+     @reject-salary-advance.window="show = true; url = $event.detail.form.action; method = 'POST'"
      class="fixed z-50 inset-0 overflow-y-auto" 
      aria-labelledby="modal-title" 
      role="dialog" 

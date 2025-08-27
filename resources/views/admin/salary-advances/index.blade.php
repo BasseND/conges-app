@@ -388,7 +388,7 @@
                                                         </a>
                                                         @if($advance->status === 'submitted')
                                                             <button type="button" 
-                                                                    @click="$dispatch('approve-salary-advance', '{{ route('admin.salary-advances.approve', $advance) }}')"
+                                                                    @click="$dispatch('approve-salary-advance', { form: { action: '{{ route('admin.salary-advances.approve', $advance) }}' } })"
                                                                     class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -396,7 +396,7 @@
                                                                 Approuver
                                                             </button>
                                                             <button type="button" 
-                                                                    @click="$dispatch('reject-salary-advance', '{{ route('admin.salary-advances.reject', $advance) }}')"
+                                                                    @click="$dispatch('reject-salary-advance', { form: { action: '{{ route('admin.salary-advances.reject', $advance) }}' } })"
                                                                     class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

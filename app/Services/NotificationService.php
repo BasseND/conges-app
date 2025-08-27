@@ -468,4 +468,91 @@ class NotificationService
          
          \Log::info('Contract updated notification creation completed');
      }
+
+    /**
+     * Créer une notification pour une nouvelle demande d'avance sur salaire
+     */
+    public function createSalaryAdvanceRequestNotification(\App\Models\SalaryAdvance $salaryAdvance): void
+    {
+        \Log::info('Creating salary advance notification for: ' . $salaryAdvance->user->email);
+        
+        // Notifier les admins et RH
+        $recipients = User::whereIn('role', ['admin', 'hr'])->get();
+        
+        \Log::info('Found ' . $recipients->count() . ' recipients for salary advance notification');
+        
+        foreach ($recipients as $recipient) {
+            \Log::info('Creating notification for recipient: ' . $recipient->email);
+            
+            Notification::createNotification(
+                type: Notification::TYPE_SALARY_ADVANCE_REQUEST,
+                title: "Nouvelle demande d'avance sur salaire",
+                message: "{$salaryAdvance->user->first_name} {$salaryAdvance->user->last_name} a créé une demande d'avance sur salaire de " . number_format($salaryAdvance->amount, 2, ',', ' ') . " €.",
+                userId: $recipient->id,
+                createdBy: $salaryAdvance->user_id,
+                data: [
+                    'salary_advance_id' => $salaryAdvance->id,
+                    'amount' => $salaryAdvance->amount,
+                    'reason' => $salaryAdvance->reason,
+                    'request_date' => $salaryAdvance->request_date->format('Y-m-d'),
+                    'url' => route('salary-advances.show', $salaryAdvance)
+                ],
+                priority: Notification::PRIORITY_NORMAL,
+                category: Notification::CATEGORY_SALARY_ADVANCE
+            );
+            
+            \Log::info('Notification created successfully for recipient: ' . $recipient->email);
+        }
+        
+        \Log::info('Salary advance notification creation process completed');
+    }
+
+    /**
+     * Créer une notification pour un changement de statut d'avance sur salaire
+     */
+    public function createSalaryAdvanceStatusNotification(\App\Models\SalaryAdvance $salaryAdvance, string $previousStatus): void
+    {
+        \Log::info('Creating salary advance status notification for: ' . $salaryAdvance->user->email);
+        
+        $statusText = $this->getSalaryAdvanceStatusText($salaryAdvance->status);
+        $previousStatusText = $this->getSalaryAdvanceStatusText($previousStatus);
+        
+        // Notifier l'auteur de la demande
+        Notification::createNotification(
+            type: Notification::TYPE_SALARY_ADVANCE_STATUS_UPDATED,
+            title: "Mise à jour de votre demande d'avance sur salaire",
+            message: "Votre demande d'avance sur salaire de " . number_format($salaryAdvance->amount, 2, ',', ' ') . " € a été {$statusText}.",
+            userId: $salaryAdvance->user_id,
+            createdBy: $salaryAdvance->approved_by ?? auth()->id(),
+            data: [
+                'salary_advance_id' => $salaryAdvance->id,
+                'amount' => $salaryAdvance->amount,
+                'status' => $salaryAdvance->status,
+                'previous_status' => $previousStatus,
+                'approval_date' => $salaryAdvance->approval_date?->format('Y-m-d H:i:s'),
+                'notes' => $salaryAdvance->notes,
+                'url' => route('salary-advances.show', $salaryAdvance)
+            ],
+            priority: Notification::PRIORITY_HIGH,
+            category: Notification::CATEGORY_SALARY_ADVANCE
+        );
+        
+        \Log::info('Salary advance status notification created successfully');
+    }
+
+    /**
+     * Obtenir le texte du statut en français
+     */
+    private function getSalaryAdvanceStatusText(string $status): string
+    {
+        return match($status) {
+            'pending' => 'en attente',
+            'submitted' => 'soumise',
+            'approved' => 'approuvée',
+            'rejected' => 'rejetée',
+            'paid' => 'payée',
+            'cancelled' => 'annulée',
+            default => $status
+        };
+    }
 }

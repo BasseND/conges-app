@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Payroll;
 use App\Http\Controllers\Controller;
 use App\Models\SalaryAdvance;
 use App\Models\User;
+use App\Events\SalaryAdvanceCreated;
+use App\Events\SalaryAdvanceStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,6 +56,9 @@ class SalaryAdvanceController extends Controller
         $salaryAdvance->request_date = $validated['request_date'];
         $salaryAdvance->status = 'pending';
         $salaryAdvance->save();
+        
+        // Déclencher l'événement pour notifier les RH
+        event(new SalaryAdvanceCreated($salaryAdvance));
         
         return redirect()->route('salary-advances.index')
             ->with('success', 'Votre demande d\'avance sur salaire a été soumise avec succès.');
@@ -109,10 +114,14 @@ class SalaryAdvanceController extends Controller
             return back()->with('error', 'Seules les demandes soumises peuvent être approuvées.');
         }
         
+        $previousStatus = $salaryAdvance->status;
         $salaryAdvance->status = 'approved';
         $salaryAdvance->approved_by = Auth::id();
         $salaryAdvance->approval_date = now();
         $salaryAdvance->save();
+        
+        // Déclencher l'événement pour notifier l'auteur de la demande
+        event(new SalaryAdvanceStatusUpdated($salaryAdvance, $previousStatus));
         
         return back()->with('success', 'La demande d\'avance sur salaire a été approuvée.');
     }
@@ -136,11 +145,15 @@ class SalaryAdvanceController extends Controller
             'notes' => 'nullable|string|max:500'
         ]);
         
+        $previousStatus = $salaryAdvance->status;
         $salaryAdvance->status = 'rejected';
         $salaryAdvance->approved_by = Auth::id();
         $salaryAdvance->approval_date = now();
         $salaryAdvance->notes = $validated['notes'] ?? null;
         $salaryAdvance->save();
+        
+        // Déclencher l'événement pour notifier l'auteur de la demande
+        event(new SalaryAdvanceStatusUpdated($salaryAdvance, $previousStatus));
         
         return back()->with('success', 'La demande d\'avance sur salaire a été rejetée.');
     }

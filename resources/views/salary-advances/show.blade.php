@@ -58,7 +58,7 @@
                                 @can('submit', $salaryAdvance)
                                     <button type="button" 
                                             x-data="{}" 
-                                            @click="$dispatch('submit-salary-advance', '{{ route('salary-advances.submit', $salaryAdvance) }}')"
+                                            @click="$dispatch('submit-salary-advance', { form: { action: '{{ route('salary-advances.submit', $salaryAdvance) }}' } })"
                                             class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -70,7 +70,7 @@
                                 @can('cancel', $salaryAdvance)
                                     <button type="button" 
                                             x-data="{}" 
-                                            @click="$dispatch('cancel-salary-advance', '{{ route('salary-advances.cancel', $salaryAdvance) }}')"
+                                            @click="$dispatch('cancel-salary-advance', { form: { action: '{{ route('salary-advances.cancel', $salaryAdvance) }}' } })"
                                             class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-gray-600 to-slate-600 border border-transparent rounded-xl hover:from-gray-700 hover:to-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -84,7 +84,7 @@
                                 @can('approve', $salaryAdvance)
                                     <button type="button" 
                                             x-data="{}" 
-                                            @click="$dispatch('approve-salary-advance', '{{ route('salary-advances.approve', $salaryAdvance) }}')"
+                                            @click="$dispatch('approve-salary-advance', { form: { action: '{{ route('salary-advances.approve', $salaryAdvance) }}' } })"
                                             class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-emerald-600 border border-transparent rounded-xl hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -96,7 +96,7 @@
                                 @can('reject', $salaryAdvance)
                                     <button type="button" 
                                             x-data="{}" 
-                                            @click="$dispatch('reject-salary-advance', '{{ route('salary-advances.reject', $salaryAdvance) }}')"
+                                            @click="$dispatch('reject-salary-advance', { form: { action: '{{ route('salary-advances.reject', $salaryAdvance) }}' } })"
                                             class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-red-600 to-pink-600 border border-transparent rounded-xl hover:from-red-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -115,7 +115,6 @@
                             <div class="flex items-center mb-4">
                                 <div class="flex-shrink-0">
                                     <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-                                       
                                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
@@ -555,8 +554,6 @@
     <x-modals.reject-salary-advance message="Êtes-vous sûr de vouloir rejeter cette demande d'avance sur salaire ?" />
     <x-modals.submit-salary-advance message="Êtes-vous sûr de vouloir soumettre cette demande ? Vous ne pourrez plus la modifier après soumission." />
     <x-modals.cancel-salary-advance message="Êtes-vous sûr de vouloir annuler cette demande d'avance sur salaire ? Cette action est irréversible." />
-    
-
 
 
 </x-app-layout>
