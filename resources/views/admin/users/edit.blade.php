@@ -231,6 +231,96 @@
                                  </div>
                              </div>
 
+                             <!-- Informations complémentaires -->
+                             <div class="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/10 dark:to-indigo-900/10 border border-purple-200 dark:border-purple-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                                 <div class="flex items-center space-x-3">
+                                     <div class="flex-shrink-0">
+                                         <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                                             <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Z" />
+                                             </svg>
+                                         </div>
+                                     </div>
+                                     <div>
+                                         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                             {{ __('Informations complémentaires') }}
+                                         </h2>
+                                         <p class="text-sm text-gray-600 dark:text-gray-400">Détails personnels et administratifs</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="marital_status" :value="__('État civil')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <select id="marital_status" name="marital_status" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                             <option value="">Sélectionner un état civil</option>
+                                             @foreach(App\Models\User::getMaritalStatusOptions() as $value => $label)
+                                                 <option value="{{ $value }}" {{ old('marital_status', $user->marital_status) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                             @endforeach
+                                         </select>
+                                         <x-input-error :messages="$errors->get('marital_status')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="employment_status" :value="__('Statut professionnel')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <select id="employment_status" name="employment_status" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                             <option value="">Sélectionner un statut</option>
+                                             @foreach(App\Models\User::getEmploymentStatusOptions() as $value => $label)
+                                                 <option value="{{ $value }}" {{ old('employment_status', $user->employment_status) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                             @endforeach
+                                         </select>
+                                         <x-input-error :messages="$errors->get('employment_status')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="children_count" :value="__('Nombre d\'enfants à charge')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="children_count" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="number" name="children_count" value="{{ old('children_count', $user->children_count ?? 0) }}" min="0" placeholder="0" />
+                                         <x-input-error :messages="$errors->get('children_count')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="matricule" :value="__('Matricule')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="matricule" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="matricule" value="{{ old('matricule', $user->matricule) }}" placeholder="Matricule unique" />
+                                         <x-input-error :messages="$errors->get('matricule')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="affectation" :value="__('Affectation')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="affectation" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="affectation" value="{{ old('affectation', $user->affectation) }}" placeholder="Lieu d'affectation" />
+                                         <x-input-error :messages="$errors->get('affectation')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="category" :value="__('Catégorie')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <select id="category" name="category" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                             <option value="">Sélectionner une catégorie</option>
+                                             @foreach(App\Models\User::getCategoryOptions() as $value => $label)
+                                                 <option value="{{ $value }}" {{ old('category', $user->category) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                             @endforeach
+                                         </select>
+                                         <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="section" :value="__('Section')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="section" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="section" value="{{ old('section', $user->section) }}" placeholder="Section" />
+                                         <x-input-error :messages="$errors->get('section')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="service" :value="__('Service')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="service" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="service" value="{{ old('service', $user->service) }}" placeholder="Service" />
+                                         <x-input-error :messages="$errors->get('service')" class="mt-2" />
+                                     </div>
+                                 </div>
+                             </div>
+
                              <!-- Informations professionnelles -->
                              <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/10 dark:to-red-900/10 border border-orange-200 dark:border-orange-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
                                  <div class="flex items-center space-x-3">

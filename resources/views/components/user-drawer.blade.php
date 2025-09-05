@@ -88,8 +88,8 @@
             </div>
 
             <!-- Informations personnelles -->
-            <div class="px-6 py-3">
-                <div class="flex items-center mb-3">
+            <div class="px-6 py-4">
+                <div class="flex items-center mb-4">
                     <div class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-md flex items-center justify-center mr-2">
                         <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
@@ -97,7 +97,7 @@
                     </div>
                     <h4 class="text-base font-semibold text-gray-900 dark:text-white">Informations personnelles</h4>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Prénom</label>
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.first_name || 'Non renseigné'"></p>
@@ -111,15 +111,23 @@
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.gender || 'Non renseigné'"></p>
                     </div>
                     <div>
-                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Poste</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.poste || 'Non renseigné'"></p>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">État civil</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.marital_status || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Téléphone</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.phone || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nombre d'enfants</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.children_count || '0'"></p>
                     </div>
                 </div>
             </div>
 
             <!-- Informations professionnelles -->
-            <div class="px-6 py-3 border-t border-gray-100 dark:border-gray-800">
-                <div class="flex items-center mb-3">
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center mb-4">
                     <div class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-md flex items-center justify-center mr-2">
                         <svg class="w-3 h-3 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"></path>
@@ -127,14 +135,56 @@
                     </div>
                     <h4 class="text-base font-semibold text-gray-900 dark:text-white">Informations professionnelles</h4>
                 </div>
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Matricule</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.matricule || 'Non renseigné'"></p>
+                    </div>
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rôle</label>
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.role || 'Non renseigné'"></p>
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Statut professionnel</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.employment_status || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Catégorie</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.category || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Affectation</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.affectation || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Section</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.section || 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Service</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.service || 'Non renseigné'"></p>
+                    </div>
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</label>
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.is_prestataire ? 'Prestataire' : 'Employé'"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations système -->
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center mb-4">
+                    <div class="w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-2">
+                        <svg class="w-3 h-3 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-base font-semibold text-gray-900 dark:text-white">Informations système</h4>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Département</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.department?.name || 'Non renseigné'"></p>
                     </div>
                     <div class="flex justify-between items-center">
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Membre depuis</label>

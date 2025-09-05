@@ -30,6 +30,22 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_HR = 'hr';
     const ROLE_MANAGER = 'manager';
 
+    // Constantes pour l'état civil
+    const MARITAL_STATUS_MARRIED = 'marié';
+    const MARITAL_STATUS_SINGLE = 'célibataire';
+    const MARITAL_STATUS_WIDOWED = 'veuf';
+
+    // Constantes pour le statut professionnel
+    const EMPLOYMENT_STATUS_CIVIL_SERVANT = 'fonctionnaire';
+    const EMPLOYMENT_STATUS_PERMANENT_CONTRACT = 'contractuel_cdi';
+    const EMPLOYMENT_STATUS_FIXED_TERM_CONTRACT = 'contractuel_cdd';
+
+    // Constantes pour les catégories
+    const CATEGORY_EXECUTIVE = 'cadre';
+    const CATEGORY_SUPERVISOR = 'agent_de_maitrise';
+    const CATEGORY_EMPLOYEE = 'employe';
+    const CATEGORY_WORKER = 'ouvrier';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,15 +55,22 @@ class User extends Authenticatable implements MustVerifyEmail
         'first_name',
         'last_name',
         'gender',
+        'marital_status',
+        'employment_status',
+        'children_count',
         'phone',
         'email',
         'password',
         'role',
         'employee_id',
+        'matricule',
+        'affectation',
+        'category',
+        'section',
+        'service',
         'department_id',
         'company_id',
         'leave_balance_id',
-
         'is_active',
         'position',
         'is_prestataire'
@@ -550,5 +573,114 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
+     * Get marital status options
+     *
+     * @return array
+     */
+    public static function getMaritalStatusOptions()
+    {
+        return [
+            self::MARITAL_STATUS_MARRIED => 'Marié(e)',
+            self::MARITAL_STATUS_SINGLE => 'Célibataire',
+            self::MARITAL_STATUS_WIDOWED => 'Veuf/Veuve'
+        ];
+    }
+
+    /**
+     * Get employment status options
+     *
+     * @return array
+     */
+    public static function getEmploymentStatusOptions()
+    {
+        return [
+            self::EMPLOYMENT_STATUS_CIVIL_SERVANT => 'Fonctionnaire',
+            self::EMPLOYMENT_STATUS_PERMANENT_CONTRACT => 'Contractuel - CDI',
+            self::EMPLOYMENT_STATUS_FIXED_TERM_CONTRACT => 'Contractuel - CDD'
+        ];
+    }
+
+    /**
+     * Get category options
+     *
+     * @return array
+     */
+    public static function getCategoryOptions()
+    {
+        return [
+            self::CATEGORY_EXECUTIVE => 'Cadre',
+            self::CATEGORY_SUPERVISOR => 'Agent de maîtrise',
+            self::CATEGORY_EMPLOYEE => 'Employé',
+            self::CATEGORY_WORKER => 'Ouvrier'
+        ];
+    }
+
+    /**
+     * Get formatted marital status
+     *
+     * @return string
+     */
+    public function getFormattedMaritalStatusAttribute()
+    {
+        $options = self::getMaritalStatusOptions();
+        return $options[$this->marital_status] ?? $this->marital_status;
+    }
+
+    /**
+     * Get formatted employment status
+     *
+     * @return string
+     */
+    public function getFormattedEmploymentStatusAttribute()
+    {
+        $options = self::getEmploymentStatusOptions();
+        return $options[$this->employment_status] ?? $this->employment_status;
+    }
+
+    /**
+     * Get formatted category
+     *
+     * @return string
+     */
+    public function getFormattedCategoryAttribute()
+    {
+        $options = self::getCategoryOptions();
+        return $options[$this->category] ?? $this->category;
+    }
+
+    /**
+     * Get marital status label
+     *
+     * @return string
+     */
+    public function getMaritalStatusLabel()
+    {
+        $options = self::getMaritalStatusOptions();
+        return $options[$this->marital_status] ?? 'Non renseigné';
+    }
+
+    /**
+     * Get employment status label
+     *
+     * @return string
+     */
+    public function getEmploymentStatusLabel()
+    {
+        $options = self::getEmploymentStatusOptions();
+        return $options[$this->employment_status] ?? 'Non renseigné';
+    }
+
+    /**
+     * Get category label
+     *
+     * @return string
+     */
+    public function getCategoryLabel()
+    {
+        $options = self::getCategoryOptions();
+        return $options[$this->category] ?? 'Non renseigné';
     }
 }
