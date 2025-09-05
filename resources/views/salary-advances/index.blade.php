@@ -473,7 +473,8 @@
                         </div>
                         
                         <div class="mt-4">
-                            {{ $salaryAdvances->links() }}
+                             <!-- Pagination avec composant -->
+                            <x-pagination :paginator="$salaryAdvances->appends(request()->query())" entityName="avances sur salaire" />
                         </div>
                     @endif
                 </div>

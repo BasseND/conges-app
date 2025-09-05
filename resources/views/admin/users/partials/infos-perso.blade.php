@@ -135,6 +135,127 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Carte Civilité -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Civilité</p>
+                        <p class="text-sm font-semibold {{ $user->marital_status ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->getMaritalStatusLabel() ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Statut professionnel -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V8m8 0V6a2 2 0 00-2-2H10a2 2 0 00-2 2v2"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Statut professionnel</p>
+                        <p class="text-sm font-semibold {{ $user->employment_status ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->getEmploymentStatusLabel() ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Nombre d'enfants -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Nombre d'enfants</p>
+                        <p class="text-sm font-semibold {{ isset($user->children_count) ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->children_count ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Matricule -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gray-100 dark:bg-gray-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Matricule</p>
+                        <p class="text-sm font-semibold {{ $user->matricule ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->matricule ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Affectation -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Affectation</p>
+                        <p class="text-sm font-semibold {{ $user->affectation ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->affectation ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Catégorie -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Catégorie</p>
+                        <p class="text-sm font-semibold {{ $user->category ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->getCategoryLabel() ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Section -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h2m-2 0v6a2 2 0 002 2h6a2 2 0 002-2v-6a2 2 0 00-2-2h-2m0 0V9a2 2 0 00-2-2H9m0 0V5a2 2 0 012-2h2a2 2 0 012 2v2M9 5a2 2 0 012 2v2a2 2 0 01-2 2M9 5a2 2 0 00-2 2v2a2 2 0 002 2m6 0a2 2 0 002-2V9a2 2 0 00-2-2m0 0a2 2 0 00-2 2v2a2 2 0 002 2"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Section</p>
+                        <p class="text-sm font-semibold {{ $user->section ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->section ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Service -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-rose-100 dark:bg-rose-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V8m8 0V6a2 2 0 00-2-2H10a2 2 0 00-2 2v2"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Service</p>
+                        <p class="text-sm font-semibold {{ $user->service ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->service ?? 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

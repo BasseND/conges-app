@@ -87,7 +87,16 @@ class UserController extends Controller
                 'department_id' => 'required|exists:departments,id',
                 'team_id' => 'nullable|exists:teams,id',
                 'leave_balance_id' => 'nullable|exists:leave_balances,id',
-                'is_prestataire' => 'nullable'
+                'is_prestataire' => 'nullable',
+                // Nouveaux champs
+                'marital_status' => ['nullable', Rule::in(array_keys(User::getMaritalStatusOptions()))],
+                'employment_status' => ['nullable', Rule::in(array_keys(User::getEmploymentStatusOptions()))],
+                'children_count' => 'nullable|integer|min:0|max:20',
+                'matricule' => 'nullable|string|max:50|unique:users,matricule',
+                'affectation' => 'nullable|string|max:255',
+                'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
+                'section' => 'nullable|string|max:255',
+                'service' => 'nullable|string|max:255'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
@@ -105,7 +114,19 @@ class UserController extends Controller
                 'department_id.required' => 'Le département est obligatoire.',
                 'department_id.exists' => 'Le département sélectionné n\'existe pas.',
                 'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
-                'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.'
+                'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
+                // Messages pour les nouveaux champs
+                'marital_status.in' => 'L\'état civil sélectionné n\'est pas valide.',
+                'employment_status.in' => 'Le statut professionnel sélectionné n\'est pas valide.',
+                'children_count.integer' => 'Le nombre d\'enfants doit être un nombre entier.',
+                'children_count.min' => 'Le nombre d\'enfants ne peut pas être négatif.',
+                'children_count.max' => 'Le nombre d\'enfants ne peut pas dépasser 20.',
+                'matricule.unique' => 'Ce matricule est déjà utilisé.',
+                'matricule.max' => 'Le matricule ne peut pas dépasser 50 caractères.',
+                'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
+                'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
+                'section.max' => 'La section ne peut pas dépasser 255 caractères.',
+                'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
             ]);
 
             Log::info('Validated data:', $validatedData);
@@ -300,7 +321,16 @@ class UserController extends Controller
             'maternity_leave_days' => 'nullable|integer|min:0',
             'paternity_leave_days' => 'nullable|integer|min:0',
             'special_leave_days' => 'nullable|integer|min:0',
-            'is_prestataire' => 'nullable'
+            'is_prestataire' => 'nullable',
+            // Nouveaux champs
+            'marital_status' => ['nullable', Rule::in(array_keys(User::getMaritalStatusOptions()))],
+            'employment_status' => ['nullable', Rule::in(array_keys(User::getEmploymentStatusOptions()))],
+            'children_count' => 'nullable|integer|min:0|max:20',
+            'matricule' => ['nullable', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'affectation' => 'nullable|string|max:255',
+            'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
+            'section' => 'nullable|string|max:255',
+            'service' => 'nullable|string|max:255'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
@@ -315,7 +345,19 @@ class UserController extends Controller
             'department_id.required' => 'Le département est obligatoire.',
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
             'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
-            'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.'
+            'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
+            // Messages pour les nouveaux champs
+            'marital_status.in' => 'Le statut matrimonial sélectionné n\'est pas valide.',
+            'employment_status.in' => 'Le statut professionnel sélectionné n\'est pas valide.',
+            'children_count.integer' => 'Le nombre d\'enfants doit être un nombre entier.',
+            'children_count.min' => 'Le nombre d\'enfants ne peut pas être négatif.',
+            'children_count.max' => 'Le nombre d\'enfants ne peut pas dépasser 20.',
+            'matricule.unique' => 'Ce matricule est déjà utilisé.',
+            'matricule.max' => 'Le matricule ne peut pas dépasser 50 caractères.',
+            'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
+            'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
+            'section.max' => 'La section ne peut pas dépasser 255 caractères.',
+            'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
         ]);
 
         // Sauvegarder les anciennes données
