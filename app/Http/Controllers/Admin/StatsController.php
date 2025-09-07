@@ -8,6 +8,7 @@ use App\Models\Leave;
 use App\Models\User;
 use App\Models\ExpenseReport;
 use App\Models\Contract;
+use App\Models\SalaryAdvance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +81,17 @@ class StatsController extends Controller
                       ->whereNotNull('date_fin')
                       ->where('date_fin', '>', Carbon::now())
                       ->where('date_fin', '<=', Carbon::now()->addDays(60))
-                      ->count()
+                      ->count(),
+            // Statistiques des demandes d'accompte
+            'salary_advances_pending' => SalaryAdvance::where('status', SalaryAdvance::STATUS_PENDING)->count(),
+            'salary_advances_submitted' => SalaryAdvance::where('status', SalaryAdvance::STATUS_SUBMITTED)->count(),
+            'salary_advances_approved' => SalaryAdvance::where('status', SalaryAdvance::STATUS_APPROVED)->count(),
+            'salary_advances_total' => SalaryAdvance::count(),
+            'salary_advances_amount_pending' => SalaryAdvance::where('status', SalaryAdvance::STATUS_PENDING)
+                                                            ->orWhere('status', SalaryAdvance::STATUS_SUBMITTED)
+                                                            ->sum('amount'),
+            'salary_advances_amount_approved' => SalaryAdvance::where('status', SalaryAdvance::STATUS_APPROVED)
+                                                              ->sum('amount')
         ];
 
         // Dernières notes de frais
@@ -95,12 +106,19 @@ class StatsController extends Controller
             ->take(5)
             ->get();
 
+        // Dernières demandes d'accompte
+        $recentSalaryAdvances = SalaryAdvance::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.stats', compact(
             'departmentStats',
             'monthlyStats',
             'stats',
             'recentLeaves',
-            'recentExpenses'
+            'recentExpenses',
+            'recentSalaryAdvances'
         ));
     }
 }

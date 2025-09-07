@@ -22,6 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         // Revenir à l'enum précédent
-        DB::statement("ALTER TABLE leaves MODIFY COLUMN type ENUM('annual', 'sick', 'unpaid', 'other')");
+        DB::statement("ALTER TABLE leaves MODIFY COLUMN type ENUM('annual', 'sick', 'unpaid', 'other', 'maternity', 'paternity') NOT NULL");
     }
 };

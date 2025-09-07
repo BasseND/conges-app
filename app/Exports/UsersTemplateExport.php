@@ -25,7 +25,15 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
                 'employee',
                 'Informatique',
                 'password123',
-                'non'
+                'non',
+                'marié',
+                'fonctionnaire',
+                '2',
+                'MAT001',
+                'Direction Générale',
+                'cadre',
+                'Section IT',
+                'Service Développement'
             ],
             [
                 'Marie',
@@ -37,7 +45,15 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
                 'manager',
                 'Marketing',
                 'password123',
-                'oui'
+                'oui',
+                'célibataire',
+                'contractuel_cdi',
+                '0',
+                'MAT002',
+                'Direction Marketing',
+                'agent_de_maitrise',
+                'Section Communication',
+                'Service Digital'
             ]
         ];
     }
@@ -54,7 +70,15 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
             'role',
             'departement',
             'mot_de_passe',
-            'prestataire'
+            'prestataire',
+            'etat_civil',
+            'statut_professionnel',
+            'nombre_enfants',
+            'matricule',
+            'affectation',
+            'categorie',
+            'section',
+            'service'
         ];
     }
 
@@ -95,6 +119,14 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
             'H' => 20, // departement
             'I' => 15, // mot_de_passe
             'J' => 12, // prestataire
+            'K' => 15, // etat_civil
+            'L' => 20, // statut_professionnel
+            'M' => 12, // nombre_enfants
+            'N' => 12, // matricule
+            'O' => 20, // affectation
+            'P' => 15, // categorie
+            'Q' => 15, // section
+            'R' => 20, // service
         ];
     }
 }

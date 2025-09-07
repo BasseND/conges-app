@@ -88,7 +88,7 @@
                         
                         <!-- Statistiques rapides -->
                         <div class="flex-1 lg:ml-auto">
-                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
                                     <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-3"><x-role-badge :role="$user->role" /></div>
                                     
@@ -98,11 +98,39 @@
                                     <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $user->department->name ?? 'N/A' }}</div>
                                     <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Département</div>
                                 </div>
-                                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20 col-span-2 lg:col-span-1">
+                                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
                                     <div class="text-2xl font-bold {{ $user->is_active ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
                                         {{ $user->is_active ? 'Actif' : 'Inactif' }}
                                     </div>
                                     <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Statut</div>
+                                </div>
+                                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+                                    <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                        @if($user->entry_date)
+                                            @php
+                                                $entryDate = \Carbon\Carbon::parse($user->entry_date);
+                                                $today = \Carbon\Carbon::now();
+                                                $diff = $entryDate->diff($today);
+                                                
+                                                if ($diff->y > 0) {
+                                                    echo $diff->y . ' an' . ($diff->y > 1 ? 's' : '');
+                                                    if ($diff->m > 0) {
+                                                        echo ' et ' . $diff->m . ' mois';
+                                                    }
+                                                } elseif ($diff->m > 0) {
+                                                    echo $diff->m . ' mois';
+                                                    if ($diff->d > 0) {
+                                                        echo ' et ' . $diff->d . ' jour' . ($diff->d > 1 ? 's' : '');
+                                                    }
+                                                } else {
+                                                    echo $diff->d . ' jour' . ($diff->d > 1 ? 's' : '');
+                                                }
+                                            @endphp
+                                        @else
+                                            Non calculable
+                                        @endif
+                                    </div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Ancienneté</div>
                                 </div>
                             </div>
                         </div>

@@ -73,7 +73,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'leave_balance_id',
         'is_active',
         'position',
-        'is_prestataire'
+        'is_prestataire',
+        'entry_date',
+        'exit_date'
         //'team_id'
     ];
 
@@ -159,6 +161,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isHR(): bool
     {
         return $this->role === self::ROLE_HR;
+    }
+    
+    /**
+     * Vérifie si l'utilisateur a un rôle spécifique
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
     }
 
     /**

@@ -96,7 +96,9 @@ class UserController extends Controller
                 'affectation' => 'nullable|string|max:255',
                 'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
                 'section' => 'nullable|string|max:255',
-                'service' => 'nullable|string|max:255'
+                'service' => 'nullable|string|max:255',
+                'entry_date' => 'nullable|date',
+                'exit_date' => 'nullable|date|after_or_equal:entry_date'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
@@ -126,7 +128,10 @@ class UserController extends Controller
                 'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
                 'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
                 'section.max' => 'La section ne peut pas dépasser 255 caractères.',
-                'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
+                'service.max' => 'Le service ne peut pas dépasser 255 caractères.',
+                'entry_date.date' => 'La date d\'entrée doit être une date valide.',
+                'exit_date.date' => 'La date de sortie doit être une date valide.',
+                'exit_date.after_or_equal' => 'La date de sortie doit être postérieure ou égale à la date d\'entrée.'
             ]);
 
             Log::info('Validated data:', $validatedData);
@@ -330,7 +335,9 @@ class UserController extends Controller
             'affectation' => 'nullable|string|max:255',
             'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
             'section' => 'nullable|string|max:255',
-            'service' => 'nullable|string|max:255'
+            'service' => 'nullable|string|max:255',
+            'entry_date' => 'nullable|date',
+            'exit_date' => 'nullable|date|after_or_equal:entry_date'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
@@ -357,7 +364,10 @@ class UserController extends Controller
             'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
             'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
             'section.max' => 'La section ne peut pas dépasser 255 caractères.',
-            'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
+            'service.max' => 'Le service ne peut pas dépasser 255 caractères.',
+            'entry_date.date' => 'La date d\'entrée doit être une date valide.',
+            'exit_date.date' => 'La date de sortie doit être une date valide.',
+            'exit_date.after_or_equal' => 'La date de sortie doit être postérieure ou égale à la date d\'entrée.'
         ]);
 
         // Sauvegarder les anciennes données

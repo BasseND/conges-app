@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\LeaveBalanceController;
+use App\Http\Controllers\Admin\SpecialLeaveTypeController;
 use App\Http\Controllers\Admin\SalaryAdvanceController as AdminSalaryAdvanceController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
@@ -282,6 +283,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Gestion des soldes de congés
         Route::resource('leave-balances', LeaveBalanceController::class);
+
+        // Gestion des types de congés spéciaux
+        Route::resource('special-leave-types', SpecialLeaveTypeController::class);
 
         // Gestion des avances sur salaire
         Route::prefix('salary-advances')->name('salary-advances.')->group(function () {

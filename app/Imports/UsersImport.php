@@ -60,7 +60,16 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             ])],
             'departement' => 'required|string',
             'mot_de_passe' => 'nullable|string|min:8',
-            'prestataire' => 'nullable|in:oui,non,yes,no,1,0'
+            'prestataire' => 'nullable|in:oui,non,yes,no,1,0',
+            // Nouveaux champs
+            'etat_civil' => 'nullable|in:marié,célibataire,veuf,marie,celibataire',
+            'statut_professionnel' => 'nullable|in:fonctionnaire,contractuel_cdi,contractuel_cdd,contractuel,cdi,cdd',
+            'nombre_enfants' => 'nullable|integer|min:0|max:20',
+            'matricule' => 'nullable|string|max:50|unique:users,matricule',
+            'affectation' => 'nullable|string|max:255',
+            'categorie' => 'nullable|in:cadre,agent_de_maitrise,employe,ouvrier,agent_maitrise,employee',
+            'section' => 'nullable|string|max:255',
+            'service' => 'nullable|string|max:255'
         ], [
             'prenom.required' => 'Le prénom est obligatoire',
             'nom.required' => 'Le nom est obligatoire',
@@ -73,7 +82,19 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'role.required' => 'Le rôle est obligatoire',
             'role.in' => 'Le rôle doit être: employee, manager, admin, hr ou department_head',
             'departement.required' => 'Le département est obligatoire',
-            'mot_de_passe.min' => 'Le mot de passe doit contenir au moins 8 caractères'
+            'mot_de_passe.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            // Messages pour les nouveaux champs
+            'etat_civil.in' => 'L\'état civil doit être: marié, célibataire ou veuf',
+            'statut_professionnel.in' => 'Le statut professionnel doit être: fonctionnaire, contractuel_cdi ou contractuel_cdd',
+            'nombre_enfants.integer' => 'Le nombre d\'enfants doit être un nombre entier',
+            'nombre_enfants.min' => 'Le nombre d\'enfants ne peut pas être négatif',
+            'nombre_enfants.max' => 'Le nombre d\'enfants ne peut pas dépasser 20',
+            'matricule.unique' => 'Ce matricule existe déjà',
+            'matricule.max' => 'Le matricule ne peut pas dépasser 50 caractères',
+            'categorie.in' => 'La catégorie doit être: cadre, agent_de_maitrise, employe ou ouvrier',
+            'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères',
+            'section.max' => 'La section ne peut pas dépasser 255 caractères',
+            'service.max' => 'Le service ne peut pas dépasser 255 caractères'
         ]);
 
         if ($validator->fails()) {
@@ -112,6 +133,11 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
         // Normaliser prestataire
         $isPrestataire = $this->normalizeBoolean($row['prestataire'] ?? 'non');
 
+        // Normaliser les nouveaux champs
+        $maritalStatus = $this->normalizeMaritalStatus($row['etat_civil'] ?? null);
+        $employmentStatus = $this->normalizeEmploymentStatus($row['statut_professionnel'] ?? null);
+        $category = $this->normalizeCategory($row['categorie'] ?? null);
+        
         $userData = [
             'first_name' => trim($row['prenom']),
             'last_name' => trim($row['nom']),
@@ -124,7 +150,16 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'department_id' => $department->id,
             'employee_id' => $this->generateEmployeeId(),
             'is_prestataire' => $isPrestataire,
-            'is_active' => true
+            'is_active' => true,
+            // Nouveaux champs
+            'marital_status' => $maritalStatus,
+            'employment_status' => $employmentStatus,
+            'children_count' => !empty($row['nombre_enfants']) ? (int)$row['nombre_enfants'] : 0,
+            'matricule' => !empty($row['matricule']) ? trim($row['matricule']) : null,
+            'affectation' => !empty($row['affectation']) ? trim($row['affectation']) : null,
+            'category' => $category,
+            'section' => !empty($row['section']) ? trim($row['section']) : null,
+            'service' => !empty($row['service']) ? trim($row['service']) : null
         ];
 
         // Assigner le solde de congés du département s'il existe
@@ -178,6 +213,66 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
     {
         $value = strtolower(trim($value));
         return in_array($value, ['oui', 'yes', '1', 'true']);
+    }
+
+    protected function normalizeMaritalStatus($maritalStatus)
+    {
+        if (empty($maritalStatus)) {
+            return null;
+        }
+        
+        $maritalStatus = strtolower(trim($maritalStatus));
+        
+        $maritalMapping = [
+            'marié' => User::MARITAL_STATUS_MARRIED,
+            'marie' => User::MARITAL_STATUS_MARRIED,
+            'célibataire' => User::MARITAL_STATUS_SINGLE,
+            'celibataire' => User::MARITAL_STATUS_SINGLE,
+            'veuf' => User::MARITAL_STATUS_WIDOWED,
+            'veuve' => User::MARITAL_STATUS_WIDOWED
+        ];
+        
+        return $maritalMapping[$maritalStatus] ?? $maritalStatus;
+    }
+
+    protected function normalizeEmploymentStatus($employmentStatus)
+    {
+        if (empty($employmentStatus)) {
+            return null;
+        }
+        
+        $employmentStatus = strtolower(trim($employmentStatus));
+        
+        $employmentMapping = [
+            'fonctionnaire' => User::EMPLOYMENT_STATUS_CIVIL_SERVANT,
+            'contractuel_cdi' => User::EMPLOYMENT_STATUS_PERMANENT_CONTRACT,
+            'contractuel_cdd' => User::EMPLOYMENT_STATUS_FIXED_TERM_CONTRACT,
+            'contractuel' => User::EMPLOYMENT_STATUS_PERMANENT_CONTRACT,
+            'cdi' => User::EMPLOYMENT_STATUS_PERMANENT_CONTRACT,
+            'cdd' => User::EMPLOYMENT_STATUS_FIXED_TERM_CONTRACT
+        ];
+        
+        return $employmentMapping[$employmentStatus] ?? $employmentStatus;
+    }
+
+    protected function normalizeCategory($category)
+    {
+        if (empty($category)) {
+            return null;
+        }
+        
+        $category = strtolower(trim($category));
+        
+        $categoryMapping = [
+            'cadre' => User::CATEGORY_EXECUTIVE,
+            'agent_de_maitrise' => User::CATEGORY_SUPERVISOR,
+            'agent_maitrise' => User::CATEGORY_SUPERVISOR,
+            'employe' => User::CATEGORY_EMPLOYEE,
+            'employee' => User::CATEGORY_EMPLOYEE,
+            'ouvrier' => User::CATEGORY_WORKER
+        ];
+        
+        return $categoryMapping[$category] ?? $category;
     }
 
     protected function generateEmployeeId()

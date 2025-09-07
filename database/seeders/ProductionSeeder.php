@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Leave;
+use App\Models\SpecialLeaveType;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,11 +16,28 @@ class ProductionSeeder extends Seeder
     public function run(): void
     {
         // Départements
-        Department::create(['name' => 'Informatique', 'code' => 'IT']);
-        Department::create(['name' => 'Ressources Humaines', 'code' => 'HR']);
-        Department::create(['name' => 'Finance', 'code' => 'FIN']);
-        Department::create(['name' => 'Marketing', 'code' => 'MKT']);
-        Department::create(['name' => 'Opérations', 'code' => 'OPS']);
+        $this->command->info('Création des départements...');
+        
+        // Vérifier si les départements existent déjà
+        if (!Department::where('code', 'IT')->exists()) {
+            Department::create(['name' => 'Informatique', 'code' => 'IT']);
+        }
+        
+        if (!Department::where('code', 'HR')->exists()) {
+            Department::create(['name' => 'Ressources Humaines', 'code' => 'HR']);
+        }
+        
+        if (!Department::where('code', 'FIN')->exists()) {
+            Department::create(['name' => 'Finance', 'code' => 'FIN']);
+        }
+        
+        if (!Department::where('code', 'MKT')->exists()) {
+            Department::create(['name' => 'Marketing', 'code' => 'MKT']);
+        }
+        
+        if (!Department::where('code', 'OPS')->exists()) {
+            Department::create(['name' => 'Opérations', 'code' => 'OPS']);
+        }
 
         // Récupérer les départements
         $itDept = Department::where('code', 'IT')->first();
@@ -27,57 +45,63 @@ class ProductionSeeder extends Seeder
         $finDept = Department::where('code', 'FIN')->first();
 
         // Créer les managers d'abord
-        $webManager = User::create([
-            'first_name' => 'Web Team Manager',
-            'last_name' => 'Web Team Manager',
-            'email' => 'web.manager@example.com',
-            'phone' => '1234567890',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_MANAGER,
+        $this->command->info('Création des utilisateurs...');
+        
+        $webManager = User::firstOrCreate(
+            ['email' => 'web.manager@example.com'],
+            [
+                'first_name' => 'Web Team Manager',
+                'last_name' => 'Web Team Manager',
+                'phone' => '1234567890',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_MANAGER,
+                'department_id' => $itDept->id,
+                'employee_id' => 'IT002',
+                'email_verified_at' => now(),
+            ]
+        );
 
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT002',
-            'email_verified_at' => now(),
-        ]);
+        $infraManager = User::firstOrCreate(
+            ['email' => 'infra.manager@example.com'],
+            [
+                'first_name' => 'Infrastructure Manager',
+                'last_name' => 'Infrastructure Manager',
+                'phone' => '1234567891',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_MANAGER,
+                'department_id' => $itDept->id,
+                'employee_id' => 'IT006',
+                'email_verified_at' => now(),
+            ]
+        );
 
-        $infraManager = User::create([
-            'first_name' => 'Infrastructure Manager',
-            'last_name' => 'Infrastructure Manager',
-            'email' => 'infra.manager@example.com',
-            'phone' => '1234567890',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_MANAGER,
+        $hrTeamManager = User::firstOrCreate(
+            ['email' => 'hr.manager@example.com'],
+            [
+                'first_name' => 'HR Team Manager',
+                'last_name' => 'HR Team Manager',
+                'phone' => '1234567892',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_MANAGER,
+                'department_id' => $hrDept->id,
+                'employee_id' => 'HR002',
+                'email_verified_at' => now(),
+            ]
+        );
 
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT005',
-            'email_verified_at' => now(),
-        ]);
-
-        $hrTeamManager = User::create([
-            'first_name' => 'HR Team Manager',
-            'last_name' => 'HR Team Manager',
-            'email' => 'hr.team@example.com',
-            'phone' => '1234567890',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_MANAGER,
-
-            'department_id' => $hrDept->id,
-            'employee_id' => 'HR002',
-            'email_verified_at' => now(),
-        ]);
-
-        $financeManager = User::create([
-            'first_name' => 'Finance Manager',
-            'last_name' => 'Finance Manager',
-            'email' => 'finance.manager@example.com',
-            'phone' => '1234567890',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_MANAGER,
-
-            'department_id' => $finDept->id,
-            'employee_id' => 'FIN001',
-            'email_verified_at' => now(),
-        ]);
+        $financeManager = User::firstOrCreate(
+            ['email' => 'finance.manager@example.com'],
+            [
+                'first_name' => 'Finance Manager',
+                'last_name' => 'Finance Manager',
+                'phone' => '1234567893',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_MANAGER,
+                'department_id' => $finDept->id,
+                'employee_id' => 'FIN002',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Équipes avec leurs managers
         $team1 = Team::create([
@@ -105,84 +129,136 @@ class ProductionSeeder extends Seeder
         ]);
 
         // Admin utilisateur
-        $admin = User::create([
-            'first_name' => 'Admin',
-            'last_name' => 'Admin',
-            'email' => 'admin@example.com',
-            'phone' => '1234567890',
-            'position' => 'Admin',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_ADMIN,
-
-            'department_id' => $itDept->id,
-            'employee_id' => 'ADMIN001',
-            'email_verified_at' => now(),
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'first_name' => 'Admin',
+                'last_name' => 'Admin',
+                'phone' => '1234567890',
+                'position' => 'Admin',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_ADMIN,
+                'department_id' => $itDept->id,
+                'employee_id' => 'ADMIN001',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // HR Manager
-        $hrManager = User::create([
-            'first_name' => 'HR',
-            'last_name' => 'Manager',
-            'email' => 'hr@example.com',
-            'phone' => '1234567890',
-            'position' => 'HR Manager',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_HR,
-
-            'department_id' => $hrDept->id,
-            'employee_id' => 'HR001',
-            'email_verified_at' => now(),
-        ]);
+        $hrManager = User::firstOrCreate(
+            ['email' => 'hr@example.com'],
+            [
+                'first_name' => 'HR',
+                'last_name' => 'Manager',
+                'phone' => '1234567890',
+                'position' => 'HR Manager',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_HR,
+                'department_id' => $hrDept->id,
+                'employee_id' => 'HR001',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Chef de département IT
-        $itHead = User::create([
-            'first_name' => 'IT Department Head',
-            'last_name' => 'IT Department Head',
-            'email' => 'it.head@example.com',
-            'phone' => '1234567890',
-            'position' => 'IT Department Head',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_DEPARTMENT_HEAD,
-
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT001',
-            'email_verified_at' => now(),
-        ]);
+        $itHead = User::firstOrCreate(
+            ['email' => 'it.head@example.com'],
+            [
+                'first_name' => 'IT Department Head',
+                'last_name' => 'IT Department Head',
+                'phone' => '1234567890',
+                'position' => 'IT Department Head',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_DEPARTMENT_HEAD,
+                'department_id' => $itDept->id,
+                'employee_id' => 'IT001',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Employés
-        $employee1 = User::create([
-            'first_name' => 'John',
-            'last_name' => 'Developer',
-            'email' => 'john@example.com',
-            'phone' => '1234567890',
-            'position' => 'Developer',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_EMPLOYEE,
+        $employee1 = User::firstOrCreate(
+            ['email' => 'john@example.com'],
+            [
+                'first_name' => 'John',
+                'last_name' => 'Developer',
+                'phone' => '1234567890',
+                'position' => 'Developer',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_EMPLOYEE,
+                'department_id' => $itDept->id,
+                'employee_id' => 'IT008',
+                'email_verified_at' => now(),
+            ]
+        );
 
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT003',
-            'email_verified_at' => now(),
-        ]);
-
-        $employee2 = User::create([
-            'first_name' => 'Jane',
-            'last_name' => 'Developer',
-            'email' => 'jane@example.com',
-            'phone' => '1234567890',
-            'position' => 'Developer',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_EMPLOYEE,
-
-            'department_id' => $itDept->id,
-            'employee_id' => 'IT004',
-            'email_verified_at' => now(),
-        ]);
+        $employee2 = User::firstOrCreate(
+            ['email' => 'jane@example.com'],
+            [
+                'first_name' => 'Jane',
+                'last_name' => 'Developer',
+                'phone' => '1234567890',
+                'position' => 'Developer',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_EMPLOYEE,
+                'department_id' => $itDept->id,
+                'employee_id' => 'IT007',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Associer les utilisateurs aux équipes
         $webManager->teams()->attach($team1->id);
         $employee1->teams()->attach($team1->id);
         $employee2->teams()->attach($team1->id);
 
+        // Créer les types de congés spéciaux par défaut
+        $this->command->info('Création des types de congés spéciaux par défaut...');
+        
+        // Congé annuel
+        SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_annuel'],
+            [
+                'name' => 'Congé annuel',
+                'duration_days' => 25,
+                'description' => 'Congé annuel standard pour tous les employés',
+                'is_active' => true,
+            ]
+        );
+        
+        // Congé maternité
+        SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_maternite'],
+            [
+                'name' => 'Congé maternité',
+                'duration_days' => 112, // 16 semaines
+                'description' => 'Congé maternité pour les employées enceintes',
+                'is_active' => true,
+            ]
+        );
+        
+        // Congé paternité
+        SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_paternite'],
+            [
+                'name' => 'Congé paternité',
+                'duration_days' => 28, // 4 semaines
+                'description' => 'Congé paternité pour les nouveaux pères',
+                'is_active' => true,
+            ]
+        );
+        
+        // Congé maladie
+        SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_maladie'],
+            [
+                'name' => 'Congé maladie',
+                'duration_days' => 30,
+                'description' => 'Congé maladie pour les employés malades',
+                'is_active' => true,
+            ]
+        );
+        
         // Créer des congés
         $statuses = ['pending', 'approved', 'rejected'];
         $types = ['annual', 'sick', 'unpaid', 'other'];

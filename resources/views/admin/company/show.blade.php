@@ -311,16 +311,20 @@
                                                 
                                                 <!-- Action buttons -->
                                                 <div class="flex flex-col gap-2 lg:gap-3 lg:ml-4 mt-3 lg:mt-0 justify-end lg:justify-start">
-                                                    <button type="button" onclick="editLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
+                                                    <a href="{{ route('admin.special-leave-types.edit', $balance->id) }}" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                         </svg>
-                                                    </button>
-                                                    <button type="button" onclick="deleteLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
-                                                    </button>
+                                                    </a>
+                                                    <form action="{{ route('admin.special-leave-types.destroy', $balance->id) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de congé ?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -337,15 +341,13 @@
 
                         {{-- Paramètre date limite de soumission d'une demande d'avance sur salaire --}}
 
-                        <!-- Inclusion du composant modal moderne -->
-                        <x-leave-balance-modal :company="$company" />
+
 
                         <!-- Action buttons -->
                         <div class="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4 mt-6 lg:mt-8">
                             <a href="{{ route('admin.company.edit', $company->id) }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
                                 <i class="bx bx-edit mr-1 lg:mr-2"></i> Modifier
                             </a>
-                            
                         </div>
 
                     @else

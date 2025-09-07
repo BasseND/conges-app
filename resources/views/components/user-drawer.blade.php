@@ -168,6 +168,30 @@
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</label>
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.is_prestataire ? 'Prestataire' : 'Employé'"></p>
                     </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date d'entrée</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.entry_date ? new Date(user.entry_date).toLocaleDateString('fr-FR') : 'Non renseigné'"></p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ancienneté</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.entry_date ? (() => {
+                            const entryDate = new Date(user.entry_date);
+                            const today = new Date();
+                            const diffTime = Math.abs(today - entryDate);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            const years = Math.floor(diffDays / 365);
+                            const months = Math.floor((diffDays % 365) / 30);
+                            const days = diffDays % 30;
+                            
+                            if (years > 0) {
+                                return years + ' an' + (years > 1 ? 's' : '') + (months > 0 ? ' et ' + months + ' mois' : '');
+                            } else if (months > 0) {
+                                return months + ' mois' + (days > 0 ? ' et ' + days + ' jour' + (days > 1 ? 's' : '') : '');
+                            } else {
+                                return days + ' jour' + (days > 1 ? 's' : '');
+                            }
+                        })() : 'Non calculable'"></p>
+                    </div>
                 </div>
             </div>
 

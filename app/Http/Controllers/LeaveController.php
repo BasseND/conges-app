@@ -76,7 +76,38 @@ class LeaveController extends Controller
                         }
                     }
                 ],
-                'type' => ['required', Rule::in(['annual', 'sick', 'unpaid' , 'maternity', 'paternity', 'other'])],
+                'type' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        // Système unifié : tous les congés utilisent LeaveBalance (format: balance_X)
+                        if (preg_match('/^balance_(\d+)$/', $value, $matches)) {
+                            $leaveBalanceId = $matches[1];
+                            $leaveBalance = \App\Models\LeaveBalance::where('id', $leaveBalanceId)
+                                ->where('company_id', auth()->user()->company_id)
+                                ->first();
+                            
+                            if (!$leaveBalance) {
+                                $fail('Le type de congé sélectionné n\'est pas valide ou n\'appartient pas à votre entreprise.');
+                            }
+                            return;
+                        }
+                        
+                        // Types de congés spéciaux (format: special_X)
+                        if (preg_match('/^special_(.+)$/', $value, $matches)) {
+                            $systemName = $matches[1];
+                            $specialType = \App\Models\SpecialLeaveType::where('system_name', $systemName)
+                                ->where('is_active', true)
+                                ->first();
+                            
+                            if (!$specialType) {
+                                $fail('Le type de congé spécial sélectionné n\'est pas valide ou n\'est pas actif.');
+                            }
+                            return;
+                        }
+                        
+                        $fail('Le type de congé sélectionné n\'est pas valide. Veuillez utiliser un type défini dans le système.');
+                    }
+                ],
                 'reason' => ['required', 'string', 'min:10', 'max:500'],
                 'attachments.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:2048']
             ], [
@@ -145,13 +176,37 @@ class LeaveController extends Controller
             }
 
             // Vérification de la durée maximale
-            $maxDuration = match($validated['type']) {
-                'annual' => 30,
-                'sick' => 90,
-                'unpaid' => 60,
-                'other' => 5,
-                default => 30,
-            };
+            $leaveBalance = null;
+            $specialLeaveType = null;
+            $maxDuration = 30; // Valeur par défaut de sécurité
+            
+            // Récupérer le LeaveBalance (système unifié)
+            if (preg_match('/^balance_(\d+)$/', $validated['type'], $matches)) {
+                $leaveBalanceId = $matches[1];
+                $leaveBalance = \App\Models\LeaveBalance::find($leaveBalanceId);
+                
+                if ($leaveBalance) {
+                    // Déterminer la durée maximale selon les champs disponibles dans LeaveBalance
+                    if ($leaveBalance->annual_leave_days > 0) {
+                        $maxDuration = $leaveBalance->annual_leave_days;
+                    } elseif ($leaveBalance->maternity_leave_days > 0) {
+                        $maxDuration = $leaveBalance->maternity_leave_days;
+                    } elseif ($leaveBalance->paternity_leave_days > 0) {
+                        $maxDuration = $leaveBalance->paternity_leave_days;
+                    } elseif ($leaveBalance->special_leave_days > 0) {
+                        $maxDuration = $leaveBalance->special_leave_days;
+                    }
+                }
+            }
+            // Récupérer le SpecialLeaveType
+            elseif (preg_match('/^special_(.+)$/', $validated['type'], $matches)) {
+                $systemName = $matches[1];
+                $specialLeaveType = \App\Models\SpecialLeaveType::where('system_name', $systemName)->first();
+                
+                if ($specialLeaveType && $specialLeaveType->duration_days) {
+                    $maxDuration = $specialLeaveType->duration_days;
+                }
+            }
 
             if ($duration > $maxDuration) {
                 return back()->withInput()->with('error', 
@@ -167,6 +222,14 @@ class LeaveController extends Controller
             $leave->user_id = auth()->id();
             $leave->status = $status;
             $leave->duration = $duration;
+            
+            // Associer le LeaveBalance ou SpecialLeaveType
+            if ($leaveBalance) {
+                $leave->leave_balance_id = $leaveBalance->id;
+            } elseif ($specialLeaveType) {
+                // Pour les types spéciaux, le type est déjà stocké dans $validated['type'] (format: special_system_name)
+                // Le system_name est utilisé pour identifier de manière unique le type de congé spécial
+            }
             
             if (!$leave->save()) {
                 throw new \Exception('Erreur lors de la sauvegarde du congé');

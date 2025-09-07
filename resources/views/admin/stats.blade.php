@@ -92,6 +92,85 @@
                 </div>
             </div>
 
+            <!-- Section Statistiques Avances sur Salaire -->
+            <div class="bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <svg class="w-6 h-6 text-amber-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                    Demandes d'Accompte
+                </h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <!-- Total demandes -->
+                    <div class="group relative bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-amber-200/50 dark:border-amber-600/30 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/20 to-yellow-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="relative flex items-center">
+                            <div class="flex-shrink-0 p-4 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl shadow-lg group-hover:shadow-amber-500/25 transition-all duration-300 group-hover:scale-105">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-6 flex-1">
+                                <h3 class="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wider uppercase mb-1">Total demandes</h3>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">{{ $stats['salary_advances_total'] }}</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Toutes périodes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- En attente -->
+                    <div class="group relative bg-gradient-to-br from-orange-50 to-red-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-200/50 dark:border-orange-600/30 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="relative flex items-center">
+                            <div class="flex-shrink-0 p-4 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl shadow-lg group-hover:shadow-orange-500/25 transition-all duration-300 group-hover:scale-105">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-6 flex-1">
+                                <h3 class="text-sm font-semibold text-orange-600 dark:text-orange-400 tracking-wider uppercase mb-1">En attente</h3>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">{{ $stats['salary_advances_pending'] + $stats['salary_advances_submitted'] }}</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">À traiter</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approuvées -->
+                    <div class="group relative bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-green-200/50 dark:border-green-600/30 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/20 to-emerald-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="relative flex items-center">
+                            <div class="flex-shrink-0 p-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg group-hover:shadow-green-500/25 transition-all duration-300 group-hover:scale-105">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-6 flex-1">
+                                <h3 class="text-sm font-semibold text-green-600 dark:text-green-400 tracking-wider uppercase mb-1">Approuvées</h3>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">{{ $stats['salary_advances_approved'] }}</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Validées</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Montant en attente -->
+                    <div class="group relative bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-blue-200/50 dark:border-blue-600/30 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="relative flex items-center">
+                            <div class="flex-shrink-0 p-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300 group-hover:scale-105">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-6 flex-1">
+                                <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wider uppercase mb-1">Montant en attente</h3>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{{ number_format($stats['salary_advances_amount_pending'], 0, ',', ' ') }} <span class="text-bgray-600 dark:text-white font-bold text-xl leading-[30px]"> {{ $globalCompanyCurrency }} </span></p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">À valider</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 <!-- Actions a faire -->
@@ -105,12 +184,12 @@
                           En attente de traitement
                         </p>
                         <div class="flex space-x-4 rtl:space-x-reverse items-end">
-                          <span class="text-bgray-500 dark:text-white font-bold text-2xl leading-[30px]">{{ $stats['pending'] + $stats['pending_expenses'] + $stats['temporary_contracts'] }} au total</span>
+                          <span class="text-bgray-500 dark:text-white font-bold text-2xl leading-[30px]">{{ $stats['pending'] + $stats['pending_expenses'] + $stats['temporary_contracts'] + $stats['salary_advances_pending'] + $stats['salary_advances_submitted'] }} au total</span>
 
                         </div>
                       </div>
                       </div>
-                      <div class="flex space-x-3 rtl:space-x-reverse mb-10">
+                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
                         <!-- Congés en attente-->
                         <a href="{{ route('admin.leaves.index', ['status' => 'pending']) }}" class="block w-full p-4 bg-gradient-to-br from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
@@ -154,6 +233,29 @@
                             </p>
                           </div>
                         </a>
+
+                        <!-- Demandes d'accompte en attente -->
+                        <a href="{{ route('admin.salary-advances.index', ['status' => 'pending']) }}" class="block w-full p-4 bg-gradient-to-br from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
+                          <div>
+                            <div class="flex justify-center mb-3">
+                              <div class="p-3 bg-white/20 rounded-full group-hover:bg-white/30 transition-all duration-300">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                              </div>
+                            </div>
+                            <p class="text-white text-xs text-center font-medium mb-1">
+                              Accomptes en attente
+                            </p>
+                            <p class="text-2xl font-bold text-white text-center group-hover:scale-110 transition-transform duration-300">
+                              {{ $stats['salary_advances_pending'] + $stats['salary_advances_submitted'] }}
+                            </p>
+                            <p class="text-white/80 text-xs text-center mt-1">
+                              Cliquez pour traiter
+                            </p>
+                          </div>
+                        </a>
+
                         <!-- Contrats à terme -->
                         <a href="{{ route('admin.contracts.index') }}" class="block w-full p-4 bg-gradient-to-br from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
@@ -558,6 +660,124 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                       </svg>
                                                       <span>{{ $expense->approved_at->format('d/m/Y H:i') }}</span>
+                                                    </div>
+                                                  @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dernières demandes d'accompte -->
+                <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-8">
+                          <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl shadow-lg">
+                              <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                              </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                              Dernières demandes d'accompte
+                            </h3>
+                          </div>
+                          <a href="{{ route('salary-advances.index') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                            <span>Voir toutes</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                          </a>
+                        </div>
+                        
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-600">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
+                                    <tr>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                            </svg>
+                                            <span>Date</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                            </svg>
+                                            <span>Utilisateur</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                            <span>Montant</span>
+                                          </div>
+                                        </th>
+                                        <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                          <div class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Statut</span>
+                                          </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+                                    @foreach($recentSalaryAdvances as $advance)
+                                        <tr class="hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200 group"> 
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="p-2 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900 dark:to-indigo-900 rounded-lg group-hover:scale-110 transition-transform duration-200">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-purple-600 dark:text-purple-400">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                  </div>
+                                                  <div>
+                                                    <span class="font-bold text-gray-900 dark:text-white text-sm">{{ $advance->created_at->format('d/m/Y') }}</span>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $advance->created_at->format('H:i') }}</div>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-3">
+                                                  <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                                    {{ substr($advance->user->first_name, 0, 1) }}{{ substr($advance->user->last_name ?? '', 0, 1) }}
+                                                  </div>
+                                                  <div>
+                                                    <div class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ $advance->user->first_name }} {{ $advance->user->last_name }}</div>
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ $advance->user->email }}</div>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="flex items-center space-x-2">
+                                                  <div class="p-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-lg">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-yellow-600 dark:text-yellow-400">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                  </div>
+                                                  <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($advance->amount, 2) }} {{ $globalCompanyCurrency }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 whitespace-nowrap">
+                                                <div class="space-y-2">
+                                                  <x-salary-advance-status :status="$advance->status" />
+                                                  @if($advance->approved_at)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center space-x-1">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                      </svg>
+                                                      <span>{{ $advance->approved_at->format('d/m/Y H:i') }}</span>
                                                     </div>
                                                   @endif
                                                 </div>
