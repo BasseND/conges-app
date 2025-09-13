@@ -20,13 +20,7 @@
                             <div class="text-sm text-gray-500">{{ $leave->user->department->name }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                @if($leave->type === 'annual') bg-green-100 text-green-800
-                                @elseif($leave->type === 'sick') bg-red-100 text-red-800
-                                @else bg-gray-100 text-gray-800
-                                @endif">
-                                {{ ucfirst($leave->type) }}
-                            </span>
+                            <x-leave-type-badge :leave="$leave" :specialLeaveType="$leave->specialLeaveType" />
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ $leave->start_date->format('d/m/Y') }} - {{ $leave->end_date->format('d/m/Y') }}

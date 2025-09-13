@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\LeaveBalanceController;
+// LeaveBalanceController supprimé - remplacé par SpecialLeaveTypeController
 use App\Http\Controllers\Admin\SpecialLeaveTypeController;
 use App\Http\Controllers\Admin\SalaryAdvanceController as AdminSalaryAdvanceController;
 use App\Http\Controllers\HelpController;
@@ -279,10 +279,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('departments/{department}/teams/{team}/edit', [TeamController::class, 'edit'])->name('departments.teams.edit');
         Route::put('departments/{department}/teams/{team}', [TeamController::class, 'update'])->name('departments.teams.update');
         Route::delete('departments/{department}/teams/{team}', [TeamController::class, 'destroy'])->name('departments.teams.destroy');
-        Route::get('departments/{department}/leave-balances', [LeaveBalanceController::class, 'getByCompany'])->name('departments.leave-balances');
+        // Route supprimée - LeaveBalance remplacé par SpecialLeaveType
 
         // Gestion des soldes de congés
-        Route::resource('leave-balances', LeaveBalanceController::class);
+        // Route supprimée - LeaveBalance remplacé par SpecialLeaveType
 
         // Gestion des types de congés spéciaux
         Route::resource('special-leave-types', SpecialLeaveTypeController::class);
@@ -306,8 +306,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('company/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');
         
         // Routes pour les soldes de congés de la société
-        Route::post('company/leave-balances', [CompanyController::class, 'storeLeaveBalance'])->name('company.leave-balances.store');
-        Route::put('company/leave-balances/{leaveBalance}', [CompanyController::class, 'updateLeaveBalance'])->name('company.leave-balances.update');
-        Route::delete('company/leave-balances/{leaveBalance}', [CompanyController::class, 'destroyLeaveBalance'])->name('company.leave-balances.destroy');
+        // Routes supprimées - LeaveBalance remplacé par SpecialLeaveType
     });
 });

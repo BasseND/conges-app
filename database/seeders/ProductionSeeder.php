@@ -247,7 +247,8 @@ class ProductionSeeder extends Seeder
                 'is_active' => true,
             ]
         );
-        
+
+       
         // Congé maladie
         SpecialLeaveType::firstOrCreate(
             ['system_name' => 'conge_maladie'],

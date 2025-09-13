@@ -42,7 +42,7 @@
                                         Type de congé
                                     </label>
                                     <div class="ml-6">
-                                        <x-leave-type-badge :type="$leave->type" />
+                                        <x-leave-type-badge :type="$leave->specialLeaveType?->system_name ?: 'unknown'" :specialLeaveType="$leave->specialLeaveType" />
                                     </div>
                                 </div>
 

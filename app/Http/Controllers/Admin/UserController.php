@@ -49,7 +49,7 @@ class UserController extends Controller
         $sortDirection = $request->input('direction', 'asc');
         $query->orderBy($sortField, $sortDirection);
 
-        $users = $query->paginate(10)->withQueryString();
+        $users = $query->paginate(10)->appends(request()->query());
         $departments = Department::all();
 
         return view('admin.users.index', compact('users', 'departments'));
@@ -64,9 +64,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        \Log::info('UserController store method called');
-        
-        Log::info('Request data:', $request->all());
+    
 
         try {
             $validatedData = $request->validate([
@@ -175,9 +173,7 @@ class UserController extends Controller
             }
             
             // Déclencher l'événement de création d'utilisateur
-            \Log::info('About to trigger UserCreated event for user: ' . $user->email);
             event(new UserCreated($user));
-            \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -266,9 +262,7 @@ class UserController extends Controller
         }
         
         // Déclencher l'événement de création d'utilisateur
-        \Log::info('About to trigger UserCreated event for user: ' . $user->email);
         event(new UserCreated($user));
-        \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -291,10 +285,8 @@ class UserController extends Controller
         $user->load([
             'department', 
             'teams', 
-            'leaveBalance',
-            'company.leaveBalances' => function($query) {
-                $query->where('is_default', true);
-            },
+            // 'leaveBalance' supprimé - remplacé par SpecialLeaveType
+            // 'company.leaveBalances' supprimé - remplacé par SpecialLeaveType
             'contracts' => function($query) {
                 $query->orderBy('date_debut', 'desc');
             }
@@ -372,9 +364,6 @@ class UserController extends Controller
 
         // Sauvegarder les anciennes données
         $oldData = $user->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
-        
-        \Log::info('User update - Old data: ' . json_encode($oldData));
-        \Log::info('User update - New data: ' . json_encode($validatedData));
 
         // Traiter la valeur is_prestataire
         $validatedData['is_prestataire'] = $request->has('is_prestataire');
@@ -417,7 +406,6 @@ class UserController extends Controller
         
         // Déclencher l'événement UserUpdated
         event(new UserUpdated($user, $oldData, $newData));
-        \Log::info('UserUpdated event dispatched for user: ' . $user->email);
 
         // Redirection conditionnelle selon la source de la requête
         if ($request->has('source') && $request->input('source') === 'modal') {

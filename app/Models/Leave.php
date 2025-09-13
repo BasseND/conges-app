@@ -22,12 +22,11 @@ class Leave extends Model
         'rejected' => 'Rejeté'
     ];
 
-    // Note: Les types de congés sont maintenant définis via LeaveBalance
+    // Les types de congés sont définis via le modèle SpecialLeaveType
+    // La relation specialLeaveType() permet d'accéder aux types configurés
 
     protected $fillable = [
         'user_id',
-        'type',
-        'leave_balance_id',
         'special_leave_type_id',
         'start_date',
         'end_date',
@@ -74,13 +73,7 @@ class Leave extends Model
         return $this->belongsTo(SpecialLeaveType::class);
     }
 
-    /**
-     * Get the leave balance that defines this leave type.
-     */
-    public function leaveBalance()
-    {
-        return $this->belongsTo(LeaveBalance::class);
-    }
+
 
     /**
      * Obtenir le libellé du statut
@@ -95,18 +88,20 @@ class Leave extends Model
      */
     public function getTypeLabelAttribute()
     {
-        // Nouveau système : utiliser le LeaveBalance si disponible
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->description ?? 'Congé personnalisé';
-        }
-        
-        // Legacy : ancien système avec types spéciaux
-        if ($this->type === 'special' && $this->specialLeaveType) {
+        // Utiliser SpecialLeaveType
+        if ($this->specialLeaveType) {
             return $this->specialLeaveType->name;
         }
         
-        // Legacy : types hardcodés
-        return self::TYPES[$this->type] ?? $this->type;
+        return 'Congé';
+    }
+
+    /**
+     * Obtenir le system_name du type de congé
+     */
+    public function getSystemNameAttribute()
+    {
+        return $this->specialLeaveType?->system_name;
     }
 
     /**
@@ -114,37 +109,28 @@ class Leave extends Model
      */
     public function getMaxDurationAttribute()
     {
-        // Nouveau système : utiliser le LeaveBalance
-        if ($this->leaveBalance) {
-            // Déterminer le type de congé basé sur la description ou un champ spécifique
-            $description = strtolower($this->leaveBalance->description ?? '');
+        // Utiliser SpecialLeaveType si disponible
+        if ($this->specialLeaveType) {
+            // Déterminer le type de congé basé sur le nom ou la description
+            $name = strtolower($this->specialLeaveType->name ?? '');
+            $description = strtolower($this->specialLeaveType->description ?? '');
             
-            if (str_contains($description, 'annuel') || str_contains($description, 'annual')) {
-                return $this->leaveBalance->annual_leave_days;
-            } elseif (str_contains($description, 'maternité') || str_contains($description, 'maternity')) {
-                return $this->leaveBalance->maternity_leave_days;
-            } elseif (str_contains($description, 'paternité') || str_contains($description, 'paternity')) {
-                return $this->leaveBalance->paternity_leave_days;
+            if (str_contains($name, 'annuel') || str_contains($description, 'annuel') || 
+                str_contains($name, 'annual') || str_contains($description, 'annual')) {
+                return $this->specialLeaveType->annual_leave_days ?? $this->specialLeaveType->duration_days;
+            } elseif (str_contains($name, 'maternité') || str_contains($description, 'maternité') ||
+                     str_contains($name, 'maternity') || str_contains($description, 'maternity')) {
+                return $this->specialLeaveType->maternity_leave_days ?? $this->specialLeaveType->duration_days;
+            } elseif (str_contains($name, 'paternité') || str_contains($description, 'paternité') ||
+                     str_contains($name, 'paternity') || str_contains($description, 'paternity')) {
+                return $this->specialLeaveType->paternity_leave_days ?? $this->specialLeaveType->duration_days;
             } else {
-                return $this->leaveBalance->special_leave_days;
+                return $this->specialLeaveType->special_leave_days ?? $this->specialLeaveType->duration_days;
             }
         }
         
-        // Legacy : ancien système
-        if ($this->type === 'special' && $this->specialLeaveType) {
-            return $this->specialLeaveType->duration_days;
-        }
-        
-        // Legacy : types hardcodés
-        return match($this->type) {
-            'annual' => 30,
-            'sick' => 90,
-            'unpaid' => 60,
-            'maternity' => 120,
-            'paternity' => 15,
-            'other' => 5,
-            default => 30,
-        };
+        // Valeur par défaut si aucun SpecialLeaveType n'est défini
+        return 30;
     }
 
     /**

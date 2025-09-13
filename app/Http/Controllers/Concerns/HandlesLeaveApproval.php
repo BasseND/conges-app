@@ -45,10 +45,10 @@ trait HandlesLeaveApproval
             event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
             // Créer une transaction de déduction pour le congé approuvé
-            if (in_array($leave->type, ['annual', 'maternity', 'paternity', 'special', 'sick'])) {
+            if ($leave->specialLeaveType && in_array($leave->specialLeaveType->system_name, ['annual', 'maternity', 'paternity', 'special', 'sick', 'conge_annuel', 'maternite', 'paternite', 'maladie'])) {
                 LeaveTransaction::createTransaction(
                     userId: $leave->user_id,
-                    leaveType: $leave->type,
+                    leaveType: $leave->specialLeaveType->system_name,
                     transactionType: 'deduction',
                     amount: -$leave->duration, // Négatif car c'est une déduction
                     leaveId: $leave->id,
@@ -57,7 +57,7 @@ trait HandlesLeaveApproval
                         'leave_start_date' => $leave->start_date->format('Y-m-d'),
                         'leave_end_date' => $leave->end_date->format('Y-m-d'),
                         'leave_duration' => $leave->duration,
-                        'leave_type' => $leave->type
+                        'leave_type' => $leave->specialLeaveType->system_name
                     ],
                     createdBy: auth()->id()
                 );

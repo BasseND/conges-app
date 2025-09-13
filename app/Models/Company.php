@@ -55,18 +55,12 @@ class Company extends Model
     }
 
     /**
-     * Get the leave balances for the company.
+     * Get the special leave types for the company.
      */
-    public function leaveBalances(): HasMany
+    public function specialLeaveTypes(): HasMany
     {
-        return $this->hasMany(LeaveBalance::class);
+        return $this->hasMany(SpecialLeaveType::class);
     }
 
-    /**
-     * Get the default leave balance for the company.
-     */
-    public function defaultLeaveBalance()
-    {
-        return $this->leaveBalances()->where('is_default', true)->first();
-    }
+    // Relations LeaveBalance supprimées - remplacées par SpecialLeaveType
 }

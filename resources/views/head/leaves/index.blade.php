@@ -55,9 +55,9 @@
                         <select name="type" id="type"
                             class="block w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200">
                             <option value="">Tous les types</option>
-                            @foreach(\App\Models\Leave::TYPES as $value => $label)
-                                <option value="{{ $value }}" {{ request('type') == $value ? 'selected' : '' }}>
-                                    {{ $label }}
+                            @foreach(\App\Models\SpecialLeaveType::where('is_active', true)->get() as $specialType)
+                                <option value="{{ $specialType->system_name }}" {{ request('type') == $specialType->system_name ? 'selected' : '' }}>
+                                    {{ $specialType->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -221,7 +221,7 @@
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">{{ $leave->user->department->code }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <x-leave-type-badge :type="$leave->type" />
+                                                <x-leave-type-badge :type="$leave->specialLeaveType?->system_name ?: 'unknown'" :specialLeaveType="$leave->specialLeaveType" />
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-900 dark:text-gray-200">

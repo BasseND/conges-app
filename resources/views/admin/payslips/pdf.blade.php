@@ -230,15 +230,7 @@
                     @foreach ($leaves as $leave)
                         <tr>
                             <td>
-                                @if ($leave->type === 'annual')
-                                    Congé annuel
-                                @elseif ($leave->type === 'sick')
-                                    Congé maladie
-                                @elseif ($leave->type === 'unpaid')
-                                    Congé sans solde
-                                @elseif ($leave->type === 'other')
-                                    Autre
-                                @endif
+                                {{ $leave->specialLeaveType ? $leave->specialLeaveType->name : 'Congé' }}
                             </td>
                             <td>{{ $leave->start_date->format('d/m/Y') }}</td>
                             <td>{{ $leave->end_date->format('d/m/Y') }}</td>

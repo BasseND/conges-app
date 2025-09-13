@@ -120,56 +120,20 @@
                             <x-input-label for="type" :value="__('Type de congé')" class="sr-only" />
                             <select id="type" name="type" class="block w-full rounded-lg border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-400 dark:focus:ring-blue-400 transition-colors duration-200" required>
                                 <option value="">Sélectionner un type de congé</option>
-                                
-                                <!-- Types de congés depuis LeaveBalance -->
+                                <!-- Types de congés par nom système -->
                                 @php
-                                    $leaveBalances = \App\Models\LeaveBalance::where('company_id', auth()->user()->company_id)
-                                        ->orderBy('description')
+                                    $systemLeaveTypes = \App\Models\SpecialLeaveType::where('is_active', true)
+                                        ->whereNotNull('system_name')
+                                        ->orderBy('name')
                                         ->get();
                                 @endphp
-                                @if($leaveBalances->count() > 0)
-                                    <optgroup label="Types de congés disponibles">
-                                        @foreach($leaveBalances as $balance)
-                                            <option value="balance_{{ $balance->id }}" {{ old('type') == 'balance_'.$balance->id ? 'selected' : '' }}>
-                                                {{ $balance->description }}
-                                                @if($balance->annual_leave_days > 0)
-                                                    ({{ $balance->annual_leave_days }} jour{{ $balance->annual_leave_days > 1 ? 's' : '' }})
-                                                @elseif($balance->maternity_leave_days > 0)
-                                                    ({{ $balance->maternity_leave_days }} jour{{ $balance->maternity_leave_days > 1 ? 's' : '' }})
-                                                @elseif($balance->paternity_leave_days > 0)
-                                                    ({{ $balance->paternity_leave_days }} jour{{ $balance->paternity_leave_days > 1 ? 's' : '' }})
-                                                @elseif($balance->special_leave_days > 0)
-                                                    ({{ $balance->special_leave_days }} jour{{ $balance->special_leave_days > 1 ? 's' : '' }})
-                                                @endif
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
-                                @endif
-                                
-                                <!-- Legacy: Types de congés standards (pour compatibilité) -->
-                                {{-- <optgroup label="Congés standards (legacy)">
-                                    <option value="annual" {{ old('type') == 'annual' ? 'selected' : '' }}>Congé annuel (legacy)</option>
-                                    <option value="sick" {{ old('type') == 'sick' ? 'selected' : '' }}>Congé maladie (legacy)</option>
-                                     @if(Auth::check())
-                                        @if(auth()->user()->gender === 'F')
-                                        <option value="maternity" {{ old('type') == 'maternity' ? 'selected' : '' }}>Congé maternité (legacy)</option>
-                                        @else
-                                        <option value="paternity" {{ old('type') == 'paternity' ? 'selected' : '' }}>Congé paternité (legacy)</option>
-                                        @endif
-                                    @endif
-                                </optgroup> --}}
-                                
-                                <!-- Types de congés spéciaux -->
-                                @php
-                                    $specialLeaveTypes = \App\Models\SpecialLeaveType::where('is_active', true)->orderBy('name')->get();
-                                @endphp
-                                @if($specialLeaveTypes->count() > 0)
-                                    <optgroup label="Congés spéciaux">
-                                        @foreach($specialLeaveTypes as $specialType)
-                                            <option value="special_{{ $specialType->system_name }}" {{ old('type') == 'special_'.$specialType->system_name ? 'selected' : '' }}>
-                                                {{ $specialType->name }} 
-                                                @if($specialType->duration_days)
-                                                    ({{ $specialType->duration_days }} jour{{ $specialType->duration_days > 1 ? 's' : '' }})
+                                @if($systemLeaveTypes->count() > 0)
+                                    <optgroup label="Congés système">
+                                        @foreach($systemLeaveTypes as $systemType)
+                                            <option value="system_{{ $systemType->system_name }}" {{ old('type') == 'system_'.$systemType->system_name ? 'selected' : '' }}>
+                                                {{ $systemType->name }} 
+                                                @if($systemType->duration_days)
+                                                    ({{ $systemType->duration_days }} jour{{ $systemType->duration_days > 1 ? 's' : '' }})
                                                 @endif
                                             </option>
                                         @endforeach

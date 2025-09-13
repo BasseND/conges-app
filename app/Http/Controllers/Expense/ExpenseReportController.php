@@ -45,7 +45,7 @@ class ExpenseReportController extends Controller
 
         $expenseReports = $query->orderBy('created_at', 'desc')
             ->paginate(10)
-            ->withQueryString(); // Garde les paramètres de filtrage dans les liens de pagination
+            ->appends(request()->query()); // Garde les paramètres de filtrage dans les liens de pagination
 
         return view('expenses.reports.index', compact('expenseReports'));
     }

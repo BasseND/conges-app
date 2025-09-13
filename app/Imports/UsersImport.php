@@ -4,7 +4,6 @@ namespace App\Imports;
 
 use App\Models\User;
 use App\Models\Department;
-use App\Models\LeaveBalance;
 use App\Events\UserCreated;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;

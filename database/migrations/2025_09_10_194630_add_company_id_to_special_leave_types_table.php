@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('leave_balances', function (Blueprint $table) {
-            $table->dropColumn('sick_leave_days');
+        Schema::table('special_leave_types', function (Blueprint $table) {
+            $table->foreignId('company_id')->nullable()->after('id')->constrained('companies')->onDelete('cascade');
         });
     }
 
@@ -21,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('leave_balances', function (Blueprint $table) {
-            $table->integer('sick_leave_days')->default(0)->after('annual_leave_days');
+        Schema::table('special_leave_types', function (Blueprint $table) {
+            $table->dropForeign(['company_id']);
+            $table->dropColumn('company_id');
         });
     }
 };

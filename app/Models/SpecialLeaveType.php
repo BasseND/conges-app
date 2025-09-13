@@ -15,7 +15,8 @@ class SpecialLeaveType extends Model
         'duration_days',
         'seniority_months',
         'description',
-        'is_active'
+        'is_active',
+        'company_id'
     ];
 
     protected $casts = [
@@ -127,5 +128,13 @@ class SpecialLeaveType extends Model
         
         $monthsWorked = $user->hired_at->diffInMonths(now());
         return $monthsWorked >= $this->seniority_months;
+    }
+
+    /**
+     * Get the company that owns the special leave type.
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }

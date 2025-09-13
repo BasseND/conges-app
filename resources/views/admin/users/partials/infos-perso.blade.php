@@ -274,104 +274,68 @@
     </div>
     <div class="p-6">
         @php
-            // Logique pour récupérer le solde de congés :
-            // 1. Solde personnel de l'utilisateur (si existe)
-            // 2. Solde du département (si existe)
-            // 3. Solde par défaut de l'entreprise (si existe)
-            $leaveBalance = $user->leaveBalance 
-                ?? ($user->department ? $user->department->leaveBalance : null)
-                ?? ($user->company ? $user->company->leaveBalances->where('is_default', true)->first() : null);
+            // Récupération des types de congés actifs
+            $specialLeaveTypes = \App\Models\SpecialLeaveType::where('is_active', true)->get();
         @endphp
         
-        @if($leaveBalance)
+        @if($specialLeaveTypes->count() > 0)
             @php
-                $annualUsedDays = $user->leaves()->where('type', 'annual')->where('status', 'approved')->sum('duration');
-                $maternityUsedDays = $user->leaves()->where('type', 'maternity')->where('status', 'approved')->sum('duration');
-                $paternityUsedDays = $user->leaves()->where('type', 'paternity')->where('status', 'approved')->sum('duration');
-                $specialUsedDays = $user->leaves()->where('type', 'special')->where('status', 'approved')->sum('duration');
+                // Calcul des jours utilisés par type de congé
+                $usedDaysByType = [];
+                foreach($specialLeaveTypes as $type) {
+                    $usedDaysByType[$type->system_name] = $user->leaves()
+                        ->whereHas('specialLeaveType', function($q) use ($type) {
+                            $q->where('system_name', $type->system_name);
+                        })
+                        ->where('status', 'approved')
+                        ->sum('duration');
+                }
             @endphp
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Congés annuels -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Annuels</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ max(0, $leaveBalance->annual_leave_days - $annualUsedDays) }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">restants / {{ $leaveBalance->annual_leave_days }}</p>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Congés de maternité -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Maternité</p>
-                            <p class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ max(0, $leaveBalance->maternity_leave_days - $maternityUsedDays) }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">restants / {{ $leaveBalance->maternity_leave_days }}</p>
-                        </div>
-                        <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Congés de paternité -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Paternité</p>
-                            <p class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{{ max(0, $leaveBalance->paternity_leave_days - $paternityUsedDays) }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">restants / {{ $leaveBalance->paternity_leave_days }}</p>
-                        </div>
-                        <div class="w-12 h-12 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
+                @foreach($specialLeaveTypes as $leaveType)
+                    @php
+                        $usedDays = $usedDaysByType[$leaveType->system_name] ?? 0;
+                        $remainingDays = max(0, $leaveType->duration_days - $usedDays);
+                        
+                        // Couleurs selon le type
+                        $colorMap = [
+                            'annual' => ['bg' => 'bg-blue-100 dark:bg-blue-900', 'text' => 'text-blue-600 dark:text-blue-400'],
+                            'sick' => ['bg' => 'bg-red-100 dark:bg-red-900', 'text' => 'text-red-600 dark:text-red-400'],
+                            'maternity' => ['bg' => 'bg-pink-100 dark:bg-pink-900', 'text' => 'text-pink-600 dark:text-pink-400'],
+                            'paternity' => ['bg' => 'bg-cyan-100 dark:bg-cyan-900', 'text' => 'text-cyan-600 dark:text-cyan-400']
+                        ];
+                        
+                        $colors = $colorMap[$leaveType->system_name] ?? ['bg' => 'bg-purple-100 dark:bg-purple-900', 'text' => 'text-purple-600 dark:text-purple-400'];
+                    @endphp
+                    
+                    <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{{ $leaveType->name }}</p>
+                                <p class="text-2xl font-bold {{ $colors['text'] }}">{{ $remainingDays }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">restants / {{ $leaveType->duration_days }}</p>
+                            </div>
+                            <div class="w-12 h-12 {{ $colors['bg'] }} rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 {{ $colors['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Congés spéciaux -->
-                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Spéciaux</p>
-                            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ max(0, $leaveBalance->special_leave_days - $specialUsedDays) }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">restants / {{ $leaveBalance->special_leave_days }}</p>
-                        </div>
-                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            
-            @if($leaveBalance->description)
-                <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $leaveBalance->description }}</p>
-                </div>
-            @endif
         @else
-            @if($user->company && $user->company->defaultLeaveBalance())
+            {{-- Code LeaveBalance supprimé - remplacé par SpecialLeaveType --}}
+            {{-- @if($user->company && $user->company->defaultLeaveBalance()) --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Congés annuels (défaut) -->
+                <!-- Affichage basé sur les attributs du modèle User utilisant SpecialLeaveType -->
                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Annuels</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->company->defaultLeaveBalance()->annual_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours (défaut)</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $user->annual_leave_days }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">jours</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,8 +349,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Maternité</p>
-                            <p class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ $user->company->defaultLeaveBalance()->maternity_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours (défaut)</p>
+                            <p class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ $user->maternity_leave_days }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">jours</p>
                         </div>
                         <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,8 +364,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Paternité</p>
-                            <p class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{{ $user->company->defaultLeaveBalance()->paternity_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours (défaut)</p>
+                            <p class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{{ $user->paternity_leave_days }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">jours</p>
                         </div>
                         <div class="w-12 h-12 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -415,8 +379,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Spéciaux</p>
-                            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $user->company->defaultLeaveBalance()->special_leave_days }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">jours (défaut)</p>
+                            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">Voir types spéciaux</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">selon entreprise</p>
                         </div>
                         <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -479,7 +443,7 @@
                                 @endif
                             </div>
                             <div>
-                                <p class="font-medium text-gray-900 dark:text-white">{{ ucfirst($leave->type) }}</p>
+                                <div class="font-medium text-gray-900 dark:text-white"><x-leave-type-badge :leave="$leave" :specialLeaveType="$leave->specialLeaveType" /></div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ $leave->start_date->format('d/m/Y') }} - {{ $leave->end_date->format('d/m/Y') }}</p>
                             </div>
                         </div>

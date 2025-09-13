@@ -36,42 +36,46 @@ class SpecialLeaveTypeController extends Controller
      */
     public function store(Request $request)
     {
+        // Récupérer automatiquement l'ID de l'entreprise
+        $company = \App\Models\Company::first();
+        if (!$company) {
+            return redirect()->back()->withErrors(['company' => 'Aucune entreprise configurée dans le système.']);
+        }
+
+        // Vérifier l'unicité du nom manuellement
+        $existingType = SpecialLeaveType::where('name', $request->name)
+                                       ->where('company_id', $company->id)
+                                       ->first();
+        
+        if ($existingType) {
+            return redirect()->back()
+                           ->withErrors(['name' => 'Un type de congé avec ce nom existe déjà dans votre entreprise.'])
+                           ->withInput();
+        }
+
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => 'required|string|max:255',
             'duration_days' => 'required|integer|min:0|max:365',
-            'company_id' => 'required|exists:companies,id',
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
         ], [
-            'name.required' => 'Le nom du solde de congé est requis.',
+            'name.required' => 'Le nom du type de congé est requis.',
             'duration_days.required' => 'Le nombre de jours est requis.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
-            'company_id.required' => 'L\'entreprise est requise.',
-            'company_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
             'seniority_months.min' => 'La condition d\'ancienneté doit être positive ou nulle.',
             'seniority_months.max' => 'La condition d\'ancienneté ne peut pas dépasser 120 mois (10 ans).'
         ]);
 
+        $validated['company_id'] = $company->id;
         $validated['is_active'] = $request->has('is_active');
+        $validated['seniority_months'] = $validated['seniority_months'] ?? 0;
 
-        // Créer un solde de congé au lieu d'un type de congé spécial
-        $leaveBalanceData = [
-            'company_id' => $validated['company_id'],
-            'description' => $validated['name'] . ' - ' . ($validated['description'] ?? ''),
-            'is_default' => false,
-            // Par défaut, on crée un congé spécial
-            'annual_leave_days' => 0,
-            'maternity_leave_days' => 0,
-            'paternity_leave_days' => 0,
-            'special_leave_days' => $validated['duration_days']
-        ];
-
-        \App\Models\LeaveBalance::create($leaveBalanceData);
+        SpecialLeaveType::create($validated);
 
         return redirect()->route('admin.company.show')
-            ->with('success', 'Solde de congé créé avec succès.');
+            ->with('success', 'Type de congé spécial créé avec succès.');
     }
 
     /**
@@ -79,43 +83,8 @@ class SpecialLeaveTypeController extends Controller
      */
     public function show($id)
     {
-        // Récupérer le type de congé spécial ou le solde de congé
-        $specialLeaveType = SpecialLeaveType::find($id);
-        
-        if ($specialLeaveType) {
-            $specialLeaveType->load('leaves.user');
-            return view('admin.special-leave-types.show', compact('specialLeaveType'));
-        }
-        
-        // Si ce n'est pas un SpecialLeaveType, essayer de trouver un LeaveBalance
-        $leaveBalance = \App\Models\LeaveBalance::find($id);
-        
-        if (!$leaveBalance) {
-            abort(404, 'Type de congé non trouvé');
-        }
-        
-        // Déterminer le type de congé principal
-        $leaveType = 'annual';
-        if ($leaveBalance->maternity_leave_days > 0) {
-            $leaveType = 'maternity';
-        } elseif ($leaveBalance->paternity_leave_days > 0) {
-            $leaveType = 'paternity';
-        } elseif ($leaveBalance->special_leave_days > 0) {
-            $leaveType = 'special';
-        }
-        
-        // Créer un objet compatible pour la vue
-        $specialLeaveType = (object) [
-            'id' => $leaveBalance->id,
-            'name' => explode(' - ', $leaveBalance->description)[0] ?? $leaveBalance->description,
-            'leave_type' => $leaveType,
-            'duration_days' => max($leaveBalance->annual_leave_days, $leaveBalance->maternity_leave_days, $leaveBalance->paternity_leave_days, $leaveBalance->special_leave_days),
-            'company_id' => $leaveBalance->company_id,
-            'description' => isset(explode(' - ', $leaveBalance->description)[1]) ? explode(' - ', $leaveBalance->description)[1] : '',
-            'is_active' => true,
-            'seniority_months' => 0,
-            'leaves' => collect([]) // Collection vide pour la compatibilité
-        ];
+        $specialLeaveType = SpecialLeaveType::findOrFail($id);
+        $specialLeaveType->load('leaves.user');
         
         return view('admin.special-leave-types.show', compact('specialLeaveType'));
     }
@@ -125,41 +94,7 @@ class SpecialLeaveTypeController extends Controller
      */
     public function edit($id)
     {
-        // Récupérer le type de congé spécial ou le solde de congé
-        $specialLeaveType = SpecialLeaveType::find($id);
-        
-        if ($specialLeaveType) {
-            return view('admin.special-leave-types.edit', compact('specialLeaveType'));
-        }
-        
-        // Si ce n'est pas un SpecialLeaveType, essayer de trouver un LeaveBalance
-        $leaveBalance = \App\Models\LeaveBalance::find($id);
-        
-        if (!$leaveBalance) {
-            abort(404, 'Type de congé non trouvé');
-        }
-        
-        // Déterminer le type de congé principal
-        $leaveType = 'annual';
-        if ($leaveBalance->maternity_leave_days > 0) {
-            $leaveType = 'maternity';
-        } elseif ($leaveBalance->paternity_leave_days > 0) {
-            $leaveType = 'paternity';
-        } elseif ($leaveBalance->special_leave_days > 0) {
-            $leaveType = 'special';
-        }
-        
-        // Créer un objet compatible pour la vue
-        $specialLeaveType = (object) [
-            'id' => $leaveBalance->id,
-            'name' => explode(' - ', $leaveBalance->description)[0] ?? $leaveBalance->description,
-            'leave_type' => $leaveType,
-            'duration_days' => max($leaveBalance->annual_leave_days, $leaveBalance->maternity_leave_days, $leaveBalance->paternity_leave_days, $leaveBalance->special_leave_days),
-            'company_id' => $leaveBalance->company_id,
-            'description' => isset(explode(' - ', $leaveBalance->description)[1]) ? explode(' - ', $leaveBalance->description)[1] : '',
-            'is_active' => true,
-            'seniority_months' => 0
-        ];
+        $specialLeaveType = SpecialLeaveType::findOrFail($id);
         
         return view('admin.special-leave-types.edit', compact('specialLeaveType'));
     }
@@ -169,74 +104,48 @@ class SpecialLeaveTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Récupérer automatiquement l'ID de l'entreprise
+        $company = \App\Models\Company::first();
+        if (!$company) {
+            return redirect()->back()->withErrors(['company' => 'Aucune entreprise configurée dans le système.']);
+        }
+
+        // Vérifier l'unicité du nom manuellement (en excluant l'enregistrement actuel)
+        $existingType = SpecialLeaveType::where('name', $request->name)
+                                       ->where('company_id', $company->id)
+                                       ->where('id', '!=', $id)
+                                       ->first();
+        
+        if ($existingType) {
+            return redirect()->back()
+                           ->withErrors(['name' => 'Un type de congé avec ce nom existe déjà dans votre entreprise.'])
+                           ->withInput();
+        }
+
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => 'required|string|max:255',
             'duration_days' => 'required|integer|min:0|max:365',
-            'company_id' => 'required|exists:companies,id',
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
         ], [
-            'name.required' => 'Le nom du solde de congé est requis.',
+            'name.required' => 'Le nom du type de congé est requis.',
             'duration_days.required' => 'Le nombre de jours est requis.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
-            'company_id.required' => 'L\'entreprise est requise.',
-            'company_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
             'seniority_months.min' => 'La condition d\'ancienneté doit être positive ou nulle.',
             'seniority_months.max' => 'La condition d\'ancienneté ne peut pas dépasser 120 mois (10 ans).'
         ]);
 
+        $validated['company_id'] = $company->id;
         $validated['is_active'] = $request->has('is_active');
+        $validated['seniority_months'] = $validated['seniority_months'] ?? 0;
 
-        // Vérifier si c'est un SpecialLeaveType
-        $specialLeaveType = SpecialLeaveType::find($id);
+        $specialLeaveType = SpecialLeaveType::findOrFail($id);
+        $specialLeaveType->update($validated);
         
-        if ($specialLeaveType) {
-            // Mettre à jour le type de congé spécial
-            $specialLeaveType->update([
-                'name' => $validated['name'],
-                'duration_days' => $validated['duration_days'],
-                'seniority_months' => $validated['seniority_months'] ?? 0,
-                'description' => $validated['description'],
-                'is_active' => $validated['is_active']
-            ]);
-            
-            return redirect()->route('admin.special-leave-types.show', $specialLeaveType->id)
-                ->with('success', 'Type de congé spécial mis à jour avec succès.');
-        }
-        
-        // Si ce n'est pas un SpecialLeaveType, essayer de trouver un LeaveBalance
-        $leaveBalance = \App\Models\LeaveBalance::find($id);
-        
-        if (!$leaveBalance) {
-            abort(404, 'Type de congé non trouvé');
-        }
-
-        // Préparer les données de mise à jour
-        $leaveBalanceData = [
-            'company_id' => $validated['company_id'],
-            'description' => $validated['name'] . ' - ' . ($validated['description'] ?? ''),
-            'is_default' => $leaveBalance->is_default,
-            // Conserver le type de congé existant en mettant à jour uniquement la durée
-            'annual_leave_days' => $leaveBalance->annual_leave_days > 0 ? $validated['duration_days'] : 0,
-            'maternity_leave_days' => $leaveBalance->maternity_leave_days > 0 ? $validated['duration_days'] : 0,
-            'paternity_leave_days' => $leaveBalance->paternity_leave_days > 0 ? $validated['duration_days'] : 0,
-            'special_leave_days' => $leaveBalance->special_leave_days > 0 ? $validated['duration_days'] : 0
-        ];
-        
-        // Si aucun type n'est défini, on utilise le type spécial par défaut
-         if ($leaveBalanceData['annual_leave_days'] == 0 && 
-             $leaveBalanceData['maternity_leave_days'] == 0 && 
-             $leaveBalanceData['paternity_leave_days'] == 0 && 
-             $leaveBalanceData['special_leave_days'] == 0) {
-             $leaveBalanceData['special_leave_days'] = $validated['duration_days'];
-         }
-
-        $leaveBalance->update($leaveBalanceData);
-
-        return redirect()->route('admin.special-leave-types.show', $leaveBalance->id)
-            ->with('success', 'Solde de congé mis à jour avec succès.');
+        return redirect()->route('admin.special-leave-types.show', $specialLeaveType->id)
+            ->with('success', 'Type de congé spécial mis à jour avec succès.');
     }
 
     /**
@@ -244,50 +153,23 @@ class SpecialLeaveTypeController extends Controller
      */
     public function destroy($id)
     {
-        // Vérifier si c'est un SpecialLeaveType
-        $specialLeaveType = SpecialLeaveType::find($id);
+        $specialLeaveType = SpecialLeaveType::findOrFail($id);
         
-        if ($specialLeaveType) {
-            // Vérifier si des congés sont associés à ce type
-            if ($specialLeaveType->leaves()->count() > 0) {
-                return redirect()->route('admin.special-leave-types.index')
-                    ->with('error', 'Impossible de supprimer ce type de congé car des demandes y sont associées.');
-            }
-            
-            // Vérifier si c'est un type de congé par défaut
-            if (in_array($specialLeaveType->system_name, ['conge_annuel', 'conge_maternite', 'conge_paternite', 'conge_maladie'])) {
-                return redirect()->route('admin.special-leave-types.index')
-                    ->with('error', 'Impossible de supprimer un type de congé par défaut.');
-            }
-            
-            $specialLeaveType->delete();
-            
+        // Vérifier si des congés sont associés à ce type
+        if ($specialLeaveType->leaves()->count() > 0) {
             return redirect()->route('admin.special-leave-types.index')
-                ->with('success', 'Type de congé spécial supprimé avec succès.');
+                ->with('error', 'Impossible de supprimer ce type de congé car des demandes y sont associées.');
         }
         
-        // Si ce n'est pas un SpecialLeaveType, essayer de trouver un LeaveBalance
-        $leaveBalance = \App\Models\LeaveBalance::find($id);
-        
-        if (!$leaveBalance) {
-            abort(404, 'Type de congé non trouvé');
-        }
-        
-        // Vérifier si des utilisateurs sont associés à ce solde
-        if ($leaveBalance->users()->count() > 0) {
+        // Vérifier si c'est un type de congé par défaut
+        if (isset($specialLeaveType->system_name) && in_array($specialLeaveType->system_name, ['conge_annuel', 'conge_maternite', 'conge_paternite', 'conge_maladie'])) {
             return redirect()->route('admin.special-leave-types.index')
-                ->with('error', 'Impossible de supprimer ce solde de congé car des utilisateurs y sont associés.');
+                ->with('error', 'Impossible de supprimer un type de congé par défaut.');
         }
         
-        // Vérifier si c'est un solde par défaut
-        if ($leaveBalance->is_default) {
-            return redirect()->route('admin.special-leave-types.index')
-                ->with('error', 'Impossible de supprimer un solde de congé par défaut.');
-        }
-
-        $leaveBalance->delete();
-
-        return redirect()->route('admin.special-leave-types.index')
-            ->with('success', 'Solde de congé supprimé avec succès.');
+        $specialLeaveType->delete();
+        
+        return redirect()->route('admin.company.show')
+            ->with('success', 'Type de congé spécial supprimé avec succès.');
     }
 }

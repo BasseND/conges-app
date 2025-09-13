@@ -117,9 +117,9 @@
                         <div>
                             <x-input-label for="type" :value="__('Type de congé')" class="sr-only" />
                             <select id="type" name="type" class="block w-full rounded-lg border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-400 dark:focus:ring-blue-400 transition-colors duration-200">
-                                @foreach(App\Models\Leave::TYPES as $value => $label)
-                                    <option value="{{ $value }}" {{ old('type', $leave->type) === $value ? 'selected' : '' }}>
-                                        {{ $label }}
+                                @foreach(\App\Models\SpecialLeaveType::where('is_active', true)->get() as $specialType)
+                                    <option value="system_{{ $specialType->system_name }}" {{ old('special_leave_type_id', $leave->special_leave_type_id) == $specialType->id ? 'selected' : '' }}>
+                                        {{ $specialType->name }}
                                     </option>
                                 @endforeach
                             </select>

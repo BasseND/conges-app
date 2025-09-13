@@ -116,38 +116,7 @@
                             </p>
                         </div>
 
-                        <!-- Entreprise (si admin système) -->
-                        @if(auth()->user()->hasRole('admin'))
-                        <div class="space-y-2">
-                            <label for="company_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                {{ __('Entreprise') }}
-                                <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                </div>
-                                <select name="company_id" 
-                                        id="company_id" 
-                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                        required>
-                                    <option value="">{{ __('Sélectionner une entreprise') }}</option>
-                                    @foreach(\App\Models\Company::all() as $company)
-                                        <option value="{{ $company->id }}" {{ old('company_id', auth()->user()->company_id) == $company->id ? 'selected' : '' }}>
-                                            {{ $company->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ __('Entreprise pour laquelle ce solde de congé sera défini') }}
-                            </p>
-                        </div>
-                        @else
-                        <input type="hidden" name="company_id" value="{{ auth()->user()->company_id }}">
-                        @endif
+
 
                         <!-- Condition d'ancienneté -->
                         <div class="space-y-2">

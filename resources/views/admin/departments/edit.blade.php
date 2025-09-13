@@ -129,15 +129,8 @@
                                 <select id="leave_balance_id" name="leave_balance_id"
                                         class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200">
                                     <option value="">Utiliser le solde par défaut de l'entreprise</option>
-                                    @foreach($leaveBalances as $leaveBalance)
-                                        <option value="{{ $leaveBalance->id }}" {{ old('leave_balance_id', $department->leave_balance_id) == $leaveBalance->id ? 'selected' : '' }}>
-                                            {{ $leaveBalance->description }} 
-                                            @if($leaveBalance->is_default)
-                                                (Par défaut)
-                                            @endif
-                                            - {{ $leaveBalance->annual_leave_days }} jours/an
-                                        </option>
-                                    @endforeach
+                                    {{-- Section LeaveBalance supprimée - remplacée par SpecialLeaveType --}}
+                                    <option value="">Types de congés gérés via SpecialLeaveType</option>
                                 </select>
                                 <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

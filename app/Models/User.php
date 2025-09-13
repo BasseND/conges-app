@@ -123,13 +123,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Company::class);
     }
 
-    /**
-     * Get the leave balance that the user belongs to.
-     */
-    public function leaveBalance()
-    {
-        return $this->belongsTo(LeaveBalance::class);
-    }
+    // Relation LeaveBalance supprimée - remplacée par SpecialLeaveType
 
     /**
      * Vérifie si l'utilisateur est un administrateur
@@ -418,19 +412,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getAnnualLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->annual_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->annual_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->annual_leave_days;
+        // Utiliser SpecialLeaveType pour les congés annuels
+        $annualLeaveType = $this->company->specialLeaveTypes()
+            ->where('system_name', 'annual')
+            ->first();
+            
+        if ($annualLeaveType) {
+            return $annualLeaveType->duration_days;
         }
         
         // Valeur par défaut
@@ -446,19 +434,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getMaternityLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->maternity_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->maternity_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->maternity_leave_days;
+        // Utiliser SpecialLeaveType pour les congés maternité
+        $maternityLeaveType = $this->company->specialLeaveTypes()
+            ->where('system_name', 'maternity')
+            ->first();
+            
+        if ($maternityLeaveType) {
+            return $maternityLeaveType->duration_days;
         }
         
         // Valeur par défaut (16 semaines = 112 jours)
@@ -472,49 +454,34 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getPaternityLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->paternity_leave_days;
+        // Utiliser SpecialLeaveType pour les congés paternité
+        $paternityLeaveType = $this->company->specialLeaveTypes()
+            ->where('system_name', 'paternity')
+            ->first();
+            
+        if ($paternityLeaveType) {
+            return $paternityLeaveType->duration_days;
         }
         
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->paternity_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->paternity_leave_days;
-        }
+        // Code LeaveBalance supprimé - remplacé par SpecialLeaveType
+        // if ($this->company && $this->company->defaultLeaveBalance()) {
+        //     return $this->company->defaultLeaveBalance()->paternity_leave_days;
+        // }
         
         // Valeur par défaut (25 jours)
         return 25;
     }
 
     /**
-     * Get the special leave days for the user (from leave balance)
+     * Get the special leave days for the user (from SpecialLeaveType)
      * 
-     * @return int
+     * @return string
      */
     public function getSpecialLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->special_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->special_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->special_leave_days;
-        }
-        
-        // Valeur par défaut
-        return 5;
+        // Code LeaveBalance supprimé - remplacé par SpecialLeaveType
+        // Les congés spéciaux sont maintenant gérés via SpecialLeaveType
+        return "Voir types spéciaux";
     }
 
     /**

@@ -28,7 +28,7 @@ class NotificationService
                 createdBy: $leave->user_id,
                 data: [
                     'leave_id' => $leave->id,
-                    'leave_type' => $leave->type,
+                    'leave_type' => $leave->specialLeaveType ? $leave->specialLeaveType->system_name : 'congé',
                     'duration' => $leave->duration,
                     'url' => route('leaves.show', $leave)
                 ],
@@ -51,7 +51,7 @@ class NotificationService
             createdBy: $leave->approved_by,
             data: [
                 'leave_id' => $leave->id,
-                'leave_type' => $leave->type,
+                'leave_type' => $leave->specialLeaveType ? $leave->specialLeaveType->system_name : 'congé',
                 'duration' => $leave->duration,
                 'url' => route('leaves.show', $leave)
             ],
@@ -73,7 +73,7 @@ class NotificationService
             createdBy: $leave->approved_by,
             data: [
                 'leave_id' => $leave->id,
-                'leave_type' => $leave->type,
+                'leave_type' => $leave->specialLeaveType ? $leave->specialLeaveType->system_name : 'congé',
                 'duration' => $leave->duration,
                 'rejection_reason' => $leave->rejection_reason,
                 'url' => route('leaves.show', $leave)

@@ -123,19 +123,10 @@
                                     </svg>
                                     <span>{{ __('Solde de congés par défaut') }}</span>
                                 </label>
-                                <select id="leave_balance_id" name="leave_balance_id"
-                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200">
-                                    <option value="">Utiliser le solde par défaut de l'entreprise</option>
-                                    @foreach($leaveBalances as $leaveBalance)
-                                        <option value="{{ $leaveBalance->id }}" {{ old('leave_balance_id') == $leaveBalance->id ? 'selected' : '' }}>
-                                            {{ $leaveBalance->description }} 
-                                            @if($leaveBalance->is_default)
-                                                (Par défaut)
-                                            @endif
-                                            - {{ $leaveBalance->annual_leave_days }} jours/an
-                                        </option>
-                                    @endforeach
-                                </select>
+                                {{-- Section LeaveBalance supprimée - remplacée par SpecialLeaveType --}}
+                                <div class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-600">
+                                    <p class="text-gray-600 dark:text-gray-300">Les types de congés sont maintenant gérés via les Types de Congés Spéciaux de l'entreprise.</p>
+                                </div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>

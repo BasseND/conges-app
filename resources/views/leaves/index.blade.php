@@ -427,31 +427,31 @@
                                         <!-- Type -->
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             @php
-                                                // Nouveau système avec LeaveBalance
-                                                if (str_starts_with($leave->type, 'balance_') && $leave->leaveBalance) {
-                                                    $config = [
-                                                        'bg' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-                                                        'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-                                                        'label' => $leave->leaveBalance->description
-                                                    ];
-                                                } else {
-                                                    // Legacy: Types hardcodés
-                                                    $typeConfig = [
-                                                        'annual' => ['bg' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'label' => 'Congé annuel (legacy)'],
-                                                        'sick' => ['bg' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', 'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', 'label' => 'Congé maladie (legacy)'],
-                                                        'maternity' => ['bg' => 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z', 'label' => 'Congé maternité (legacy)'],
-                                                        'paternity' => ['bg' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'label' => 'Congé paternité (legacy)']
+                                                // Système basé sur SpecialLeaveType
+                                                if ($leave->specialLeaveType) {
+                                                    // Couleurs selon le type de congé
+                                                    $colorMap = [
+                                                        'annual' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+                                                        'sick' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+                                                        'maternity' => 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
+                                                        'paternity' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300'
                                                     ];
                                                     
-                                                    if (str_starts_with($leave->type, 'special_') && $leave->specialLeaveType) {
-                                                        $config = [
-                                                            'bg' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
-                                                            'icon' => 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
-                                                            'label' => $leave->specialLeaveType->name . ' (legacy)'
-                                                        ];
-                                                    } else {
-                                                        $config = $typeConfig[$leave->type] ?? ['bg' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300', 'icon' => 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z', 'label' => 'Autre'];
-                                                    }
+                                                    $systemName = $leave->specialLeaveType->system_name;
+                                                    $bgColor = $colorMap[$systemName] ?? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300';
+                                                    
+                                                    $config = [
+                                                        'bg' => $bgColor,
+                                                        'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+                                                        'label' => $leave->specialLeaveType->name
+                                                    ];
+                                                } else {
+                                                    // Fallback pour les anciens types
+                                                    $config = [
+                                                        'bg' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+                                                        'icon' => 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z',
+                                                        'label' => 'Type inconnu'
+                                                    ];
                                                 }
                                              @endphp
                                              <div class="flex items-center space-x-1 sm:space-x-2">

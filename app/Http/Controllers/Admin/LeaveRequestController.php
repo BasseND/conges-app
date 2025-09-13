@@ -40,7 +40,7 @@ class LeaveRequestController extends Controller
 
         // Mettre à jour le solde de congés
         $user = $leave->user;
-        if ($leave->type === 'annual') {
+        if ($leave->specialLeaveType && in_array($leave->specialLeaveType->system_name, ['annual', 'conge_annuel', 'congés_annuels'])) {
             $user->annual_leave_days -= $leave->duration;
         }
         $user->save();
