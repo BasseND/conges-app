@@ -1,6 +1,7 @@
-@props(['type', 'style' => 'default', 'specialLeaveType' => null])
+@props(['type' => null, 'style' => 'default', 'specialLeaveType' => null])
 
 @php
+$type = $type ?? ($specialLeaveType ? $specialLeaveType->system_name : 'default');
 $classes = match($style) {
     'gradient' => match($type) {
         'annual', 'conge_annuel', 'congés_annuels' => 'bg-gradient-to-r from-blue-500 to-blue-600 text-white',

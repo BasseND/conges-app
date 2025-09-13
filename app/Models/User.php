@@ -413,12 +413,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAnnualLeaveDaysAttribute()
     {
         // Utiliser SpecialLeaveType pour les congés annuels
-        $annualLeaveType = $this->company->specialLeaveTypes()
-            ->where('system_name', 'annual')
-            ->first();
-            
-        if ($annualLeaveType) {
-            return $annualLeaveType->duration_days;
+        if ($this->company) {
+            $annualLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'annual')
+                ->first();
+                
+            if ($annualLeaveType) {
+                return $annualLeaveType->duration_days;
+            }
         }
         
         // Valeur par défaut
@@ -435,12 +437,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getMaternityLeaveDaysAttribute()
     {
         // Utiliser SpecialLeaveType pour les congés maternité
-        $maternityLeaveType = $this->company->specialLeaveTypes()
-            ->where('system_name', 'maternity')
-            ->first();
-            
-        if ($maternityLeaveType) {
-            return $maternityLeaveType->duration_days;
+        if ($this->company) {
+            $maternityLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'maternity')
+                ->first();
+                
+            if ($maternityLeaveType) {
+                return $maternityLeaveType->duration_days;
+            }
         }
         
         // Valeur par défaut (16 semaines = 112 jours)
@@ -455,12 +459,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getPaternityLeaveDaysAttribute()
     {
         // Utiliser SpecialLeaveType pour les congés paternité
-        $paternityLeaveType = $this->company->specialLeaveTypes()
-            ->where('system_name', 'paternity')
-            ->first();
-            
-        if ($paternityLeaveType) {
-            return $paternityLeaveType->duration_days;
+        if ($this->company) {
+            $paternityLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'paternity')
+                ->first();
+                
+            if ($paternityLeaveType) {
+                return $paternityLeaveType->duration_days;
+            }
         }
         
         // Code LeaveBalance supprimé - remplacé par SpecialLeaveType

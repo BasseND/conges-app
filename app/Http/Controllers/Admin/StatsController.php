@@ -49,6 +49,66 @@ class StatsController extends Controller
                 return $item;
             });
 
+        // Statistiques mensuelles des notes de frais
+        $expenseStats = ExpenseReport::select(
+                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                DB::raw('SUM(total_amount) as total_amount')
+            )
+            ->where('status', '!=', ExpenseReport::STATUS_DRAFT)
+            ->where('created_at', '>=', Carbon::now()->subMonths(12))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                $date = Carbon::createFromFormat('Y-m', $item->month);
+                $item->month = $date->format('M');
+                return $item;
+            });
+
+        // Créer un tableau complet pour les 12 derniers mois
+        $expenseMonthlyStats = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $monthKey = $month->format('Y-m');
+            $monthLabel = $month->format('M');
+            
+            $found = $expenseStats->firstWhere('month', $monthLabel);
+            $expenseMonthlyStats[] = [
+                'month' => $monthLabel,
+                'total' => $found ? (float) $found->total_amount : 0
+            ];
+        }
+
+        // Statistiques mensuelles des accomptes
+        $salaryAdvanceStats = SalaryAdvance::select(
+                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                DB::raw('SUM(amount) as total_amount')
+            )
+            ->where('status', '!=', SalaryAdvance::STATUS_PENDING)
+            ->where('created_at', '>=', Carbon::now()->subMonths(12))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                $date = Carbon::createFromFormat('Y-m', $item->month);
+                $item->month = $date->format('M');
+                return $item;
+            });
+
+        // Créer un tableau complet pour les 12 derniers mois des accomptes
+        $salaryAdvanceMonthlyStats = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $monthKey = $month->format('Y-m');
+            $monthLabel = $month->format('M');
+            
+            $found = $salaryAdvanceStats->firstWhere('month', $monthLabel);
+            $salaryAdvanceMonthlyStats[] = [
+                'month' => $monthLabel,
+                'total' => $found ? (float) $found->total_amount : 0
+            ];
+        }
+
         // Statistiques générales
         $stats = [
             'pending' => Leave::where('status', 'pending')->count(),
@@ -115,6 +175,8 @@ class StatsController extends Controller
         return view('admin.stats', compact(
             'departmentStats',
             'monthlyStats',
+            'expenseMonthlyStats',
+            'salaryAdvanceMonthlyStats',
             'stats',
             'recentLeaves',
             'recentExpenses',

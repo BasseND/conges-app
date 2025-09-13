@@ -870,7 +870,7 @@
                                     @if (Auth::check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'hr'))
                                     <!-- Paramètres -->
                                         <li class="item px-[43px] py-[11px]">
-                                            <a href="signin.html">
+                                            <a href="{{ route('admin.company.show') }}">
                                                 <span class="item-ico">
                                                     <svg
                                                         width="24"

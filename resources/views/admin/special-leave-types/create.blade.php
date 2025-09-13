@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                            <a href="{{ route('admin.special-leave-types.index') }}" 
+                            <a href="{{ route('admin.company.show') }}" 
                                class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-lg sm:rounded-xl font-medium sm:font-semibold text-sm sm:text-base text-white transition-colors duration-200 shadow-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
