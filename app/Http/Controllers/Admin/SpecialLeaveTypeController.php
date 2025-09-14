@@ -177,17 +177,36 @@ class SpecialLeaveTypeController extends Controller
         
         // Vérifier si des congés sont associés à ce type
         if ($specialLeaveType->leaves()->count() > 0) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossible de supprimer ce type de congé car des demandes y sont associées.'
+                ], 422);
+            }
             return redirect()->route('admin.special-leave-types.index')
                 ->with('error', 'Impossible de supprimer ce type de congé car des demandes y sont associées.');
         }
         
         // Vérifier si c'est un type de congé système
         if ($specialLeaveType->type === 'système') {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossible de supprimer un type de congé système.'
+                ], 422);
+            }
             return redirect()->route('admin.special-leave-types.index')
                 ->with('error', 'Impossible de supprimer un type de congé système.');
         }
         
         $specialLeaveType->delete();
+        
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Type de congé spécial supprimé avec succès.'
+            ]);
+        }
         
         return redirect()->route('admin.company.show')
             ->with('success', 'Type de congé spécial supprimé avec succès.');

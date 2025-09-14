@@ -342,18 +342,14 @@
                                                                         @endphp
                                                                         
                                                                         @if($canDelete)
-                                                                            <form action="{{ route('admin.special-leave-types.destroy', $type) }}" method="POST" class="inline-block" 
-                                                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de congé ?')">
-                                                                                @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="submit" 
-                                                                                        title="Supprimer"
-                                                                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-all duration-200 hover:scale-110">
-                                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                                                    </svg>
-                                                                                </button>
-                                                                            </form>
+                                                                            <button type="button" 
+                                                                                    title="Supprimer"
+                                                                                    onclick="openDeleteModal('{{ route('admin.special-leave-types.destroy', $type) }}', 'Êtes-vous sûr de vouloir supprimer ce type de congé ? Cette action ne peut pas être annulée.')"
+                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-all duration-200 hover:scale-110">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                                                </svg>
+                                                                            </button>
                                                                         @else
                                                                             <button type="button" 
                                                                                     title="Type de congé système - Non supprimable"
@@ -452,5 +448,24 @@
         function showNotification(message, type = 'info') {
             window.showNotification(message, type);
         }
+        
+        // Fonction pour ouvrir le modal de suppression
+        function openDeleteModal(url, message) {
+            // Mettre à jour le message du modal
+            const modal = document.querySelector('[x-data="deleteDialog()"]');
+            if (modal) {
+                const messageElement = modal.querySelector('p');
+                if (messageElement) {
+                    messageElement.textContent = message;
+                }
+                // Déclencher l'événement pour ouvrir le modal
+                window.dispatchEvent(new CustomEvent('delete-dialog', {
+                    detail: url
+                }));
+            }
+        }
     </script>
+
+    <!-- Modal de suppression -->
+    <x-modals.delete-dialog message="" />
 </x-app-layout>
