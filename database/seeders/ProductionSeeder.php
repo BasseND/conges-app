@@ -220,6 +220,7 @@ class ProductionSeeder extends Seeder
             ['system_name' => 'conge_annuel'],
             [
                 'name' => 'Congé annuel',
+                'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 25,
                 'description' => 'Congé annuel standard pour tous les employés',
                 'is_active' => true,
@@ -231,6 +232,7 @@ class ProductionSeeder extends Seeder
             ['system_name' => 'conge_maternite'],
             [
                 'name' => 'Congé maternité',
+                'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 112, // 16 semaines
                 'description' => 'Congé maternité pour les employées enceintes',
                 'is_active' => true,
@@ -242,6 +244,7 @@ class ProductionSeeder extends Seeder
             ['system_name' => 'conge_paternite'],
             [
                 'name' => 'Congé paternité',
+                'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 28, // 4 semaines
                 'description' => 'Congé paternité pour les nouveaux pères',
                 'is_active' => true,
@@ -254,6 +257,7 @@ class ProductionSeeder extends Seeder
             ['system_name' => 'conge_maladie'],
             [
                 'name' => 'Congé maladie',
+                'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 30,
                 'description' => 'Congé maladie pour les employés malades',
                 'is_active' => true,
@@ -262,7 +266,7 @@ class ProductionSeeder extends Seeder
         
         // Créer des congés
         $statuses = ['pending', 'approved', 'rejected'];
-        $types = ['annual', 'sick', 'unpaid', 'other'];
+        $specialLeaveTypes = SpecialLeaveType::all();
         $users = User::where('role', User::ROLE_EMPLOYEE)->get();
 
         foreach ($users as $user) {
@@ -271,6 +275,7 @@ class ProductionSeeder extends Seeder
                 $startDate = Carbon::now()->subMonths(rand(0, 11))->subDays(rand(0, 28));
                 $duration = rand(1, 5);
                 $endDate = $startDate->copy()->addDays($duration - 1);
+                $specialLeaveType = $specialLeaveTypes->random();
                 
                 Leave::create([
                     'user_id' => $user->id,
@@ -278,8 +283,8 @@ class ProductionSeeder extends Seeder
                     'end_date' => $endDate,
                     'duration' => $duration,
                     'status' => $statuses[array_rand($statuses)],
-                    'type' => $types[array_rand($types)],
-                    'reason' => 'Congés ' . $types[array_rand($types)],
+                    'special_leave_type_id' => $specialLeaveType->id,
+                    'reason' => 'Congés ' . $specialLeaveType->name,
                 ]);
             }
         }

@@ -4,7 +4,7 @@
         <div class="">
            <!-- General Stats -->
             <div class="bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-5">
                    <!-- Total employés -->
                     <div class="group relative bg-gradient-to-br from-emerald-50 to-green-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-emerald-200/50 dark:border-emerald-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-green-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
@@ -37,9 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    
                      <!-- Total note de frais -->
-                    
                      <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-400/20 to-cyan-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                         <div class="relative flex items-center">
@@ -55,6 +53,22 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Total demandes d'accomptes -->
+                    <div class="group relative bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-amber-200/50 dark:border-amber-600/30 overflow-hidden">
+                      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/20 to-yellow-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                      <div class="relative flex items-center">
+                          <div class="flex-shrink-0 p-4 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl shadow-lg group-hover:shadow-amber-500/25 transition-all duration-300 group-hover:scale-105">
+                              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                              </svg>
+                          </div>
+                          <div class="ml-6 flex-1">
+                              <h3 class="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wider uppercase mb-1">Total demandes</h3>
+                              <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">{{ $stats['salary_advances_total'] }}</p>
+                     
+                          </div>
+                      </div>
+                  </div>
                     <!-- Masse salariale -->
                     <div class="group relative bg-gradient-to-br from-rose-50 to-red-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-rose-200/50 dark:border-rose-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-rose-400/20 to-red-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
@@ -92,8 +106,8 @@
                 </div>
             </div>
 
-            <!-- Section Statistiques Avances sur Salaire -->
-            <div class="bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+            <!-- Section Statistiques Avances sur Salaire : HIDDEN -->
+            <div class="bg-white dark:bg-darkblack-600 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6" style="display: none">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                     <svg class="w-6 h-6 text-amber-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
@@ -101,23 +115,6 @@
                     Demandes d'Accompte
                 </h3>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <!-- Total demandes -->
-                    <div class="group relative bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-amber-200/50 dark:border-amber-600/30 overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/20 to-yellow-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
-                        <div class="relative flex items-center">
-                            <div class="flex-shrink-0 p-4 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl shadow-lg group-hover:shadow-amber-500/25 transition-all duration-300 group-hover:scale-105">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-6 flex-1">
-                                <h3 class="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wider uppercase mb-1">Total demandes</h3>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">{{ $stats['salary_advances_total'] }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Toutes périodes</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- En attente -->
                     <div class="group relative bg-gradient-to-br from-orange-50 to-red-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-200/50 dark:border-orange-600/30 overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
@@ -172,7 +169,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
                 <!-- Actions a faire -->
                  <div class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
                     <div class="mb-8">
@@ -441,8 +437,10 @@
                     </div>
                 </div>
             </div>
+
             <!-- CONGES  -->
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
               <!-- Dernières activités congés -->
               <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
                   <div class="p-8">
@@ -553,7 +551,7 @@
                       </div>
                   </div>
               </div>
-              {{-- Tendance --}}
+              
               
               
               
@@ -702,9 +700,10 @@
                 </div>
               </div>
 
-            </div>
+           
+
            <!-- ACCOMPTES -->
-            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+           
                 <!-- Dernières demandes d'accompte -->
                 <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
                   <div class="p-8">
@@ -823,7 +822,7 @@
                           </table>
                       </div>
                   </div>
-              </div>
+                </div>
 
               {{-- Tendance Accomptes --}}
               <div class="mt-6">

@@ -61,6 +61,9 @@
                 <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-8">
                     <form action="{{ route('admin.special-leave-types.store') }}" method="POST" class="space-y-8">
                         @csrf
+                        
+                        <!-- Champ caché pour définir le type comme custom -->
+                        <input type="hidden" name="type" value="custom">
 
                         <!-- Nom du type de congé -->
                         <div class="space-y-2">

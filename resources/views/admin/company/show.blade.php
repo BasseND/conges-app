@@ -318,18 +318,27 @@
                                                                         </a>
 
                                                                         <!-- Bouton Modifier -->
-                                                                        <a href="{{ route('admin.special-leave-types.edit', $type) }}" 
-                                                                           title="Modifier"
-                                                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all duration-200 hover:scale-110">
-                                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                                            </svg>
-                                                                        </a>
+                                                                        @if($type->type !== 'système')
+                                                                            <a href="{{ route('admin.special-leave-types.edit', $type) }}" 
+                                                                               title="Modifier"
+                                                                               class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all duration-200 hover:scale-110">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                                </svg>
+                                                                            </a>
+                                                                        @else
+                                                                            <button type="button" 
+                                                                                    title="Type de congé système - Non modifiable"
+                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                                </svg>
+                                                                            </button>
+                                                                        @endif
 
                                                                         <!-- Bouton Supprimer -->
                                                                         @php
-                                                                            $defaultTypes = ['conge_annuel', 'conge_maternite', 'conge_paternite', 'conge_maladie'];
-                                                                            $canDelete = !in_array($type->system_name, $defaultTypes);
+                                                                            $canDelete = $type->type !== 'système';
                                                                         @endphp
                                                                         
                                                                         @if($canDelete)
@@ -347,7 +356,7 @@
                                                                             </form>
                                                                         @else
                                                                             <button type="button" 
-                                                                                    title="Type de congé par défaut - Non supprimable"
+                                                                                    title="Type de congé système - Non supprimable"
                                                                                     class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
                                                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -362,8 +371,6 @@
                                                 </table>
                                             </div>
                                         </div>
-
-
                                     @else
                                         <!-- État vide -->
                                         <div class="text-center py-12">

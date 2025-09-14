@@ -9,9 +9,20 @@ class SpecialLeaveType extends Model
 {
     use HasFactory;
 
+    // Types de congés spéciaux
+    const TYPE_SYSTEM = 'système';
+    const TYPE_CUSTOM = 'custom';
+
+    // Types disponibles
+    const AVAILABLE_TYPES = [
+        self::TYPE_SYSTEM,
+        self::TYPE_CUSTOM
+    ];
+
     protected $fillable = [
         'name',
         'system_name',
+        'type',
         'duration_days',
         'seniority_months',
         'description',
@@ -22,7 +33,8 @@ class SpecialLeaveType extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'duration_days' => 'integer',
-        'seniority_months' => 'integer'
+        'seniority_months' => 'integer',
+        'type' => 'string'
     ];
     
     /**
@@ -36,11 +48,23 @@ class SpecialLeaveType extends Model
             if (empty($specialLeaveType->system_name)) {
                 $specialLeaveType->system_name = static::generateSystemName($specialLeaveType->name);
             }
+            
+            // Définir le type par défaut si non spécifié
+            if (empty($specialLeaveType->type)) {
+                $specialLeaveType->type = self::TYPE_CUSTOM;
+            }
         });
         
         static::updating(function ($specialLeaveType) {
             if ($specialLeaveType->isDirty('name') && !$specialLeaveType->isDirty('system_name')) {
                 $specialLeaveType->system_name = static::generateSystemName($specialLeaveType->name);
+            }
+        });
+        
+        // Validation du type avant sauvegarde
+        static::saving(function ($specialLeaveType) {
+            if (!in_array($specialLeaveType->type, self::AVAILABLE_TYPES)) {
+                throw new \InvalidArgumentException('Le type doit être "système" ou "custom"');
             }
         });
     }
@@ -69,6 +93,38 @@ class SpecialLeaveType extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope pour les types système
+     */
+    public function scopeSystem($query)
+    {
+        return $query->where('type', self::TYPE_SYSTEM);
+    }
+
+    /**
+     * Scope pour les types custom
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('type', self::TYPE_CUSTOM);
+    }
+
+    /**
+     * Vérifier si c'est un type système
+     */
+    public function isSystem()
+    {
+        return $this->type === self::TYPE_SYSTEM;
+    }
+
+    /**
+     * Vérifier si c'est un type custom
+     */
+    public function isCustom()
+    {
+        return $this->type === self::TYPE_CUSTOM;
     }
 
     /**

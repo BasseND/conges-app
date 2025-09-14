@@ -55,12 +55,15 @@ class SpecialLeaveTypeController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'type' => 'required|string|in:système,custom',
             'duration_days' => 'required|integer|min:0|max:365',
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
         ], [
             'name.required' => 'Le nom du type de congé est requis.',
+            'type.required' => 'Le type est requis.',
+            'type.in' => 'Le type doit être "système" ou "custom".',
             'duration_days.required' => 'Le nombre de jours est requis.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
@@ -96,6 +99,12 @@ class SpecialLeaveTypeController extends Controller
     {
         $specialLeaveType = SpecialLeaveType::findOrFail($id);
         
+        // Vérifier si c'est un type de congé système
+        if ($specialLeaveType->type === 'système') {
+            return redirect()->route('admin.special-leave-types.index')
+                ->with('error', 'Impossible de modifier un type de congé système.');
+        }
+        
         return view('admin.special-leave-types.edit', compact('specialLeaveType'));
     }
 
@@ -104,6 +113,14 @@ class SpecialLeaveTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $specialLeaveType = SpecialLeaveType::findOrFail($id);
+        
+        // Vérifier si c'est un type de congé système
+        if ($specialLeaveType->type === 'système') {
+            return redirect()->route('admin.special-leave-types.index')
+                ->with('error', 'Impossible de modifier un type de congé système.');
+        }
+        
         // Récupérer automatiquement l'ID de l'entreprise
         $company = \App\Models\Company::first();
         if (!$company) {
@@ -124,12 +141,15 @@ class SpecialLeaveTypeController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'type' => 'required|string|in:système,custom',
             'duration_days' => 'required|integer|min:0|max:365',
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
         ], [
             'name.required' => 'Le nom du type de congé est requis.',
+            'type.required' => 'Le type est requis.',
+            'type.in' => 'Le type doit être "système" ou "custom".',
             'duration_days.required' => 'Le nombre de jours est requis.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
@@ -161,10 +181,10 @@ class SpecialLeaveTypeController extends Controller
                 ->with('error', 'Impossible de supprimer ce type de congé car des demandes y sont associées.');
         }
         
-        // Vérifier si c'est un type de congé par défaut
-        if (isset($specialLeaveType->system_name) && in_array($specialLeaveType->system_name, ['conge_annuel', 'conge_maternite', 'conge_paternite', 'conge_maladie'])) {
+        // Vérifier si c'est un type de congé système
+        if ($specialLeaveType->type === 'système') {
             return redirect()->route('admin.special-leave-types.index')
-                ->with('error', 'Impossible de supprimer un type de congé par défaut.');
+                ->with('error', 'Impossible de supprimer un type de congé système.');
         }
         
         $specialLeaveType->delete();

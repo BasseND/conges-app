@@ -62,6 +62,32 @@
                     <form action="{{ route('admin.special-leave-types.update', $specialLeaveType->id) }}" method="POST" class="space-y-8">
                         @csrf
                         @method('PUT')
+                        
+                        <!-- Type de congé -->
+                        <div class="space-y-2">
+                            <label for="type" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                {{ __('Type de congé') }}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                    </svg>
+                                </div>
+                                <select name="type" 
+                                        id="type" 
+                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                        {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}
+                                        required>
+                                    <option value="système" {{ old('type', $specialLeaveType->type) == 'système' ? 'selected' : '' }}>{{ __('Système') }}</option>
+                                    <option value="custom" {{ old('type', $specialLeaveType->type) == 'custom' ? 'selected' : '' }}>{{ __('Custom') }}</option>
+                                </select>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ __('Les types "système" sont prédéfinis, les types "custom" sont créés par les utilisateurs') }}
+                            </p>
+                        </div>
 
 
 
@@ -83,6 +109,7 @@
                                        value="{{ old('name', $specialLeaveType->name) }}"
                                        placeholder="Ex: Solde congés annuels 2024, Congé maternité..."
                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                       {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}
                                        required>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -106,6 +133,7 @@
                                 <select name="company_id" 
                                         id="company_id" 
                                         class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                        {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}
                                         required>
                                     <option value="">{{ __('Sélectionnez une entreprise') }}</option>
                                     @foreach(\App\Models\Company::all() as $company)
@@ -140,6 +168,7 @@
                                        max="365"
                                        placeholder="Nombre de jours"
                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                       {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}
                                        required>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -166,7 +195,8 @@
                                        min="0" 
                                        max="120"
                                        placeholder="Nombre de mois d'ancienneté requis"
-                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200">
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                       {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ __('Nombre de mois d\'ancienneté minimum requis (0 = aucune condition, 12 = 1 an, etc.)') }}
@@ -189,7 +219,8 @@
                                           id="description" 
                                           rows="4"
                                           placeholder="Description détaillée du type de congé..."
-                                          class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 resize-none">{{ old('description', $specialLeaveType->description) }}</textarea>
+                                          class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 resize-none"
+                                          {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}>{{ old('description', $specialLeaveType->description) }}</textarea>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ __('Description optionnelle pour clarifier les conditions d\'utilisation') }}
@@ -207,6 +238,7 @@
                                            name="is_active" 
                                            value="1"
                                            {{ old('is_active', $specialLeaveType->is_active) ? 'checked' : '' }}
+                                           {{ $specialLeaveType->type === 'système' ? 'disabled' : '' }}
                                            class="sr-only peer">
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 dark:peer-focus:ring-amber-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-amber-600"></div>
                                     <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -221,13 +253,24 @@
 
                         <!-- Boutons d'action -->
                         <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <button type="submit" 
-                                    class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 border border-transparent rounded-xl font-semibold text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                                {{ __('Mettre à jour') }}
-                            </button>
+                            @if($specialLeaveType->type !== 'système')
+                                <button type="submit" 
+                                        class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 border border-transparent rounded-xl font-semibold text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    {{ __('Mettre à jour') }}
+                                </button>
+                            @else
+                                <button type="button" 
+                                        disabled
+                                        class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gray-400 border border-transparent rounded-xl font-semibold text-sm text-white cursor-not-allowed opacity-60">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
+                                    </svg>
+                                    {{ __('Type système non modifiable') }}
+                                </button>
+                            @endif
                             
                             <a href="{{ route('admin.special-leave-types.show', $specialLeaveType) }}" 
                                class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-xl font-semibold text-sm text-gray-700 dark:text-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
