@@ -107,4 +107,22 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Update the user's emergency contact information.
+     */
+    public function updateEmergencyContact(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'emergency_contact_name' => ['nullable', 'string', 'max:255'],
+            'emergency_contact_phone' => ['nullable', 'string', 'max:20'],
+            'emergency_contact_relationship' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $user = $request->user();
+        $user->update($validated);
+
+        return redirect()->route('profile.show')
+            ->with('success', 'Les informations de contact d\'urgence ont été mises à jour avec succès.');
+    }
 }

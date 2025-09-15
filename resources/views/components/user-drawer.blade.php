@@ -125,6 +125,34 @@
                 </div>
             </div>
 
+            <!-- Contact d'urgence -->
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center mb-4">
+                    <div class="w-6 h-6 bg-red-100 dark:bg-red-900/30 rounded-md flex items-center justify-center mr-2">
+                        <svg class="w-3 h-3 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-base font-semibold text-gray-900 dark:text-white">Contact d'urgence</h4>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nom du contact</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.emergency_contact_name || 'Non renseigné'"></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Téléphone</label>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.emergency_contact_phone || 'Non renseigné'"></p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Relation</label>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.emergency_contact_relationship || 'Non renseigné'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Informations professionnelles -->
             <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800">
                 <div class="flex items-center mb-4">

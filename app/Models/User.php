@@ -75,7 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'position',
         'is_prestataire',
         'entry_date',
-        'exit_date'
+        'exit_date',
+        'emergency_contact_name',
+        'emergency_contact_phone',
+        'emergency_contact_relationship'
         //'team_id'
     ];
 

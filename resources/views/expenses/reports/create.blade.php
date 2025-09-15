@@ -175,7 +175,7 @@
                                     </svg>
                                 </button>
                                 
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pr-12">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pr-12">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             <span class="flex items-center space-x-2">
@@ -188,6 +188,27 @@
                                         <input type="text" name="lines[INDEX][description]" required
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-gray-300 transition-all duration-200"
                                             placeholder="Ex: Repas client, Transport...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <span class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a1.994 1.994 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                                </svg>
+                                                <span>Catégorie</span>
+                                            </span>
+                                        </label>
+                                        <select name="lines[INDEX][category]" required
+                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-gray-300 transition-all duration-200">
+                                            <option value="">Sélectionner une catégorie</option>
+                                            <option value="transport">Transport</option>
+                                            <option value="accommodation">Hébergement</option>
+                                            <option value="meals">Repas</option>
+                                            <option value="supplies">Fournitures</option>
+                                            <option value="communication">Communication</option>
+                                            <option value="training">Formation</option>
+                                            <option value="other">Autre</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -215,7 +236,7 @@
                                         <input type="date" name="lines[INDEX][spent_on]" required
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-gray-300 transition-all duration-200">
                                     </div>
-                                    <div class="md:col-span-3">
+                                    <div class="md:col-span-4">
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             <span class="flex items-center space-x-2">
                                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,9 +330,14 @@
             function addExpenseLine() {
                 const newLine = template.content.cloneNode(true);
                 const inputs = newLine.querySelectorAll('input');
+                const selects = newLine.querySelectorAll('select');
 
                 inputs.forEach(input => {
                     input.name = input.name.replace('INDEX', lineCount);
+                });
+
+                selects.forEach(select => {
+                    select.name = select.name.replace('INDEX', lineCount);
                 });
 
                 // Ajouter le gestionnaire de suppression

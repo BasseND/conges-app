@@ -192,9 +192,9 @@
                                             </div>
                                             <div>
                                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                                                    {{ __('Types de Congés Spéciaux') }}
+                                                    {{ __('Types de Congés') }}
                                                 </h2>
-                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de congés spéciaux paramétrables</p>
+                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de congés paramétrables</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">

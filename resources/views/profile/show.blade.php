@@ -271,6 +271,43 @@
                                             </p>
                                         </div>
                                     </div>
+                                    
+                                    <!-- Section Contact d'urgence -->
+                                    <div class="mt-8">
+                                        <div class="flex items-center justify-between mb-6">
+                                            <div class="flex items-center">
+                                                <div class="bg-gradient-to-r from-red-500 to-orange-600 rounded-full p-3 mr-4">
+                                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                                    </svg>
+                                                </div>
+                                                <h4 class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">{{ __('Contact d\'urgence') }}</h4>
+                                            </div>
+                                            <button onclick="openEmergencyContactModal()" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                                {{ __('Modifier') }}
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-red-400">
+                                                <label class="block text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide mb-2">{{ __('Nom du contact') }}</label>
+                                                <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $user->emergency_contact_name ?: 'Non renseigné' }}</p>
+                                            </div>
+                                            
+                                            <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-orange-400">
+                                                <label class="block text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wide mb-2">{{ __('Téléphone') }}</label>
+                                                <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $user->emergency_contact_phone ?: 'Non renseigné' }}</p>
+                                            </div>
+                                            
+                                            <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-yellow-400">
+                                                <label class="block text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase tracking-wide mb-2">{{ __('Relation') }}</label>
+                                                <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $user->emergency_contact_relationship ?: 'Non renseigné' }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -298,4 +335,137 @@
             </div>
         </div>
     </div>
+    
+    <!-- Modal Contact d'urgence -->
+    <div id="emergencyContactModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-2xl bg-white dark:bg-gray-800">
+            <div class="mt-3">
+                <!-- En-tête du modal -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <div class="bg-gradient-to-r from-red-500 to-orange-600 rounded-full p-3 mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">{{ __('Modifier le contact d\'urgence') }}</h3>
+                    </div>
+                    <button onclick="closeEmergencyContactModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Formulaire -->
+                <form id="emergencyContactForm" method="POST" action="{{ route('profile.update-emergency-contact') }}">
+                    @csrf
+                    @method('PATCH')
+                    
+                    <div class="space-y-6">
+                        <!-- Nom du contact -->
+                        <div>
+                            <label for="emergency_contact_name" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                {{ __('Nom du contact') }}
+                            </label>
+                            <input type="text" id="emergency_contact_name" name="emergency_contact_name" 
+                                   value="{{ old('emergency_contact_name', $user->emergency_contact_name) }}"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                   placeholder="Nom complet du contact d'urgence">
+                            @error('emergency_contact_name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <!-- Téléphone -->
+                        <div>
+                            <label for="emergency_contact_phone" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                                {{ __('Téléphone') }}
+                            </label>
+                            <input type="tel" id="emergency_contact_phone" name="emergency_contact_phone" 
+                                   value="{{ old('emergency_contact_phone', $user->emergency_contact_phone) }}"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                   placeholder="Numéro de téléphone">
+                            @error('emergency_contact_phone')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <!-- Relation -->
+                        <div>
+                            <label for="emergency_contact_relationship" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                {{ __('Relation') }}
+                            </label>
+                            <select id="emergency_contact_relationship" name="emergency_contact_relationship" 
+                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200">
+                                <option value="">{{ __('Sélectionner une relation') }}</option>
+                                <option value="Conjoint(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Conjoint(e)' ? 'selected' : '' }}>{{ __('Conjoint(e)') }}</option>
+                                <option value="Père" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Père' ? 'selected' : '' }}>{{ __('Père') }}</option>
+                                <option value="Mère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Mère' ? 'selected' : '' }}>{{ __('Mère') }}</option>
+                                <option value="Frère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Frère' ? 'selected' : '' }}>{{ __('Frère') }}</option>
+                                <option value="Sœur" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Sœur' ? 'selected' : '' }}>{{ __('Sœur') }}</option>
+                                <option value="Enfant" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Enfant' ? 'selected' : '' }}>{{ __('Enfant') }}</option>
+                                <option value="Ami(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Ami(e)' ? 'selected' : '' }}>{{ __('Ami(e)') }}</option>
+                                <option value="Collègue" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Collègue' ? 'selected' : '' }}>{{ __('Collègue') }}</option>
+                                <option value="Autre" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Autre' ? 'selected' : '' }}>{{ __('Autre') }}</option>
+                            </select>
+                            @error('emergency_contact_relationship')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <!-- Boutons -->
+                    <div class="flex justify-end space-x-4 mt-8">
+                        <button type="button" onclick="closeEmergencyContactModal()" 
+                                class="px-6 py-3 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-200 font-medium">
+                            {{ __('Annuler') }}
+                        </button>
+                        <button type="submit" 
+                                class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {{ __('Enregistrer') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openEmergencyContactModal() {
+            document.getElementById('emergencyContactModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeEmergencyContactModal() {
+            document.getElementById('emergencyContactModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Fermer le modal en cliquant à l'extérieur
+        document.getElementById('emergencyContactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmergencyContactModal();
+            }
+        });
+        
+        // Fermer le modal avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEmergencyContactModal();
+            }
+        });
+    </script>
 </x-app-layout>

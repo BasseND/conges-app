@@ -321,6 +321,47 @@
                                  </div>
                              </div>
 
+                             <!-- Contact d'urgence -->
+                             <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/10 dark:to-pink-900/10 border border-red-200 dark:border-red-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                                 <div class="flex items-center space-x-3">
+                                     <div class="flex-shrink-0">
+                                         <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
+                                             <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                             </svg>
+                                         </div>
+                                     </div>
+                                     <div>
+                                         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                             {{ __('Contact d\'urgence') }}
+                                         </h2>
+                                         <p class="text-sm text-gray-600 dark:text-gray-400">Personne à contacter en cas d'urgence</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_name" :value="__('Nom du contact d\'urgence')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="emergency_contact_name" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="emergency_contact_name" value="{{ old('emergency_contact_name', $user->emergency_contact_name) }}" placeholder="Nom complet du contact" />
+                                         <x-input-error :messages="$errors->get('emergency_contact_name')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_phone" :value="__('Téléphone du contact d\'urgence')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="emergency_contact_phone" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="tel" name="emergency_contact_phone" value="{{ old('emergency_contact_phone', $user->emergency_contact_phone) }}" placeholder="Numéro de téléphone" />
+                                         <x-input-error :messages="$errors->get('emergency_contact_phone')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_relationship" :value="__('Relation avec le contact')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="emergency_contact_relationship" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship', $user->emergency_contact_relationship) }}" placeholder="Ex: Époux/Épouse, Parent, Ami..." />
+                                         <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-2" />
+                                     </div>
+                                 </div>
+                             </div>
+
                              <!-- Informations professionnelles -->
                              <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/10 dark:to-red-900/10 border border-orange-200 dark:border-orange-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
                                  <div class="flex items-center space-x-3">

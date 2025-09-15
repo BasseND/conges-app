@@ -68,6 +68,7 @@ class ExpenseReportController extends Controller
                 'lines.*.description' => 'required|string|max:255',
                 'lines.*.amount' => 'required|numeric|min:0',
                 'lines.*.spent_on' => 'required|date',
+                'lines.*.category' => 'required|string|in:transport,accommodation,meals,supplies,communication,training,other',
                 'lines.*.receipt' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
             ]);
 
@@ -117,6 +118,7 @@ class ExpenseReportController extends Controller
                     'description' => $line['description'],
                     'amount' => $line['amount'],
                     'spent_on' => $line['spent_on'],
+                    'category' => $line['category'],
                     'receipt_path' => $receiptPath
                 ];
                 \Log::info('Données de la ligne de frais:', $lineData);
@@ -193,6 +195,7 @@ class ExpenseReportController extends Controller
                 'lines.*.description' => 'required|string|max:255',
                 'lines.*.amount' => 'required|numeric|min:0',
                 'lines.*.spent_on' => 'required|date',
+                'lines.*.category' => 'required|string|in:transport,accommodation,meals,supplies,communication,training,other',
                 'lines.*.receipt' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
             ]);
 
@@ -247,6 +250,7 @@ class ExpenseReportController extends Controller
                         'description' => $lineData['description'],
                         'amount' => $lineData['amount'],
                         'spent_on' => $lineData['spent_on'],
+                        'category' => $lineData['category'],
                         'receipt_path' => $receiptPath
                     ]);
                     $updatedLineIds[] = $line->id;
@@ -258,6 +262,7 @@ class ExpenseReportController extends Controller
                         'description' => $lineData['description'],
                         'amount' => $lineData['amount'],
                         'spent_on' => $lineData['spent_on'],
+                        'category' => $lineData['category'],
                         'receipt_path' => $receiptPath
                     ]);
                     $updatedLineIds[] = $line->id;
