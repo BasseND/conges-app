@@ -79,16 +79,25 @@ class LeaveController extends Controller
                 'type' => [
                     'required',
                     function ($attribute, $value, $fail) {
+                        $user = auth()->user();
+                        $userSeniorityMonths = $user->getSeniorityInMonths();
+                        
                         // Système unifié : tous les congés utilisent SpecialLeaveType (format: special_X)
                         if (preg_match('/^special_(\d+)$/', $value, $matches)) {
                             $specialLeaveTypeId = $matches[1];
                             $specialLeaveType = \App\Models\SpecialLeaveType::where('id', $specialLeaveTypeId)
-                                ->where('company_id', auth()->user()->company_id)
+                                ->where('company_id', $user->company_id)
                                 ->where('is_active', true)
                                 ->first();
                             
                             if (!$specialLeaveType) {
                                 $fail('Le type de congé sélectionné n\'est pas valide ou n\'appartient pas à votre entreprise.');
+                                return;
+                            }
+                            
+                            // Vérification de l'ancienneté pour les types personnalisés
+                            if ($specialLeaveType->seniority_months > 0 && $userSeniorityMonths < $specialLeaveType->seniority_months) {
+                                $fail("Vous n'avez pas l'ancienneté requise pour ce type de congé. Ancienneté requise: {$specialLeaveType->seniority_months} mois, votre ancienneté: {$userSeniorityMonths} mois.");
                             }
                             return;
                         }
@@ -102,6 +111,12 @@ class LeaveController extends Controller
                             
                             if (!$specialType) {
                                 $fail('Le type de congé spécial sélectionné n\'est pas valide ou n\'est pas actif.');
+                                return;
+                            }
+                            
+                            // Vérification de l'ancienneté pour les types système
+                            if ($specialType->seniority_months > 0 && $userSeniorityMonths < $specialType->seniority_months) {
+                                $fail("Vous n'avez pas l'ancienneté requise pour ce type de congé. Ancienneté requise: {$specialType->seniority_months} mois, votre ancienneté: {$userSeniorityMonths} mois.");
                             }
                             return;
                         }

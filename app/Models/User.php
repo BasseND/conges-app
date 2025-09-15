@@ -669,4 +669,57 @@ class User extends Authenticatable implements MustVerifyEmail
         $options = self::getCategoryOptions();
         return $options[$this->category] ?? 'Non renseigné';
     }
+
+    /**
+     * Get the user's seniority in months
+     *
+     * @return int
+     */
+    public function getSeniorityInMonths()
+    {
+        if (!$this->entry_date) {
+            return 0;
+        }
+
+        $entryDate = Carbon::parse($this->entry_date);
+        $now = Carbon::now();
+        
+        return $entryDate->diffInMonths($now);
+    }
+
+    /**
+     * Get the user's seniority in years and months
+     *
+     * @return array
+     */
+    public function getSeniorityDetails()
+    {
+        if (!$this->entry_date) {
+            return ['years' => 0, 'months' => 0, 'total_months' => 0];
+        }
+
+        $entryDate = Carbon::parse($this->entry_date);
+        $now = Carbon::now();
+        
+        $totalMonths = $entryDate->diffInMonths($now);
+        $years = intval($totalMonths / 12);
+        $months = $totalMonths % 12;
+        
+        return [
+            'years' => $years,
+            'months' => $months,
+            'total_months' => $totalMonths
+        ];
+    }
+
+    /**
+     * Check if user meets seniority requirement in months
+     *
+     * @param int $requiredMonths
+     * @return bool
+     */
+    public function meetsSeniorityRequirement($requiredMonths)
+    {
+        return $this->getSeniorityInMonths() >= $requiredMonths;
+    }
 }

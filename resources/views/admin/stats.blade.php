@@ -438,6 +438,60 @@
                 </div>
             </div>
 
+            <!-- Graphique des contrats -->
+            <div class="mt-6">
+                <div class="relative bg-gradient-to-br from-white via-orange-50 to-amber-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500"></div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📋 Répartition des contrats en vigueur</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Types de contrats et montants totaux</p>
+                            </div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Graphique en secteurs -->
+                            <div class="relative h-96 bg-white dark:bg-gray-800 rounded-xl p-4">
+                                <canvas id="contractChart"></canvas>
+                            </div>
+                            <!-- Détails des contrats -->
+                            <div class="space-y-4">
+                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Détails par type</h4>
+                                @foreach($contractStats as $index => $contract)
+                                    @php
+                                        $colors = ['bg-[#29caf1]', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500'];
+                                        $colorClass = $colors[$index % count($colors)];
+                                    @endphp
+                                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-4 h-4 rounded-full {{ $colorClass }}"></div>
+                                            <div>
+                                                <p class="font-medium text-gray-900 dark:text-white">{{ $contract['label'] }}</p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300">{{ $contract['count'] }} contrat(s)</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-bold text-gray-900 dark:text-white">{{ number_format($contract['total_amount'], 0, ',', ' ') }} €</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">Total brut</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if($contractStats->isEmpty())
+                                    <div class="text-center py-8">
+                                        <p class="text-gray-500 dark:text-gray-400">Aucun contrat actif trouvé</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- CONGES  -->
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
               
@@ -677,7 +731,7 @@
                 </div>
               </div>
               {{-- Tendance notes de frais --}}
-              <div class="mt-6">
+              <div class="mt-8">
                 <!-- Graphique tendance notes de frais -->
                 <div class="relative bg-gradient-to-br from-white via-orange-50 to-amber-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500"></div>
@@ -693,7 +747,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4">
+                        <div class="relative h-96 bg-white dark:bg-gray-800 rounded-xl p-4">
                             <canvas id="expenseChart"></canvas>
                         </div>
                     </div>
@@ -825,7 +879,7 @@
                 </div>
 
               {{-- Tendance Accomptes --}}
-              <div class="mt-6">
+              <div class="mt-8">
                 <!-- Graphique tendance accomptes -->
                 <div class="relative bg-gradient-to-br from-white via-purple-50 to-indigo-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500"></div>
@@ -841,7 +895,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <div class="relative h-80 bg-white dark:bg-gray-800 rounded-xl p-4">
+                        <div class="relative h-96 bg-white dark:bg-gray-800 rounded-xl p-4">
                             <canvas id="salaryAdvanceChart"></canvas>
                         </div>
                     </div>
@@ -1398,6 +1452,82 @@
                     elements: {
                         point: {
                             hoverRadius: 12
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+                    }
+                }
+            }
+        );
+
+        // Graphique des contrats
+        const contractData = @json($contractStats);
+        const contractChart = new Chart(
+            document.getElementById('contractChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: contractData.map(item => item.label),
+                    datasets: [{
+                        data: contractData.map(item => item.count),
+                        backgroundColor: [
+                            '#29caf1', 
+                            '#3B82F6', // Bleu
+                            '#10B981', // Vert
+                            '#F59E0B', // Jaune
+                            '#EF4444', // Rouge
+                            '#8B5CF6', // Violet
+                            '#EC4899'  // Rose
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3,
+                        hoverBorderWidth: 4,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutCubic'
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                },
+                                color: '#374151'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#F59E0B',
+                            borderWidth: 2,
+                            cornerRadius: 12,
+                            displayColors: true,
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return `📋 ${context[0].label}`;
+                                },
+                                label: function(context) {
+                                    const contract = contractData[context.dataIndex];
+                                    return [
+                                        `👥 ${context.parsed} contrat(s)`,
+                                        `💰 ${new Intl.NumberFormat('fr-FR').format(contract.total_amount)} € brut`
+                                    ];
+                                }
+                            }
                         }
                     },
                     onHover: (event, activeElements) => {

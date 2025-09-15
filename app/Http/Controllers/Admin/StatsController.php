@@ -109,6 +109,23 @@ class StatsController extends Controller
             ];
         }
 
+        // Statistiques des contrats par type
+        $contractStats = Contract::select('type')
+            ->selectRaw('COUNT(*) as count')
+            ->selectRaw('SUM(salaire_brut) as total_amount')
+            ->where('statut', 'actif')
+            ->where('is_expired', false)
+            ->groupBy('type')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'type' => $item->type,
+                    'label' => Contract::getContractTypes()[$item->type] ?? $item->type,
+                    'count' => $item->count,
+                    'total_amount' => (float) $item->total_amount
+                ];
+            });
+
         // Statistiques générales
         $stats = [
             'pending' => Leave::where('status', 'pending')->count(),
@@ -177,6 +194,7 @@ class StatsController extends Controller
             'monthlyStats',
             'expenseMonthlyStats',
             'salaryAdvanceMonthlyStats',
+            'contractStats',
             'stats',
             'recentLeaves',
             'recentExpenses',

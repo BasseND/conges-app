@@ -356,7 +356,19 @@
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                      <div class="space-y-2">
                                          <x-input-label for="emergency_contact_relationship" :value="__('Relation avec le contact')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                         <input id="emergency_contact_relationship" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship', $user->emergency_contact_relationship) }}" placeholder="Ex: Époux/Épouse, Parent, Ami..." />
+                                         <select id="emergency_contact_relationship" name="emergency_contact_relationship" 
+                                                 class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                             <option value="">{{ __('Sélectionner une relation') }}</option>
+                                             <option value="Conjoint(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Conjoint(e)' ? 'selected' : '' }}>{{ __('Conjoint(e)') }}</option>
+                                             <option value="Père" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Père' ? 'selected' : '' }}>{{ __('Père') }}</option>
+                                             <option value="Mère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Mère' ? 'selected' : '' }}>{{ __('Mère') }}</option>
+                                             <option value="Frère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Frère' ? 'selected' : '' }}>{{ __('Frère') }}</option>
+                                             <option value="Sœur" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Sœur' ? 'selected' : '' }}>{{ __('Sœur') }}</option>
+                                             <option value="Enfant" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Enfant' ? 'selected' : '' }}>{{ __('Enfant') }}</option>
+                                             <option value="Ami(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Ami(e)' ? 'selected' : '' }}>{{ __('Ami(e)') }}</option>
+                                             <option value="Collègue" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Collègue' ? 'selected' : '' }}>{{ __('Collègue') }}</option>
+                                             <option value="Autre" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Autre' ? 'selected' : '' }}>{{ __('Autre') }}</option>
+                                         </select>
                                          <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-2" />
                                      </div>
                                  </div>

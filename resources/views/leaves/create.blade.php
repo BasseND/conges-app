@@ -120,13 +120,33 @@
                             <x-input-label for="type" :value="__('Type de congé')" class="sr-only" />
                             <select id="type" name="type" class="block w-full rounded-lg border-gray-300 dark:bg-gray-700 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-400 dark:focus:ring-blue-400 transition-colors duration-200" required>
                                 <option value="">Sélectionner un type de congé</option>
-                                <!-- Types de congés par nom système -->
+                                <!-- Types de congés filtrés par ancienneté -->
                                 @php
+                                    $user = auth()->user();
+                                    $userSeniorityMonths = $user ? $user->getSeniorityInMonths() : 0;
+                                    
+                                    // Types de congés système éligibles
                                     $systemLeaveTypes = \App\Models\SpecialLeaveType::where('is_active', true)
                                         ->whereNotNull('system_name')
+                                        ->where(function($query) use ($userSeniorityMonths) {
+                                            $query->where('seniority_months', 0) // Pas de condition d'ancienneté
+                                                  ->orWhere('seniority_months', '<=', $userSeniorityMonths); // Condition remplie
+                                        })
+                                        ->orderBy('name')
+                                        ->get();
+                                    
+                                    // Types de congés personnalisés éligibles
+                                    $customLeaveTypes = \App\Models\SpecialLeaveType::where('is_active', true)
+                                        ->whereNull('system_name')
+                                        ->where('company_id', $user->company_id ?? 0)
+                                        ->where(function($query) use ($userSeniorityMonths) {
+                                            $query->where('seniority_months', 0) // Pas de condition d'ancienneté
+                                                  ->orWhere('seniority_months', '<=', $userSeniorityMonths); // Condition remplie
+                                        })
                                         ->orderBy('name')
                                         ->get();
                                 @endphp
+                                
                                 @if($systemLeaveTypes->count() > 0)
                                     <optgroup label="Congés système">
                                         @foreach($systemLeaveTypes as $systemType)
@@ -135,13 +155,69 @@
                                                 @if($systemType->duration_days)
                                                     ({{ $systemType->duration_days }} jour{{ $systemType->duration_days > 1 ? 's' : '' }})
                                                 @endif
+                                                @if($systemType->seniority_months > 0)
+                                                    <span class="text-xs text-gray-500">- Ancienneté: {{ $systemType->seniority_months }} mois</span>
+                                                @endif
                                             </option>
                                         @endforeach
                                     </optgroup>
                                 @endif
+                                
+                                @if($customLeaveTypes->count() > 0)
+                                    <optgroup label="Congés personnalisés">
+                                        @foreach($customLeaveTypes as $customType)
+                                            <option value="special_{{ $customType->id }}" {{ old('type') == 'special_'.$customType->id ? 'selected' : '' }}>
+                                                {{ $customType->name }}
+                                                @if($customType->duration_days)
+                                                    ({{ $customType->duration_days }} jour{{ $customType->duration_days > 1 ? 's' : '' }})
+                                                @endif
+                                                @if($customType->seniority_months > 0)
+                                                    <span class="text-xs text-gray-500">- Ancienneté: {{ $customType->seniority_months }} mois</span>
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @endif
+                                
+                                @if($systemLeaveTypes->count() == 0 && $customLeaveTypes->count() == 0)
+                                    <option value="" disabled>Aucun type de congé disponible pour votre ancienneté ({{ $userSeniorityMonths }} mois)</option>
+                                @endif
                               
                             </select>
                             <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                            
+                            <!-- Informations sur l'ancienneté -->
+                            @if(Auth::check())
+                                @php
+                                    $seniorityDetails = auth()->user()->getSeniorityDetails();
+                                @endphp
+                                <div class="mt-4 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg border border-purple-200 dark:border-purple-700">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ __('Votre ancienneté') }}
+                                    </h4>
+                                    <div class="text-center">
+                                        <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                            @if($seniorityDetails['years'] > 0)
+                                                {{ $seniorityDetails['years'] }} an{{ $seniorityDetails['years'] > 1 ? 's' : '' }}
+                                                @if($seniorityDetails['months'] > 0)
+                                                    et {{ $seniorityDetails['months'] }} mois
+                                                @endif
+                                            @else
+                                                {{ $seniorityDetails['months'] }} mois
+                                            @endif
+                                        </div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400">
+                                            ({{ $seniorityDetails['total_months'] }} mois au total)
+                                            @if(auth()->user()->entry_date)
+                                                - Depuis le {{ is_string(auth()->user()->entry_date) ? auth()->user()->entry_date : auth()->user()->entry_date->format('d/m/Y') }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             
                             <!-- Solde de congés -->
                             <div class="mt-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-blue-200 dark:border-blue-700">
