@@ -184,6 +184,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('messages/{message}/mark-read', [MessageController::class, 'markAsRead'])->name('messages.mark-read');
     Route::get('messages/unread/count', [MessageController::class, 'unreadCount'])->name('messages.unread-count');
 
+    // Routes pour les attestations (côté employé)
+    Route::prefix('attestations')->name('attestations.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AttestationController::class, 'index'])->name('index');
+        Route::post('/', [\App\Http\Controllers\AttestationController::class, 'store'])->name('store');
+        Route::get('/{attestationRequest}', [\App\Http\Controllers\AttestationController::class, 'show'])->name('show');
+        Route::get('/{attestationRequest}/download', [\App\Http\Controllers\AttestationController::class, 'download'])->name('download');
+        Route::post('/{attestationRequest}/cancel', [\App\Http\Controllers\AttestationController::class, 'cancel'])->name('cancel');
+        Route::get('/types/available', [\App\Http\Controllers\AttestationController::class, 'getAvailableTypes'])->name('types.available');
+    });
+
     // Routes pour les managers
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
         Route::get('leaves', [\App\Http\Controllers\Manager\LeaveController::class, 'index'])->name('leaves.index');
@@ -308,5 +318,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Routes pour les soldes de congés de la société
         // Routes supprimées - LeaveBalance remplacé par SpecialLeaveType
+        
+        // Routes pour les attestations
+        Route::prefix('attestations')->name('attestations.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\AttestationController::class, 'index'])->name('index');
+            Route::get('/{attestationRequest}', [\App\Http\Controllers\Admin\AttestationController::class, 'show'])->name('show');
+            Route::post('/{attestationRequest}/approve', [\App\Http\Controllers\Admin\AttestationController::class, 'approve'])->name('approve');
+            Route::post('/{attestationRequest}/reject', [\App\Http\Controllers\Admin\AttestationController::class, 'reject'])->name('reject');
+            Route::get('/{attestationRequest}/generate-pdf', [\App\Http\Controllers\Admin\AttestationController::class, 'generatePdf'])->name('generate-pdf');
+            Route::get('/{attestationRequest}/download', [\App\Http\Controllers\Admin\AttestationController::class, 'download'])->name('download');
+            Route::get('/stats', [\App\Http\Controllers\Admin\AttestationController::class, 'getStats'])->name('stats');
+            
+            // Routes pour les types d'attestations
+            Route::prefix('types')->name('types.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\AttestationController::class, 'types'])->name('index');
+                Route::post('/', [\App\Http\Controllers\Admin\AttestationController::class, 'storeType'])->name('store');
+                Route::get('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'showType'])->name('show');
+                Route::get('/{attestationType}/edit', [\App\Http\Controllers\Admin\AttestationController::class, 'editType'])->name('edit');
+                Route::put('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'updateType'])->name('update');
+                Route::delete('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'destroyType'])->name('destroy');
+            });
+        });
     });
 });

@@ -428,6 +428,102 @@
                                     </ul>
                                 </li>
 
+                                <!-- Attestations -->
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="#" @click.prevent="toggleSubmenu('attestations')">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2.5">
+                                                <span class="item-ico">
+                                                    <svg
+                                                        width="18"
+                                                        height="20"
+                                                        viewBox="0 0 18 20"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                        d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
+                                                        fill="#1A202C"
+                                                        class="path-1"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                                <span
+                                                class="item-text text-lg font-medium leading-none"
+                                                >Attestations</span
+                                                >
+                                            </div>
+                                            <span>
+                                                <svg
+                                                width="6"
+                                                height="12"
+                                                viewBox="0 0 6 12"
+                                                fill="none"
+                                                class="fill-current"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    fill="currentColor"
+                                                    d="M0.531506 0.414376C0.20806 0.673133 0.155619 1.1451 0.414376 1.46855L4.03956 6.00003L0.414376 10.5315C0.155618 10.855 0.208059 11.3269 0.531506 11.5857C0.854952 11.8444 1.32692 11.792 1.58568 11.4685L5.58568 6.46855C5.80481 6.19464 5.80481 5.80542 5.58568 5.53151L1.58568 0.531506C1.32692 0.20806 0.854953 0.155619 0.531506 0.414376Z"
+                                                />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <ul
+                                        class="sub-menu ml-2.5 mt-[22px] border-l border-success-100 pl-5"
+                                        :class="{ 'active': isSubmenuOpen('attestations') }"
+                                        x-show="isSubmenuOpen('attestations')"
+                                        x-transition
+                                    >
+                                        <li>
+                                        <a
+                                            href="{{ route('admin.attestations.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('admin.attestations.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Gestion des attestations</a
+                                        >
+                                        </li>
+                                        <li>
+                                        <a
+                                            href="{{ route('admin.attestations.types.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('admin.attestations.types.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Types d'attestations</a
+                                        >
+                                        </li>
+                                        <li>
+                                        <a
+                                            href="{{ route('attestations.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('attestations.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Mes attestations</a
+                                        >
+                                        </li>
+                                    
+                                    </ul>
+                                </li>
+
                             @else
 
                                 <!-- Mes Conges -->
@@ -659,6 +755,56 @@
                                     </a>
                                 </li>
 
+                                <!-- Attestations -->
+                                <li class="item py-[11px] text-bgray-900 dark:text-white">
+                                    <a href="{{ route('attestations.index') }}" class="sidebar-link {{ request()->routeIs('attestations.*') ? 'active' : '' }}">
+                                        <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2.5">
+                                            <span class="item-ico">
+                                            <svg
+                                                width="18"
+                                                height="20"
+                                                viewBox="0 0 18 20"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
+                                                fill="#1A202C"
+                                                class="path-1"
+                                                />
+                                                <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                                />
+                                                <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                                />
+                                                <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
+                                                fill="#22C55E"
+                                                class="path-2"
+                                                />
+                                            </svg>
+                                            </span>
+                                            <span
+                                            class="item-text text-lg font-medium leading-none"
+                                            >Attestations</span
+                                            >
+                                        </div>
+                                        </div>
+                                    </a>
+                                </li>
+
                             @endif
                          @endauth
 
@@ -678,40 +824,47 @@
 
 
                          <li class="item py-[11px] text-bgray-900 dark:text-white" 
-                             x-data="{ unreadCount: 0 }" 
+                             x-data="{ 
+                                 unreadCount: 0,
+                                 fetchUnreadCount() {
+                                     fetch('{{ route('messages.unread-count') }}', {
+                                         method: 'GET',
+                                         headers: {
+                                             'Accept': 'application/json',
+                                             'X-Requested-With': 'XMLHttpRequest'
+                                         },
+                                         credentials: 'same-origin'
+                                     })
+                                     .then((response) => {
+                                         if (response.ok) {
+                                             // Vérifier si la réponse est bien du JSON
+                                             const contentType = response.headers.get('content-type');
+                                             if (contentType && contentType.includes('application/json')) {
+                                                 return response.json();
+                                             } else {
+                                                 // Probablement une redirection vers la page de connexion
+                                                 throw new Error('Réponse non-JSON reçue');
+                                             }
+                                         }
+                                         throw new Error('Erreur réseau: ' + response.status);
+                                     })
+                                     .then((data) => {
+                                         if (data && typeof data.count !== 'undefined') {
+                                             this.unreadCount = data.count;
+                                         }
+                                     })
+                                     .catch((error) => {
+                                         console.error('Erreur lors de la récupération des messages non lus:', error);
+                                         // Ne pas modifier unreadCount en cas d'erreur
+                                     });
+                                 }
+                             }" 
                              x-init="
-                                 // Fonction pour récupérer le nombre de messages non lus
-                                  function fetchUnreadCount() {
-                                      fetch('{{ route('messages.unread-count') }}', {
-                                          method: 'GET',
-                                          headers: {
-                                              'Accept': 'application/json',
-                                              'X-Requested-With': 'XMLHttpRequest'
-                                          },
-                                          credentials: 'same-origin'
-                                      })
-                                      .then(function(response) {
-                                          if (response.ok) {
-                                              return response.json();
-                                          }
-                                          throw new Error('Erreur réseau: ' + response.status);
-                                      })
-                                      .then(function(data) {
-                                          if (data && typeof data.count !== 'undefined') {
-                                              unreadCount = data.count;
-                                          }
-                                      })
-                                      .catch(function(error) {
-                                          console.error('Erreur lors de la récupération des messages non lus:', error);
-                                          // Ne pas modifier unreadCount en cas d'erreur
-                                      });
-                                  }
-                                  
-                                  // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
-                                  setTimeout(fetchUnreadCount, 1000);
-                                  
-                                  // Actualiser toutes les 30 secondes
-                                  setInterval(fetchUnreadCount, 30000);
+                                 // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
+                                 setTimeout(() => fetchUnreadCount(), 1000);
+                                 
+                                 // Actualiser toutes les 30 secondes
+                                 setInterval(() => fetchUnreadCount(), 30000);
                              ">
                             <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}">
 
@@ -1046,6 +1199,74 @@
                                            
                                             </ul>
                                         </li>
+                                        <!-- Attestations -->
+                                        <li class="item px-[43px] py-[11px]">
+                                            <a href="javascript:void(0);">
+                                                <span class="item-ico">
+                                                    <svg
+                                                        width="18"
+                                                        height="20"
+                                                        viewBox="0 0 18 20"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                        d="M18 16V6C18 3.79086 16.2091 2 14 2H4C1.79086 2 0 3.79086 0 6V16C0 18.2091 1.79086 20 4 20H14C16.2091 20 18 18.2091 18 16Z"
+                                                        fill="#1A202C"
+                                                        class="path-1"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 8C4.25 7.58579 4.58579 7.25 5 7.25H13C13.4142 7.25 13.75 7.58579 13.75 8C13.75 8.41421 13.4142 8.75 13 8.75H5C4.58579 8.75 4.25 8.41421 4.25 8Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H13C13.4142 11.25 13.75 11.5858 13.75 12C13.75 12.4142 13.4142 12.75 13 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                        <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4.25 16C4.25 15.5858 4.58579 15.25 5 15.25H9C9.41421 15.25 9.75 15.5858 9.75 16C9.75 16.4142 9.41421 16.75 9 16.75H5C4.58579 16.75 4.25 16.4142 4.25 16Z"
+                                                        fill="#22C55E"
+                                                        class="path-2"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                            <ul
+                                                class="sub-menu min-w-[200px] rounded-lg border-l border-success-100 bg-white px-5 py-2 shadow-lg"
+                                            
+                                            >
+                                                <li>
+                                                <a
+                                                    href="{{ route('admin.attestations.index') }}"
+                                                    class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                    >Gestion des attestations</a
+                                                >
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="{{ route('admin.attestations.types.index') }}"
+                                                        class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                        >Types d'attestations</a
+                                                    >
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="{{ route('attestations.index') }}"
+                                                        class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                        >Mes attestations</a
+                                                    >
+                                                </li>
+                                           
+                                            </ul>
+                                        </li>
                                         <!-- Notes de frais -->
                                         <li class="item px-[43px] py-[11px]">
                                             <a href="{{ route('expense-reports.index') }}">
@@ -1330,6 +1551,22 @@
                                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M20 4C20 1.79086 18.2091 0 16 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H16C18.2091 18 20 16.2091 20 14V4Z" fill="#1A202C" class="path-1"></path>
                                                         <path d="M6 9C6 7.34315 4.65685 6 3 6H0V12H3C4.65685 12 6 10.6569 6 9Z" fill="#22C55E" class="path-2"></path>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                        </li>
+
+                                        <!-- Attestations -->
+                                        <li class="item px-[43px] py-[11px]">
+                                            <a href="{{ route('attestations.index') }}">
+                                                <span class="item-ico">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M4 0C1.79086 0 0 1.79086 0 4V16C0 18.2091 1.79086 20 4 20H16C18.2091 20 20 18.2091 20 16V4C20 1.79086 18.2091 0 16 0H4Z" fill="#1A202C" class="path-1"/>
+                                                        <path d="M6 6C5.44772 6 5 6.44772 5 7C5 7.55228 5.44772 8 6 8H14C14.5523 8 15 7.55228 15 7C15 6.44772 14.5523 6 14 6H6Z" fill="#22C55E" class="path-2"/>
+                                                        <path d="M6 10C5.44772 10 5 10.4477 5 11C5 11.5523 5.44772 12 6 12H14C14.5523 12 15 11.5523 15 11C15 10.4477 14.5523 10 14 10H6Z" fill="#22C55E" class="path-2"/>
+                                                        <path d="M6 14C5.44772 14 5 14.4477 5 15C5 15.5523 5.44772 16 6 16H10C10.5523 16 11 15.5523 11 15C11 14.4477 10.5523 14 10 14H6Z" fill="#22C55E" class="path-2"/>
+                                                        <circle cx="15" cy="5" r="3" fill="#22C55E" class="path-2"/>
+                                                        <path d="M13.5 5L14.5 6L16.5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                                     </svg>
                                                 </span>
                                             </a>

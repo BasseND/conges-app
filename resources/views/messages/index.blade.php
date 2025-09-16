@@ -124,8 +124,25 @@
 <script>
 // Actualiser le nombre de messages non lus toutes les 30 secondes
 setInterval(function() {
-    fetch('{{ route("messages.unread-count") }}')
-        .then(response => response.json())
+    fetch('{{ route("messages.unread-count") }}', {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin'
+    })
+        .then(response => {
+            if (response.ok) {
+                // Vérifier si la réponse est bien du JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    throw new Error('Réponse non-JSON reçue');
+                }
+            }
+            throw new Error('Erreur réseau: ' + response.status);
+        })
         .then(data => {
             // Mettre à jour l'indicateur dans la navigation si nécessaire
             const badge = document.querySelector('.messages-badge');
@@ -138,7 +155,9 @@ setInterval(function() {
                 }
             }
         })
-        .catch(error => console.error('Erreur:', error));
+        .catch(error => {
+            console.error('Erreur lors de la récupération des messages non lus:', error);
+        });
 }, 30000);
 </script>
 @endpush
