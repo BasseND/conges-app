@@ -67,6 +67,21 @@
                 </div>
             </div>
 
+            <!-- Carte Date de naissance -->
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 012 0v4m0 0V3a1 1 0 112 0v4m0 0h4m-4 0H8m0 0v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2H10a2 2 0 00-2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date de naissance</p>
+                        <p class="text-sm font-semibold {{ $user->birth_date ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->birth_date ? $user->birth_date->format('d/m/Y') : 'Non renseigné' }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Carte Adresse -->
             <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-600/50">
                 <div class="flex items-center space-x-3">
@@ -78,7 +93,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Adresse</p>
-                        <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 italic">Non renseigné</p>
+                        <p class="text-sm font-semibold {{ $user->address ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 italic' }}">{{ $user->address ?? 'Non renseigné' }}</p>
                     </div>
                 </div>
             </div>

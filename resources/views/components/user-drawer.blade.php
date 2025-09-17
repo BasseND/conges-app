@@ -115,8 +115,16 @@
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.marital_status || 'Non renseigné'"></p>
                     </div>
                     <div>
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date de naissance</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.birth_date ? new Date(user.birth_date).toLocaleDateString('fr-FR') : 'Non renseigné'"></p>
+                    </div>
+                    <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Téléphone</label>
                         <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.phone || 'Non renseigné'"></p>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Adresse</label>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.address || 'Non renseigné'"></p>
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nombre d'enfants</label>

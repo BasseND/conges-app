@@ -23,6 +23,7 @@ class AttestationTypeSeeder extends Seeder
         $types = [
             [
                 'name' => 'Attestation de travail',
+                'system_name' => 'attestation_de_travail',
                 'description' => 'Attestation confirmant l\'emploi du salarié dans l\'entreprise',
                 'template_file' => 'attestation_travail',
                 'type' => 'employment',
@@ -31,6 +32,7 @@ class AttestationTypeSeeder extends Seeder
             ],
             [
                 'name' => 'Attestation de salaire',
+                'system_name' => 'attestation_de_salaire',
                 'description' => 'Attestation indiquant le salaire et les conditions d\'emploi',
                 'template_file' => 'attestation_salaire',
                 'type' => 'salary',
@@ -40,6 +42,7 @@ class AttestationTypeSeeder extends Seeder
             ],
             [
                 'name' => 'Attestation de stage',
+                'system_name' => 'attestation_de_stage',
                 'description' => 'Attestation pour les stagiaires',
                 'template_file' => 'attestation_stage',
                 'type' => 'custom',

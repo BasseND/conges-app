@@ -16,12 +16,22 @@ class AttestationController extends Controller
     /**
      * Afficher la liste des demandes d'attestations de l'utilisateur connecté
      */
-    public function index()
+    public function index(Request $request)
     {
-        $requests = AttestationRequest::with(['attestationType', 'processor'])
+        $query = AttestationRequest::with(['attestationType', 'processor'])
             ->forUser(Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->orderBy('created_at', 'desc');
+
+        // Filtres
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('type')) {
+            $query->where('attestation_type_id', $request->type);
+        }
+
+        $requests = $query->paginate(10);
         
         $attestationTypes = AttestationType::active()->get();
 
@@ -56,7 +66,7 @@ class AttestationController extends Controller
         $validator = Validator::make($request->all(), [
             'attestation_type_id' => 'required|exists:attestation_types,id',
             'priority' => 'required|in:low,normal,high,urgent',
-            'start_date' => 'nullable|date|after_or_equal:today',
+            'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string|max:1000',
             'custom_data' => 'nullable|array'

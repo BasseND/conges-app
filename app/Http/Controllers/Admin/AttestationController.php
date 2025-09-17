@@ -46,7 +46,15 @@ class AttestationController extends Controller
         $requests = $query->paginate(15);
         $attestationTypes = AttestationType::all();
 
-        return view('admin.attestations.index', compact('requests', 'attestationTypes'));
+        // Calculer les statistiques
+        $stats = [
+            'pending' => AttestationRequest::where('status', AttestationRequest::STATUS_PENDING)->count(),
+            'approved' => AttestationRequest::where('status', AttestationRequest::STATUS_APPROVED)->count(),
+            'rejected' => AttestationRequest::where('status', AttestationRequest::STATUS_REJECTED)->count(),
+            'generated' => AttestationRequest::where('status', AttestationRequest::STATUS_GENERATED)->count(),
+        ];
+
+        return view('admin.attestations.index', compact('requests', 'attestationTypes', 'stats'));
     }
 
     /**
@@ -215,6 +223,7 @@ class AttestationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:attestation_types',
+            'system_name' => 'nullable|string|max:255|unique:attestation_types',
             'description' => 'nullable|string|max:1000',
             'template_file' => 'required|string|max:255',
             'type' => 'required|in:salary,presence,employment,custom',
@@ -233,6 +242,7 @@ class AttestationController extends Controller
 
         AttestationType::create([
             'name' => $request->name,
+            'system_name' => $request->system_name,
             'description' => $request->description,
             'template_file' => $request->template_file,
             'type' => $request->type,
@@ -266,6 +276,7 @@ class AttestationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:attestation_types,name,' . $id,
+            'system_name' => 'nullable|string|max:255|unique:attestation_types,system_name,' . $id,
             'description' => 'nullable|string|max:1000',
             'template_file' => 'required|string|max:255',
             'type' => 'required|in:salary,presence,employment,custom',
@@ -284,6 +295,7 @@ class AttestationController extends Controller
 
         $attestationType->update([
             'name' => $request->name,
+            'system_name' => $request->system_name,
             'description' => $request->description,
             'template_file' => $request->template_file,
             'type' => $request->type,

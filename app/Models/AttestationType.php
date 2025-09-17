@@ -25,6 +25,7 @@ class AttestationType extends Model
 
     protected $fillable = [
         'name',
+        'system_name',
         'description',
         'template_file',
         'type',
@@ -105,5 +106,41 @@ class AttestationType extends Model
     public function getFormattedStatusAttribute()
     {
         return $this->status === self::STATUS_ACTIVE ? 'Actif' : 'Inactif';
+    }
+
+    /**
+     * Scope pour rechercher par system_name
+     */
+    public function scopeBySystemName($query, $systemName)
+    {
+        return $query->where('system_name', $systemName);
+    }
+
+    /**
+     * Générer automatiquement le system_name basé sur le nom
+     */
+    public function generateSystemName()
+    {
+        return strtolower(str_replace([' ', '-', "'"], '_', $this->name));
+    }
+
+    /**
+     * Boot method pour générer automatiquement le system_name
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->system_name)) {
+                $model->system_name = $model->generateSystemName();
+            }
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name') && empty($model->system_name)) {
+                $model->system_name = $model->generateSystemName();
+            }
+        });
     }
 }

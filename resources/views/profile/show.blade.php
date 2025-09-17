@@ -91,6 +91,35 @@
                                     </div>
                                 </div>
                                 
+                                <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-yellow-400">
+                                    <div class="flex items-center">
+                                        <div class="bg-yellow-100 dark:bg-yellow-900/50 rounded-lg p-2 mr-3">
+                                            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 012 0v4m0 0V3a1 1 0 112 0v4m0 0h4m-4 0H8m0 0v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2H10a2 2 0 00-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date de naissance</p>
+                                            <p class="text-gray-900 dark:text-white font-medium">{{ $user->birth_date ? $user->birth_date->format('d/m/Y') : 'Non renseigné' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-indigo-400 md:col-span-2">
+                                    <div class="flex items-center">
+                                        <div class="bg-indigo-100 dark:bg-indigo-900/50 rounded-lg p-2 mr-3">
+                                            <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Adresse</p>
+                                            <p class="text-gray-900 dark:text-white font-medium">{{ $user->address ?: 'Non renseigné' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border-l-4 border-green-400">
                                     <div class="flex items-center">
                                         <div class="bg-green-100 dark:bg-green-900/50 rounded-lg p-2 mr-3">

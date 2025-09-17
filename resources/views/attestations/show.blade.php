@@ -1,34 +1,42 @@
 @section('title', 'Détails de la demande d\'attestation')
 <x-app-layout>
     <div class="pb-12">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <!-- En-tête -->
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+            <!-- En-tête épuré -->
             <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <div class="px-6 py-4">
+                <div class="px-6 py-6">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('attestations.index') }}" 
-                               class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                               class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                 </svg>
                             </a>
                             <div class="flex-shrink-0">
-                                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-2xl shadow-lg">
-                                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
                                 </div>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Demande d'attestation #{{ $attestationRequest->id }}</h1>
+                                <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Attestation #{{ $attestationRequest->id }}</h1>
                                 <p class="text-gray-600 dark:text-gray-400 mt-1">{{ $attestationRequest->attestationType->name }}</p>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->status_class }}">
+                                        {{ $attestationRequest->formatted_status }}
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->priority_class }}">
+                                        {{ $attestationRequest->formatted_priority }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="flex items-center space-x-3">
                             @if($attestationRequest->status === 'generated' && $attestationRequest->pdf_path)
                                 <a href="{{ route('attestations.download', $attestationRequest->id) }}" 
-                                   class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors duration-200">
+                                   class="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white text-sm font-medium rounded-md transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
@@ -37,7 +45,7 @@
                             @endif
                             @if($attestationRequest->status === 'pending')
                                 <button onclick="cancelRequest({{ $attestationRequest->id }})" 
-                                        class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200">
+                                        class="inline-flex items-center px-4 py-2 border border-red-300 text-red-700 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/20 text-sm font-medium rounded-md transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
@@ -66,17 +74,17 @@
                     <!-- Informations principales -->
                     <div class="lg:col-span-2">
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informations de la demande</h2>
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Informations de la demande</h2>
                             
                             <div class="space-y-4">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type d'attestation</label>
-                                        <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $attestationRequest->attestationType->name }}</p>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type d'attestation</label>
+                                        <p class="text-sm text-gray-900 dark:text-white">{{ $attestationRequest->attestationType->name }}</p>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Statut</label>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->status_class }} mt-1">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Statut</label>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->status_class }}">
                                             {{ $attestationRequest->formatted_status }}
                                         </span>
                                     </div>
@@ -84,14 +92,14 @@
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priorité</label>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->priority_class }} mt-1">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priorité</label>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $attestationRequest->priority_class }}">
                                             {{ $attestationRequest->formatted_priority }}
                                         </span>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de demande</label>
-                                        <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $attestationRequest->created_at->format('d/m/Y à H:i') }}</p>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date de demande</label>
+                                        <p class="text-sm text-gray-900 dark:text-white">{{ $attestationRequest->created_at->format('d/m/Y à H:i') }}</p>
                                     </div>
                                 </div>
 
@@ -99,14 +107,14 @@
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         @if($attestationRequest->start_date)
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de début</label>
-                                                <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $attestationRequest->start_date->format('d/m/Y') }}</p>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date de début</label>
+                                                <p class="text-sm text-gray-900 dark:text-white">{{ $attestationRequest->start_date->format('d/m/Y') }}</p>
                                             </div>
                                         @endif
                                         @if($attestationRequest->end_date)
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de fin</label>
-                                                <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $attestationRequest->end_date->format('d/m/Y') }}</p>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date de fin</label>
+                                                <p class="text-sm text-gray-900 dark:text-white">{{ $attestationRequest->end_date->format('d/m/Y') }}</p>
                                             </div>
                                         @endif
                                     </div>
@@ -114,8 +122,8 @@
 
                                 @if($attestationRequest->notes)
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Notes</label>
-                                        <div class="mt-1 p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+                                        <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600">
                                             <p class="text-sm text-gray-900 dark:text-white whitespace-pre-wrap">{{ $attestationRequest->notes }}</p>
                                         </div>
                                     </div>
@@ -214,14 +222,18 @@
                                                 @endif
                                                 <div class="relative flex space-x-3">
                                                     <div>
-                                                        <span class="h-8 w-8 rounded-full {{ $attestationRequest->status === 'approved' ? 'bg-green-500' : 'bg-red-500' }} flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
+                                                        <span class="h-8 w-8 rounded-full @if($attestationRequest->status === 'approved') bg-green-500 @elseif($attestationRequest->status === 'rejected') bg-red-500 @else bg-gray-500 @endif flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
                                                             @if($attestationRequest->status === 'approved')
                                                                 <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                                                 </svg>
-                                                            @else
+                                                            @elseif($attestationRequest->status === 'rejected')
                                                                 <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                            @else
+                                                                <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                                                 </svg>
                                                             @endif
                                                         </span>
@@ -229,7 +241,13 @@
                                                     <div class="min-w-0 flex-1 pt-1.5">
                                                         <div>
                                                             <p class="text-sm text-gray-900 dark:text-white font-medium">
-                                                                Demande {{ $attestationRequest->status === 'approved' ? 'approuvée' : 'rejetée' }}
+                                                                @if($attestationRequest->status === 'approved')
+                                                                    Demande approuvée
+                                                                @elseif($attestationRequest->status === 'rejected')
+                                                                    Demande rejetée
+                                                                @else
+                                                                    Demande traitée
+                                                                @endif
                                                             </p>
                                                             <p class="text-sm text-gray-500 dark:text-gray-400">{{ $attestationRequest->processed_at->format('d/m/Y à H:i') }}</p>
                                                             @if($attestationRequest->processor)

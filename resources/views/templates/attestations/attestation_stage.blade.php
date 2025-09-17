@@ -31,12 +31,22 @@
         }
         
         .company-info {
-            text-align: left;
             margin-bottom: 30px;
             background: #faf5ff;
             padding: 20px;
             border-radius: 8px;
             border-left: 4px solid #7c3aed;
+        }
+        
+        .company-logo {
+            flex-shrink: 0;
+            margin-right: 20px;
+            vertical-align: top;
+        }
+        
+        .company-details {
+            flex-grow: 1;
+            vertical-align: top;
         }
         
         .company-name {
@@ -96,17 +106,17 @@
         }
         
         .signatures {
-            display: table;
             width: 100%;
             margin-top: 60px;
             page-break-inside: avoid;
+            text-align: center;
         }
         
         .signature-box {
-            display: table-cell;
             text-align: center;
-            width: 50%;
+            width: 45%;
             vertical-align: top;
+            display: inline-block;
         }
         
         .signature-line {
@@ -152,20 +162,24 @@
 </head>
 <body>
     <div class="header" >
-        <div class="company-info" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            @if($logo_entreprise)
-                <div class="company-logo" style="flex-shrink: 0; margin-right: 20px;">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $logo_entreprise))) }}" alt="Logo {{ $entreprise }}" style="max-height: 80px; max-width: 200px;">
-                </div>
-            @endif
-            <div style="flex-grow: 1; text-align: {{ $logo_entreprise ? 'right' : 'left' }};">
-                <div class="company-name">{{ $entreprise }}</div>
-                <div>{{ $adresse_entreprise }}</div>
-                <div>{{ $code_postal_entreprise }} {{ $ville_entreprise }}</div>
-                @if($siret)
-                    <div>SIRET : {{ $siret }}</div>
-                @endif
-            </div>
+        <div class="company-info">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    @if($logo_entreprise)
+                        <td class="company-logo" style="width: 200px; vertical-align: top; padding-right: 20px;">
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $logo_entreprise))) }}" alt="Logo {{ $entreprise }}" style="max-height: 80px; max-width: 200px; display: block;">
+                        </td>
+                    @endif
+                    <td class="company-details" style="vertical-align: top; text-align: {{ $logo_entreprise ? 'right' : 'left' }};">
+                        <div class="company-name">{{ $entreprise }}</div>
+                        <div>{{ $adresse_entreprise }}</div>
+                        <div>{{ $code_postal_entreprise }} {{ $ville_entreprise }}</div>
+                        @if($siret)
+                            <div>SIRET : {{ $siret }}</div>
+                        @endif
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -230,14 +244,14 @@
         <p style="margin-top: 40px;">Fait le <strong>{{ $date_actuelle }}</strong></p>
     </div>
 
-    <div class="signature-section">
+    <div class="signatures">
         <p style="margin: 0 0 10px 0; font-weight: bold;">
             {{ $generateur }}
         </p>
         <p style="margin: 0; font-size: 11px; color: #666;">
             Directeur des Ressources Humaines
         </p>
-        <div class="signature-box"></div>
+        <div class="signature-line"></div>
     </div>
 
     <div class="footer">

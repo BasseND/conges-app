@@ -315,14 +315,14 @@ class AttestationPdfService
         
         .signature-section {
             margin-top: 60px;
-            display: table;
             width: 100%;
+            text-align: center;
         }
         
         .signature-left, .signature-right {
-            display: table-cell;
             width: 50%;
             vertical-align: top;
+            display: inline-block;
         }
         
         .signature-right {
