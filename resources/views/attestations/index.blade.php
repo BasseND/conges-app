@@ -213,7 +213,7 @@
                                             Voir détails
                                         </a>
                                         @if($request->status === 'pending')
-                                            <button onclick="cancelRequest({{ $request->id }})" 
+                                            <button @click="$dispatch('delete-dialog', '{{ route('attestations.cancel', $request->id) }}')" 
                                                     class="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
                                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -247,9 +247,7 @@
 
                 <!-- Pagination -->
                 @if($requests->hasPages())
-                    <div class="mt-6">
-                        {{ $requests->links() }}
-                    </div>
+                    <x-pagination :paginator="$requests" entity-name="attestations" />
                 @endif
             </div>
         </div>
@@ -259,50 +257,16 @@
     @include('attestations.modals.create')
 
     <script>
-        // Ouvrir le modal de création
+        // Ouvrir le modal de création avec Alpine.js
         document.getElementById('newAttestationBtn').addEventListener('click', function() {
-            document.getElementById('createAttestationModal').classList.remove('hidden');
+            window.dispatchEvent(new CustomEvent('open-attestation-modal'));
         });
 
         document.getElementById('newAttestationBtnEmpty')?.addEventListener('click', function() {
-            document.getElementById('createAttestationModal').classList.remove('hidden');
+            window.dispatchEvent(new CustomEvent('open-attestation-modal'));
         });
-
-        // Fermer le modal
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('createAttestationModal').classList.add('hidden');
-        });
-
-        // Fermer le modal en cliquant à l'extérieur
-        document.getElementById('createAttestationModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.add('hidden');
-            }
-        });
-
-        // Fonction pour annuler une demande
-        function cancelRequest(requestId) {
-            if (confirm('Êtes-vous sûr de vouloir annuler cette demande ?')) {
-                fetch(`/attestations/${requestId}/cancel`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert(data.message || 'Une erreur est survenue');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Une erreur est survenue');
-                });
-            }
-        }
     </script>
+
+    {{-- Modal de confirmation d'annulation --}}
+    <x-modals.delete-dialog message="Êtes-vous sûr de vouloir annuler cette demande d'attestation ? Cette action ne peut pas être annulée." />
 </x-app-layout>

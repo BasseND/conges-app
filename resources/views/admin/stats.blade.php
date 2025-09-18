@@ -63,7 +63,7 @@
                               </svg>
                           </div>
                           <div class="ml-6 flex-1">
-                              <h3 class="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wider uppercase mb-1">Total demandes</h3>
+                              <h3 class="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wider uppercase mb-1">Total des accomptes</h3>
                               <p class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">{{ $stats['salary_advances_total'] }}</p>
                      
                           </div>
@@ -438,63 +438,10 @@
                 </div>
             </div>
 
-            <!-- Graphique des contrats -->
-            <div class="mt-6">
-                <div class="relative bg-gradient-to-br from-white via-orange-50 to-amber-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500"></div>
-                    <div class="p-8">
-                        <div class="flex items-center justify-between mb-6">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📋 Répartition des contrats en vigueur</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Types de contrats et montants totaux</p>
-                            </div>
-                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <!-- Graphique en secteurs -->
-                            <div class="relative h-96 bg-white dark:bg-gray-800 rounded-xl p-4">
-                                <canvas id="contractChart"></canvas>
-                            </div>
-                            <!-- Détails des contrats -->
-                            <div class="space-y-4">
-                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Détails par type</h4>
-                                @foreach($contractStats as $index => $contract)
-                                    @php
-                                        $colors = ['bg-[#29caf1]', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500'];
-                                        $colorClass = $colors[$index % count($colors)];
-                                    @endphp
-                                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-4 h-4 rounded-full {{ $colorClass }}"></div>
-                                            <div>
-                                                <p class="font-medium text-gray-900 dark:text-white">{{ $contract['label'] }}</p>
-                                                <p class="text-sm text-gray-600 dark:text-gray-300">{{ $contract['count'] }} contrat(s)</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="font-bold text-gray-900 dark:text-white">{{ number_format($contract['total_amount'], 0, ',', ' ') }} €</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">Total brut</p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                @if($contractStats->isEmpty())
-                                    <div class="text-center py-8">
-                                        <p class="text-gray-500 dark:text-gray-400">Aucun contrat actif trouvé</p>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- CONGES  -->
-            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-              
+            <div class="mt-6">
               <!-- Dernières activités congés -->
               <div class="mt-8 bg-white dark:from-darkblack-600 dark:to-darkblack-700 overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-gray-600">
                   <div class="p-8">
@@ -540,6 +487,22 @@
                                       <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                                         <div class="flex items-center space-x-2">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                          </svg>
+                                          <span>Période</span>
+                                        </div>
+                                      </th>
+                                      <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center space-x-2">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                          </svg>
+                                          <span>Durée</span>
+                                        </div>
+                                      </th>
+                                      <th class="px-8 py-5 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                                        <div class="flex items-center space-x-2">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                           </svg>
                                           <span>Utilisateur</span>
@@ -575,6 +538,22 @@
                                               <x-leave-type-badge :type="$activity->specialLeaveType?->system_name ?: 'unknown'" :specialLeaveType="$activity->specialLeaveType" />
                                           </td>
                                           <td class="px-8 py-6 whitespace-nowrap">
+                                              <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                  {{ $activity->start_date->format('d/m/Y') }}
+                                              </div>
+                                              <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                  au {{ $activity->end_date->format('d/m/Y') }}
+                                              </div>
+                                          </td>
+                                          <td class="px-8 py-6 whitespace-nowrap">
+                                              <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                  </svg>
+                                                  {{ $activity->duration }} jour(s)
+                                              </div>
+                                          </td>
+                                          <td class="px-8 py-6 whitespace-nowrap">
                                               <div class="flex items-center space-x-3">
                                                 <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform duration-200">
                                                   {{ substr($activity->user->first_name, 0, 1) }}{{ substr($activity->user->last_name ?? '', 0, 1) }}
@@ -605,12 +584,62 @@
                       </div>
                   </div>
               </div>
-              
-              
-              
-              
-            
             </div>
+
+            <!-- Graphique des contrats -->
+            <div class="mt-6">
+                <div class="relative bg-gradient-to-br from-white via-orange-50 to-amber-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-600 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-600 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500"></div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📋 Répartition des contrats en vigueur</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Types de contrats et montants totaux</p>
+                            </div>
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Graphique en secteurs -->
+                            <div class="relative h-96 bg-white dark:bg-gray-800 rounded-xl p-4">
+                                <canvas id="contractChart"></canvas>
+                            </div>
+                            <!-- Détails des contrats -->
+                            <div class="space-y-4">
+                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Détails par type</h4>
+                                @foreach($contractStats as $index => $contract)
+                                    @php
+                                        $colors = ['bg-[#29caf1]', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500'];
+                                        $colorClass = $colors[$index % count($colors)];
+                                    @endphp
+                                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-4 h-4 rounded-full {{ $colorClass }}"></div>
+                                            <div>
+                                                <p class="font-medium text-gray-900 dark:text-white">{{ $contract['label'] }}</p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-300">{{ $contract['count'] }} contrat(s)</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-bold text-gray-900 dark:text-white">{{ number_format($contract['total_amount'], 0, ',', ' ') }} {{ $globalCompanyCurrency }}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">Total brut</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if($contractStats->isEmpty())
+                                    <div class="text-center py-8">
+                                        <p class="text-gray-500 dark:text-gray-400">Aucun contrat actif trouvé</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- NOTES DE FRAIS -->
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
               <!-- Dernières notes de frais -->
@@ -700,14 +729,28 @@
                                               </div>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 whitespace-nowrap">
+                                        <td class="px-8 py-6 whitespace-nowrap" x-data="{ showAmount: false }">
                                             <div class="flex items-center space-x-2">
                                               <div class="p-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-lg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-yellow-600 dark:text-yellow-400">
                                                   <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 100 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                               </div>
-                                              <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($expense->total_amount, 2) }} {{ $globalCompanyCurrency }}</span>
+                                              <div class="flex items-center space-x-2">
+                                                <span class="text-lg font-bold text-gray-900 dark:text-white">
+                                                  <span x-show="!showAmount">•••••</span>
+                                                  <span x-show="showAmount">{{ number_format($expense->total_amount, 2) }} {{ $globalCompanyCurrency }}</span>
+                                                </span>
+                                                <button @click="showAmount = !showAmount" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200">
+                                                  <svg x-show="!showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                  </svg>
+                                                  <svg x-show="showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                                  </svg>
+                                                </button>
+                                              </div>
                                             </div>
                                         </td>
                                         <td class="px-8 py-6 whitespace-nowrap">
@@ -847,14 +890,28 @@
                                                 </div>
                                               </div>
                                           </td>
-                                          <td class="px-8 py-6 whitespace-nowrap">
+                                          <td class="px-8 py-6 whitespace-nowrap" x-data="{ showAmount: false }">
                                               <div class="flex items-center space-x-2">
                                                 <div class="p-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-lg">
                                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-yellow-600 dark:text-yellow-400">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                   </svg>
                                                 </div>
-                                                <span class="text-lg font-bold text-gray-900 dark:text-white">{{ number_format($advance->amount, 2) }} {{ $globalCompanyCurrency }}</span>
+                                                <div class="flex items-center space-x-2">
+                                                  <span class="text-lg font-bold text-gray-900 dark:text-white">
+                                                    <span x-show="!showAmount">•••••</span>
+                                                    <span x-show="showAmount">{{ number_format($advance->amount, 2) }} {{ $globalCompanyCurrency }}</span>
+                                                  </span>
+                                                  <button @click="showAmount = !showAmount" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200">
+                                                    <svg x-show="!showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                    </svg>
+                                                    <svg x-show="showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                                    </svg>
+                                                  </button>
+                                                </div>
                                               </div>
                                           </td>
                                           <td class="px-8 py-6 whitespace-nowrap">
@@ -1050,7 +1107,7 @@
                                     return `📅 ${context[0].label}`;
                                 },
                                 label: function(context) {
-                                    return `💰 ${context.parsed.y.toLocaleString('fr-FR')} €`;
+                                    return `💰 ${context.parsed.y.toLocaleString('fr-FR')} {{ $globalCompanyCurrency }}`;
                                 }
                             }
                         }
@@ -1080,7 +1137,7 @@
                                     weight: 'bold'
                                 },
                                 callback: function(value) {
-                                    return value.toLocaleString('fr-FR') + ' €';
+                                    return value.toLocaleString('fr-FR') + ' {{ $globalCompanyCurrency }}';
                                 }
                             },
                             title: {
@@ -1163,7 +1220,7 @@
                                     return `📅 ${context[0].label}`;
                                 },
                                 label: function(context) {
-                                    return `💳 ${context.parsed.y.toLocaleString('fr-FR')} €`;
+                                    return `💳 ${context.parsed.y.toLocaleString('fr-FR')} {{ $globalCompanyCurrency }}`;
                                 }
                             }
                         }
@@ -1193,7 +1250,7 @@
                                     weight: 'bold'
                                 },
                                 callback: function(value) {
-                                    return value.toLocaleString('fr-FR') + ' €';
+                                    return value.toLocaleString('fr-FR') + ' {{ $globalCompanyCurrency }}';
                                 }
                             },
                             title: {
@@ -1524,7 +1581,7 @@
                                     const contract = contractData[context.dataIndex];
                                     return [
                                         `👥 ${context.parsed} contrat(s)`,
-                                        `💰 ${new Intl.NumberFormat('fr-FR').format(contract.total_amount)} € brut`
+                                        `💰 ${new Intl.NumberFormat('fr-FR').format(contract.total_amount)} {{ $globalCompanyCurrency }} brut`
                                     ];
                                 }
                             }

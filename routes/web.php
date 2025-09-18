@@ -190,7 +190,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [\App\Http\Controllers\AttestationController::class, 'store'])->name('store');
         Route::get('/{attestationRequest}', [\App\Http\Controllers\AttestationController::class, 'show'])->name('show');
         Route::get('/{attestationRequest}/download', [\App\Http\Controllers\AttestationController::class, 'download'])->name('download');
-        Route::post('/{attestationRequest}/cancel', [\App\Http\Controllers\AttestationController::class, 'cancel'])->name('cancel');
+        Route::delete('/{attestationRequest}/cancel', [\App\Http\Controllers\AttestationController::class, 'cancel'])->name('cancel');
         Route::get('/types/available', [\App\Http\Controllers\AttestationController::class, 'getAvailableTypes'])->name('types.available');
     });
 

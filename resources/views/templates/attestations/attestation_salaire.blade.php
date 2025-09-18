@@ -105,7 +105,7 @@
         
         .signature-box {
             text-align: center;
-            width: 45%;
+            width: 40%;
             vertical-align: top;
             display: inline-block;
         }
@@ -181,7 +181,7 @@
         </div>
 
         <div class="salary-info">
-            <p>Perçoit un salaire mensuel brut de <span class="highlight">{{ $salaire }} €</span></p>
+            <p>Perçoit un salaire mensuel brut de <span class="highlight">{{ $salaire }} {{ $globalCompanyCurrency }}</span></p>
             <p>Cette attestation est délivrée pour servir et valoir ce que de droit.</p>
         </div>
 
@@ -191,12 +191,12 @@
     <div class="signatures">
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
-                <td class="signature-box" style="width: 50%; text-align: center; vertical-align: top; padding: 0 20px;">
+                <td class="signature-box" style="text-align: center; vertical-align: top; padding: 0 20px;">
                     <div>L'employé(e)</div>
                     <div class="signature-line"></div>
                     <div>{{ $nom }} {{ $prenom }}</div>
                 </td>
-                <td class="signature-box" style="width: 50%; text-align: center; vertical-align: top; padding: 0 20px;">
+                <td class="signature-box" style="text-align: center; vertical-align: top; padding: 0 20px;">
                     <div>L'employeur</div>
                     <div class="signature-line"></div>
                     <div>{{ $directeur_rh }}</div>

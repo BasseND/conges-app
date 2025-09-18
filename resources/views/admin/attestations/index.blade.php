@@ -297,7 +297,7 @@
                                                     Voir
                                                 </a>
                                                 @if($request->status === 'pending')
-                                                    <button onclick="approveRequest({{ $request->id }})" 
+                                                    <button @click="$dispatch('approve-dialog', '{{ route('admin.attestations.approve', $request->id) }}')" 
                                                             class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-medium rounded-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -313,7 +313,7 @@
                                                     </button>
                                                 @endif
                                                 @if($request->status === 'approved' && !$request->pdf_path)
-                                                    <button onclick="generatePdf({{ $request->id }})" 
+                                                    <button @click="$dispatch('generate-pdf-dialog', '{{ route('admin.attestations.generate-pdf', $request->id) }}')" 
                                                             class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-xs font-medium rounded-lg hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -339,9 +339,8 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="bg-gradient-to-r from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                        {{ $requests->appends(request()->query())->links() }}
-                    </div>
+                    <x-pagination :paginator="$requests" entity-name="attestations" />
+                   
                 @else
                     <div class="px-6 py-16 text-center">
                         <div class="mx-auto w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mb-6">
@@ -388,29 +387,7 @@
     <script>
         let currentRequestId = null;
 
-        function approveRequest(requestId) {
-            if (confirm('Êtes-vous sûr de vouloir approuver cette demande ?')) {
-                fetch(`/admin/attestations/${requestId}/approve`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert(data.message || 'Une erreur est survenue');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Une erreur est survenue');
-                });
-            }
-        }
+
 
         function rejectRequest(requestId) {
             currentRequestId = requestId;
@@ -423,29 +400,7 @@
             currentRequestId = null;
         }
 
-        function generatePdf(requestId) {
-            if (confirm('Générer le PDF pour cette attestation ?')) {
-                fetch(`/admin/attestations/${requestId}/generate-pdf`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert(data.message || 'Une erreur est survenue');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Une erreur est survenue');
-                });
-            }
-        }
+
 
         document.getElementById('rejectForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -482,4 +437,10 @@
             }
         });
     </script>
+
+    {{-- Modal de confirmation d'approbation --}}
+    <x-modals.approve-dialog message="Êtes-vous sûr de vouloir approuver cette demande d'attestation ? Cette action ne peut pas être annulée." />
+
+    {{-- Modal de confirmation de génération de PDF --}}
+    <x-modals.generate-pdf-dialog message="Êtes-vous sûr de vouloir générer le PDF pour cette attestation ?" />
 </x-app-layout>

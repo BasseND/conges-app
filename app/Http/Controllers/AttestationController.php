@@ -73,6 +73,13 @@ class AttestationController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur de validation.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -81,6 +88,12 @@ class AttestationController extends Controller
         // Vérifier que le type d'attestation est actif
         $attestationType = AttestationType::active()->find($request->attestation_type_id);
         if (!$attestationType) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Type d\'attestation non disponible.'
+                ], 400);
+            }
             return redirect()->back()
                 ->with('error', 'Type d\'attestation non disponible.')
                 ->withInput();
@@ -88,6 +101,12 @@ class AttestationController extends Controller
 
         // Valider les champs requis selon le type
         if ($attestationType->requires_date_range && (!$request->start_date || !$request->end_date)) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ce type d\'attestation nécessite une période (date de début et fin).'
+                ], 400);
+            }
             return redirect()->back()
                 ->with('error', 'Ce type d\'attestation nécessite une période (date de début et fin).')
                 ->withInput();
@@ -103,6 +122,14 @@ class AttestationController extends Controller
             'custom_data' => $request->custom_data,
             'status' => AttestationRequest::STATUS_PENDING
         ]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Votre demande d\'attestation a été envoyée avec succès.',
+                'data' => $attestationRequest
+            ]);
+        }
 
         return redirect()->route('attestations.index')
             ->with('success', 'Votre demande d\'attestation a été envoyée avec succès.');
