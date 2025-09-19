@@ -53,6 +53,9 @@ class CompanyController extends Controller
             'contact_phone' => 'nullable|string|max:20',
             'currency' => 'nullable|string|max:10',
             'salary_advance_deadline_day' => 'nullable|integer|min:1|max:31',
+            'director_name' => 'nullable|string|max:255',
+            'hr_director_name' => 'nullable|string|max:255',
+            'hr_signature' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -62,7 +65,7 @@ class CompanyController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['logo']);
+        $data = $request->except(['logo', 'hr_signature']);
 
         // Gestion du logo
         if ($request->hasFile('logo')) {
@@ -74,6 +77,18 @@ class CompanyController extends Controller
             // Stocker le nouveau logo
             $logoPath = $request->file('logo')->store('company/logos', 'public');
             $data['logo'] = $logoPath;
+        }
+
+        // Gestion de la signature du DRH
+        if ($request->hasFile('hr_signature')) {
+            // Supprimer l'ancienne signature s'il existe
+            if ($company && $company->hr_signature && Storage::disk('public')->exists($company->hr_signature)) {
+                Storage::disk('public')->delete($company->hr_signature);
+            }
+
+            // Stocker la nouvelle signature
+            $signaturePath = $request->file('hr_signature')->store('company/signatures', 'public');
+            $data['hr_signature'] = $signaturePath;
         }
 
         if ($company) {
@@ -120,6 +135,9 @@ class CompanyController extends Controller
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:20',
             'currency' => 'nullable|string|max:10',
+            'director_name' => 'nullable|string|max:255',
+            'hr_director_name' => 'nullable|string|max:255',
+            'hr_signature' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -129,12 +147,18 @@ class CompanyController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['logo']);
+        $data = $request->except(['logo', 'hr_signature']);
 
         // Gestion du logo
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('company/logos', 'public');
             $data['logo'] = $logoPath;
+        }
+
+        // Gestion de la signature du DRH
+        if ($request->hasFile('hr_signature')) {
+            $signaturePath = $request->file('hr_signature')->store('company/signatures', 'public');
+            $data['hr_signature'] = $signaturePath;
         }
 
         Company::create($data);

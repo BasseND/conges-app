@@ -50,6 +50,16 @@ class AttestationTypeSeeder extends Seeder
                 'requires_date_range' => true,
                 'created_by' => $adminUser->id,
             ],
+            [
+                'name' => 'Attestation de présence / assiduité',
+                'system_name' => 'attestation_de_presence',
+                'description' => 'Attestation confirmant la présence et l\'assiduité du salarié',
+                'template_file' => 'attestation_presence',
+                'type' => 'presence',
+                'status' => 'active',
+                'requires_date_range' => true,
+                'created_by' => $adminUser->id,
+            ],
         ];
 
         foreach ($types as $type) {

@@ -22,12 +22,13 @@
             margin: 0;
             padding: 0;
         }
-        
+       
         .header {
             text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #2563eb;
             padding-bottom: 15px;
+        }
+        .header-border {
+            border-bottom: 2px solid #2563eb;
         }
         
         .company-info {
@@ -109,12 +110,7 @@
             vertical-align: top;
             display: inline-block;
         }
-        
-        .signature-line {
-            border-bottom: 1px solid #333;
-            height: 40px;
-            margin: 15px 0 8px 0;
-        }
+
         
         .footer {
             position: fixed;
@@ -150,7 +146,7 @@
                         <div>{{ $adresse_entreprise }}</div>
                         <div>{{ $code_postal_entreprise }} {{ $ville_entreprise }}</div>
                         @if($siret)
-                            <div>SIRET : {{ $siret }}</div>
+                            <div>N° d'enregistrement : {{ $siret }}</div>
                         @endif
                     </td>
                 </tr>
@@ -166,12 +162,12 @@
         {{ $ville_entreprise }}, le {{ $date_actuelle }}
     </div>
 
-    <div style="text-align: center;">
+    <div class="header header-border">
         <h1 class="attestation-title">Attestation de Salaire</h1>
     </div>
 
     <div class="content">
-        <p>Je soussigné(e), <span class="highlight">{{ $directeur_rh }}</span>, Directeur des Ressources Humaines de <span class="highlight">{{ $entreprise }}</span>, certifie que :</p>
+        <p>Je soussigné(e), <span class="highlight">{{ $hr_director_name ?? $directeur_rh }}</span>, Directeur des Ressources Humaines de <span class="highlight">{{ $entreprise }}</span>, certifie que :</p>
 
         <div class="employee-info">
             <p><strong>{{ $civilite }} {{ $nom }} {{ $prenom }}</strong></p>
@@ -189,20 +185,17 @@
     </div>
 
     <div class="signatures">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td class="signature-box" style="text-align: center; vertical-align: top; padding: 0 20px;">
-                    <div>L'employé(e)</div>
-                    <div class="signature-line"></div>
-                    <div>{{ $nom }} {{ $prenom }}</div>
-                </td>
-                <td class="signature-box" style="text-align: center; vertical-align: top; padding: 0 20px;">
-                    <div>L'employeur</div>
-                    <div class="signature-line"></div>
-                    <div>{{ $directeur_rh }}</div>
-                </td>
-            </tr>
-        </table>
+        @if(isset($hr_signature) && $hr_signature)
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $hr_signature))) }}" alt="Signature DRH" style="max-height: 80px; max-width: 200px;">
+            </div>
+        @endif
+        <p style="margin: 0 0 10px 0; font-weight: bold;">
+            {{ $hr_director_name ?? $generateur }}
+        </p>
+        <p style="margin: 0; font-size: 11px; color: #666;">
+            Directeur des Ressources Humaines
+        </p>
     </div>
 
     <div class="footer">

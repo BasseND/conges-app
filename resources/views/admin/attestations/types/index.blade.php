@@ -246,8 +246,9 @@
                         <select id="template_file" name="template_file" required
                                 class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">Sélectionnez un template HTML</option>
-                            <option value="attestation-travail.blade.php">Template Attestation de Travail</option>
-                            <option value="attestation-stage.blade.php">Template Attestation de Stage</option>
+                            <option value="attestation_travail">Template Attestation de Travail</option>
+                            <option value="attestation_stage">Template Attestation de Stage</option>
+                            <option value="attestation_presence">Template Attestation de Présence / Assiduité</option>
                         </select>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             Sélectionnez un template HTML prédéfini pour ce type d'attestation.

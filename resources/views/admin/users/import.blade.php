@@ -84,6 +84,18 @@
                         </h2>
                     </div>
                     
+                    <div class="bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg p-4 border border-green-200 dark:border-green-700 mb-6">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h4 class="text-sm font-semibold text-green-800 dark:text-green-200">Nouveauté - Champs étendus</h4>
+                        </div>
+                        <p class="text-sm text-green-700 dark:text-green-300">
+                            La fonctionnalité d'import a été mise à jour pour inclure de nouveaux champs : état civil, statut professionnel, nombre d'enfants, matricule, affectation, catégorie, section et service. Ces champs sont optionnels et permettent une gestion plus complète des profils utilisateurs.
+                        </p>
+                    </div>
+
                     <div class="space-y-6">
                         <div class="group/step flex items-start space-x-4 p-4 rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all duration-300">
                             <div class="relative">
@@ -175,18 +187,67 @@
                                     </div>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-lg">Colonnes optionnelles</h3>
                                 </div>
-                                <div class="grid grid-cols-1 gap-2">
-                                    <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
-                                        <span><strong>telephone</strong> : Numéro de téléphone</span>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    <div class="space-y-3">
+                                        <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600 pb-1">Informations de base</h5>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>telephone</strong> : Numéro de téléphone</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>mot_de_passe</strong> : Mot de passe (défaut: password123)</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>prestataire</strong> : oui/non (défaut: non)</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
-                                        <span><strong>mot_de_passe</strong> : Mot de passe (défaut: password123)</span>
+                                    
+                                    <div class="space-y-3">
+                                        <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600 pb-1">Informations personnelles</h5>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>etat_civil</strong> : marié, célibataire, veuf</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>nombre_enfants</strong> : Nombre d'enfants (0-20)</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
-                                        <span><strong>prestataire</strong> : oui/non (défaut: non)</span>
+                                    
+                                    <div class="space-y-3 lg:col-span-2">
+                                        <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600 pb-1">Informations professionnelles</h5>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>statut_professionnel</strong> : fonctionnaire, contractuel_cdi, contractuel_cdd</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>matricule</strong> : Matricule unique</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>categorie</strong> : cadre, agent_de_maitrise, employe, ouvrier</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>affectation</strong> : Affectation de l'employé</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>section</strong> : Section de travail</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>service</strong> : Service de travail</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

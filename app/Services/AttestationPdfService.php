@@ -131,15 +131,17 @@ class AttestationPdfService
             'adresse_entreprise' => $company ? $company->address : config('app.company_address', 'Adresse de l\'entreprise'),
             'ville_entreprise' => $company ? $company->city : config('app.company_city', 'Ville'),
             'code_postal_entreprise' => $company ? $company->postal_code : config('app.company_postal_code', 'Code postal'),
-            'siret' => config('app.company_siret', 'SIRET'),
-            'directeur_rh' => config('app.hr_director_name', 'Directeur RH'),
-            'generateur' => config('app.hr_director_name', 'Directeur RH'),
+            'siret' => $company ? $company->registration_number : config('app.company_siret', 'SIRET'),
+            'directeur_rh' => $company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH'),
+            'hr_director_name' => $company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH'),
+            'hr_signature' => $company ? $company->hr_signature : null,
+            'generateur' => $company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH'),
             
             // Variables spécifiques aux stages
             'date_debut_stage' => $attestationRequest->start_date ? Carbon::parse($attestationRequest->start_date)->format('d/m/Y') : '',
             'date_fin_stage' => $attestationRequest->end_date ? Carbon::parse($attestationRequest->end_date)->format('d/m/Y') : '',
             'duree_stage' => $this->calculateStageDuration($attestationRequest),
-            'maitre_stage' => $attestationRequest->custom_data['maitre_stage'] ?? config('app.hr_director_name', 'Directeur RH'),
+            'maitre_stage' => $attestationRequest->custom_data['maitre_stage'] ?? ($company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH')),
             'missions_stage' => $attestationRequest->custom_data['missions_stage'] ?? 'Missions variées selon les besoins du service',
             'formation' => $attestationRequest->custom_data['formation'] ?? 'Non renseigné',
             'etablissement' => $attestationRequest->custom_data['etablissement'] ?? 'Non renseigné',
@@ -196,6 +198,9 @@ class AttestationPdfService
      */
     public function replaceTemplateVariables(string $template, User $user, AttestationRequest $attestationRequest): string
     {
+        // Récupérer les informations de l'entreprise depuis le modèle Company
+        $company = \App\Models\Company::first();
+        
         $variables = [
             '{nom}' => strtoupper($user->last_name),
             '{prenom}' => ucfirst($user->first_name),
@@ -214,12 +219,15 @@ class AttestationPdfService
             '{date_actuelle}' => Carbon::now()->format('d/m/Y'),
             '{date_demande}' => $attestationRequest->created_at->format('d/m/Y'),
             '{numero_attestation}' => $this->generateAttestationNumber($attestationRequest),
-            '{entreprise}' => config('app.company_name', 'Nom de l\'entreprise'),
-            '{adresse_entreprise}' => config('app.company_address', 'Adresse de l\'entreprise'),
-            '{ville_entreprise}' => config('app.company_city', 'Ville'),
-            '{code_postal_entreprise}' => config('app.company_postal_code', 'Code postal'),
-            '{siret}' => config('app.company_siret', 'SIRET'),
-            '{directeur_rh}' => config('app.hr_director_name', 'Directeur RH'),
+            '{entreprise}' => $company ? $company->name : config('app.company_name', 'Nom de l\'entreprise'),
+            '{adresse_entreprise}' => $company ? $company->address : config('app.company_address', 'Adresse de l\'entreprise'),
+            '{ville_entreprise}' => $company ? $company->city : config('app.company_city', 'Ville'),
+            '{code_postal_entreprise}' => $company ? $company->postal_code : config('app.company_postal_code', 'Code postal'),
+            '{siret}' => $company ? $company->registration_number : config('app.company_siret', 'SIRET'),
+            '{registration_number}' => $company ? $company->registration_number : config('app.company_siret', 'SIRET'),
+            '{directeur_rh}' => $company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH'),
+            '{hr_director_name}' => $company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH'),
+            '{hr_signature}' => $company ? $company->hr_signature : null,
         ];
         
         // Ajouter les données personnalisées si elles existent
@@ -237,10 +245,13 @@ class AttestationPdfService
      */
     private function generateHtmlTemplate(string $content, AttestationRequest $attestationRequest): string
     {
-        $companyName = config('app.company_name', 'Nom de l\'entreprise');
-        $companyAddress = config('app.company_address', 'Adresse de l\'entreprise');
-        $companyCity = config('app.company_city', 'Ville');
-        $companyPostalCode = config('app.company_postal_code', 'Code postal');
+        // Récupérer les informations de l'entreprise depuis le modèle Company
+        $company = \App\Models\Company::first();
+        
+        $companyName = $company ? $company->name : config('app.company_name', 'Nom de l\'entreprise');
+        $companyAddress = $company ? $company->address : config('app.company_address', 'Adresse de l\'entreprise');
+        $companyCity = $company ? $company->city : config('app.company_city', 'Ville');
+        $companyPostalCode = $company ? $company->postal_code : config('app.company_postal_code', 'Code postal');
         $attestationNumber = $this->generateAttestationNumber($attestationRequest);
         
         return '
@@ -408,7 +419,7 @@ class AttestationPdfService
         <div class="signature-right">
             <div>L\'employeur</div>
             <div class="signature-box"></div>
-            <div style="margin-top: 10px; font-size: 11px;">' . config('app.hr_director_name', 'Directeur RH') . '</div>
+            <div style="margin-top: 10px; font-size: 11px;">' . ($company ? $company->hr_director_name : config('app.hr_director_name', 'Directeur RH')) . '</div>
         </div>
     </div>
     
@@ -560,7 +571,7 @@ class AttestationPdfService
             'nom', 'prenom', 'nom_complet', 'email', 'telephone', 'poste', 'departement', 'manager',
             'date_embauche', 'salaire', 'salaire_brut', 'date_debut', 'date_fin', 'periode',
             'date_actuelle', 'date_demande', 'numero_attestation', 'entreprise', 'adresse_entreprise',
-            'ville_entreprise', 'code_postal_entreprise', 'siret', 'directeur_rh'
+            'ville_entreprise', 'code_postal_entreprise', 'siret', 'registration_number', 'directeur_rh'
         ];
         
         foreach ($matches[1] as $variable) {

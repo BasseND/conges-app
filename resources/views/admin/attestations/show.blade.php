@@ -1,68 +1,66 @@
 @section('title', 'Détails de la demande d\'attestation')
 <x-app-layout>
     <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pb-12">
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl overflow-hidden shadow-2xl sm:rounded-3xl border border-white/20 dark:border-gray-700/50">
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl overflow-hidden shadow-xl sm:rounded-3xl border border-white/20 dark:border-gray-700/50">
             <!-- En-tête modernisé -->
-            <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
-                <div class="absolute inset-0 bg-black/10"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
-                <div class="relative px-6 py-8">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                        <div class="flex items-center space-x-6">
-                            <a href="{{ route('admin.attestations.index') }}" 
-                               class="group p-3 rounded-2xl bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-110">
-                                <svg class="w-6 h-6 text-white group-hover:text-white/90 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 px-6 py-4">
+                <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center space-y-4 lg:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <a href="{{ route('admin.attestations.index') }}" 
+                           class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </a>
+                        <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                                {{ __('Détails de l\'attestation') }}
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-300 mt-1">
+                                Demande #{{ $attestationRequest->id }} - {{ $attestationRequest->user->first_name }} {{ $attestationRequest->user->last_name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        @if($attestationRequest->status === 'pending')
+                            <button onclick="approveRequest({{ $attestationRequest->id }})" 
+                                    class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-emerald-600 border border-transparent rounded-xl hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
+                                {{ __('Approuver') }}
+                            </button>
+                            <button onclick="rejectRequest({{ $attestationRequest->id }})" 
+                                    class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-red-600 to-pink-600 border border-transparent rounded-xl hover:from-red-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                {{ __('Rejeter') }}
+                            </button>
+                        @endif
+                        @if($attestationRequest->status === 'approved' && !$attestationRequest->pdf_path)
+                            <button onclick="generatePdf({{ $attestationRequest->id }})" 
+                                    class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 border border-transparent rounded-xl hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                {{ __('Générer PDF') }}
+                            </button>
+                        @endif
+                        @if($attestationRequest->pdf_path)
+                            <a href="{{ route('admin.attestations.download', $attestationRequest->id) }}" 
+                               class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-cyan-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                {{ __('Télécharger PDF') }}
                             </a>
-                            <div class="flex-shrink-0">
-                                <div class="bg-white/20 backdrop-blur-sm p-4 rounded-3xl shadow-2xl border border-white/30 group hover:scale-105 transition-transform duration-300">
-                                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div>
-                                <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Demande #{{ $attestationRequest->id }}</h1>
-                                <p class="text-white/90 text-lg font-medium">{{ $attestationRequest->user->first_name }} {{ $attestationRequest->user->last_name }}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            @if($attestationRequest->status === 'pending')
-                                <button onclick="approveRequest({{ $attestationRequest->id }})" 
-                                        class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm border border-white/20">
-                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span class="font-semibold">Approuver</span>
-                                </button>
-                                <button onclick="rejectRequest({{ $attestationRequest->id }})" 
-                                        class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm border border-white/20">
-                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                    <span class="font-semibold">Rejeter</span>
-                                </button>
-                            @endif
-                            @if($attestationRequest->status === 'approved' && !$attestationRequest->pdf_path)
-                                <button onclick="generatePdf({{ $attestationRequest->id }})" 
-                                        class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm border border-white/20">
-                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                    <span class="font-semibold">Générer PDF</span>
-                                </button>
-                            @endif
-                            @if($attestationRequest->pdf_path)
-                                <a href="{{ route('admin.attestations.download', $attestationRequest->id) }}" 
-                                   class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm border border-white/20">
-                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                    <span class="font-semibold">Télécharger PDF</span>
-                                </a>
-                            @endif
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -94,14 +92,19 @@
                     <!-- Informations de l'employé -->
                     <div class="lg:col-span-2 space-y-8">
                         <!-- Informations employé -->
-                        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm">
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                             <div class="flex items-center mb-6">
-                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Informations de l'employé</h2>
+                                <div class="ml-4">
+                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Informations de l'employé</h2>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Détails du demandeur</p>
+                                </div>
                             </div>
                             
                             <div class="flex items-center space-x-6 mb-8">
@@ -162,14 +165,19 @@
                         </div>
 
                         <!-- Détails de la demande -->
-                        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm">
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                             <div class="flex items-center mb-6">
-                                <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-3 rounded-2xl shadow-lg mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Détails de la demande</h2>
+                                <div class="ml-4">
+                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Détails de la demande</h2>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">Informations sur l'attestation demandée</p>
+                                </div>
                             </div>
                             
                             <div class="space-y-6">
@@ -246,15 +254,20 @@
 
                         <!-- Template de l'attestation -->
                         @if($templatePreview)
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm">
+                            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                                 <div class="flex items-center mb-6">
-                                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-3 rounded-2xl shadow-lg mr-4">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                        </svg>
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Aperçu du template</h2>
+                                    <div class="ml-4">
+                                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Aperçu du template</h2>
+                                        <p class="text-gray-600 dark:text-gray-400 mt-1">Prévisualisation du document final</p>
+                                    </div>
                                 </div>
                                 <div class="p-6 rounded-2xl border-l-4 border-blue-500 shadow-inner">
                                     <div class="text-gray-900 dark:text-white leading-relaxed prose prose-sm max-w-none">
@@ -278,14 +291,19 @@
                     <!-- Statut et actions -->
                     <div class="space-y-8">
                         <!-- Statut actuel -->
-                        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-300/50 dark:border-gray-700/50 rounded-3xl p-8 transition-all duration-300 backdrop-blur-sm">
+                        <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                             <div class="flex items-center mb-6">
-                                <div class="bg-gradient-to-r from-violet-500 to-purple-600 p-3 rounded-2xl shadow-lg mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Statut</h3>
+                                <div class="ml-4">
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Statut</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-1">État actuel de la demande</p>
+                                </div>
                             </div>
                             
                             <div class="text-center mb-6">
@@ -345,14 +363,19 @@
 
                         <!-- Motif de rejet -->
                         @if($attestationRequest->rejection_reason)
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-400/50 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm">
+                            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                                 <div class="flex items-center mb-6">
-                                    <div class="bg-gradient-to-r from-red-500 to-rose-600 p-3 rounded-2xl shadow-lg mr-4">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                                        </svg>
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Motif de rejet</h3>
+                                    <div class="ml-4">
+                                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Motif de rejet</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 mt-1">Raison du refus de la demande</p>
+                                    </div>
                                 </div>
                                 <div class="bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 p-6 rounded-2xl border border-red-200/50 dark:border-red-700/50">
                                     <p class="text-red-800 dark:text-red-300 whitespace-pre-wrap leading-relaxed font-medium">{{ $attestationRequest->rejection_reason }}</p>
@@ -362,14 +385,19 @@
 
                         <!-- Actions rapides -->
                         @if($attestationRequest->status === 'pending')
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300">
+                            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                                 <div class="flex items-center mb-6">
-                                    <div class="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl shadow-lg mr-4">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Actions</h3>
+                                    <div class="ml-4">
+                                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Actions</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 mt-1">Actions disponibles pour cette demande</p>
+                                    </div>
                                 </div>
                                 <div class="space-y-4">
                                     <button onclick="approveRequest({{ $attestationRequest->id }})" 
@@ -391,14 +419,19 @@
                         @endif
 
                         @if($attestationRequest->status === 'approved' && !$attestationRequest->pdf_path)
-                            <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm">
+                            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
                                 <div class="flex items-center mb-6">
-                                    <div class="bg-gradient-to-r from-purple-500 to-indigo-600 p-3 rounded-2xl shadow-lg mr-4">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Génération PDF</h3>
+                                    <div class="ml-4">
+                                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Génération PDF</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 mt-1">Créer le document final</p>
+                                    </div>
                                 </div>
                                 <button onclick="generatePdf({{ $attestationRequest->id }})" 
                                         class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 border border-gray-200 dark:border-gray-700 font-bold">

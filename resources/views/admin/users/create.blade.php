@@ -119,27 +119,7 @@
                                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-3">
-                                    <x-input-label for="gender" :value="__('Sexe')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                    <div class="flex space-x-6">
-                                        <div class="flex items-center">
-                                            <input id="gender_m" name="gender" type="radio" value="M" {{ old('gender') == 'M' ? 'checked' : '' }} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 transition-all duration-200" required>
-                                            <label for="gender_m" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-                                                Masculin
-                                            </label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input id="gender_f" name="gender" type="radio" value="F" {{ old('gender') == 'F' ? 'checked' : '' }} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 transition-all duration-200" required>
-                                            <label for="gender_f" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-                                                Féminin
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <x-input-error :messages="$errors->get('gender')" class="mt-2" />
-                                </div>
-                                <div></div>
-                            </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <x-input-label for="email" :value="__('Email')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
@@ -165,6 +145,25 @@
                                         <x-text-input id="phone" class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="tel" name="phone" :value="old('phone')" required placeholder="+33 1 23 45 67 89" />
                                     </div>
                                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                                </div>
+
+                                <div class="space-y-3">
+                                    <x-input-label for="gender" :value="__('Sexe')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                    <div class="flex space-x-6">
+                                        <div class="flex items-center">
+                                            <input id="gender_m" name="gender" type="radio" value="M" {{ old('gender') == 'M' ? 'checked' : '' }} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 transition-all duration-200" required>
+                                            <label for="gender_m" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+                                                Masculin
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="gender_f" name="gender" type="radio" value="F" {{ old('gender') == 'F' ? 'checked' : '' }} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 transition-all duration-200" required>
+                                            <label for="gender_f" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+                                                Féminin
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <x-input-error :messages="$errors->get('gender')" class="mt-2" />
                                 </div>
 
                                 <div class="space-y-2">
@@ -194,6 +193,15 @@
                                     <x-input-error :messages="$errors->get('address')" class="mt-2" />
                                 </div>
                             </div>
+
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <div></div>
+                            </div>
+
+                            
+                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2" x-data="{ showPassword: false }">
                                     <x-input-label for="password" :value="__('Mot de passe')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />

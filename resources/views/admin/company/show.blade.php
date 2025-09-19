@@ -141,6 +141,78 @@
                                                     </div>
                                                     @endif
 
+                                                @if($company->registration_number)
+                                                    <div class="group hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->registration_number }}</p>
+                                                                <p class="text-xs text-yellow-600 dark:text-yellow-400 font-medium">Numéro d'enregistrement</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->director_name)
+                                                    <div class="group hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->director_name }}</p>
+                                                                <p class="text-xs text-orange-600 dark:text-orange-400 font-medium">Directeur général</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->hr_director_name)
+                                                    <div class="group hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->hr_director_name }}</p>
+                                                                <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Directeur des ressources humaines</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->hr_signature)
+                                                    <div class="group hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white mb-2">Signature du DRH</p>
+                                                                <img src="{{ Storage::url($company->hr_signature) }}" alt="Signature du DRH" class="max-w-32 h-auto border border-gray-200 dark:border-gray-600 rounded-lg bg-white p-2">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
                                                 <!-- Address Information -->
                                                 @if($company->address || $company->city || $company->country)
                                                     <div class="group hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-xl p-4 transition-all duration-200">

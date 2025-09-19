@@ -12,12 +12,16 @@ class Company extends Model
 
     protected $fillable = [
         'name',
+        'director_name',
+        'hr_director_name',
+        'hr_signature',
         'logo',
         'website_url',
         'address',
         'city',
         'country',
         'postal_code',
+        'registration_number',
         'location',
         'contact_email',
         'contact_phone',

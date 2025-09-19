@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attestation de Stage</title>
+    <title>Attestation de Présence / Assiduité</title>
     <style>
         @page {
             margin: 2cm;
@@ -33,7 +33,7 @@
         
         .company-info {
             margin-bottom: 30px;
-            background: #faf5ff;
+            background: #f5f3ff;
             padding: 20px;
             border-radius: 8px;
             border-left: 4px solid #7c3aed;
@@ -77,7 +77,7 @@
             text-align: justify;
         }
         
-        .student-info {
+        .employee-info {
             background: #f0f9ff;
             padding: 20px;
             border-radius: 8px;
@@ -85,20 +85,12 @@
             border-left: 4px solid #0ea5e9;
         }
         
-        .internship-info {
-            background: #fef3c7;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #f59e0b;
-        }
-        
-        .evaluation {
+        .presence-period {
             background: #f0fdf4;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
-            border-left: 4px solid #22c55e;
+            border-left: 4px solid #059669;
         }
         
         .highlight {
@@ -108,9 +100,8 @@
         
         .signatures {
             width: 100%;
-            margin-top: 60px;
+            margin-top: 30px;
             page-break-inside: avoid;
-            text-align: center;
         }
         
         .signature-box {
@@ -138,41 +129,36 @@
             font-style: italic;
         }
         
-        .skills-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        
-        .skills-list li {
-            padding: 5px 0;
-            border-bottom: 1px dotted #ddd;
-        }
-        
-        .skills-list li:before {
-            content: "✓ ";
-            color: #22c55e;
-            font-weight: bold;
+        .official-stamp {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            border: 2px dashed #7c3aed;
+            background: #f5f3ff;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="header" >
+    <div class="header">
         <div class="company-info">
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    @if($logo_entreprise)
-                        <td class="company-logo" style="width: 200px; vertical-align: top; padding-right: 20px;">
-                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $logo_entreprise))) }}" alt="Logo {{ $entreprise }}" style="max-height: 80px; max-width: 200px; display: block;">
-                        </td>
-                    @endif
-                    <td class="company-details" style="vertical-align: top; text-align: {{ $logo_entreprise ? 'right' : 'left' }};">
-                        <div class="company-name">{{ $entreprise }}</div>
-                        <div>{{ $adresse_entreprise }}</div>
-                        <div>{{ $code_postal_entreprise }} {{ $ville_entreprise }}</div>
-                        @if($siret)
-                            <div>N° d'enregistrement : {{ $siret }}</div>
+                    <tr>
+                        @if($logo_entreprise)
+                            <td class="company-logo" style="width: 150px; vertical-align: top; padding-right: 15px;">
+                                <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $logo_entreprise))) }}" alt="Logo {{ $entreprise }}" style="max-height: 60px; max-width: 150px; display: block;">
+                            </td>
                         @endif
-                    </td>
+                        <td class="company-details" style="vertical-align: top; text-align: {{ $logo_entreprise ? 'right' : 'left' }};">
+                            <div class="company-name">{{ $entreprise }}</div>
+                            <div>{{ $adresse_entreprise }}</div>
+                            <div>{{ $code_postal_entreprise }} {{ $ville_entreprise }}</div>
+                            @if($siret)
+                                <div>N° d'enregistrement : {{ $siret }}</div>
+                            @endif
+                        </td>
+                    </tr>
                 </tr>
             </table>
         </div>
@@ -187,56 +173,41 @@
     </div>
 
     <div class="header header-border">
-        <h1 class="attestation-title">Attestation de Stage</h1>
+        <h1 class="attestation-title">Attestation de Présence / Assiduité</h1>
     </div>
 
     <div class="content">
-        <p>Je soussigné(e), <span class="highlight">{{ $directeur_rh }}</span>, Directeur des Ressources Humaines de <span class="highlight">{{ $entreprise }}</span>, atteste que :</p>
+        <p>Je soussigné(e), <span class="highlight">{{ $hr_director_name ?? $directeur_rh }}</span>, Directeur des Ressources Humaines de <span class="highlight">{{ $entreprise }}</span>, atteste par la présente que :</p>
 
-        <div class="student-info">
+        <div class="employee-info">
             <p><strong>{{ $civilite }} {{ $nom }} {{ $prenom }}</strong></p>
-            <p>Étudiant(e) en <span class="highlight">{{ $formation ?? 'Non renseigné' }}</span></p>
-            <p>Établissement : <span class="highlight">{{ $etablissement ?? 'Non renseigné' }}</span></p>
-            <p>Niveau d'études : <span class="highlight">{{ $niveau_etudes ?? 'Non renseigné' }}</span></p>
+            <p>Né(e) le : <span class="highlight">{{ $date_naissance ?? 'Non renseigné' }}</span></p>
+            <p>Demeurant : <span class="highlight">{{ $adresse_employe ?? 'Non renseigné' }}</span></p>
+            <p>Fonction : <span class="highlight">{{ $poste }}</span></p>
+            <p>Département : <span class="highlight">{{ $departement }}</span></p>
         </div>
 
-        <p>A effectué un stage dans notre entreprise dans les conditions suivantes :</p>
+        <p>Est employé(e) dans notre entreprise depuis le <span class="highlight">{{ $date_embauche }}</span> en qualité de <span class="highlight">{{ $poste }}</span>.</p>
 
-        <div class="internship-info">
-            <p><strong>Informations du stage :</strong></p>
-            <p>Période : Du <span class="highlight">{{ $date_debut_stage }}</span> au <span class="highlight">{{ $date_fin_stage }}</span></p>
-            <p>Durée : <span class="highlight">{{ $duree_stage ?? 'Non renseigné' }}</span></p>
-            <p>Service/Département : <span class="highlight">{{ $departement }}</span></p>
-            <p>Maître de stage : <span class="highlight">{{ $maitre_stage ?? $hr_director_name ?? $directeur_rh }}</span></p>
-            <p>Missions principales : <span class="highlight">{{ $missions_stage ?? 'Missions variées selon les besoins du service' }}</span></p>
-        </div>
-
-        <div class="evaluation">
-            <p><strong>Évaluation du stage :</strong></p>
-            <p>Le/La stagiaire a fait preuve de <span class="highlight">sérieux, de motivation et d'adaptabilité</span> tout au long de son stage.</p>
-            
-            @if(isset($competences_acquises) && $competences_acquises)
-                <p><strong>Compétences développées :</strong></p>
-                <ul class="skills-list">
-                    @foreach(explode(',', $competences_acquises) as $competence)
-                        <li>{{ trim($competence) }}</li>
-                    @endforeach
-                </ul>
+        <div class="presence-period">
+            <p><strong>Période de présence attestée :</strong></p>
+            @if(isset($date_debut_periode) && isset($date_fin_periode))
+                <p>Du <span class="highlight">{{ $date_debut_periode }}</span> au <span class="highlight">{{ $date_fin_periode }}</span></p>
+            @else
+                <p>Depuis le <span class="highlight">{{ $date_embauche }}</span> jusqu'à ce jour</p>
             @endif
-            
-            <p>Appréciation générale : <span class="highlight">{{ $appreciation ?? 'Très satisfaisant' }}</span></p>
+            <p>Type de contrat : <span class="highlight">{{ $type_contrat ?? 'CDI' }}</span></p>
         </div>
 
-        <p><strong>{{ $nom_complet }}</strong> a effectué un stage dans notre entreprise 
-        @if($date_debut)du {{ $date_debut }}@endif @if($date_fin)au {{ $date_fin }}@endif 
-        en qualité de <strong>{{ $poste }}</strong>.</p>
+        <p>Durant cette période, l'intéressé(e) a fait preuve d'une <span class="highlight">présence régulière et d'une assiduité exemplaire</span> dans l'exercice de ses fonctions.</p>
 
-        <p>Durant cette période, le/la stagiaire a fait preuve de sérieux et de compétences 
-        dans l'accomplissement de ses missions au sein du département <strong>{{ $departement }}</strong>.</p>
+        <p>L'employé(e) a respecté ses horaires de travail et a démontré un engagement professionnel constant.</p>
 
         <p>Cette attestation est délivrée à l'intéressé(e) pour servir et valoir ce que de droit.</p>
 
-        <p style="margin-top: 40px;">Fait le <strong>{{ $date_actuelle }}</strong></p>
+        <div class="official-stamp">
+            <p><strong>Cachet et signature de l'entreprise</strong></p>
+        </div>
     </div>
 
     <div class="signatures">
