@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('special_leave_types', function (Blueprint $table) {
-            $table->string('type')->default('custom')->after('system_name');
+            $table->string('type')->default('custom');
         });
     }
 
