@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\HrAttestation;
+use App\Models\AttestationRequest;
 use App\Models\AttestationType;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -31,14 +31,14 @@ class HrAttestationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = HrAttestation::with(['employee', 'attestationType', 'generatedBy'])
-            ->hrGenerated()
+        $query = AttestationRequest::with(['user', 'attestationType', 'generator'])
+            ->whereNotNull('generated_by')
             ->orderBy('created_at', 'desc');
 
         // Filtres
-        if ($request->filled('employee_search')) {
-            $search = $request->employee_search;
-            $query->whereHas('employee', function ($q) use ($search) {
+        if ($request->filled('user_search')) {
+            $search = $request->user_search;
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
                   ->orWhere('last_name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%");
@@ -53,6 +53,10 @@ class HrAttestationController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
         if ($request->filled('date_from')) {
             $query->whereDate('generated_at', '>=', $request->date_from);
         }
@@ -63,7 +67,12 @@ class HrAttestationController extends Controller
 
         $attestations = $query->paginate(15);
         $attestationTypes = AttestationType::whereIn('type', ['salary', 'employment', 'presence'])->get();
-        $statuses = HrAttestation::getStatuses();
+        $statuses = [
+            'draft' => 'Brouillon',
+            'generated' => 'Générée',
+            'sent' => 'Envoyée',
+            'archived' => 'Archivée'
+        ];
 
         return view('admin.hr-attestations.index', compact('attestations', 'attestationTypes', 'statuses'));
     }
@@ -73,7 +82,7 @@ class HrAttestationController extends Controller
      */
     public function create()
     {
-        $attestationTypes = AttestationType::whereIn('type', ['salary', 'employment', 'presence'])->where('status', 'active')->get();
+        $attestationTypes = AttestationType::where('status', 'active')->get();
         return view('admin.hr-attestations.create', compact('attestationTypes'));
     }
 
@@ -83,10 +92,13 @@ class HrAttestationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
             'attestation_type_id' => 'required|exists:attestation_types,id',
-            'data' => 'required|array',
-            'notes' => 'nullable|string|max:1000'
+            'custom_data' => 'nullable|array',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'notes' => 'nullable|string|max:1000',
+            'category' => 'required|in:hr_generated,employee_request'
         ]);
 
         if ($validator->fails()) {
@@ -95,14 +107,39 @@ class HrAttestationController extends Controller
                 ->withInput();
         }
 
+        // Vérifier que le type d'attestation est actif
+        $attestationType = AttestationType::active()->find($request->attestation_type_id);
+        if (!$attestationType) {
+            return redirect()->back()
+                ->with('error', 'Type d\'attestation non disponible.')
+                ->withInput();
+        }
+
+        // Valider les champs requis selon le type
+        if ($attestationType->requires_date_range && (!$request->start_date || !$request->end_date)) {
+            return redirect()->back()
+                ->with('error', 'Ce type d\'attestation nécessite une période (date de début et fin).')
+                ->withInput();
+        }
+
         try {
-            $attestation = HrAttestation::create([
-                'employee_id' => $request->employee_id,
+            // Générer un numéro de document unique
+            $documentNumber = 'ATT-' . date('Y') . '-' . str_pad(AttestationRequest::whereYear('created_at', date('Y'))->count() + 1, 4, '0', STR_PAD_LEFT);
+
+            $attestation = AttestationRequest::create([
+                'user_id' => $request->user_id,
                 'attestation_type_id' => $request->attestation_type_id,
+                'category' => $request->category,
                 'generated_by' => Auth::id(),
-                'status' => HrAttestation::STATUS_GENERATED,
-                'data' => $request->data,
+                'processed_by' => Auth::id(),
+                'status' => AttestationRequest::STATUS_GENERATED,
+                'priority' => AttestationRequest::PRIORITY_NORMAL,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'custom_data' => $request->custom_data ?? [],
                 'notes' => $request->notes,
+                'document_number' => $documentNumber,
+                'processed_at' => now(),
                 'generated_at' => now()
             ]);
 
@@ -110,7 +147,7 @@ class HrAttestationController extends Controller
             $this->generatePdf($attestation);
 
             return redirect()->route('admin.hr-attestations.index')
-                ->with('success', 'Attestation générée avec succès pour ' . $attestation->employee->first_name . ' ' . $attestation->employee->last_name . '!');
+                ->with('success', 'Attestation générée avec succès pour ' . $attestation->user->first_name . ' ' . $attestation->user->last_name . '!');
 
         } catch (\Exception $e) {
             return redirect()->back()
@@ -122,32 +159,35 @@ class HrAttestationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HrAttestation $hrAttestation)
+    public function show(AttestationRequest $attestationRequest)
     {
-        $hrAttestation->load(['employee.department', 'attestationType', 'generatedBy']);
-        return view('admin.hr-attestations.show', compact('hrAttestation'));
+        $attestationRequest->load(['user.department', 'attestationType', 'generator']);
+        return view('admin.hr-attestations.show', compact('attestationRequest'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HrAttestation $hrAttestation)
+    public function edit(AttestationRequest $attestationRequest)
     {
-        $hrAttestation->load(['employee', 'attestationType']);
-        $attestationTypes = AttestationType::whereIn('type', ['salary', 'employment', 'presence'])->where('status', 'active')->get();
-        return view('admin.hr-attestations.edit', compact('hrAttestation', 'attestationTypes'));
+        $attestationRequest->load(['user', 'attestationType']);
+        $attestationTypes = AttestationType::where('status', 'active')->get();
+        return view('admin.hr-attestations.edit', compact('attestationRequest', 'attestationTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HrAttestation $hrAttestation)
+    public function update(Request $request, AttestationRequest $attestationRequest)
     {
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
             'attestation_type_id' => 'required|exists:attestation_types,id',
-            'data' => 'required|array',
-            'notes' => 'nullable|string|max:1000'
+            'custom_data' => 'nullable|array',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'notes' => 'nullable|string|max:1000',
+            'category' => 'required|in:hr_generated,employee_request'
         ]);
 
         if ($validator->fails()) {
@@ -157,22 +197,27 @@ class HrAttestationController extends Controller
         }
 
         try {
-            // Supprimer l'ancien PDF
-            $hrAttestation->deleteOldPdf();
+            // Supprimer l'ancien PDF si il existe
+            if ($attestationRequest->pdf_path && Storage::exists($attestationRequest->pdf_path)) {
+                Storage::delete($attestationRequest->pdf_path);
+            }
 
             // Mettre à jour l'attestation
-            $hrAttestation->update([
-                'employee_id' => $request->employee_id,
+            $attestationRequest->update([
+                'user_id' => $request->user_id,
                 'attestation_type_id' => $request->attestation_type_id,
-                'data' => $request->data,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'custom_data' => $request->custom_data ?? [],
                 'notes' => $request->notes,
+                'category' => $request->category,
                 'generated_at' => now()
             ]);
 
             // Régénérer le PDF
-            $this->generatePdf($hrAttestation);
+            $this->generatePdf($attestationRequest);
 
-            return redirect()->route('hr-attestations.show', $hrAttestation)
+            return redirect()->route('admin.hr-attestations.show', $attestationRequest)
                 ->with('success', 'Attestation mise à jour avec succès!');
 
         } catch (\Exception $e) {
@@ -185,13 +230,16 @@ class HrAttestationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HrAttestation $hrAttestation)
+    public function destroy(AttestationRequest $attestationRequest)
     {
         try {
-            $hrAttestation->deleteOldPdf();
-            $hrAttestation->delete();
+            // Supprimer le PDF si il existe
+            if ($attestationRequest->pdf_path && Storage::exists($attestationRequest->pdf_path)) {
+                Storage::delete($attestationRequest->pdf_path);
+            }
+            $attestationRequest->delete();
 
-            return redirect()->route('hr-attestations.index')
+            return redirect()->route('admin.hr-attestations.index')
                 ->with('success', 'Attestation supprimée avec succès!');
 
         } catch (\Exception $e) {
@@ -203,25 +251,25 @@ class HrAttestationController extends Controller
     /**
      * Télécharger le PDF de l'attestation
      */
-    public function downloadPdf(HrAttestation $hrAttestation)
+    public function downloadPdf(AttestationRequest $attestationRequest)
     {
-        if (!$hrAttestation->hasPdf()) {
+        if (!$attestationRequest->pdf_path || !Storage::exists($attestationRequest->pdf_path)) {
             return redirect()->back()
                 ->with('error', 'Le fichier PDF n\'existe pas.');
         }
 
-        $fileName = 'attestation_' . $hrAttestation->document_number . '.pdf';
-        return Storage::download($hrAttestation->pdf_path, $fileName);
+        $fileName = 'attestation_' . $attestationRequest->document_number . '.pdf';
+        return Storage::download($attestationRequest->pdf_path, $fileName);
     }
 
     /**
-     * Recherche d'employés pour l'autocomplétion
+     * Recherche d'utilisateurs pour l'autocomplétion
      */
-    public function searchEmployees(Request $request)
+    public function searchUsers(Request $request)
     {
         $search = $request->get('q', '');
         
-        $employees = User::where('role', '!=', 'admin')
+        $users = User::where('role', '!=', 'admin')
             ->where(function ($query) use ($search) {
                 $query->where('first_name', 'like', "%{$search}%")
                       ->orWhere('last_name', 'like', "%{$search}%")
@@ -238,38 +286,36 @@ class HrAttestationController extends Controller
                 ];
             });
 
-        return response()->json($employees);
+        return response()->json($users);
     }
 
     /**
-     * Obtenir les détails d'un employé
+     * Obtenir les détails d'un utilisateur
      */
-    public function getEmployeeDetails(User $employee)
+    public function getUserDetails(User $user)
     {
+        $user->load('department');
+        
         return response()->json([
-            'id' => $employee->id,
-            'first_name' => $employee->first_name,
-            'last_name' => $employee->last_name,
-            'email' => $employee->email,
-            'position' => $employee->position,
-            'department' => $employee->department ? $employee->department->name : null,
-            'hire_date' => $employee->hire_date,
-            'contract_type' => $employee->contract_type,
-            'salary' => $employee->salary,
-            'address' => $employee->address,
-            'phone' => $employee->phone,
-            'birth_date' => $employee->birth_date,
-            'birth_place' => $employee->birth_place,
-            'nationality' => $employee->nationality
+            'id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'position' => $user->position,
+            'department' => $user->department ? $user->department->name : null,
+            'salary' => $user->salary,
+            'entry_date' => $user->entry_date ? $user->entry_date->format('Y-m-d') : null
         ]);
     }
+
+
 
     /**
      * Générer le PDF de l'attestation
      */
-    private function generatePdf(HrAttestation $attestation)
+    private function generatePdf(AttestationRequest $attestation)
     {
-        $attestation->load(['employee', 'attestationType', 'generatedBy']);
+        $attestation->load(['user', 'attestationType', 'generator']);
         
         $templateFile = $attestation->attestationType->template_file;
         $data = $this->prepareTemplateData($attestation);
@@ -277,8 +323,8 @@ class HrAttestationController extends Controller
         $pdf = Pdf::loadView("templates.attestations.{$templateFile}", $data)
             ->setPaper('a4', 'portrait')
             ->setOptions([
-                'dpi' => 150,
-                'defaultFont' => 'sans-serif',
+                'defaultFont' => 'DejaVu Sans',
+                'isRemoteEnabled' => true,
                 'isHtml5ParserEnabled' => true,
                 'isPhpEnabled' => true
             ]);
@@ -294,10 +340,10 @@ class HrAttestationController extends Controller
     /**
      * Préparer les données pour le template
      */
-    private function prepareTemplateData(HrAttestation $attestation)
+    private function prepareTemplateData(AttestationRequest $attestation)
     {
-        $employee = $attestation->employee;
-        $data = $attestation->data;
+        $employee = $attestation->user;
+        $data = $attestation->custom_data ?? [];
         
         // Récupérer les données de l'entreprise depuis la base de données
         $company = \App\Models\Company::first();
@@ -324,10 +370,10 @@ class HrAttestationController extends Controller
             'numero_solde' => $attestation->document_number,
             
             // Données RH - Variables utilisées dans le template
-            'hr_director_name' => $company && $company->hr_director_name ? $company->hr_director_name : ($attestation->generatedBy->first_name . ' ' . $attestation->generatedBy->last_name),
+            'hr_director_name' => $company && $company->hr_director_name ? $company->hr_director_name : ($attestation->generator ? ($attestation->generator->first_name . ' ' . $attestation->generator->last_name) : 'Directeur RH'),
             'hr_director_title' => 'Directeur des Ressources Humaines',
-            'directeur_rh' => $company && $company->hr_director_name ? $company->hr_director_name : ($attestation->generatedBy->first_name . ' ' . $attestation->generatedBy->last_name),
-            'generateur' => $attestation->generatedBy->first_name . ' ' . $attestation->generatedBy->last_name,
+            'directeur_rh' => $company && $company->hr_director_name ? $company->hr_director_name : ($attestation->generator ? ($attestation->generator->first_name . ' ' . $attestation->generator->last_name) : 'Directeur RH'),
+            'generateur' => $attestation->generator ? ($attestation->generator->first_name . ' ' . $attestation->generator->last_name) : 'Système',
             'hr_signature' => $company ? $company->hr_signature : null,
             'signature_drh' => $company ? $company->hr_signature : null,
             
@@ -350,8 +396,8 @@ class HrAttestationController extends Controller
             'numero_ss' => $employee->social_security_number ?? '',
             
             // Variables exactes utilisées dans le template certificat_travail
-            'date_fin_contrat' => $data['date_fin_contrat'] ?? '',
-            'duree_contrat' => $data['duree_contrat'] ?? $this->calculateContractDuration($employee->entry_date, $data['date_fin_contrat'] ?? null),
+            'date_fin_contrat' => $attestation->end_date ? $attestation->end_date->format('d/m/Y') : ($data['date_fin_contrat'] ?? ''),
+            'duree_contrat' => $data['duree_contrat'] ?? $this->calculateContractDuration($employee->entry_date, $attestation->end_date ?? $data['date_fin_contrat'] ?? null),
             'motif_fin' => $data['motif_fin_contrat'] ?? $data['motif_fin'] ?? '', // Mapper motif_fin_contrat vers motif_fin
             'salaire_final' => $data['salaire_final'] ?? $employee->salary ?? '',
             'appreciation' => $data['appreciation'] ?? 'L\'employé(e) a fait preuve de professionnalisme et de compétence durant toute la durée de son contrat.',

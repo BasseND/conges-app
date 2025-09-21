@@ -346,15 +346,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', [\App\Http\Controllers\HrAttestationController::class, 'index'])->name('index');
             Route::get('/create', [\App\Http\Controllers\HrAttestationController::class, 'create'])->name('create');
             Route::post('/', [\App\Http\Controllers\HrAttestationController::class, 'store'])->name('store');
-            Route::get('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'show'])->name('show');
-            Route::get('/{hrAttestation}/edit', [\App\Http\Controllers\HrAttestationController::class, 'edit'])->name('edit');
-            Route::put('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'update'])->name('update');
-            Route::delete('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'destroy'])->name('destroy');
-            Route::get('/{hrAttestation}/download-pdf', [\App\Http\Controllers\HrAttestationController::class, 'downloadPdf'])->name('download-pdf');
+            Route::get('/{attestationRequest}', [\App\Http\Controllers\HrAttestationController::class, 'show'])->name('show');
+            Route::get('/{attestationRequest}/edit', [\App\Http\Controllers\HrAttestationController::class, 'edit'])->name('edit');
+            Route::put('/{attestationRequest}', [\App\Http\Controllers\HrAttestationController::class, 'update'])->name('update');
+            Route::delete('/{attestationRequest}', [\App\Http\Controllers\HrAttestationController::class, 'destroy'])->name('destroy');
+            Route::get('/{attestationRequest}/download-pdf', [\App\Http\Controllers\HrAttestationController::class, 'downloadPdf'])->name('download-pdf');
             
-            // Routes AJAX pour la recherche d'employés
-            Route::get('/search/employees', [\App\Http\Controllers\HrAttestationController::class, 'searchEmployees'])->name('search-employees');
-            Route::get('/employee/{employee}/details', [\App\Http\Controllers\HrAttestationController::class, 'getEmployeeDetails'])->name('employee-details');
+            // Routes AJAX pour la recherche d'utilisateurs
+            Route::get('/search/users', [\App\Http\Controllers\HrAttestationController::class, 'searchUsers'])->name('search-users');
+            Route::get('/user/{user}/details', [\App\Http\Controllers\HrAttestationController::class, 'getUserDetails'])->name('user-details');
         });
     });
 });

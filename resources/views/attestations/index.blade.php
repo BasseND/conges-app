@@ -1,4 +1,4 @@
-@section('title', 'Mes attestations')
+@section('title', 'Mes demandes d\'attestations')
 <x-app-layout>
     <div class="pb-12">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -15,8 +15,8 @@
                                 </div>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Mes attestations') }}</h1>
-                                <p class="text-gray-600 dark:text-gray-400 mt-1">Demandez et consultez vos attestations</p>
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Mes demandes d\'attestations') }}</h1>
+                                <p class="text-gray-600 dark:text-gray-400 mt-1">Consultez vos demandes d'attestations personnelles</p>
                             </div>
                         </div>
                         <div class="flex-shrink-0">

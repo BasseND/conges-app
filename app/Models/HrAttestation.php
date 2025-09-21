@@ -92,7 +92,7 @@ class HrAttestation extends Model
     public function scopeHrGenerated($query)
     {
         return $query->whereHas('attestationType', function ($q) {
-            $q->whereIn('type', ['salary', 'employment', 'presence']);
+            $q->where('status', 'active');
         });
     }
 

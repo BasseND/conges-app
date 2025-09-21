@@ -16,7 +16,7 @@
                         </div>
                         <div>
                             <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
-                                Détails de l'Attestation #{{ $hrAttestation->document_number }}
+                                Détails de l'Attestation #{{ $attestationRequest->document_number }}
                             </h2>
                             <p class="text-gray-600 dark:text-gray-300 mt-1">
                                 Consultation des informations détaillées
@@ -26,16 +26,16 @@
                     </div>
                     <div class="flex flex-wrap gap-3">
 
-                        @if($hrAttestation->hasPdf())
-                            <a href="{{ route('admin.hr-attestations.download-pdf', $hrAttestation) }}" 
+                        @if($attestationRequest->pdf_path && Storage::exists($attestationRequest->pdf_path))
+                            <a href="{{ route('admin.hr-attestations.download-pdf', $attestationRequest) }}" 
                                 class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-cyan-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                  </svg>
                                  Télécharger PDF
                              </a>
-                        @endif
-                        <a href="{{ route('admin.hr-attestations.edit', $hrAttestation) }}" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                         @endif
+                        <a href="{{ route('admin.hr-attestations.edit', $attestationRequest) }}" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
@@ -98,11 +98,11 @@
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Numéro de document:</span>
-                                        <span class="text-gray-900 dark:text-white font-semibold">{{ $hrAttestation->document_number }}</span>
+                                        <span class="text-gray-900 dark:text-white font-semibold">{{ $attestationRequest->document_number }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Type d'attestation:</span>
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200">{{ $hrAttestation->attestationType->name }}</span>
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200">{{ $attestationRequest->attestationType->name }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Statut:</span>
@@ -114,33 +114,33 @@
                                                     'archived' => 'bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-900/30 dark:to-slate-900/30 text-gray-800 dark:text-gray-200',
                                                     'cancelled' => 'bg-gradient-to-r from-red-100 to-rose-100 dark:from-red-900/30 dark:to-rose-900/30 text-red-800 dark:text-red-200'
                                                 ];
-                                                $statuses = \App\Models\HrAttestation::getStatuses();
-                                                $color = $statusColors[$hrAttestation->status] ?? 'bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-900/30 dark:to-slate-900/30 text-gray-800 dark:text-gray-200';
+                                                $statuses = \App\Models\AttestationRequest::getStatuses();
+                                                $color = $statusColors[$attestationRequest->status] ?? 'bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-900/30 dark:to-slate-900/30 text-gray-800 dark:text-gray-200';
                                             @endphp
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $color }}">
-                                                {{ $statuses[$hrAttestation->status] ?? $hrAttestation->status }}
+                                                {{ $statuses[$attestationRequest->status] ?? $attestationRequest->status }}
                                             </span>
                                         </span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Date de génération:</span>
-                                        <span class="text-gray-900 dark:text-white">{{ $hrAttestation->generated_at ? $hrAttestation->generated_at->format('d/m/Y H:i') : '-' }}</span>
+                                        <span class="text-gray-900 dark:text-white">{{ $attestationRequest->generated_at ? $attestationRequest->generated_at->format('d/m/Y H:i') : '-' }}</span>
                                     </div>
                                     <div class="flex justify-between items-start py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Généré par:</span>
                                         <div class="text-right">
-                                            <div class="text-gray-900 dark:text-white font-medium">{{ $hrAttestation->generatedBy->first_name }} {{ $hrAttestation->generatedBy->last_name }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $hrAttestation->generatedBy->email }}</div>
+                                            <div class="text-gray-900 dark:text-white font-medium">{{ $attestationRequest->generator->first_name }} {{ $attestationRequest->generator->last_name }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $attestationRequest->generator->email }}</div>
                                         </div>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Créé le:</span>
-                                        <span class="text-gray-900 dark:text-white">{{ $hrAttestation->created_at->format('d/m/Y H:i') }}</span>
+                                        <span class="text-gray-900 dark:text-white">{{ $attestationRequest->created_at->format('d/m/Y H:i') }}</span>
                                     </div>
-                                    @if($hrAttestation->updated_at != $hrAttestation->created_at)
+                                    @if($attestationRequest->updated_at != $attestationRequest->created_at)
                                         <div class="flex justify-between items-center py-3">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">Dernière modification:</span>
-                                            <span class="text-gray-900 dark:text-white">{{ $hrAttestation->updated_at->format('d/m/Y H:i') }}</span>
+                                            <span class="text-gray-900 dark:text-white">{{ $attestationRequest->updated_at->format('d/m/Y H:i') }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -156,41 +156,41 @@
                                     <svg class="w-5 h-5 mr-3 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    Informations de l'Employé
+                                    Informations de l'Utilisateur
                                 </h5>
                             </div>
                             <div class="p-6">
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Nom complet:</span>
-                                        <span class="text-gray-900 dark:text-white font-semibold">{{ $hrAttestation->employee->first_name }} {{ $hrAttestation->employee->last_name }}</span>
+                                        <span class="text-gray-900 dark:text-white font-semibold">{{ $attestationRequest->user->first_name }} {{ $attestationRequest->user->last_name }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                         <span class="font-medium text-gray-700 dark:text-gray-300">Email:</span>
-                                        <span class="text-gray-900 dark:text-white">{{ $hrAttestation->employee->email }}</span>
+                                        <span class="text-gray-900 dark:text-white">{{ $attestationRequest->user->email }}</span>
                                     </div>
-                                    @if($hrAttestation->employee->position)
+                                    @if($attestationRequest->user->position)
                                         <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">Poste:</span>
-                                            <span class="text-gray-900 dark:text-white">{{ $hrAttestation->employee->position }}</span>
+                                            <span class="text-gray-900 dark:text-white">{{ $attestationRequest->user->position }}</span>
                                         </div>
                                     @endif
-                                    @if($hrAttestation->employee->department)
+                                    @if($attestationRequest->user->department)
                                         <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">Département:</span>
-                                            <span class="text-gray-900 dark:text-white">{{ $hrAttestation->employee->department ? $hrAttestation->employee->department->name : 'Non assigné' }}</span>
+                                            <span class="text-gray-900 dark:text-white">{{ $attestationRequest->user->department ? $attestationRequest->user->department->name : 'Non assigné' }}</span>
                                         </div>
                                     @endif
-                                    @if($hrAttestation->employee->hire_date)
+                                    @if($attestationRequest->user->hire_date)
                                         <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">Date d'embauche:</span>
-                                            <span class="text-gray-900 dark:text-white">{{ $hrAttestation->employee->hire_date->format('d/m/Y') }}</span>
+                                            <span class="text-gray-900 dark:text-white">{{ $attestationRequest->user->hire_date->format('d/m/Y') }}</span>
                                         </div>
                                     @endif
-                                    @if($hrAttestation->employee->contract_type)
+                                    @if($attestationRequest->user->contract_type)
                                         <div class="flex justify-between items-center py-3">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">Type de contrat:</span>
-                                            <span class="text-gray-900 dark:text-white">{{ $hrAttestation->employee->contract_type }}</span>
+                                            <span class="text-gray-900 dark:text-white">{{ $attestationRequest->user->contract_type }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -200,7 +200,7 @@
                 </div>
 
                 <!-- Données spécifiques de l'attestation -->
-                @if($hrAttestation->data && count($hrAttestation->data) > 0)
+                @if($attestationRequest->custom_data && count($attestationRequest->custom_data) > 0)
                     <div class="mb-6">
                         <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
                             <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 rounded-t-lg">
@@ -210,73 +210,73 @@
                                 </h5>
                             </div>
                             <div class="p-4">
-                                @if($hrAttestation->attestationType->template_file === 'certificat_travail')
+                                @if($attestationRequest->attestationType->template_file === 'certificat_travail')
                                     <h6 class="text-blue-600 font-medium mb-4">Informations du Certificat de Travail</h6>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        @if(isset($hrAttestation->data['date_fin_contrat']))
+                                        @if(isset($attestationRequest->custom_data['date_fin_contrat']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Date de fin de contrat:</span>
-                                                <span class="ml-2 text-gray-900">{{ \Carbon\Carbon::parse($hrAttestation->data['date_fin_contrat'])->format('d/m/Y') }}</span>
+                                                <span class="ml-2 text-gray-900">{{ \Carbon\Carbon::parse($attestationRequest->custom_data['date_fin_contrat'])->format('d/m/Y') }}</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['motif_fin_contrat']))
+                                        @if(isset($attestationRequest->custom_data['motif_fin_contrat']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Motif de fin de contrat:</span>
-                                                <span class="ml-2 text-gray-900">{{ ucfirst(str_replace('_', ' ', $hrAttestation->data['motif_fin_contrat'])) }}</span>
+                                                <span class="ml-2 text-gray-900">{{ ucfirst(str_replace('_', ' ', $attestationRequest->custom_data['motif_fin_contrat'])) }}</span>
                                             </div>
                                         @endif
                                     </div>
-                                    @if(isset($hrAttestation->data['fonctions_exercees']))
+                                    @if(isset($attestationRequest->custom_data['fonctions_exercees']))
                                         <div class="mb-3">
                                             <span class="font-medium text-gray-700">Fonctions exercées:</span>
                                             <div class="mt-2 p-3 bg-gray-50 rounded-md">
-                                                {{ $hrAttestation->data['fonctions_exercees'] }}
+                                                {{ $attestationRequest->custom_data['fonctions_exercees'] }}
                                             </div>
                                         </div>
                                     @endif
-                                @elseif($hrAttestation->attestationType->template_file === 'solde_tout_compte')
+                                @elseif($attestationRequest->attestationType->template_file === 'solde_tout_compte')
                                     <h6 class="text-blue-600 font-medium mb-4">Informations Financières - Solde de Tout Compte</h6>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        @if(isset($hrAttestation->data['salaire_base']))
+                                        @if(isset($attestationRequest->custom_data['salaire_base']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Salaire de base:</span>
-                                                <span class="ml-2 text-gray-900">{{ number_format($hrAttestation->data['salaire_base'], 2, ',', ' ') }} €</span>
+                                                <span class="ml-2 text-gray-900">{{ number_format($attestationRequest->custom_data['salaire_base'], 2, ',', ' ') }} €</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['primes']))
+                                        @if(isset($attestationRequest->custom_data['primes']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Primes et indemnités:</span>
-                                                <span class="ml-2 text-gray-900">{{ number_format($hrAttestation->data['primes'], 2, ',', ' ') }} €</span>
+                                                <span class="ml-2 text-gray-900">{{ number_format($attestationRequest->custom_data['primes'], 2, ',', ' ') }} €</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['conges_payes']))
+                                        @if(isset($attestationRequest->custom_data['conges_payes']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Congés payés:</span>
-                                                <span class="ml-2 text-gray-900">{{ number_format($hrAttestation->data['conges_payes'], 2, ',', ' ') }} €</span>
+                                                <span class="ml-2 text-gray-900">{{ number_format($attestationRequest->custom_data['conges_payes'], 2, ',', ' ') }} €</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['indemnite_rupture']))
+                                        @if(isset($attestationRequest->custom_data['indemnite_rupture']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Indemnité de rupture:</span>
-                                                <span class="ml-2 text-gray-900">{{ number_format($hrAttestation->data['indemnite_rupture'], 2, ',', ' ') }} €</span>
+                                                <span class="ml-2 text-gray-900">{{ number_format($attestationRequest->custom_data['indemnite_rupture'], 2, ',', ' ') }} €</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['periode_preavis']))
+                                        @if(isset($attestationRequest->custom_data['periode_preavis']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Période de préavis:</span>
-                                                <span class="ml-2 text-gray-900">{{ $hrAttestation->data['periode_preavis'] }}</span>
+                                                <span class="ml-2 text-gray-900">{{ $attestationRequest->custom_data['periode_preavis'] }}</span>
                                             </div>
                                         @endif
-                                        @if(isset($hrAttestation->data['total_brut']))
+                                        @if(isset($attestationRequest->custom_data['total_brut']))
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">Total brut:</span>
-                                                <span class="ml-2 font-bold text-green-600">{{ number_format($hrAttestation->data['total_brut'], 2, ',', ' ') }} €</span>
+                                                <span class="ml-2 font-bold text-green-600">{{ number_format($attestationRequest->custom_data['total_brut'], 2, ',', ' ') }} €</span>
                                             </div>
                                         @endif
                                     </div>
                                 @else
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        @foreach($hrAttestation->data as $key => $value)
+                                        @foreach($attestationRequest->custom_data as $key => $value)
                                             <div class="mb-3">
                                                 <span class="font-medium text-gray-700">{{ ucfirst(str_replace('_', ' ', $key)) }}:</span>
                                                 <span class="ml-2 text-gray-900">{{ $value }}</span>
@@ -290,7 +290,7 @@
                 @endif
 
                 <!-- Notes -->
-                @if($hrAttestation->notes)
+                @if($attestationRequest->notes)
                     <div class="mb-6">
                         <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
                             <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 rounded-t-lg">
@@ -301,7 +301,7 @@
                             </div>
                             <div class="p-4">
                                 <div class="p-3 bg-gray-50 rounded-md">
-                                    {{ $hrAttestation->notes }}
+                                    {{ $attestationRequest->notes }}
                                 </div>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
                 @endif
 
                 <!-- Informations sur le fichier PDF -->
-                @if($hrAttestation->pdf_path)
+                @if($attestationRequest->pdf_path)
                     <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
                         <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 rounded-t-lg">
                             <h5 class="text-lg font-medium text-gray-900">
@@ -322,19 +322,19 @@
                                 <div>
                                     <div class="mb-2">
                                         <span class="font-medium text-gray-700">Fichier:</span> 
-                                        <span class="text-gray-900">{{ basename($hrAttestation->pdf_path) }}</span>
+                                        <span class="text-gray-900">{{ basename($attestationRequest->pdf_path) }}</span>
                                     </div>
                                     <div>
                                         <span class="font-medium text-gray-700">Statut:</span> 
-                                        @if($hrAttestation->hasPdf())
+                                        @if($attestationRequest->pdf_path && Storage::exists($attestationRequest->pdf_path))
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Fichier manquant</span>
                                         @endif
                                     </div>
                                 </div>
-                                @if($hrAttestation->hasPdf())
-                                    <a href="{{ route('admin.hr-attestations.download-pdf', $hrAttestation) }}" 
+                                @if($attestationRequest->pdf_path && Storage::exists($attestationRequest->pdf_path))
+                                    <a href="{{ route('admin.hr-attestations.download-pdf', $attestationRequest) }}" 
                                         class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-cyan-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -356,7 +356,7 @@
                         Retour à la liste
                     </a>
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="{{ route('admin.hr-attestations.edit', $hrAttestation) }}" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <a href="{{ route('admin.hr-attestations.edit', $attestationRequest) }}" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
@@ -436,7 +436,7 @@
                             </svg>
                             Annuler
                         </button>
-                        <form action="{{ route('admin.hr-attestations.destroy', $hrAttestation) }}" method="POST" class="inline">
+                        <form action="{{ route('admin.hr-attestations.destroy', $attestationRequest) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-500 to-rose-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">

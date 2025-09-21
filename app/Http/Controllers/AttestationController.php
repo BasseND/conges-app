@@ -20,6 +20,7 @@ class AttestationController extends Controller
     {
         $query = AttestationRequest::with(['attestationType', 'processor'])
             ->forUser(Auth::id())
+            ->where('category', 'employee_request')
             ->orderBy('created_at', 'desc');
 
         // Filtres
@@ -69,7 +70,8 @@ class AttestationController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string|max:1000',
-            'custom_data' => 'nullable|array'
+            'custom_data' => 'nullable|array',
+            'category' => 'required|in:hr_generated,employee_request'
         ]);
 
         if ($validator->fails()) {
@@ -120,6 +122,7 @@ class AttestationController extends Controller
             'end_date' => $request->end_date,
             'notes' => $request->notes,
             'custom_data' => $request->custom_data,
+            'category' => $request->category,
             'status' => AttestationRequest::STATUS_PENDING
         ]);
 
@@ -142,6 +145,7 @@ class AttestationController extends Controller
     {
         $attestationRequest = AttestationRequest::with(['attestationType', 'processor'])
             ->forUser(Auth::id())
+            ->where('category', 'employee_request')
             ->findOrFail($id);
 
         return view('attestations.show', compact('attestationRequest'));
@@ -191,10 +195,10 @@ class AttestationController extends Controller
         $userId = Auth::id();
         
         $stats = [
-            'total' => AttestationRequest::forUser($userId)->count(),
-            'pending' => AttestationRequest::forUser($userId)->pending()->count(),
-            'approved' => AttestationRequest::forUser($userId)->approved()->count(),
-            'generated' => AttestationRequest::forUser($userId)->where('status', AttestationRequest::STATUS_GENERATED)->count(),
+            'total' => AttestationRequest::forUser($userId)->where('category', 'employee_request')->count(),
+            'pending' => AttestationRequest::forUser($userId)->where('category', 'employee_request')->pending()->count(),
+            'approved' => AttestationRequest::forUser($userId)->where('category', 'employee_request')->approved()->count(),
+            'generated' => AttestationRequest::forUser($userId)->where('category', 'employee_request')->where('status', AttestationRequest::STATUS_GENERATED)->count(),
         ];
 
         return response()->json($stats);

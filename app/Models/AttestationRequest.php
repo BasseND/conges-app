@@ -10,6 +10,10 @@ class AttestationRequest extends Model
 {
     use HasFactory;
 
+    // Constantes pour les catégories
+    const CATEGORY_HR_GENERATED = 'hr_generated';
+    const CATEGORY_EMPLOYEE_REQUEST = 'employee_request';
+
     /**
      * Les statuts possibles pour une demande d'attestation
      */
@@ -17,6 +21,9 @@ class AttestationRequest extends Model
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
     const STATUS_GENERATED = 'generated';
+    const STATUS_DRAFT = 'draft';
+    const STATUS_SENT = 'sent';
+    const STATUS_ARCHIVED = 'archived';
 
     /**
      * Les priorités possibles
@@ -29,6 +36,7 @@ class AttestationRequest extends Model
     protected $fillable = [
         'user_id',
         'attestation_type_id',
+        'category',
         'status',
         'priority',
         'start_date',
@@ -39,7 +47,11 @@ class AttestationRequest extends Model
         'processed_at',
         'rejection_reason',
         'pdf_path',
-        'generated_at'
+        'generated_at',
+        'generated_by',
+        'document_number',
+        'sent_at',
+        'archived_at'
     ];
 
     protected $casts = [
@@ -47,6 +59,8 @@ class AttestationRequest extends Model
         'end_date' => 'date',
         'processed_at' => 'datetime',
         'generated_at' => 'datetime',
+        'sent_at' => 'datetime',
+        'archived_at' => 'datetime',
         'custom_data' => 'array'
     ];
 
@@ -72,6 +86,14 @@ class AttestationRequest extends Model
     public function processor()
     {
         return $this->belongsTo(User::class, 'processed_by');
+    }
+
+    /**
+     * Get the user who generated the attestation.
+     */
+    public function generator()
+    {
+        return $this->belongsTo(User::class, 'generated_by');
     }
 
     /**
@@ -131,6 +153,30 @@ class AttestationRequest extends Model
     }
 
     /**
+     * Vérifier si la demande est en brouillon
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
+
+    /**
+     * Vérifier si l'attestation a été envoyée
+     */
+    public function isSent()
+    {
+        return $this->status === self::STATUS_SENT;
+    }
+
+    /**
+     * Vérifier si l'attestation est archivée
+     */
+    public function isArchived()
+    {
+        return $this->status === self::STATUS_ARCHIVED;
+    }
+
+    /**
      * Obtenir le statut formaté
      */
     public function getFormattedStatusAttribute()
@@ -139,7 +185,10 @@ class AttestationRequest extends Model
             self::STATUS_PENDING => 'En attente',
             self::STATUS_APPROVED => 'Approuvée',
             self::STATUS_REJECTED => 'Rejetée',
-            self::STATUS_GENERATED => 'Générée'
+            self::STATUS_GENERATED => 'Générée',
+            self::STATUS_DRAFT => 'Brouillon',
+            self::STATUS_SENT => 'Envoyée',
+            self::STATUS_ARCHIVED => 'Archivée'
         ];
 
         return $statuses[$this->status] ?? 'Statut inconnu';
@@ -184,7 +233,10 @@ class AttestationRequest extends Model
             self::STATUS_PENDING => 'text-yellow-600 bg-yellow-100',
             self::STATUS_APPROVED => 'text-green-600 bg-green-100',
             self::STATUS_REJECTED => 'text-red-600 bg-red-100',
-            self::STATUS_GENERATED => 'text-blue-600 bg-blue-100'
+            self::STATUS_GENERATED => 'text-blue-600 bg-blue-100',
+            self::STATUS_DRAFT => 'text-gray-600 bg-gray-100',
+            self::STATUS_SENT => 'text-purple-600 bg-purple-100',
+            self::STATUS_ARCHIVED => 'text-indigo-600 bg-indigo-100'
         ];
 
         return $classes[$this->status] ?? 'text-gray-600 bg-gray-100';

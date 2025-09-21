@@ -123,6 +123,7 @@
             <!-- Formulaire -->
             <form id="createAttestationForm" action="{{ route('attestations.store') }}" method="POST" @submit="submitForm($event)" class="mt-6 space-y-6">
                 @csrf
+                <input type="hidden" name="category" value="employee_request">
                 
                 <!-- Message de succès -->
                 <div x-show="showSuccess" x-cloak class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">

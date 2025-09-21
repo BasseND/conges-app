@@ -58,19 +58,20 @@
 
                     <form action="{{ route('admin.hr-attestations.store') }}" method="POST" id="attestationForm">
                         @csrf
+                        <input type="hidden" name="category" value="hr_generated">
                         
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <!-- Sélection de l'employé -->
+                            <!-- Sélection de l'utilisateur -->
                             <div class="space-y-2">
-                                <label for="employee_search_input" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <label for="user_search_input" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    Employé <span class="text-red-500 ml-1">*</span>
+                                    Utilisateur <span class="text-red-500 ml-1">*</span>
                                 </label>
-                                <div class="employee-search-container">
-                                    <select id="employee_select" name="employee_id" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" required>
-                                        <option value="">Sélectionner un employé...</option>
+                                <div class="user-search-container">
+                                    <select id="user_select" name="user_id" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" required>
+                                        <option value="">Sélectionner un utilisateur...</option>
                                     </select>
                                 </div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center">
@@ -105,8 +106,8 @@
                             </div>
                         </div>
 
-                        <!-- Informations de l'employé sélectionné -->
-                        <div id="employee-info" class="mb-8 hidden">
+                        <!-- Informations de l'utilisateur sélectionné -->
+                        <div id="user-info" class="mb-8 hidden">
                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-700 shadow-sm">
                                 <div class="p-6">
                                     <div class="flex items-center mb-4">
@@ -114,7 +115,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         <h6 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                                            Informations de l'employé
+                                            Informations de l'utilisateur
                                         </h6>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -126,7 +127,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Nom complet</p>
-                                                <p id="employee-name" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
+                                                <p id="user-name" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
@@ -137,7 +138,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Poste</p>
-                                                <p id="employee-position" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
+                                                <p id="user-position" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
@@ -148,7 +149,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Département</p>
-                                                <p id="employee-department" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
+                                                <p id="user-department" class="text-gray-900 dark:text-gray-100 font-semibold"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -171,13 +172,13 @@
                                         <label for="date_fin_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Date de fin de contrat
                                         </label>
-                                        <input type="date" name="data[date_fin_contrat]" id="date_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        <input type="date" name="custom_data[date_fin_contrat]" id="date_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     <div class="mb-4">
                                         <label for="motif_fin_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Motif de fin de contrat
                                         </label>
-                                        <select name="data[motif_fin_contrat]" id="motif_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                        <select name="custom_data[motif_fin_contrat]" id="motif_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                             <option value="">Sélectionner...</option>
                                             <option value="demission">Démission</option>
                                             <option value="licenciement">Licenciement</option>
@@ -190,20 +191,20 @@
                                         <label for="duree_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Durée du contrat
                                         </label>
-                                        <input type="text" name="data[duree_contrat]" id="duree_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 2 ans, 6 mois">
+                                        <input type="text" name="custom_data[duree_contrat]" id="duree_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 2 ans, 6 mois">
                                         <p class="text-xs text-gray-500 mt-1">Laissez vide pour calcul automatique basé sur les dates</p>
                                     </div>
                                     <div class="mb-4">
                                         <label for="salaire_final" class="block text-sm font-medium text-gray-700 mb-2">
                                             Salaire final (€)
                                         </label>
-                                        <input type="number" name="data[salaire_final]" id="salaire_final" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01" placeholder="Salaire final de l'employé">
+                                        <input type="number" name="custom_data[salaire_final]" id="salaire_final" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01" placeholder="Salaire final de l'utilisateur">
                                     </div>
                                     <div class="col-span-full mb-4">
                                         <label for="fonctions_exercees" class="block text-sm font-medium text-gray-700 mb-2">
                                             Fonctions exercées
                                         </label>
-                                        <textarea name="data[fonctions_exercees]" id="fonctions_exercees" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Décrivez les principales fonctions exercées par l'employé..."></textarea>
+                                        <textarea name="custom_data[fonctions_exercees]" id="fonctions_exercees" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Décrivez les principales fonctions exercées par l'utilisateur..."></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -221,37 +222,37 @@
                                         <label for="salaire_base" class="block text-sm font-medium text-gray-700 mb-2">
                                             Salaire de base (€)
                                         </label>
-                                        <input type="number" name="data[salaire_base]" id="salaire_base" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
+                                        <input type="number" name="custom_data[salaire_base]" id="salaire_base" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
                                     </div>
                                     <div class="mb-4">
                                         <label for="primes" class="block text-sm font-medium text-gray-700 mb-2">
                                             Primes et indemnités (€)
                                         </label>
-                                        <input type="number" name="data[primes]" id="primes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
+                                        <input type="number" name="custom_data[primes]" id="primes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
                                     </div>
                                     <div class="mb-4">
                                         <label for="conges_payes" class="block text-sm font-medium text-gray-700 mb-2">
                                             Congés payés (€)
                                         </label>
-                                        <input type="number" name="data[conges_payes]" id="conges_payes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
+                                        <input type="number" name="custom_data[conges_payes]" id="conges_payes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
                                     </div>
                                     <div class="mb-4">
                                         <label for="indemnite_rupture" class="block text-sm font-medium text-gray-700 mb-2">
                                             Indemnité de rupture (€)
                                         </label>
-                                        <input type="number" name="data[indemnite_rupture]" id="indemnite_rupture" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
+                                        <input type="number" name="custom_data[indemnite_rupture]" id="indemnite_rupture" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" step="0.01">
                                     </div>
                                     <div class="mb-4">
                                         <label for="periode_preavis" class="block text-sm font-medium text-gray-700 mb-2">
                                             Période de préavis
                                         </label>
-                                        <input type="text" name="data[periode_preavis]" id="periode_preavis" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 1 mois">
+                                        <input type="text" name="custom_data[periode_preavis]" id="periode_preavis" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 1 mois">
                                     </div>
                                     <div class="mb-4">
                                         <label for="total_brut" class="block text-sm font-medium text-gray-700 mb-2">
                                             Total brut (€)
                                         </label>
-                                        <input type="number" name="data[total_brut]" id="total_brut" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50" step="0.01" readonly>
+                                        <input type="number" name="custom_data[total_brut]" id="total_brut" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50" step="0.01" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -268,9 +269,42 @@
                                 </label>
                                 <textarea name="notes" id="notes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Notes internes ou commentaires..."></textarea>
                             </div>
-                        </div>
+                </div>
+            </div>
 
-                        <!-- Boutons d'action -->
+            <!-- Champs conditionnels pour le type stage -->
+            <div id="stage-fields" class="conditional-group hidden bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Informations du stage
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Date de début
+                        </label>
+                        <input type="date" name="start_date" id="start_date" 
+                               class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200">
+                    </div>
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Date de fin
+                        </label>
+                        <input type="date" name="end_date" id="end_date" 
+                               class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
                         <div class="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
                             <a href="{{ route('admin.hr-attestations.index') }}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-medium">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -297,7 +331,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@11.1.0/public/assets/styles/choices.min.css">
 
 <style>
-.employee-search-container {
+.user-search-container {
     position: relative;
     width: 100%;
 }
@@ -374,21 +408,21 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Variables globales
-    let employeeChoices;
-    let selectedEmployeeId = null;
+    let userChoices;
+    let selectedUserId = null;
     
     // Éléments DOM
-    const employeeSelect = document.getElementById('employee_select');
+    const userSelect = document.getElementById('user_select');
     const attestationTypeSelect = document.getElementById('attestation_type_id');
     const attestationForm = document.getElementById('attestationForm');
     
-    // Initialiser Choices.js pour la recherche d'employés
-    if (employeeSelect) {
-        employeeChoices = new Choices(employeeSelect, {
+    // Initialiser Choices.js pour la recherche d'utilisateurs
+    if (userSelect) {
+        userChoices = new Choices(userSelect, {
             searchEnabled: true,
-            searchPlaceholderValue: 'Rechercher un employé...',
-            noResultsText: 'Aucun employé trouvé',
-            noChoicesText: 'Aucun employé disponible',
+            searchPlaceholderValue: 'Rechercher un utilisateur...',
+            noResultsText: 'Aucun utilisateur trouvé',
+            noChoicesText: 'Aucun utilisateur disponible',
             itemSelectText: 'Cliquer pour sélectionner',
             loadingText: 'Chargement...',
             shouldSort: false,
@@ -400,28 +434,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Charger les employés au focus (charger une liste initiale)
-        employeeSelect.addEventListener('showDropdown', function() {
-            const currentValue = employeeChoices.getValue();
-            if ((!currentValue || currentValue.value === '') && employeeChoices._store.choices.length === 0) {
-                loadEmployees('a'); // Charger avec une lettre pour avoir des résultats initiaux
+        // Charger les utilisateurs au focus (charger une liste initiale)
+        userSelect.addEventListener('showDropdown', function() {
+            const currentValue = userChoices.getValue();
+            if ((!currentValue || currentValue.value === '') && userChoices._store.choices.length === 0) {
+                loadUsers('a'); // Charger avec une lettre pour avoir des résultats initiaux
             }
         });
         
         // Recherche en temps réel
-        employeeSelect.addEventListener('search', function(event) {
+        userSelect.addEventListener('search', function(event) {
             const query = event.detail.value;
             if (query && query.length >= 2) {
-                loadEmployees(query);
+                loadUsers(query);
             }
         });
         
-        // Sélection d'un employé
-        employeeSelect.addEventListener('choice', function(event) {
-            const employeeId = event.detail.choice && event.detail.choice.value ? event.detail.choice.value : '';
-            if (employeeId) {
-                selectedEmployeeId = employeeId;
-                loadEmployeeDetails(employeeId);
+        // Sélection d'un utilisateur
+        userSelect.addEventListener('choice', function(event) {
+            const userId = event.detail.choice && event.detail.choice.value ? event.detail.choice.value : '';
+            if (userId) {
+                selectedUserId = userId;
+                loadUserDetails(userId);
             }
         });
     }
@@ -444,6 +478,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (template === 'solde_tout_compte') {
                 const soldeFields = document.getElementById('solde-fields');
                 if (soldeFields) soldeFields.classList.remove('hidden');
+            } else if (template === 'attestation_stage') {
+                const stageFields = document.getElementById('stage-fields');
+                if (stageFields) stageFields.classList.remove('hidden');
             }
         });
     }
@@ -460,13 +497,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validation du formulaire
     if (attestationForm) {
         attestationForm.addEventListener('submit', function(e) {
-            const currentValue = employeeChoices ? employeeChoices.getValue() : null;
-            const employeeId = currentValue && currentValue.value ? currentValue.value : '';
+            const currentValue = userChoices ? userChoices.getValue() : null;
+            const userId = currentValue && currentValue.value ? currentValue.value : '';
             const attestationTypeId = document.getElementById('attestation_type_id').value;
             
-            if (!employeeId || !attestationTypeId) {
+            if (!userId || !attestationTypeId) {
                 e.preventDefault();
-                alert('Veuillez sélectionner un employé et un type d\'attestation.');
+                alert('Veuillez sélectionner un utilisateur et un type d\'attestation.');
                 return false;
             }
             
@@ -483,13 +520,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Fonctions utilitaires
-    function loadEmployees(query) {
+    function loadUsers(query) {
         // Ne pas faire de requête si la query est vide
         if (!query || query.length < 2) {
             return;
         }
         
-        fetch(`/admin/hr-attestations/search/employees?q=${encodeURIComponent(query)}`, {
+        fetch(`/admin/hr-attestations/search/users?q=${encodeURIComponent(query)}`, {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -510,26 +547,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Effacer les choix existants
-            employeeChoices.clearChoices();
+            userChoices.clearChoices();
             
             // Ajouter les nouveaux choix
-            const choices = data.map(employee => ({
-                value: employee.id,
-                label: `${employee.text}`,
+            const choices = data.map(user => ({
+                value: user.id,
+                label: `${user.text}`,
                 customProperties: {
-                    position: employee.position || 'Non défini'
+                    position: user.position || 'Non défini'
                 }
             }));
             
-            employeeChoices.setChoices(choices, 'value', 'label', true);
+            userChoices.setChoices(choices, 'value', 'label', true);
         })
         .catch(error => {
             console.error('Erreur lors de la recherche:', error);
         });
     }
     
-    function loadEmployeeDetails(employeeId) {
-        fetch(`/employee/${employeeId}/details`, {
+    function loadUserDetails(userId) {
+        fetch(`/admin/hr-attestations/user/${userId}/details`, {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -538,15 +575,15 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            const employeeName = document.getElementById('employee-name');
-            const employeePosition = document.getElementById('employee-position');
-            const employeeDepartment = document.getElementById('employee-department');
-            const employeeInfo = document.getElementById('employee-info');
+            const userName = document.getElementById('user-name');
+            const userPosition = document.getElementById('user-position');
+            const userDepartment = document.getElementById('user-department');
+            const userInfo = document.getElementById('user-info');
             
-            if (employeeName) employeeName.textContent = data.first_name + ' ' + data.last_name;
-            if (employeePosition) employeePosition.textContent = data.position || 'Non défini';
-            if (employeeDepartment) employeeDepartment.textContent = data.department || 'Non défini';
-            if (employeeInfo) employeeInfo.classList.remove('hidden');
+            if (userName) userName.textContent = data.first_name + ' ' + data.last_name;
+            if (userPosition) userPosition.textContent = data.position || 'Non défini';
+            if (userDepartment) userDepartment.textContent = data.department || 'Non défini';
+            if (userInfo) userInfo.classList.remove('hidden');
             
             // Pré-remplir certains champs si disponibles
             if (data.salary) {
@@ -559,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Erreur lors du chargement des détails:', error);
-            alert('Erreur lors du chargement des détails de l\'employé');
+            alert('Erreur lors du chargement des détails de l\'utilisateur');
         });
     }
     

@@ -14,7 +14,7 @@
                         Modifier l'Attestation
                     </h1>
                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                        Document #{{ $hrAttestation->document_number }}
+                        Document #{{ $attestationRequest->document_number }}
                     </p>
                 </div>
             </div>
@@ -53,28 +53,29 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.hr-attestations.update', $hrAttestation) }}" method="POST" id="attestationForm">
+                    <form action="{{ route('admin.hr-attestations.update', $attestationRequest) }}" method="POST" id="attestationForm">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="category" value="{{ $attestationRequest->category ?? 'hr_generated' }}">
                         
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <!-- Information de l'employé (lecture seule) -->
+                            <!-- Information de l'utilisateur (lecture seule) -->
                             <div class="space-y-2">
                                 <label class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    Employé
+                                    Utilisateur
                                 </label>
                                 <div class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300">
-                                    {{ $hrAttestation->employee->first_name }} {{ $hrAttestation->employee->last_name }} ({{ $hrAttestation->employee->email }})
+                                    {{ $attestationRequest->user->first_name }} {{ $attestationRequest->user->last_name }} ({{ $attestationRequest->user->email }})
                                 </div>
-                                <input type="hidden" name="employee_id" value="{{ $hrAttestation->employee->id }}">
+                                <input type="hidden" name="user_id" value="{{ $attestationRequest->user->id }}">
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    L'employé ne peut pas être modifié lors de l'édition
+                                    L'utilisateur ne peut pas être modifié lors de l'édition
                                 </p>
                             </div>
 
@@ -87,9 +88,9 @@
                                     Type d'Attestation
                                 </label>
                                 <div class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300">
-                                    {{ $hrAttestation->attestationType->name }}
+                                    {{ $attestationRequest->attestationType->name }}
                                 </div>
-                                <input type="hidden" name="attestation_type_id" value="{{ $hrAttestation->attestation_type_id }}">
+                                <input type="hidden" name="attestation_type_id" value="{{ $attestationRequest->attestation_type_id }}">
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -99,27 +100,27 @@
                             </div>
                         </div>
 
-                        <!-- Informations de l'employé sélectionné -->
-                        <div id="employee-info" class="mb-6">
+                        <!-- Informations de l'utilisateur sélectionné -->
+                        <div id="user-info" class="mb-6">
                             <div class="bg-gray-50 rounded-lg p-4">
                                 <h6 class="flex items-center text-lg font-medium text-gray-900 mb-3">
                                     <svg class="w-4 h-4 mr-1 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    Informations de l'employé
+                                    Informations de l'utilisateur
                                 </h6>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <strong class="text-gray-700">Nom complet:</strong> 
-                                        <span id="employee-name" class="text-gray-900">{{ $hrAttestation->employee->first_name }} {{ $hrAttestation->employee->last_name }}</span>
+                                        <span id="user-name" class="text-gray-900">{{ $attestationRequest->user->first_name }} {{ $attestationRequest->user->last_name }}</span>
                                     </div>
                                     <div>
                                         <strong class="text-gray-700">Poste:</strong> 
-                                        <span id="employee-position" class="text-gray-900">{{ $hrAttestation->employee->position ?? 'Non défini' }}</span>
+                                        <span id="user-position" class="text-gray-900">{{ $attestationRequest->user->position ?? 'Non défini' }}</span>
                                     </div>
                                     <div>
                                         <strong class="text-gray-700">Département:</strong> 
-                                        <span id="employee-department" class="text-gray-900">{{ $hrAttestation->employee->department->name ?? 'Non défini' }}</span>
+                                        <span id="user-department" class="text-gray-900">{{ $attestationRequest->user->department->name ?? 'Non défini' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +129,7 @@
                         <!-- Champs conditionnels -->
                         <div id="conditional-fields">
                             <!-- Champs pour certificat de travail -->
-                            <div id="certificat-fields" class="conditional-group {{ $hrAttestation->attestationType->template_file === 'certificat_travail' ? '' : 'hidden' }}">
+                            <div id="certificat-fields" class="conditional-group {{ $attestationRequest->attestationType->template_file === 'certificat_travail' ? '' : 'hidden' }}">
                                 <h5 class="flex items-center text-lg font-medium text-gray-900 mb-4">
                                     <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8"/>
@@ -140,49 +141,49 @@
                                         <label for="date_fin_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Date de fin de contrat
                                         </label>
-                                        <input type="date" name="data[date_fin_contrat]" id="date_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                               value="{{ $hrAttestation->data['date_fin_contrat'] ?? '' }}">
+                                        <input type="date" name="custom_data[date_fin_contrat]" id="date_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                               value="{{ $attestationRequest->custom_data['date_fin_contrat'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="motif_fin_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Motif de fin de contrat
                                         </label>
-                                        <select name="data[motif_fin_contrat]" id="motif_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <select name="custom_data[motif_fin_contrat]" id="motif_fin_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                             <option value="">Sélectionner...</option>
-                                            <option value="demission" {{ ($hrAttestation->data['motif_fin_contrat'] ?? '') === 'demission' ? 'selected' : '' }}>Démission</option>
-                                            <option value="licenciement" {{ ($hrAttestation->data['motif_fin_contrat'] ?? '') === 'licenciement' ? 'selected' : '' }}>Licenciement</option>
-                                            <option value="fin_cdd" {{ ($hrAttestation->data['motif_fin_contrat'] ?? '') === 'fin_cdd' ? 'selected' : '' }}>Fin de CDD</option>
-                                            <option value="rupture_conventionnelle" {{ ($hrAttestation->data['motif_fin_contrat'] ?? '') === 'rupture_conventionnelle' ? 'selected' : '' }}>Rupture conventionnelle</option>
-                                            <option value="retraite" {{ ($hrAttestation->data['motif_fin_contrat'] ?? '') === 'retraite' ? 'selected' : '' }}>Retraite</option>
+                                            <option value="demission" {{ ($attestationRequest->custom_data['motif_fin_contrat'] ?? '') === 'demission' ? 'selected' : '' }}>Démission</option>
+                                            <option value="licenciement" {{ ($attestationRequest->custom_data['motif_fin_contrat'] ?? '') === 'licenciement' ? 'selected' : '' }}>Licenciement</option>
+                                            <option value="fin_cdd" {{ ($attestationRequest->custom_data['fin_cdd'] ?? '') === 'fin_cdd' ? 'selected' : '' }}>Fin de CDD</option>
+                                            <option value="rupture_conventionnelle" {{ ($attestationRequest->custom_data['motif_fin_contrat'] ?? '') === 'rupture_conventionnelle' ? 'selected' : '' }}>Rupture conventionnelle</option>
+                                            <option value="retraite" {{ ($attestationRequest->custom_data['motif_fin_contrat'] ?? '') === 'retraite' ? 'selected' : '' }}>Retraite</option>
                                         </select>
                                     </div>
                                     <div class="mb-4">
                                         <label for="duree_contrat" class="block text-sm font-medium text-gray-700 mb-2">
                                             Durée du contrat
                                         </label>
-                                        <input type="text" name="data[duree_contrat]" id="duree_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                               placeholder="Ex: 2 ans, 6 mois" value="{{ $hrAttestation->data['duree_contrat'] ?? '' }}">
+                                        <input type="text" name="custom_data[duree_contrat]" id="duree_contrat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               placeholder="Ex: 2 ans, 6 mois" value="{{ $attestationRequest->custom_data['duree_contrat'] ?? '' }}">
                                         <p class="text-xs text-gray-500 mt-1">Laissez vide pour calcul automatique basé sur les dates</p>
                                     </div>
                                     <div class="mb-4">
                                         <label for="salaire_final" class="block text-sm font-medium text-gray-700 mb-2">
                                             Salaire final (€)
                                         </label>
-                                        <input type="number" name="data[salaire_final]" id="salaire_final" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                               step="0.01" placeholder="Salaire final de l'employé" value="{{ $hrAttestation->data['salaire_final'] ?? '' }}">
+                                        <input type="number" name="custom_data[salaire_final]" id="salaire_final" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               step="0.01" placeholder="Salaire final de l'utilisateur" value="{{ $attestationRequest->custom_data['salaire_final'] ?? '' }}">
                                     </div>
                                     <div class="md:col-span-2 mb-4">
                                         <label for="fonctions_exercees" class="block text-sm font-medium text-gray-700 mb-2">
                                             Fonctions exercées
                                         </label>
-                                        <textarea name="data[fonctions_exercees]" id="fonctions_exercees" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" 
-                                                  placeholder="Décrivez les principales fonctions exercées par l'employé...">{{ $hrAttestation->data['fonctions_exercees'] ?? '' }}</textarea>
+                                        <textarea name="custom_data[fonctions_exercees]" id="fonctions_exercees" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" 
+                                                  placeholder="Décrivez les principales fonctions exercées par l'utilisateur...">{{ $attestationRequest->custom_data['fonctions_exercees'] ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Champs pour solde de tout compte -->
-                            <div id="solde-fields" class="conditional-group {{ $hrAttestation->attestationType->template_file === 'solde_tout_compte' ? '' : 'hidden' }}">
+                            <div id="solde-fields" class="conditional-group {{ $attestationRequest->attestationType->template_file === 'solde_tout_compte' ? '' : 'hidden' }}">
                                 <h5 class="flex items-center text-lg font-medium text-gray-900 mb-4">
                                     <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -194,43 +195,43 @@
                                         <label for="salaire_base" class="block text-sm font-medium text-gray-700 mb-2">
                                             Salaire de base (€)
                                         </label>
-                                        <input type="number" name="data[salaire_base]" id="salaire_base" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
-                                               value="{{ $hrAttestation->data['salaire_base'] ?? '' }}">
+                                        <input type="number" name="custom_data[salaire_base]" id="salaire_base" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
+                                               value="{{ $attestationRequest->custom_data['salaire_base'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="primes" class="block text-sm font-medium text-gray-700 mb-2">
                                             Primes et indemnités (€)
                                         </label>
-                                        <input type="number" name="data[primes]" id="primes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
-                                               value="{{ $hrAttestation->data['primes'] ?? '' }}">
+                                        <input type="number" name="custom_data[primes]" id="primes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
+                                               value="{{ $attestationRequest->custom_data['primes'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="conges_payes" class="block text-sm font-medium text-gray-700 mb-2">
                                             Congés payés (€)
                                         </label>
-                                        <input type="number" name="data[conges_payes]" id="conges_payes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
-                                               value="{{ $hrAttestation->data['conges_payes'] ?? '' }}">
+                                        <input type="number" name="custom_data[conges_payes]" id="conges_payes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
+                                               value="{{ $attestationRequest->custom_data['conges_payes'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="indemnite_rupture" class="block text-sm font-medium text-gray-700 mb-2">
                                             Indemnité de rupture (€)
                                         </label>
-                                        <input type="number" name="data[indemnite_rupture]" id="indemnite_rupture" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
-                                               value="{{ $hrAttestation->data['indemnite_rupture'] ?? '' }}">
+                                        <input type="number" name="custom_data[indemnite_rupture]" id="indemnite_rupture" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" step="0.01"
+                                               value="{{ $attestationRequest->custom_data['indemnite_rupture'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="periode_preavis" class="block text-sm font-medium text-gray-700 mb-2">
                                             Période de préavis
                                         </label>
-                                        <input type="text" name="data[periode_preavis]" id="periode_preavis" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                               placeholder="Ex: 1 mois" value="{{ $hrAttestation->data['periode_preavis'] ?? '' }}">
+                                        <input type="text" name="custom_data[periode_preavis]" id="periode_preavis" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               placeholder="Ex: 1 mois" value="{{ $attestationRequest->custom_data['periode_preavis'] ?? '' }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="total_brut" class="block text-sm font-medium text-gray-700 mb-2">
                                             Total brut (€)
                                         </label>
-                                        <input type="number" name="data[total_brut]" id="total_brut" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50" step="0.01" readonly
-                                               value="{{ $hrAttestation->data['total_brut'] ?? '' }}">
+                                        <input type="number" name="custom_data[total_brut]" id="total_brut" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50" step="0.01" readonly
+                                               value="{{ $attestationRequest->custom_data['total_brut'] ?? '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +246,7 @@
                                 Notes (optionnel)
                             </label>
                             <textarea name="notes" id="notes" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" 
-                                      placeholder="Notes internes ou commentaires...">{{ $hrAttestation->notes }}</textarea>
+                                      placeholder="Notes internes ou commentaires...">{{ $attestationRequest->notes }}</textarea>
                         </div>
 
                         <!-- Avertissement -->
@@ -267,7 +268,7 @@
                         <!-- Boutons d'action -->
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
                             <div class="flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('admin.hr-attestations.show', $hrAttestation) }}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-medium">
+                                <a href="{{ route('admin.hr-attestations.show', $attestationRequest) }}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-medium">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -326,7 +327,7 @@ $(document).ready(function() {
         placeholder: 'Rechercher un employé...',
         allowClear: true,
         ajax: {
-            url: '{{ route("admin.hr-attestations.search-employees") }}',
+            url: '{{ route("admin.hr-attestations.search-users") }}',
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -377,16 +378,16 @@ $(document).ready(function() {
 
     function loadEmployeeDetails(employeeId) {
         $.ajax({
-            url: `/admin/hr-attestations/employee/${employeeId}/details`,
+            url: `/admin/hr-attestations/user/${employeeId}/details`,
             method: 'GET',
             success: function(data) {
-                $('#employee-name').text(data.first_name + ' ' + data.last_name);
-                $('#employee-position').text(data.position || 'Non défini');
-                $('#employee-department').text(data.department || 'Non défini');
-                $('#employee-info').removeClass('hidden');
+                $('#user-name').text(data.first_name + ' ' + data.last_name);
+                $('#user-position').text(data.position || 'Non défini');
+                $('#user-department').text(data.department || 'Non défini');
+                $('#user-info').removeClass('hidden');
             },
             error: function() {
-                alert('Erreur lors du chargement des détails de l\'employé');
+                alert('Erreur lors du chargement des détails de l\'utilisateur');
             }
         });
     }
@@ -403,12 +404,12 @@ $(document).ready(function() {
 
     // Validation du formulaire
     $('#attestationForm').on('submit', function(e) {
-        const employeeId = $('#employee_id').val();
+        const userId = $('#user_id').val();
         const attestationTypeId = $('#attestation_type_id').val();
         
-        if (!employeeId || !attestationTypeId) {
+        if (!userId || !attestationTypeId) {
             e.preventDefault();
-            alert('Veuillez sélectionner un employé et un type d\'attestation.');
+            alert('Veuillez sélectionner un utilisateur et un type d\'attestation.');
             return false;
         }
         

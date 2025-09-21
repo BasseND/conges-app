@@ -66,8 +66,8 @@
                 <div class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-amber-100 text-sm font-medium uppercase tracking-wide">En attente</p>
-                            <p class="text-3xl font-bold mt-2">{{ $attestations->where('status', 'pending')->count() }}</p>
+                            <p class="text-amber-100 text-sm font-medium uppercase tracking-wide">Brouillon</p>
+                            <p class="text-3xl font-bold mt-2">{{ $attestations->where('status', 'draft')->count() }}</p>
                         </div>
                         <div class="p-3 bg-white/20 rounded-xl">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,8 +80,8 @@
                 <div class="bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-100 text-sm font-medium uppercase tracking-wide">Archivées</p>
-                            <p class="text-3xl font-bold mt-2">{{ $attestations->where('status', 'archived')->count() }}</p>
+                            <p class="text-gray-100 text-sm font-medium uppercase tracking-wide">Envoyées</p>
+                            <p class="text-3xl font-bold mt-2">{{ $attestations->where('status', 'sent')->count() }}</p>
                         </div>
                         <div class="p-3 bg-white/20 rounded-xl">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,9 +111,9 @@
                                     <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    Employé
+                                    Utilisateur
                                 </label>
-                                <input type="text" name="employee_search" value="{{ request('employee_search') }}" placeholder="Nom, prénom ou email..." class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
+                                <input type="text" name="user_search" value="{{ request('user_search') }}" placeholder="Nom, prénom ou email..." class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                             </div>
                             
                             <div class="flex-1 min-w-[200px]">
@@ -143,6 +143,20 @@
                                     @foreach($statuses as $key => $label)
                                         <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex-1 min-w-[200px]">
+                                <label class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a1.994 1.994 0 01-1.414.586H7a4 4 0 01-4-4V7a4 4 0 014-4z"/>
+                                    </svg>
+                                    Catégorie
+                                </label>
+                                <select name="category" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
+                                    <option value="">Toutes les catégories</option>
+                                    <option value="hr_generated" {{ request('category') == 'hr_generated' ? 'selected' : '' }}>Générées par RH</option>
+                                    <option value="employee_request" {{ request('category') == 'employee_request' ? 'selected' : '' }}>Demandes d'employés</option>
                                 </select>
                             </div>
                             
@@ -237,8 +251,9 @@
                             <thead class="bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800">
                                 <tr>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">N° Document</th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employé</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Utilisateur</th>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Catégorie</th>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Statut</th>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Généré par</th>
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Date de génération</th>
@@ -256,19 +271,19 @@
                                                 <div class="flex-shrink-0 h-12 w-12">
                                                     <div class="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
                                                         <span class="text-sm font-bold text-white">
-                                                            {{ strtoupper(substr($attestation->employee->first_name, 0, 1) . substr($attestation->employee->last_name, 0, 1)) }}
+                                                            {{ strtoupper(substr($attestation->user->first_name, 0, 1) . substr($attestation->user->last_name, 0, 1)) }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
                                                     <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                        {{ $attestation->employee->first_name }} {{ $attestation->employee->last_name }}
+                                                        {{ $attestation->user->first_name }} {{ $attestation->user->last_name }}
                                                     </div>
                                                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $attestation->employee->email }}
+                                                        {{ $attestation->user->email }}
                                                     </div>
-                                                    @if($attestation->employee->position)
-                                                        <div class="text-xs text-indigo-600 dark:text-indigo-400">{{ $attestation->employee->position }}</div>
+                                                    @if($attestation->user->position)
+                                                        <div class="text-xs text-indigo-600 dark:text-indigo-400">{{ $attestation->user->position }}</div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -278,9 +293,27 @@
                                         </td>
                                         <td class="px-6 py-5 whitespace-nowrap">
                                             @php
+                                                $categoryColors = [
+                                                    'hr_generated' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
+                                                    'employee_request' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                                                ];
+                                                $categoryLabels = [
+                                                    'hr_generated' => 'Générée par RH',
+                                                    'employee_request' => 'Demande employé'
+                                                ];
+                                                $categoryColor = $categoryColors[$attestation->category] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+                                                $categoryLabel = $categoryLabels[$attestation->category] ?? $attestation->category;
+                                            @endphp
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold {{ $categoryColor }} shadow-sm">
+                                                {{ $categoryLabel }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            @php
                                                 $statusColors = [
                                                     'generated' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-                                                    'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+                                                    'draft' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+                                                    'sent' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
                                                     'archived' => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400',
                                                     'cancelled' => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
                                                 ];
@@ -291,8 +324,8 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $attestation->generatedBy->first_name }} {{ $attestation->generatedBy->last_name }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $attestation->generatedBy->email }}</div>
+                                            <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $attestation->generator ? ($attestation->generator->first_name . ' ' . $attestation->generator->last_name) : 'Système' }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $attestation->generator ? $attestation->generator->email : '' }}</div>
                                         </td>
                                         <td class="px-6 py-5 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $attestation->generated_at ? $attestation->generated_at->format('d/m/Y') : '-' }}</div>
@@ -309,7 +342,7 @@
                                                     Voir
                                                 </a>
                                                 
-                                                @if($attestation->hasPdf())
+                                                @if($attestation->pdf_path && Storage::exists($attestation->pdf_path))
                                                     <a href="{{ route('admin.hr-attestations.download-pdf', $attestation) }}" 
                                                        class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-medium rounded-lg hover:from-emerald-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
