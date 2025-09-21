@@ -70,7 +70,7 @@
                                     Utilisateur <span class="text-red-500 ml-1">*</span>
                                 </label>
                                 <div class="user-search-container">
-                                    <select id="user_select" name="user_id" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" required>
+                                    <select id="user_select" name="user_id" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                                         <option value="">Sélectionner un utilisateur...</option>
                                     </select>
                                 </div>
@@ -304,6 +304,32 @@
                 </div>
             </div>
 
+            <!-- Champs conditionnels pour l'attestation de présence -->
+            <div id="presence-fields" class="conditional-group hidden bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border border-green-200 dark:border-green-700">
+                <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Période de Présence
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="presence_start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Date de début de période <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="presence_start_date" id="presence_start_date" 
+                               class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200">
+                    </div>
+                    <div>
+                        <label for="presence_end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Date de fin de période <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="presence_end_date" id="presence_end_date" 
+                               class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200">
+                    </div>
+                </div>
+            </div>
+
             <!-- Boutons d'action -->
                         <div class="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
                             <a href="{{ route('admin.hr-attestations.index') }}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-medium">
@@ -481,6 +507,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (template === 'attestation_stage') {
                 const stageFields = document.getElementById('stage-fields');
                 if (stageFields) stageFields.classList.remove('hidden');
+            } else if (template === 'attestation_presence') {
+                const presenceFields = document.getElementById('presence-fields');
+                if (presenceFields) presenceFields.classList.remove('hidden');
             }
         });
     }
@@ -611,6 +640,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (totalBrut) {
             totalBrut.value = total.toFixed(2);
         }
+    }
+    
+    // Validation du formulaire avant soumission
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const userSelect = document.getElementById('user_select');
+            const attestationTypeSelect = document.getElementById('attestation_type_id');
+            
+            // Vérifier qu'un utilisateur est sélectionné
+            if (!userSelect.value || userSelect.value === '') {
+                e.preventDefault();
+                alert('Veuillez sélectionner un utilisateur.');
+                userSelect.focus();
+                return false;
+            }
+            
+            // Vérifier qu'un type d'attestation est sélectionné
+            if (!attestationTypeSelect.value || attestationTypeSelect.value === '') {
+                e.preventDefault();
+                alert('Veuillez sélectionner un type d\'attestation.');
+                attestationTypeSelect.focus();
+                return false;
+            }
+        });
     }
 });
 </script>

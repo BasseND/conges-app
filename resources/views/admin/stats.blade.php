@@ -252,6 +252,28 @@
                           </div>
                         </a>
 
+                        <!-- Demandes d'attestations -->
+                        <a href="{{ route('admin.attestations.index', ['status' => 'pending']) }}" class="block w-full p-4 bg-gradient-to-br from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
+                          <div>
+                            <div class="flex justify-center mb-3">
+                              <div class="p-3 bg-white/20 rounded-full group-hover:bg-white/30 transition-all duration-300">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                              </div>
+                            </div>
+                            <p class="text-white text-xs text-center font-medium mb-1">
+                              Attestations en attente
+                            </p>
+                            <p class="text-2xl font-bold text-white text-center group-hover:scale-110 transition-transform duration-300">
+                              {{ $stats['attestations_pending'] }}
+                            </p>
+                            <p class="text-white/80 text-xs text-center mt-1">
+                              Cliquez pour traiter
+                            </p>
+                          </div>
+                        </a>
+
                         <!-- Contrats à terme -->
                         <a href="{{ route('admin.contracts.index') }}" class="block w-full p-4 bg-gradient-to-br from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 flex justify-center items-center rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group">
                           <div>
@@ -275,6 +297,7 @@
                             </p>
                           </div>
                         </a>
+
                       </div>
                       
                 </div>
@@ -306,65 +329,65 @@
 
                 <!-- Statistiques des utilisateurs -->
                 <div  class="w-full rounded-lg px-5 py-6 bg-white dark:bg-darkblack-600 h-full">
-                <div class="mb-4 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
-                    Statistiques des utilisateurs
-                    </h3>
-                    
-                </div>
-                <div class="items-center xl:flex xl:space-x-[26px]">
-                    <div class="mb-4 w-full xl:mb-0 xl:flex-1">
-                    <div class="mb-1 flex items-end space-x-2">
-                        <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
-                        {{ $stats['active_employees'] }}
-                        </h1>
+                    <div class="mb-4 flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-bgray-900 dark:text-white sm:text-2xl" >
+                        Statistiques des utilisateurs
+                        </h3>
                         
                     </div>
-                    <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
-                        Total employés
-                    </p>
-                    <div class="flex flex-col space-y-2.5">
-                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
-                        >
-                        <div class="flex items-center space-x-2">
-                            <div  class="h-2 w-2 rounded-full bg-success-300"></div>
-                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
+                    <div class="items-center xl:flex xl:space-x-[26px]">
+                        <div class="mb-4 w-full xl:mb-0 xl:flex-1">
+                        <div class="mb-1 flex items-end space-x-2">
+                            <h1 class="text-2xl font-bold leading-[30px] text-bgray-900 dark:text-white" >
+                            {{ $stats['active_employees'] }}
+                            </h1>
+                            
                         </div>
-                        <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
-                        </div>
-                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                        <div class="flex items-center space-x-2">
-                            <div class="h-2 w-2 rounded-full bg-warning-300"></div>
-                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
-                        </div>
-                        <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
-                        </div>
-                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                        <div class="flex items-center space-x-2">
-                            <div class="h-2 w-2 rounded-full bg-purple"></div>
-                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
-                        </div>
-                        <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
-                        </div>
-                        <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
-                        <div class="flex items-center space-x-2">
-                            <div  class="h-2 w-2 rounded-full bg-error-300"></div>
-                            <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
-                        </div>
-                        <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
-                        </div>
+                        <p class="mb-7 text-sm text-bgray-600 dark:text-darkblack-300">
+                            Total employés
+                        </p>
+                        <div class="flex flex-col space-y-2.5">
+                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500"
+                            >
+                            <div class="flex items-center space-x-2">
+                                <div  class="h-2 w-2 rounded-full bg-success-300"></div>
+                                <span class="text-sm font-medium text-bgray-900 dark:text-white">Total employés</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['employees'] }}</span>
+                            </div>
+                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="h-2 w-2 rounded-full bg-warning-300"></div>
+                                <span class="text-sm font-medium text-bgray-900 dark:text-white">Mangers</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['managers'] }}</span>
+                            </div>
+                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                            <div class="flex items-center space-x-2">
+                                <div class="h-2 w-2 rounded-full bg-purple"></div>
+                                <span class="text-sm font-medium text-bgray-900 dark:text-white">Administrateurs</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600" >{{ $stats['admins'] }}</span>
+                            </div>
+                            <div  class="flex h-[32px] w-full items-center justify-between rounded-lg px-2">
+                            <div class="flex items-center space-x-2">
+                                <div  class="h-2 w-2 rounded-full bg-error-300"></div>
+                                <span class="text-sm font-medium text-bgray-900 dark:text-white">Chef de département</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['department_heads'] }}</span>
+                            </div>
 
-                        <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
-                        <div class="flex items-center space-x-2">
-                            <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
-                            <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
+                            <div class="flex h-[32px] w-full items-center justify-between rounded-lg bg-bgray-100 px-2 dark:bg-darkblack-500">
+                            <div class="flex items-center space-x-2">
+                                <div  class="h-2 w-2 rounded-full bg-[#00f2fe]"></div>
+                                <span class="text-sm font-medium text-bgray-900 dark:text-white">RH</span>
+                            </div>
+                            <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
+                            </div>
                         </div>
-                        <span class="text-sm font-medium text-bgray-600">{{ $stats['hr_users'] }}</span>
                         </div>
+                    
                     </div>
-                    </div>
-                
-                </div>
                 </div>
                  
 

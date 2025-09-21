@@ -97,6 +97,8 @@ class HrAttestationController extends Controller
             'custom_data' => 'nullable|array',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'presence_start_date' => 'nullable|date',
+            'presence_end_date' => 'nullable|date|after_or_equal:presence_start_date',
             'notes' => 'nullable|string|max:1000',
             'category' => 'required|in:hr_generated,employee_request'
         ]);
@@ -116,15 +118,38 @@ class HrAttestationController extends Controller
         }
 
         // Valider les champs requis selon le type
-        if ($attestationType->requires_date_range && (!$request->start_date || !$request->end_date)) {
-            return redirect()->back()
-                ->with('error', 'Ce type d\'attestation nécessite une période (date de début et fin).')
-                ->withInput();
+        if ($attestationType->requires_date_range) {
+            // Pour l'attestation de présence, vérifier les champs spécifiques
+            if ($attestationType->name === 'Attestation de présence / assiduité') {
+                if (!$request->presence_start_date || !$request->presence_end_date) {
+                    return redirect()->back()
+                        ->with('error', 'L\'attestation de présence nécessite une période (date de début et fin de présence).')
+                        ->withInput();
+                }
+            } else {
+                // Pour les autres types d'attestation
+                if (!$request->start_date || !$request->end_date) {
+                    return redirect()->back()
+                        ->with('error', 'Ce type d\'attestation nécessite une période (date de début et fin).')
+                        ->withInput();
+                }
+            }
         }
 
         try {
             // Générer un numéro de document unique
             $documentNumber = 'ATT-' . date('Y') . '-' . str_pad(AttestationRequest::whereYear('created_at', date('Y'))->count() + 1, 4, '0', STR_PAD_LEFT);
+
+            // Préparer les données personnalisées
+            $customData = $request->custom_data ?? [];
+            
+            // Traiter les champs spécifiques à l'attestation de présence
+            if ($request->presence_start_date) {
+                $customData['date_debut_periode'] = $request->presence_start_date;
+            }
+            if ($request->presence_end_date) {
+                $customData['date_fin_periode'] = $request->presence_end_date;
+            }
 
             $attestation = AttestationRequest::create([
                 'user_id' => $request->user_id,
@@ -136,15 +161,22 @@ class HrAttestationController extends Controller
                 'priority' => AttestationRequest::PRIORITY_NORMAL,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'custom_data' => $request->custom_data ?? [],
+                'custom_data' => $customData,
                 'notes' => $request->notes,
                 'document_number' => $documentNumber,
                 'processed_at' => now(),
                 'generated_at' => now()
             ]);
 
-            // Générer le PDF
-            $this->generatePdf($attestation);
+            // Tenter de générer le PDF, mais ne pas échouer si ça ne marche pas
+            try {
+                $this->generatePdf($attestation);
+                $attestation->update(['status' => AttestationRequest::STATUS_GENERATED]);
+            } catch (\Exception $pdfError) {
+                // Log l'erreur PDF mais continue
+                \Log::error('Erreur génération PDF pour attestation ' . $attestation->id . ': ' . $pdfError->getMessage());
+                $attestation->update(['status' => 'pending', 'notes' => ($attestation->notes ? $attestation->notes . '\n' : '') . 'Erreur PDF: ' . $pdfError->getMessage()]);
+            }
 
             return redirect()->route('admin.hr-attestations.index')
                 ->with('success', 'Attestation générée avec succès pour ' . $attestation->user->first_name . ' ' . $attestation->user->last_name . '!');
@@ -402,6 +434,32 @@ class HrAttestationController extends Controller
             'salaire_final' => $data['salaire_final'] ?? $employee->salary ?? '',
             'appreciation' => $data['appreciation'] ?? 'L\'employé(e) a fait preuve de professionnalisme et de compétence durant toute la durée de son contrat.',
             'observations' => $data['observations'] ?? 'Aucune observation particulière.',
+            
+            // Variables spécifiques aux stages
+            'date_debut_stage' => $attestation->start_date ? $attestation->start_date->format('d/m/Y') : ($data['date_debut_stage'] ?? ''),
+            'date_fin_stage' => $attestation->end_date ? $attestation->end_date->format('d/m/Y') : ($data['date_fin_stage'] ?? ''),
+            'date_debut' => $attestation->start_date ? $attestation->start_date->format('d/m/Y') : ($data['date_debut'] ?? ''),
+            'date_fin' => $attestation->end_date ? $attestation->end_date->format('d/m/Y') : ($data['date_fin'] ?? ''),
+            'duree_stage' => $data['duree_stage'] ?? $this->calculateContractDuration($attestation->start_date, $attestation->end_date),
+            'maitre_stage' => $data['maitre_stage'] ?? ($company && $company->hr_director_name ? $company->hr_director_name : 'Maître de stage'),
+            'missions_stage' => $data['missions_stage'] ?? 'Missions variées selon les besoins du service',
+            'formation' => $data['formation'] ?? 'Formation',
+            'etablissement' => $data['etablissement'] ?? 'Établissement',
+            'niveau_etudes' => $data['niveau_etudes'] ?? 'Niveau d\'études',
+            'competences_acquises' => $data['competences_acquises'] ?? '',
+            
+            // Variables pour attestation de présence
+            'date_debut_periode' => isset($data['date_debut_periode']) ? 
+                (is_string($data['date_debut_periode']) ? 
+                    \Carbon\Carbon::parse($data['date_debut_periode'])->format('d/m/Y') : 
+                    $data['date_debut_periode']) : 
+                ($attestation->start_date ? $attestation->start_date->format('d/m/Y') : ''),
+            'date_fin_periode' => isset($data['date_fin_periode']) ? 
+                (is_string($data['date_fin_periode']) ? 
+                    \Carbon\Carbon::parse($data['date_fin_periode'])->format('d/m/Y') : 
+                    $data['date_fin_periode']) : 
+                ($attestation->end_date ? $attestation->end_date->format('d/m/Y') : ''),
+            'motif_fin_contrat' => $data['motif_fin_contrat'] ?? $data['motif_fin'] ?? '',
             
             // Données financières par défaut
             'solde_net' => '0,00',

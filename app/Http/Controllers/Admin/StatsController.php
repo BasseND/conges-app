@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\ExpenseReport;
 use App\Models\Contract;
 use App\Models\SalaryAdvance;
+use App\Models\AttestationRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -168,7 +169,11 @@ class StatsController extends Controller
                                                             ->orWhere('status', SalaryAdvance::STATUS_SUBMITTED)
                                                             ->sum('amount'),
             'salary_advances_amount_approved' => SalaryAdvance::where('status', SalaryAdvance::STATUS_APPROVED)
-                                                              ->sum('amount')
+                                                              ->sum('amount'),
+            // Statistiques des demandes d'attestations
+            'attestations_pending' => AttestationRequest::where('status', AttestationRequest::STATUS_PENDING)
+                                                        ->where('category', 'employee_request')
+                                                        ->count()
         ];
 
         // Dernières notes de frais

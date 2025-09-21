@@ -241,4 +241,20 @@ class AttestationRequest extends Model
 
         return $classes[$this->status] ?? 'text-gray-600 bg-gray-100';
     }
+
+    /**
+     * Obtenir les statuts disponibles
+     */
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_PENDING => 'En attente',
+            self::STATUS_APPROVED => 'Approuvé',
+            self::STATUS_REJECTED => 'Rejeté',
+            self::STATUS_GENERATED => 'Généré',
+            self::STATUS_DRAFT => 'Brouillon',
+            self::STATUS_SENT => 'Envoyé',
+            self::STATUS_ARCHIVED => 'Archivé'
+        ];
+    }
 }
