@@ -60,10 +60,33 @@ class AttestationTypeSeeder extends Seeder
                 'requires_date_range' => true,
                 'created_by' => $adminUser->id,
             ],
+            [
+                'name' => 'Certificat de travail',
+                'system_name' => 'certificat_de_travail',
+                'description' => 'Certificat obligatoire à la fin du contrat de travail',
+                'template_file' => 'certificat_travail',
+                'type' => 'employment',
+                'status' => 'active',
+                'requires_date_range' => true,
+                'created_by' => $adminUser->id,
+            ],
+            [
+                'name' => 'Solde de tout compte',
+                'system_name' => 'solde_tout_compte',
+                'description' => 'Document récapitulatif des sommes dues au salarié à la fin du contrat',
+                'template_file' => 'solde_tout_compte',
+                'type' => 'salary',
+                'status' => 'active',
+                'requires_salary_info' => true,
+                'created_by' => $adminUser->id,
+            ],
         ];
 
         foreach ($types as $type) {
-            AttestationType::create($type);
+            AttestationType::updateOrCreate(
+                ['system_name' => $type['system_name']],
+                $type
+            );
         }
     }
 }

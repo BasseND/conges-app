@@ -520,6 +520,13 @@
                                             >Mes attestations</a
                                         >
                                         </li>
+                                        <li>
+                                        <a
+                                            href="{{ route('admin.hr-attestations.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('admin.hr-attestations.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Attestations RH</a
+                                        >
+                                        </li>
                                     
                                     </ul>
                                 </li>
@@ -1262,6 +1269,13 @@
                                                         href="{{ route('attestations.index') }}"
                                                         class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
                                                         >Mes attestations</a
+                                                    >
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="{{ route('admin.hr-attestations.index') }}"
+                                                        class="text-md inline-block py-1.5 font-medium text-bgray-600 hover:text-bgray-800"
+                                                        >Attestations RH</a
                                                     >
                                                 </li>
                                            

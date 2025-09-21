@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CompanyController;
 // LeaveBalanceController supprimé - remplacé par SpecialLeaveTypeController
 use App\Http\Controllers\Admin\SpecialLeaveTypeController;
 use App\Http\Controllers\Admin\SalaryAdvanceController as AdminSalaryAdvanceController;
+use App\Http\Controllers\HrAttestationController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TestMailController;
 use App\Http\Controllers\Expense\ExpenseReportController;
@@ -338,6 +339,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::put('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'updateType'])->name('update');
                 Route::delete('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'destroyType'])->name('destroy');
             });
+        });
+
+        // Routes pour la génération d'attestations par les RH
+        Route::prefix('hr-attestations')->name('hr-attestations.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\HrAttestationController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\HrAttestationController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\HrAttestationController::class, 'store'])->name('store');
+            Route::get('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'show'])->name('show');
+            Route::get('/{hrAttestation}/edit', [\App\Http\Controllers\HrAttestationController::class, 'edit'])->name('edit');
+            Route::put('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'update'])->name('update');
+            Route::delete('/{hrAttestation}', [\App\Http\Controllers\HrAttestationController::class, 'destroy'])->name('destroy');
+            Route::get('/{hrAttestation}/download-pdf', [\App\Http\Controllers\HrAttestationController::class, 'downloadPdf'])->name('download-pdf');
+            
+            // Routes AJAX pour la recherche d'employés
+            Route::get('/search/employees', [\App\Http\Controllers\HrAttestationController::class, 'searchEmployees'])->name('search-employees');
+            Route::get('/employee/{employee}/details', [\App\Http\Controllers\HrAttestationController::class, 'getEmployeeDetails'])->name('employee-details');
         });
     });
 });
