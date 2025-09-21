@@ -179,6 +179,35 @@
                                  <p class="text-xs text-gray-500 dark:text-gray-400">Numéro de téléphone professionnel</p>
                                  <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                              </div>
+
+                             <div class="space-y-2">
+                                 <x-input-label for="birth_date" :value="__('Date de naissance')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                 <div class="relative">
+                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                         </svg>
+                                     </div>
+                                     <input id="birth_date" name="birth_date" type="date" value="{{ old('birth_date', $user->birth_date ? $user->birth_date->format('Y-m-d') : '') }}" class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                 </div>
+                                 <p class="text-xs text-gray-500 dark:text-gray-400">Date de naissance de l'utilisateur</p>
+                                 <x-input-error :messages="$errors->get('birth_date')" class="mt-2" />
+                             </div>
+
+                             <div class="space-y-2 md:col-span-2">
+                                 <x-input-label for="address" :value="__('Adresse')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                 <div class="relative">
+                                     <div class="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
+                                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                         </svg>
+                                     </div>
+                                     <textarea id="address" name="address" rows="3" class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500 resize-none" placeholder="Entrez l'adresse complète">{{ old('address', $user->address) }}</textarea>
+                                 </div>
+                                 <p class="text-xs text-gray-500 dark:text-gray-400">Adresse de résidence de l'utilisateur</p>
+                                 <x-input-error :messages="$errors->get('address')" class="mt-2" />
+                             </div>
                          </div>
                      </div>
 
@@ -321,6 +350,59 @@
                                  </div>
                              </div>
 
+                             <!-- Contact d'urgence -->
+                             <div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/10 dark:to-pink-900/10 border border-red-200 dark:border-red-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                                 <div class="flex items-center space-x-3">
+                                     <div class="flex-shrink-0">
+                                         <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
+                                             <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                             </svg>
+                                         </div>
+                                     </div>
+                                     <div>
+                                         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                             {{ __('Contact d\'urgence') }}
+                                         </h2>
+                                         <p class="text-sm text-gray-600 dark:text-gray-400">Personne à contacter en cas d'urgence</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_name" :value="__('Nom du contact d\'urgence')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="emergency_contact_name" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="emergency_contact_name" value="{{ old('emergency_contact_name', $user->emergency_contact_name) }}" placeholder="Nom complet du contact" />
+                                         <x-input-error :messages="$errors->get('emergency_contact_name')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_phone" :value="__('Téléphone du contact d\'urgence')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <input id="emergency_contact_phone" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="tel" name="emergency_contact_phone" value="{{ old('emergency_contact_phone', $user->emergency_contact_phone) }}" placeholder="Numéro de téléphone" />
+                                         <x-input-error :messages="$errors->get('emergency_contact_phone')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="emergency_contact_relationship" :value="__('Relation avec le contact')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <select id="emergency_contact_relationship" name="emergency_contact_relationship" 
+                                                 class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+                                             <option value="">{{ __('Sélectionner une relation') }}</option>
+                                             <option value="Conjoint(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Conjoint(e)' ? 'selected' : '' }}>{{ __('Conjoint(e)') }}</option>
+                                             <option value="Père" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Père' ? 'selected' : '' }}>{{ __('Père') }}</option>
+                                             <option value="Mère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Mère' ? 'selected' : '' }}>{{ __('Mère') }}</option>
+                                             <option value="Frère" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Frère' ? 'selected' : '' }}>{{ __('Frère') }}</option>
+                                             <option value="Sœur" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Sœur' ? 'selected' : '' }}>{{ __('Sœur') }}</option>
+                                             <option value="Enfant" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Enfant' ? 'selected' : '' }}>{{ __('Enfant') }}</option>
+                                             <option value="Ami(e)" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Ami(e)' ? 'selected' : '' }}>{{ __('Ami(e)') }}</option>
+                                             <option value="Collègue" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Collègue' ? 'selected' : '' }}>{{ __('Collègue') }}</option>
+                                             <option value="Autre" {{ old('emergency_contact_relationship', $user->emergency_contact_relationship) == 'Autre' ? 'selected' : '' }}>{{ __('Autre') }}</option>
+                                         </select>
+                                         <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-2" />
+                                     </div>
+                                 </div>
+                             </div>
+
                              <!-- Informations professionnelles -->
                              <div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/10 dark:to-red-900/10 border border-orange-200 dark:border-orange-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
                                  <div class="flex items-center space-x-3">
@@ -392,6 +474,21 @@
                                          </select>
                                          <p class="text-xs text-gray-500 dark:text-gray-400">Équipe de travail (optionnel)</p>
                                          <x-input-error :messages="$errors->get('team_id')" class="mt-2" />
+                                     </div>
+                                 </div>
+
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="space-y-2">
+                                         <x-input-label for="entry_date" :value="__('Date d\'entrée du salarié')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date)" />
+                                         <x-input-error :messages="$errors->get('entry_date')" class="mt-2" />
+                                     </div>
+
+                                     <div class="space-y-2">
+                                         <x-input-label for="exit_date" :value="__('Date de sortie du salarié')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-text-input id="exit_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="exit_date" :value="old('exit_date', $user->exit_date)" />
+                                         <x-input-error :messages="$errors->get('exit_date')" class="mt-2" />
+                                         <p class="text-xs text-gray-500 dark:text-gray-400">Laisser vide si le salarié est toujours en poste</p>
                                      </div>
                                  </div>
                              </div>

@@ -151,6 +151,9 @@
                                                             Description
                                                         </th>
                                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                                            Catégorie
+                                                        </th>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                             Date
                                                         </th>
                                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -166,6 +169,15 @@
                                                         <tr>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                                                 {{ $line->description }}
+                                                            </td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                                                @if($line->category)
+                                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                                        {{ $line->category_label }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="text-gray-500 dark:text-gray-400">Non définie</span>
+                                                                @endif
                                                             </td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                                                 {{ $line->spent_on->format('d/m/Y') }}
@@ -193,7 +205,7 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 text-right">
+                                                        <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 text-right">
                                                             Total
                                                         </td>
                                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">

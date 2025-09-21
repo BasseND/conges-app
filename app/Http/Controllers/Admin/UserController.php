@@ -49,7 +49,7 @@ class UserController extends Controller
         $sortDirection = $request->input('direction', 'asc');
         $query->orderBy($sortField, $sortDirection);
 
-        $users = $query->paginate(10)->withQueryString();
+        $users = $query->paginate(10)->appends(request()->query());
         $departments = Department::all();
 
         return view('admin.users.index', compact('users', 'departments'));
@@ -64,9 +64,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        \Log::info('UserController store method called');
-        
-        Log::info('Request data:', $request->all());
+    
 
         try {
             $validatedData = $request->validate([
@@ -75,6 +73,8 @@ class UserController extends Controller
                 'gender' => 'required|in:M,F',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'nullable|string|max:20',
+                'birth_date' => 'nullable|date|before:today',
+                'address' => 'nullable|string|max:500',
                 'password' => 'required|string|min:8|confirmed',
                 'position' => 'required|string|max:255',
                 'role' => ['required', Rule::in([
@@ -96,7 +96,9 @@ class UserController extends Controller
                 'affectation' => 'nullable|string|max:255',
                 'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
                 'section' => 'nullable|string|max:255',
-                'service' => 'nullable|string|max:255'
+                'service' => 'nullable|string|max:255',
+                'entry_date' => 'nullable|date',
+                'exit_date' => 'nullable|date|after_or_equal:entry_date'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
@@ -126,7 +128,10 @@ class UserController extends Controller
                 'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
                 'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
                 'section.max' => 'La section ne peut pas dépasser 255 caractères.',
-                'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
+                'service.max' => 'Le service ne peut pas dépasser 255 caractères.',
+                'entry_date.date' => 'La date d\'entrée doit être une date valide.',
+                'exit_date.date' => 'La date de sortie doit être une date valide.',
+                'exit_date.after_or_equal' => 'La date de sortie doit être postérieure ou égale à la date d\'entrée.'
             ]);
 
             Log::info('Validated data:', $validatedData);
@@ -170,9 +175,7 @@ class UserController extends Controller
             }
             
             // Déclencher l'événement de création d'utilisateur
-            \Log::info('About to trigger UserCreated event for user: ' . $user->email);
             event(new UserCreated($user));
-            \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -261,9 +264,7 @@ class UserController extends Controller
         }
         
         // Déclencher l'événement de création d'utilisateur
-        \Log::info('About to trigger UserCreated event for user: ' . $user->email);
         event(new UserCreated($user));
-        \Log::info('UserCreated event triggered successfully for user: ' . $user->email);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'L\'utilisateur a été créé avec succès.');
@@ -286,10 +287,8 @@ class UserController extends Controller
         $user->load([
             'department', 
             'teams', 
-            'leaveBalance',
-            'company.leaveBalances' => function($query) {
-                $query->where('is_default', true);
-            },
+            // 'leaveBalance' supprimé - remplacé par SpecialLeaveType
+            // 'company.leaveBalances' supprimé - remplacé par SpecialLeaveType
             'contracts' => function($query) {
                 $query->orderBy('date_debut', 'desc');
             }
@@ -306,7 +305,9 @@ class UserController extends Controller
             'gender' => 'required|in:M,F',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
-            'password' => 'nullable|string|min:8|confirmed',
+                'birth_date' => 'nullable|date|before:today',
+                'address' => 'nullable|string|max:500',
+                'password' => 'nullable|string|min:8|confirmed',
             'position' => 'required|string|max:255',
             'role' => ['required', Rule::in([
                 User::ROLE_EMPLOYEE,
@@ -330,7 +331,9 @@ class UserController extends Controller
             'affectation' => 'nullable|string|max:255',
             'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
             'section' => 'nullable|string|max:255',
-            'service' => 'nullable|string|max:255'
+            'service' => 'nullable|string|max:255',
+            'entry_date' => 'nullable|date',
+            'exit_date' => 'nullable|date|after_or_equal:entry_date'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
@@ -357,14 +360,14 @@ class UserController extends Controller
             'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères.',
             'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
             'section.max' => 'La section ne peut pas dépasser 255 caractères.',
-            'service.max' => 'Le service ne peut pas dépasser 255 caractères.'
+            'service.max' => 'Le service ne peut pas dépasser 255 caractères.',
+            'entry_date.date' => 'La date d\'entrée doit être une date valide.',
+            'exit_date.date' => 'La date de sortie doit être une date valide.',
+            'exit_date.after_or_equal' => 'La date de sortie doit être postérieure ou égale à la date d\'entrée.'
         ]);
 
         // Sauvegarder les anciennes données
         $oldData = $user->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
-        
-        \Log::info('User update - Old data: ' . json_encode($oldData));
-        \Log::info('User update - New data: ' . json_encode($validatedData));
 
         // Traiter la valeur is_prestataire
         $validatedData['is_prestataire'] = $request->has('is_prestataire');
@@ -407,7 +410,6 @@ class UserController extends Controller
         
         // Déclencher l'événement UserUpdated
         event(new UserUpdated($user, $oldData, $newData));
-        \Log::info('UserUpdated event dispatched for user: ' . $user->email);
 
         // Redirection conditionnelle selon la source de la requête
         if ($request->has('source') && $request->input('source') === 'modal') {

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\LeaveBalance;
+use App\Models\SpecialLeaveType;
+// LeaveBalance supprimé - remplacé par SpecialLeaveType
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -18,9 +19,9 @@ class CompanyController extends Controller
     public function show()
     {
         $company = Company::first();
-        $leaveBalances = $company ? $company->leaveBalances()->orderBy('is_default', 'desc')->orderBy('description')->get() : collect();
-        
-        return view('admin.company.show', compact('company', 'leaveBalances'));
+        $specialLeaveTypes = SpecialLeaveType::orderBy('name')->get();
+        // LeaveBalances supprimé - remplacé par SpecialLeaveType
+        return view('admin.company.show', compact('company', 'specialLeaveTypes'));
     }
 
     /**
@@ -52,6 +53,9 @@ class CompanyController extends Controller
             'contact_phone' => 'nullable|string|max:20',
             'currency' => 'nullable|string|max:10',
             'salary_advance_deadline_day' => 'nullable|integer|min:1|max:31',
+            'director_name' => 'nullable|string|max:255',
+            'hr_director_name' => 'nullable|string|max:255',
+            'hr_signature' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -61,7 +65,7 @@ class CompanyController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['logo']);
+        $data = $request->except(['logo', 'hr_signature']);
 
         // Gestion du logo
         if ($request->hasFile('logo')) {
@@ -73,6 +77,18 @@ class CompanyController extends Controller
             // Stocker le nouveau logo
             $logoPath = $request->file('logo')->store('company/logos', 'public');
             $data['logo'] = $logoPath;
+        }
+
+        // Gestion de la signature du DRH
+        if ($request->hasFile('hr_signature')) {
+            // Supprimer l'ancienne signature s'il existe
+            if ($company && $company->hr_signature && Storage::disk('public')->exists($company->hr_signature)) {
+                Storage::disk('public')->delete($company->hr_signature);
+            }
+
+            // Stocker la nouvelle signature
+            $signaturePath = $request->file('hr_signature')->store('company/signatures', 'public');
+            $data['hr_signature'] = $signaturePath;
         }
 
         if ($company) {
@@ -119,6 +135,9 @@ class CompanyController extends Controller
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:20',
             'currency' => 'nullable|string|max:10',
+            'director_name' => 'nullable|string|max:255',
+            'hr_director_name' => 'nullable|string|max:255',
+            'hr_signature' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -128,12 +147,18 @@ class CompanyController extends Controller
                 ->withInput();
         }
 
-        $data = $request->except(['logo']);
+        $data = $request->except(['logo', 'hr_signature']);
 
         // Gestion du logo
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('company/logos', 'public');
             $data['logo'] = $logoPath;
+        }
+
+        // Gestion de la signature du DRH
+        if ($request->hasFile('hr_signature')) {
+            $signaturePath = $request->file('hr_signature')->store('company/signatures', 'public');
+            $data['hr_signature'] = $signaturePath;
         }
 
         Company::create($data);
@@ -142,114 +167,5 @@ class CompanyController extends Controller
             ->with('success', 'Les informations de la société ont été créées avec succès.');
     }
 
-    /**
-     * Stocker un nouveau solde de congés
-     */
-    public function storeLeaveBalance(Request $request)
-    {
-        $company = Company::first();
-        
-        if (!$company) {
-            return response()->json(['error' => 'Aucune société configurée'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'annual_leave_days' => 'required|integer|min:0|max:365',
-            'maternity_leave_days' => 'nullable|integer|min:0|max:365',
-            'paternity_leave_days' => 'nullable|integer|min:0|max:365',
-            'special_leave_days' => 'nullable|integer|min:0|max:365',
-            'is_default' => 'boolean',
-            'description' => 'required|string|max:255'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $data = $request->all();
-        $data['company_id'] = $company->id;
-        
-        // Si c'est défini comme défaut, retirer le statut défaut des autres
-        if ($request->boolean('is_default')) {
-            LeaveBalance::where('company_id', $company->id)
-                ->where('is_default', true)
-                ->update(['is_default' => false]);
-        }
-
-        $leaveBalance = LeaveBalance::create($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Solde de congés créé avec succès',
-            'leaveBalance' => $leaveBalance
-        ]);
-    }
-
-    /**
-     * Mettre à jour un solde de congés
-     */
-    public function updateLeaveBalance(Request $request, LeaveBalance $leaveBalance)
-    {
-        $company = Company::first();
-        
-        if (!$company || $leaveBalance->company_id !== $company->id) {
-            return response()->json(['error' => 'Solde de congés non trouvé'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'annual_leave_days' => 'required|integer|min:0|max:365',
-            'maternity_leave_days' => 'nullable|integer|min:0|max:365',
-            'paternity_leave_days' => 'nullable|integer|min:0|max:365',
-            'special_leave_days' => 'nullable|integer|min:0|max:365',
-            'is_default' => 'boolean',
-            'description' => 'required|string|max:255'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        // Si c'est défini comme défaut, retirer le statut défaut des autres
-        if ($request->boolean('is_default') && !$leaveBalance->is_default) {
-            LeaveBalance::where('company_id', $company->id)
-                ->where('id', '!=', $leaveBalance->id)
-                ->where('is_default', true)
-                ->update(['is_default' => false]);
-        }
-
-        $leaveBalance->update($request->all());
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Solde de congés mis à jour avec succès',
-            'leaveBalance' => $leaveBalance
-        ]);
-    }
-
-    /**
-     * Supprimer un solde de congés
-     */
-    public function destroyLeaveBalance(LeaveBalance $leaveBalance)
-    {
-        $company = Company::first();
-        
-        if (!$company || $leaveBalance->company_id !== $company->id) {
-            return response()->json(['error' => 'Solde de congés non trouvé'], 404);
-        }
-
-        // Vérifier si des utilisateurs utilisent ce solde
-        $usersCount = $leaveBalance->users()->count();
-        if ($usersCount > 0) {
-            return response()->json([
-                'error' => "Ce solde de congés ne peut pas être supprimé car il est utilisé par {$usersCount} utilisateur(s)"
-            ], 422);
-        }
-
-        $leaveBalance->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Solde de congés supprimé avec succès'
-        ]);
-    }
+    // Méthodes LeaveBalance supprimées - remplacées par SpecialLeaveType
 }

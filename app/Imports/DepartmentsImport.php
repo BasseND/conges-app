@@ -2,10 +2,9 @@
 
 namespace App\Imports;
 
-use App\Models\Department;
-use App\Models\Company;
-use App\Models\LeaveBalance;
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Department;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -93,14 +92,7 @@ class DepartmentsImport implements ToCollection, WithHeadingRow, WithBatchInsert
             }
         }
 
-        // Trouver le solde de congés si spécifié
-        $leaveBalance = null;
-        if (!empty($row['solde_conges'])) {
-            $leaveBalance = LeaveBalance::where('name', 'like', '%' . trim($row['solde_conges']) . '%')->first();
-            if (!$leaveBalance) {
-                throw new \Exception('Solde de congés "' . $row['solde_conges'] . '" introuvable');
-            }
-        }
+        // Note: Le système de solde de congés a été remplacé par SpecialLeaveType
 
         $departmentData = [
             'name' => trim($row['nom']),
@@ -108,7 +100,7 @@ class DepartmentsImport implements ToCollection, WithHeadingRow, WithBatchInsert
             'description' => !empty($row['description']) ? trim($row['description']) : null,
             'head_id' => $head ? $head->id : null,
             'company_id' => $company ? $company->id : null,
-            'leave_balance_id' => $leaveBalance ? $leaveBalance->id : null
+            // 'leave_balance_id' supprimé - remplacé par SpecialLeaveType
         ];
 
         $department = Department::create($departmentData);

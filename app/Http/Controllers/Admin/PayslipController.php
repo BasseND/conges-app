@@ -47,7 +47,7 @@ class PayslipController extends Controller
         $payslips = $query->orderBy('period_year', 'desc')
             ->orderBy('period_month', 'desc')
             ->paginate(15)
-            ->withQueryString();
+            ->appends(request()->query());
         
         return view('admin.payslips.index', compact('payslips'));
     }

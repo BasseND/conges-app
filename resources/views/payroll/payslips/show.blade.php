@@ -195,7 +195,7 @@
                                     @foreach($leaves as $leave)
                                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                {{ $leave->type }}
+                                                <x-leave-type-badge :leave="$leave" :specialLeaveType="$leave->specialLeaveType" />
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ \Carbon\Carbon::parse($leave->start_date)->format('d/m/Y') }}

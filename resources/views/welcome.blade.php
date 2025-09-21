@@ -35,9 +35,6 @@
 
            <div class="lg:w-1/2 px-5 xl:pl-12">
                 <div class="relative">
-                    
-
-
                     <div class="w-full lg:block hidden  relative">
                         <ul>
                             <li class="absolute top-10 left-8">
@@ -187,23 +184,20 @@
                     </div>
                 </div>
             </div>
+           
         </div>
 
         <!-- Section Statistiques Rapides -->
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Total employés -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Congés restants -->
             <div class="group relative bg-gradient-to-br from-emerald-50 to-green-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg transition-all duration-300 transform border border-emerald-200/50 dark:border-emerald-600/30 overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-green-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="relative flex items-center">
                     <div class="flex-shrink-0 p-4 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl shadow-lg group-hover:shadow-emerald-500/25 transition-all duration-300 group-hover:scale-105">
                         <!-- Icon Employés -->
-                       
-                       
-
                         <svg class="w-9 h-9 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                         </svg>
-
                     </div>
                     <div class="ml-6 flex-1">
                         <h3 class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mb-1">Congés restants</h3>
@@ -214,7 +208,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Total congés -->
+            <!-- Notes en attente -->
             <div class="group relative bg-gradient-to-br from-blue-50 to-sky-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg transition-all duration-300 transform border border-blue-200/50 dark:border-blue-600/30 overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-sky-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="relative flex items-center">
@@ -235,8 +229,34 @@
                     </div>
                 </div>
             </div>
-            
-                <!-- Total note de frais -->
+             <!-- Avance sur salaire -->
+             <div class="group relative bg-gradient-to-br from-purple-50 to-violet-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg transition-all duration-300 transform border border-purple-200/50 dark:border-purple-600/30 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-violet-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
+                <div class="relative flex items-center">
+                    <div class="flex-shrink-0 p-4 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl shadow-lg group-hover:shadow-purple-500/25 transition-all duration-300 group-hover:scale-105">
+                        <!-- Icon money -->
+                        <svg class="w-9 h-9 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                    <div class="ml-6 flex-1">
+                        <h3 class="text-sm font-semibold text-purple-600 dark:text-purple-400 tracking-wider uppercase mb-1">Avance sur salaire</h3>
+                        <div class="mt-2 flex items-baseline">
+                            <span class="text-3xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                                @php
+                                    $pendingSalaryAdvance = Auth::check() ? auth()->user()->salaryAdvances()
+                                        ->where('status', 'pending')
+                                        ->sum('amount') : 0;
+                                    echo number_format($pendingSalaryAdvance, 0, ',', ' ');
+                                @endphp
+                            </span>
+                            <span class="ml-2 text-lg font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prochain congé -->
             <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg transition-all duration-300 transform border border-teal-200/50 dark:border-teal-600/30 overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-400/20 to-cyan-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
                 <div class="relative flex items-center">
@@ -275,8 +295,6 @@
                     </div>
                 </div>
             </div>
-            
-
         </div>
     </div>
     

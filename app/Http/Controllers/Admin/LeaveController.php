@@ -49,8 +49,13 @@ class LeaveController extends Controller
         }
 
         // Filtre par type de congé
-        if ($request->filled('type') && array_key_exists($request->type, Leave::TYPES)) {
-            $query->where('type', $request->type);
+        if ($request->filled('type')) {
+            $specialLeaveType = \App\Models\SpecialLeaveType::where('system_name', $request->type)
+                ->orWhere('name', $request->type)
+                ->first();
+            if ($specialLeaveType) {
+                $query->where('special_leave_type_id', $specialLeaveType->id);
+            }
         }
 
         // Filtre par date
@@ -123,8 +128,13 @@ class LeaveController extends Controller
             $query->where('status', $request->status);
         }
 
-        if ($request->filled('type') && array_key_exists($request->type, Leave::TYPES)) {
-            $query->where('type', $request->type);
+        if ($request->filled('type')) {
+            $specialLeaveType = \App\Models\SpecialLeaveType::where('system_name', $request->type)
+                ->orWhere('name', $request->type)
+                ->first();
+            if ($specialLeaveType) {
+                $query->where('special_leave_type_id', $specialLeaveType->id);
+            }
         }
 
         if ($request->filled('date_from')) {
@@ -147,7 +157,7 @@ class LeaveController extends Controller
 
             return [
                 'id' => $leave->id,
-                'title' => $leave->user->first_name . ' ' . $leave->user->last_name . ' - ' . Leave::TYPES[$leave->type],
+                'title' => $leave->user->first_name . ' ' . $leave->user->last_name . ' - ' . ($leave->specialLeaveType ? $leave->specialLeaveType->name : 'Congé'),
                 'start' => $leave->start_date,
                 'end' => $leave->end_date,
                 'backgroundColor' => $statusColors[$leave->status] ?? '#6b7280',
@@ -155,7 +165,7 @@ class LeaveController extends Controller
                 'extendedProps' => [
                     'employee' => $leave->user->first_name . ' ' . $leave->user->last_name,
                     'department' => $leave->user->department->name ?? 'N/A',
-                    'type' => Leave::TYPES[$leave->type],
+                    'type' => $leave->specialLeaveType ? $leave->specialLeaveType->name : 'Congé',
                     'status' => Leave::STATUSES[$leave->status],
                     'duration' => $leave->duration,
                     'reason' => $leave->reason,

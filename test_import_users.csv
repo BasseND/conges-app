@@ -1,0 +1,4 @@
+prenom,nom,sexe,email,telephone,poste,role,departement,mot_de_passe,prestataire,etat_civil,statut_professionnel,nombre_enfants,matricule,affectation,categorie,section,service
+Pierre,Durand,M,pierre.durand@test.com,0123456789,Analyste,employee,Informatique,password123,non,marié,fonctionnaire,1,MAT003,Direction IT,cadre,Section Analyse,Service Développement
+Sophie,Leroy,F,sophie.leroy@test.com,0987654321,Responsable RH,manager,Ressources Humaines,password123,non,célibataire,contractuel_cdi,0,MAT004,Direction RH,agent_de_maitrise,Section Recrutement,Service Formation
+Luc,Bernard,M,luc.bernard@test.com,0147258369,Consultant,employee,Marketing,password123,oui,divorcé,contractuel_cdd,2,MAT005,Direction Marketing,employe,Section Digital,Service Communication

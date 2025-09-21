@@ -12,8 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Modifier l'enum pour ajouter 'maternity' et 'paternity'
-        DB::statement("ALTER TABLE leaves MODIFY COLUMN type ENUM('annual', 'sick', 'unpaid', 'other', 'maternity', 'paternity')");
+        // Convertir la colonne type de ENUM à VARCHAR pour supporter les types spéciaux
+        DB::statement("ALTER TABLE leaves MODIFY COLUMN type VARCHAR(50) NOT NULL");
     }
 
     /**

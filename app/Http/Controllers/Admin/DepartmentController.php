@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\User;
-use App\Models\LeaveBalance;
+// use App\Models\LeaveBalance; // Supprimé - remplacé par SpecialLeaveType
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -31,13 +31,13 @@ class DepartmentController extends Controller
             })
             ->get();
 
-        // Récupérer les soldes de congés de l'entreprise
-        $leaveBalances = LeaveBalance::where('company_id', auth()->user()->company_id)
-            ->orderBy('is_default', 'desc')
-            ->orderBy('description')
-            ->get();
+        // LeaveBalances supprimé - remplacé par SpecialLeaveType
+        // $leaveBalances = LeaveBalance::where('company_id', auth()->user()->company_id)
+        //     ->orderBy('is_default', 'desc')
+        //     ->orderBy('description')
+        //     ->get();
 
-        return view('admin.departments.create', compact('departmentHeads', 'leaveBalances'));
+        return view('admin.departments.create', compact('departmentHeads'));
     }
 
     public function store(Request $request)
@@ -72,13 +72,13 @@ class DepartmentController extends Controller
             })
             ->get();
 
-        // Récupérer les soldes de congés de l'entreprise
-        $leaveBalances = LeaveBalance::where('company_id', $department->company_id)
-            ->orderBy('is_default', 'desc')
-            ->orderBy('description')
-            ->get();
+        // LeaveBalances supprimé - remplacé par SpecialLeaveType
+        // $leaveBalances = LeaveBalance::where('company_id', $department->company_id)
+        //     ->orderBy('is_default', 'desc')
+        //     ->orderBy('description')
+        //     ->get();
 
-        return view('admin.departments.edit', compact('department', 'departmentHeads', 'leaveBalances'));
+        return view('admin.departments.edit', compact('department', 'departmentHeads'));
     }
 
     public function update(Request $request, Department $department)
@@ -104,12 +104,6 @@ class DepartmentController extends Controller
     public function show(Department $department)
     {
         $department->load(['teams.manager', 'teams.members']);
-        
-        // Debug logging
-        foreach ($department->teams as $team) {
-            \Log::info("Team {$team->name} members count: " . $team->members->count());
-            \Log::info("Team {$team->name} members: " . $team->members->pluck('name')->join(', '));
-        }
         
         $managers = $department->users()
             ->where('role', 'manager')

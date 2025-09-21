@@ -55,6 +55,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'first_name',
         'last_name',
         'gender',
+        'birth_date',
+        'address',
         'marital_status',
         'employment_status',
         'children_count',
@@ -73,7 +75,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'leave_balance_id',
         'is_active',
         'position',
-        'is_prestataire'
+        'is_prestataire',
+        'entry_date',
+        'exit_date',
+        'emergency_contact_name',
+        'emergency_contact_phone',
+        'emergency_contact_relationship'
         //'team_id'
     ];
 
@@ -95,6 +102,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'birth_date' => 'date',
+        'entry_date' => 'date',
+        'exit_date' => 'date',
     ];
 
     /**
@@ -121,13 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Company::class);
     }
 
-    /**
-     * Get the leave balance that the user belongs to.
-     */
-    public function leaveBalance()
-    {
-        return $this->belongsTo(LeaveBalance::class);
-    }
+    // Relation LeaveBalance supprimée - remplacée par SpecialLeaveType
 
     /**
      * Vérifie si l'utilisateur est un administrateur
@@ -159,6 +163,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isHR(): bool
     {
         return $this->role === self::ROLE_HR;
+    }
+    
+    /**
+     * Vérifie si l'utilisateur a un rôle spécifique
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
     }
 
     /**
@@ -408,19 +420,15 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getAnnualLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->annual_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->annual_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->annual_leave_days;
+        // Utiliser SpecialLeaveType pour les congés annuels
+        if ($this->company) {
+            $annualLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'annual')
+                ->first();
+                
+            if ($annualLeaveType) {
+                return $annualLeaveType->duration_days;
+            }
         }
         
         // Valeur par défaut
@@ -436,19 +444,15 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getMaternityLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->maternity_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->maternity_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->maternity_leave_days;
+        // Utiliser SpecialLeaveType pour les congés maternité
+        if ($this->company) {
+            $maternityLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'maternity')
+                ->first();
+                
+            if ($maternityLeaveType) {
+                return $maternityLeaveType->duration_days;
+            }
         }
         
         // Valeur par défaut (16 semaines = 112 jours)
@@ -462,49 +466,36 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getPaternityLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->paternity_leave_days;
+        // Utiliser SpecialLeaveType pour les congés paternité
+        if ($this->company) {
+            $paternityLeaveType = $this->company->specialLeaveTypes()
+                ->where('system_name', 'paternity')
+                ->first();
+                
+            if ($paternityLeaveType) {
+                return $paternityLeaveType->duration_days;
+            }
         }
         
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->paternity_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->paternity_leave_days;
-        }
+        // Code LeaveBalance supprimé - remplacé par SpecialLeaveType
+        // if ($this->company && $this->company->defaultLeaveBalance()) {
+        //     return $this->company->defaultLeaveBalance()->paternity_leave_days;
+        // }
         
         // Valeur par défaut (25 jours)
         return 25;
     }
 
     /**
-     * Get the special leave days for the user (from leave balance)
+     * Get the special leave days for the user (from SpecialLeaveType)
      * 
-     * @return int
+     * @return string
      */
     public function getSpecialLeaveDaysAttribute()
     {
-        // Si l'utilisateur a un solde de congés spécifique, l'utiliser
-        if ($this->leaveBalance) {
-            return $this->leaveBalance->special_leave_days;
-        }
-        
-        // Sinon, vérifier si le département a un solde par défaut
-        if ($this->department && $this->department->leaveBalance) {
-            return $this->department->leaveBalance->special_leave_days;
-        }
-        
-        // Sinon, utiliser le solde par défaut de l'entreprise
-        if ($this->company && $this->company->defaultLeaveBalance()) {
-            return $this->company->defaultLeaveBalance()->special_leave_days;
-        }
-        
-        // Valeur par défaut
-        return 5;
+        // Code LeaveBalance supprimé - remplacé par SpecialLeaveType
+        // Les congés spéciaux sont maintenant gérés via SpecialLeaveType
+        return "Voir types spéciaux";
     }
 
     /**
@@ -682,5 +673,58 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $options = self::getCategoryOptions();
         return $options[$this->category] ?? 'Non renseigné';
+    }
+
+    /**
+     * Get the user's seniority in months
+     *
+     * @return int
+     */
+    public function getSeniorityInMonths()
+    {
+        if (!$this->entry_date) {
+            return 0;
+        }
+
+        $entryDate = Carbon::parse($this->entry_date);
+        $now = Carbon::now();
+        
+        return $entryDate->diffInMonths($now);
+    }
+
+    /**
+     * Get the user's seniority in years and months
+     *
+     * @return array
+     */
+    public function getSeniorityDetails()
+    {
+        if (!$this->entry_date) {
+            return ['years' => 0, 'months' => 0, 'total_months' => 0];
+        }
+
+        $entryDate = Carbon::parse($this->entry_date);
+        $now = Carbon::now();
+        
+        $totalMonths = $entryDate->diffInMonths($now);
+        $years = intval($totalMonths / 12);
+        $months = $totalMonths % 12;
+        
+        return [
+            'years' => $years,
+            'months' => $months,
+            'total_months' => $totalMonths
+        ];
+    }
+
+    /**
+     * Check if user meets seniority requirement in months
+     *
+     * @param int $requiredMonths
+     * @return bool
+     */
+    public function meetsSeniorityRequirement($requiredMonths)
+    {
+        return $this->getSeniorityInMonths() >= $requiredMonths;
     }
 }

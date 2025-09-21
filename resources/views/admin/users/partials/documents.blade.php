@@ -223,9 +223,18 @@
                             <label for="document_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Type de document</label>
                             <select id="document_type" name="document_type" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" onchange="toggleExpirationDate()">
                                 <option value="identity">Pièce d'identité</option>
+                                <option value="passport">Passeport</option>
+                                <option value="criminal_record">Casier judiciaire</option>
+                                <option value="nationality_certificate">Certificat de nationalité</option>
+                                <option value="niu">NIU</option>
                                 <option value="diploma">Diplôme</option>
+                                <option value="certificate">Certificat professionnel</option>
                                 <option value="contract">Contrat</option>
-                                <option value="certificate">Certificat</option>
+                                <option value="cv">CV</option>
+                                <option value="amendment">Avenant</option>
+                                <option value="rib">RIB</option>
+                                <option value="sick_leave">Arrêt maladie</option>
+                                <option value="medical_certificate">Certificat médical (embauche)</option>
                                 <option value="other">Autre</option>
                             </select>
                         </div>
@@ -370,7 +379,7 @@
         var documentType = document.getElementById('document_type').value;
         var expirationDateContainer = document.getElementById('expiration_date_container');
         
-        if (documentType &&documentType === 'identity') {
+        if (documentType &&documentType === 'identity' || documentType === 'passport') {
             expirationDateContainer.style.display = 'block';
         } else {
             expirationDateContainer.style.display = 'none';

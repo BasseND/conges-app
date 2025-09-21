@@ -1,20 +1,29 @@
-@props(['type', 'style' => 'default'])
+@props(['type' => null, 'style' => 'default', 'specialLeaveType' => null])
 
 @php
+$type = $type ?? ($specialLeaveType ? $specialLeaveType->system_name : 'default');
 $classes = match($style) {
     'gradient' => match($type) {
-        'annual' => 'bg-gradient-to-r from-blue-500 to-blue-600 text-white',
-        'sick' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
-        'maternity' => 'bg-gradient-to-r from-pink-500 to-pink-600 text-white',
-        'paternity' => 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white',
+        'annual', 'conge_annuel', 'congés_annuels' => 'bg-gradient-to-r from-blue-500 to-blue-600 text-white',
+        'sick', 'conge_maladie' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
+        'maternity', 'conge_maternite', 'conge_maternité' => 'bg-gradient-to-r from-pink-500 to-pink-600 text-white',
+        'paternity', 'conge_paternite', 'conge_paternité' => 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white',
+        'césarienne' => 'bg-gradient-to-r from-purple-500 to-purple-600 text-white',
+        'mariage' => 'bg-gradient-to-r from-rose-500 to-rose-600 text-white',
+        'permission' => 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white',
+        'bapt_me', 'baptême' => 'bg-gradient-to-r from-amber-500 to-amber-600 text-white',
         'unpaid' => 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white',
         default => 'bg-gradient-to-r from-gray-500 to-gray-600 text-white'
     },
     default => match($type) {
-        'annual' => 'bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-200',
-        'sick' => 'bg-red-200 text-red-900 dark:bg-red-800 dark:text-red-200',
-        'maternity' => 'bg-pink-200 text-pink-900 dark:bg-pink-800 dark:text-pink-200',
-        'paternity' => 'bg-indigo-200 text-indigo-900 dark:bg-indigo-800 dark:text-indigo-200',
+        'annual', 'conge_annuel', 'congés_annuels' => 'bg-blue-200 text-blue-900 dark:bg-blue-800 dark:text-blue-200',
+        'sick', 'conge_maladie' => 'bg-red-200 text-red-900 dark:bg-red-800 dark:text-red-200',
+        'maternity', 'conge_maternite', 'conge_maternité' => 'bg-pink-200 text-pink-900 dark:bg-pink-800 dark:text-pink-200',
+        'paternity', 'conge_paternite', 'conge_paternité' => 'bg-indigo-200 text-indigo-900 dark:bg-indigo-800 dark:text-indigo-200',
+        'césarienne' => 'bg-purple-200 text-purple-900 dark:bg-purple-800 dark:text-purple-200',
+        'mariage' => 'bg-rose-200 text-rose-900 dark:bg-rose-800 dark:text-rose-200',
+        'permission' => 'bg-cyan-200 text-cyan-900 dark:bg-cyan-800 dark:text-cyan-200',
+        'bapt_me', 'baptême' => 'bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-200',
         'unpaid' => 'bg-yellow-200 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-200',
         default => 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-gray-900 dark:to-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700'
     }
@@ -23,42 +32,72 @@ $classes = match($style) {
 $size = $style === 'gradient' ? 'px-4 py-2 rounded-xl text-sm font-bold shadow-lg' : 'px-3 py-2 rounded-lg text-sm font-semibold';
 @endphp
 
+
+{{-- 
+    conge_annuel
+    conge_maternite
+    conge_paternite
+    conge_maladie
+ --}}
+
 <span class="inline-flex items-center {{ $size }} {{ $classes }}">
     @switch($type)
-        @case('annual')
+      
+        @case('conge_annuel')
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
             Congé annuel
             @break
-        @case('sick')
+       
+        @case('conge_maladie')
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
             Congé maladie
             @break
-        @case('maternity')
+       
+        @case('conge_maternite')
             <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
             Congé maternité
             @break
-        @case('paternity')
+       
+        @case('conge_paternite')
             <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
             Congé paternité
             @break
-        @case('unpaid')
-            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        
+        @case('congés_annuels')
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            Congé sans solde
+            Congés annuels
             @break
+        @case('conge_maternité')
+            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+            Congé maternité
+            @break
+        @case('conge_paternité')
+            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+            Congé paternité
+            @break
+            
         @default
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            Autre
+            @if($specialLeaveType && $specialLeaveType->name)
+                {{ $specialLeaveType->name }}
+            @else
+                {{ ucfirst(str_replace('_', ' ', $type)) }}
+            @endif
     @endswitch
 </span>

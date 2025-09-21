@@ -214,7 +214,7 @@
                                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
                                         @foreach ($leaves as $leave)
                                             <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $leave->type }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100"><x-leave-type-badge :leave="$leave" :specialLeaveType="$leave->specialLeaveType" /></td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $leave->start_date->format('d/m/Y') }}</td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $leave->end_date->format('d/m/Y') }}</td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $leave->duration }}</td>

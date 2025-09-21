@@ -110,39 +110,48 @@
                 </a>
 
                 <!-- Messagerie / Messages -->
-                <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" x-data="{ unreadCount: 0 }" x-init="
-                    // Fonction pour récupérer le nombre de messages non lus
-                    function fetchUnreadCount() {
-                        fetch('{{ route('messages.unread-count') }}', {
-                            method: 'GET',
-                            headers: {
-                                'Accept': 'application/json',
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            credentials: 'same-origin'
-                        })
-                        .then(function(response) {
-                            if (response.ok) {
-                                return response.json();
-                            }
-                            throw new Error('Erreur réseau: ' + response.status);
-                        })
-                        .then(function(data) {
-                            if (data && typeof data.count !== 'undefined') {
-                                unreadCount = data.count;
-                            }
-                        })
-                        .catch(function(error) {
-                            console.error('Erreur lors de la récupération des messages non lus:', error);
-                            // Ne pas modifier unreadCount en cas d'erreur
-                        });
-                    }
+                <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" 
+                   x-data="{ 
+                       unreadCount: 0,
+                       fetchUnreadCount() {
+                           fetch('{{ route('messages.unread-count') }}', {
+                               method: 'GET',
+                               headers: {
+                                   'Accept': 'application/json',
+                                   'X-Requested-With': 'XMLHttpRequest'
+                               },
+                               credentials: 'same-origin'
+                           })
+                           .then((response) => {
+                               if (response.ok) {
+                                   // Vérifier si la réponse est bien du JSON
+                                   const contentType = response.headers.get('content-type');
+                                   if (contentType && contentType.includes('application/json')) {
+                                       return response.json();
+                                   } else {
+                                       // Probablement une redirection vers la page de connexion
+                                       throw new Error('Réponse non-JSON reçue');
+                                   }
+                               }
+                               throw new Error('Erreur réseau: ' + response.status);
+                           })
+                           .then((data) => {
+                               if (data && typeof data.count !== 'undefined') {
+                                   this.unreadCount = data.count;
+                               }
+                           })
+                           .catch((error) => {
+                               console.error('Erreur lors de la récupération des messages non lus:', error);
+                               // Ne pas modifier unreadCount en cas d'erreur
+                           });
+                       }
+                   }" 
+                   x-init="
+                       // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
+                       setTimeout(() => fetchUnreadCount(), 1000);
                     
-                    // Récupérer le nombre initial après un délai pour s'assurer que l'authentification est complète
-                    setTimeout(fetchUnreadCount, 1000);
-                    
-                    // Actualiser toutes les 30 secondes
-                    setInterval(fetchUnreadCount, 30000);
+                        // Actualiser toutes les 30 secondes
+                        setInterval(() => fetchUnreadCount(), 30000);
                 ">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />

@@ -63,8 +63,5 @@ class Department extends Model
     /**
      * Get the default leave balance for this department.
      */
-    public function leaveBalance()
-    {
-        return $this->belongsTo(LeaveBalance::class);
-    }
+    // Relation LeaveBalance supprimée - remplacée par SpecialLeaveType
 }

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('leave_balances', function (Blueprint $table) {
-            $table->dropColumn('sick_leave_days');
+        Schema::table('special_leave_types', function (Blueprint $table) {
+            $table->string('type')->default('custom')->after('system_name');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('leave_balances', function (Blueprint $table) {
-            $table->integer('sick_leave_days')->default(0)->after('annual_leave_days');
+        Schema::table('special_leave_types', function (Blueprint $table) {
+            $table->dropColumn('type');
         });
     }
 };

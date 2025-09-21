@@ -110,9 +110,9 @@
                             <select name="type" id="type"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-200 shadow-sm">
                                 <option value="">Tous les types</option>
-                                @foreach(\App\Models\Leave::TYPES as $value => $label)
-                                    <option value="{{ $value }}" {{ request('type') == $value ? 'selected' : '' }}>
-                                        {{ $label }}
+                                @foreach(\App\Models\SpecialLeaveType::where('is_active', true)->orderBy('name')->get() as $specialLeaveType)
+                                    <option value="{{ $specialLeaveType->system_name ?: $specialLeaveType->name }}" {{ request('type') == ($specialLeaveType->system_name ?: $specialLeaveType->name) ? 'selected' : '' }}>
+                                        {{ $specialLeaveType->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -310,7 +310,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap max-w-[205px]">
-                                        <x-leave-type-badge :type="$leave->type" />
+                                        <x-leave-type-badge :type="$leave->specialLeaveType?->system_name ?: 'unknown'" :specialLeaveType="$leave->specialLeaveType" />
                                     </td>
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">

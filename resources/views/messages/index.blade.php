@@ -1,118 +1,148 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Messagerie') }}
-        </h2>
-    </x-slot>
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- En-tête -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Messagerie</h1>
-                    <p class="mt-2 text-gray-600 dark:text-gray-400">Vos conversations avec les ressources humaines</p>
-                </div>
-                <a href="{{ route('messages.create') }}" 
-                   class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Nouveau message
-                </a>
-            </div>
-        </div>
-
-        <!-- Liste des conversations -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-            @if($conversations->isEmpty())
-                <div class="p-12 text-center">
-                    <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
+    <div class="py-8">
+        <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 px-6 py-4">
+                <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center space-y-4 lg:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                           
+                            <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                                {{ __('Messagerie') }}
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-300 mt-1">
+                                Vos conversations avec les ressources humaines
+                            </p>
+                        </div>
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Aucune conversation</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">Vous n'avez encore aucune conversation. Commencez par envoyer un message.</p>
-                    <a href="{{ route('messages.create') }}" 
-                       class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Envoyer un message
-                    </a>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="{{ route('messages.create') }}" 
+                        class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Nouveau message
+                        </a>
+                    </div>
                 </div>
-            @else
-                <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach($conversations as $conversation)
-                        <a href="{{ route('messages.show', $conversation->other_user_id) }}" 
-                           class="block hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-                            <div class="p-6">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-4 flex-1">
-                                        <!-- Avatar -->
-                                        <div class="flex-shrink-0">
-                                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                                                <span class="text-white font-semibold text-lg">
-                                                    {{ strtoupper(substr($conversation->first_name, 0, 1) . substr($conversation->last_name, 0, 1)) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Informations de la conversation -->
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex items-center justify-between">
-                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate">
-                                                    {{ $conversation->first_name }} {{ $conversation->last_name }}
-                                                </h3>
-                                                <div class="flex items-center space-x-2">
-                                                    @if($conversation->unread_count > 0)
-                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                                            {{ $conversation->unread_count }}
+            </div>
+
+
+            <div class="p-6">
+                <!-- Liste des conversations -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
+                    @if($conversations->isEmpty())
+                        <div class="p-12 text-center">
+                            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Aucune conversation</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-6">Vous n'avez encore aucune conversation. Commencez par envoyer un message.</p>
+                            <a href="{{ route('messages.create') }}" 
+                            class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Envoyer un message
+                            </a>
+                        </div>
+                    @else
+                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @foreach($conversations as $conversation)
+                                <a href="{{ route('messages.show', $conversation->other_user_id) }}" 
+                                class="block hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                    <div class="p-6">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-4 flex-1">
+                                                <!-- Avatar -->
+                                                <div class="flex-shrink-0">
+                                                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                                                        <span class="text-white font-semibold text-lg">
+                                                            {{ strtoupper(substr($conversation->first_name, 0, 1) . substr($conversation->last_name, 0, 1)) }}
                                                         </span>
-                                                    @endif
-                                                    <span class="text-sm text-gray-500 dark:text-gray-400">
-                                                        {{ \Carbon\Carbon::parse($conversation->last_message_date)->diffForHumans() }}
-                                                    </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Informations de la conversation -->
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-center justify-between">
+                                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                                                            {{ $conversation->first_name }} {{ $conversation->last_name }}
+                                                        </h3>
+                                                        <div class="flex items-center space-x-2">
+                                                            @if($conversation->unread_count > 0)
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                                    {{ $conversation->unread_count }}
+                                                                </span>
+                                                            @endif
+                                                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                                                {{ \Carbon\Carbon::parse($conversation->last_message_date)->diffForHumans() }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mt-1">
+                                                        {{ $conversation->subject }}
+                                                    </p>
+                                                    
+                                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">
+                                                        @if($conversation->sender_id === auth()->id())
+                                                            <span class="font-medium">Vous:</span>
+                                                        @endif
+                                                        {{ Str::limit($conversation->content, 100) }}
+                                                    </p>
                                                 </div>
                                             </div>
                                             
-                                            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 mt-1">
-                                                {{ $conversation->subject }}
-                                            </p>
-                                            
-                                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">
-                                                @if($conversation->sender_id === auth()->id())
-                                                    <span class="font-medium">Vous:</span>
-                                                @endif
-                                                {{ Str::limit($conversation->content, 100) }}
-                                            </p>
+                                            <!-- Flèche -->
+                                            <div class="flex-shrink-0 ml-4">
+                                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Flèche -->
-                                    <div class="flex-shrink-0 ml-4">
-                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
         </div>
+
     </div>
-</div>
+
 
 
 @push('scripts')
 <script>
 // Actualiser le nombre de messages non lus toutes les 30 secondes
 setInterval(function() {
-    fetch('{{ route("messages.unread-count") }}')
-        .then(response => response.json())
+    fetch('{{ route("messages.unread-count") }}', {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin'
+    })
+        .then(response => {
+            if (response.ok) {
+                // Vérifier si la réponse est bien du JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    throw new Error('Réponse non-JSON reçue');
+                }
+            }
+            throw new Error('Erreur réseau: ' + response.status);
+        })
         .then(data => {
             // Mettre à jour l'indicateur dans la navigation si nécessaire
             const badge = document.querySelector('.messages-badge');
@@ -125,7 +155,9 @@ setInterval(function() {
                 }
             }
         })
-        .catch(error => console.error('Erreur:', error));
+        .catch(error => {
+            console.error('Erreur lors de la récupération des messages non lus:', error);
+        });
 }, 30000);
 </script>
 @endpush

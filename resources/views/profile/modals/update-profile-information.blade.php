@@ -167,6 +167,49 @@
                                     </div>
                                 @endif
                             </div>
+
+                            <!-- Date de naissance -->
+                            <div class="space-y-2">
+                                <label for="birth_date" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    {{ __('Date de naissance') }}
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <input id="birth_date" name="birth_date" type="date" 
+                                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" 
+                                        value="{{ old('birth_date', $user->birth_date ? $user->birth_date->format('Y-m-d') : '') }}" 
+                                        autocomplete="bday">
+                                </div>
+                                @error('birth_date')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Adresse -->
+                            <div class="space-y-2">
+                                <label for="address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    {{ __('Adresse') }}
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <textarea id="address" name="address" rows="3"
+                                              class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none" 
+                                              autocomplete="street-address" 
+                                              placeholder="{{ __('Entrez votre adresse complète') }}">{{ old('address', $user->address) }}</textarea>
+                                </div>
+                                @error('address')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </form>
                     </div>
                 </div>

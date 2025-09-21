@@ -76,7 +76,54 @@ class LeaveController extends Controller
                         }
                     }
                 ],
-                'type' => ['required', Rule::in(['annual', 'sick', 'unpaid' , 'maternity', 'paternity', 'other'])],
+                'type' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $user = auth()->user();
+                        $userSeniorityMonths = $user->getSeniorityInMonths();
+                        
+                        // Système unifié : tous les congés utilisent SpecialLeaveType (format: special_X)
+                        if (preg_match('/^special_(\d+)$/', $value, $matches)) {
+                            $specialLeaveTypeId = $matches[1];
+                            $specialLeaveType = \App\Models\SpecialLeaveType::where('id', $specialLeaveTypeId)
+                                ->where('company_id', $user->company_id)
+                                ->where('is_active', true)
+                                ->first();
+                            
+                            if (!$specialLeaveType) {
+                                $fail('Le type de congé sélectionné n\'est pas valide ou n\'appartient pas à votre entreprise.');
+                                return;
+                            }
+                            
+                            // Vérification de l'ancienneté pour les types personnalisés
+                            if ($specialLeaveType->seniority_months > 0 && $userSeniorityMonths < $specialLeaveType->seniority_months) {
+                                $fail("Vous n'avez pas l'ancienneté requise pour ce type de congé. Ancienneté requise: {$specialLeaveType->seniority_months} mois, votre ancienneté: {$userSeniorityMonths} mois.");
+                            }
+                            return;
+                        }
+                        
+                        // Types de congés par nom système (format: system_X)
+                        if (preg_match('/^system_(.+)$/', $value, $matches)) {
+                            $systemName = $matches[1];
+                            $specialType = \App\Models\SpecialLeaveType::where('system_name', $systemName)
+                                ->where('is_active', true)
+                                ->first();
+                            
+                            if (!$specialType) {
+                                $fail('Le type de congé spécial sélectionné n\'est pas valide ou n\'est pas actif.');
+                                return;
+                            }
+                            
+                            // Vérification de l'ancienneté pour les types système
+                            if ($specialType->seniority_months > 0 && $userSeniorityMonths < $specialType->seniority_months) {
+                                $fail("Vous n'avez pas l'ancienneté requise pour ce type de congé. Ancienneté requise: {$specialType->seniority_months} mois, votre ancienneté: {$userSeniorityMonths} mois.");
+                            }
+                            return;
+                        }
+                        
+                        $fail('Le type de congé sélectionné n\'est pas valide. Veuillez utiliser un type défini dans le système.');
+                    }
+                ],
                 'reason' => ['required', 'string', 'min:10', 'max:500'],
                 'attachments.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:2048']
             ], [
@@ -145,13 +192,38 @@ class LeaveController extends Controller
             }
 
             // Vérification de la durée maximale
-            $maxDuration = match($validated['type']) {
-                'annual' => 30,
-                'sick' => 90,
-                'unpaid' => 60,
-                'other' => 5,
-                default => 30,
-            };
+            $specialLeaveType = null;
+            $maxDuration = 30; // Valeur par défaut de sécurité
+            
+            // Récupérer le SpecialLeaveType (système unifié)
+            if (preg_match('/^special_(\d+)$/', $validated['type'], $matches)) {
+                $specialLeaveTypeId = $matches[1];
+                $specialLeaveType = \App\Models\SpecialLeaveType::find($specialLeaveTypeId);
+                
+                if ($specialLeaveType) {
+                    // Déterminer la durée maximale selon les champs disponibles dans SpecialLeaveType
+                    if ($specialLeaveType->annual_leave_days > 0) {
+                        $maxDuration = $specialLeaveType->annual_leave_days;
+                    } elseif ($specialLeaveType->maternity_leave_days > 0) {
+                        $maxDuration = $specialLeaveType->maternity_leave_days;
+                    } elseif ($specialLeaveType->paternity_leave_days > 0) {
+                        $maxDuration = $specialLeaveType->paternity_leave_days;
+                    } elseif ($specialLeaveType->special_leave_days > 0) {
+                        $maxDuration = $specialLeaveType->special_leave_days;
+                    } elseif ($specialLeaveType->duration_days > 0) {
+                        $maxDuration = $specialLeaveType->duration_days;
+                    }
+                }
+            }
+            // Récupérer le SpecialLeaveType par nom système
+            elseif (preg_match('/^system_(.+)$/', $validated['type'], $matches)) {
+                $systemName = $matches[1];
+                $specialLeaveType = \App\Models\SpecialLeaveType::where('system_name', $systemName)->first();
+                
+                if ($specialLeaveType && $specialLeaveType->duration_days) {
+                    $maxDuration = $specialLeaveType->duration_days;
+                }
+            }
 
             if ($duration > $maxDuration) {
                 return back()->withInput()->with('error', 
@@ -167,6 +239,11 @@ class LeaveController extends Controller
             $leave->user_id = auth()->id();
             $leave->status = $status;
             $leave->duration = $duration;
+            
+            // Associer le SpecialLeaveType
+            if ($specialLeaveType) {
+                $leave->special_leave_type_id = $specialLeaveType->id;
+            }
             
             if (!$leave->save()) {
                 throw new \Exception('Erreur lors de la sauvegarde du congé');
@@ -292,8 +369,13 @@ class LeaveController extends Controller
         }
 
         // Filtre par type de congé
-        if ($request->filled('type') && array_key_exists($request->type, Leave::TYPES)) {
-            $query->where('type', $request->type);
+        if ($request->filled('type')) {
+            $specialLeaveType = \App\Models\SpecialLeaveType::where('system_name', $request->type)
+                ->orWhere('name', $request->type)
+                ->first();
+            if ($specialLeaveType) {
+                $query->where('special_leave_type_id', $specialLeaveType->id);
+            }
         }
 
         // Filtre par date
@@ -528,7 +610,43 @@ class LeaveController extends Controller
             }
 
             $validated = $request->validate([
-                'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
+                'type' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        // Système unifié : tous les congés utilisent SpecialLeaveType (format: special_X)
+                        if (preg_match('/^special_(\d+)$/', $value, $matches)) {
+                            $specialLeaveTypeId = $matches[1];
+                            $specialLeaveType = \App\Models\SpecialLeaveType::where('id', $specialLeaveTypeId)
+                                ->where('is_active', true)
+                                ->first();
+                            
+                            if (!$specialLeaveType) {
+                                $fail('Le type de congé sélectionné n\'est pas valide ou n\'est pas actif.');
+                            }
+                            return;
+                        }
+                        
+                        // Types de congés par nom système (format: system_X)
+                        if (preg_match('/^system_(.+)$/', $value, $matches)) {
+                            $systemName = $matches[1];
+                            $specialType = \App\Models\SpecialLeaveType::where('system_name', $systemName)
+                                ->where('is_active', true)
+                                ->first();
+                            
+                            if (!$specialType) {
+                                $fail('Le type de congé spécial sélectionné n\'est pas valide ou n\'est pas actif.');
+                            }
+                            return;
+                        }
+                        
+                        // Compatibilité temporaire avec les anciens types
+                        if (array_key_exists($value, \App\Models\Leave::TYPES)) {
+                            return;
+                        }
+                        
+                        $fail('Le type de congé sélectionné n\'est pas valide. Veuillez utiliser un type défini dans le système.');
+                    }
+                ],
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'reason' => 'required|string|min:10',
@@ -617,7 +735,38 @@ class LeaveController extends Controller
         }
 
         $validated = $request->validate([
-            'type' => 'required|in:' . implode(',', array_keys(Leave::TYPES)),
+            'type' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // Système unifié : tous les congés utilisent SpecialLeaveType (format: special_X)
+                    if (preg_match('/^special_(\d+)$/', $value, $matches)) {
+                        $specialLeaveTypeId = $matches[1];
+                        $specialLeaveType = \App\Models\SpecialLeaveType::where('id', $specialLeaveTypeId)
+                            ->where('is_active', true)
+                            ->first();
+                        
+                        if (!$specialLeaveType) {
+                            $fail('Le type de congé sélectionné n\'est pas valide ou n\'est pas actif.');
+                        }
+                        return;
+                    }
+                    
+                    // Types de congés par nom système (format: system_X)
+                    if (preg_match('/^system_(.+)$/', $value, $matches)) {
+                        $systemName = $matches[1];
+                        $specialType = \App\Models\SpecialLeaveType::where('system_name', $systemName)
+                            ->where('is_active', true)
+                            ->first();
+                        
+                        if (!$specialType) {
+                            $fail('Le type de congé spécial sélectionné n\'est pas valide ou n\'est pas actif.');
+                        }
+                        return;
+                    }
+                    
+                    $fail('Le type de congé sélectionné n\'est pas valide. Veuillez utiliser un type défini dans le système.');
+                }
+            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|min:10',
@@ -685,10 +834,6 @@ class LeaveController extends Controller
                 ->with('success', 'Votre demande de congé a été soumise avec succès.');
                 
         } catch (\Exception $e) {
-            \Log::error('Erreur lors de la soumission de la demande:', [
-                'error' => $e->getMessage(),
-                'leave_id' => $leave->id
-            ]);
             return back()->with('error', 'Une erreur est survenue lors de la soumission de la demande.');
         }
     }

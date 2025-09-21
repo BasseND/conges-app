@@ -20,7 +20,7 @@
                         <h2 class="text-gray-900 dark:text-white text-lg sm:text-xl lg:text-2xl font-bold truncate">
                             {{ __('Informations de la société') }}
                         </h2>
-                        @if($company)
+                    @if($company)
                             <a href="{{ route('admin.company.edit') }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
                                 <i class="bx bx-edit-alt mr-1 lg:mr-2"></i> 
                                 <span class="hidden sm:inline">Modifier</span>
@@ -38,6 +38,7 @@
                 <div class="p-4 sm:p-6">
                 
                     @if($company)
+                        {{-- Company Information --}}
                         <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200 dark:border-gray-600">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                                 <!-- Logo Section -->
@@ -140,6 +141,78 @@
                                                     </div>
                                                     @endif
 
+                                                @if($company->registration_number)
+                                                    <div class="group hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->registration_number }}</p>
+                                                                <p class="text-xs text-yellow-600 dark:text-yellow-400 font-medium">Numéro d'enregistrement</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->director_name)
+                                                    <div class="group hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->director_name }}</p>
+                                                                <p class="text-xs text-orange-600 dark:text-orange-400 font-medium">Directeur général</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->hr_director_name)
+                                                    <div class="group hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $company->hr_director_name }}</p>
+                                                                <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Directeur des ressources humaines</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
+                                                @if($company->hr_signature)
+                                                    <div class="group hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-xl p-3 transition-all duration-200">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                                    <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="text-sm font-semibold text-gray-900 dark:text-white mb-2">Signature du DRH</p>
+                                                                <img src="{{ Storage::url($company->hr_signature) }}" alt="Signature du DRH" class="max-w-32 h-auto border border-gray-200 dark:border-gray-600 rounded-lg bg-white p-2">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+
                                                 <!-- Address Information -->
                                                 @if($company->address || $company->city || $company->country)
                                                     <div class="group hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-xl p-4 transition-all duration-200">
@@ -177,175 +250,220 @@
                             </div>
                         </div>
 
-                        <!-- Bloc congés -->
-                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-600 mt-4 lg:mt-6">
-                            <div class="bg-gray-50 dark:bg-gray-900 flex flex-col md:flex-row justify-between items-center p-6 rounded-xl border-b border-gray-200 dark:border-gray-700">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    <i class="bx bx-calendar mr-2"></i>Soldes de congés définis
-                                </h3>
-                                <button type="button" onclick="openLeaveBalanceModal()" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 border border-transparent rounded-xl font-semibold text-white transition-colors duration-200 shadow-sm">
-                                    <i class="bx bx-plus mr-1"></i> Ajouter un solde
-                                </button>
-                            </div>
-                            
-                            @if($leaveBalances->count() > 0)
-                                <div class="grid gap-4">
-                                    @foreach($leaveBalances as $balance)
-                                        <div class="group relative bg-white dark:bg-gray-900 p-6 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
-                                            <!-- Decorative background element -->
-                                            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-110 transition-transform duration-500"></div>
-                                            
-                                            <div class="flex justify-between items-start relative z-10">
-                                                <div class="flex-1">
-                                                    <!-- Header -->
-                                                    <div class="flex items-center mb-6">
-                                                        <div class="bg-gradient-to-r from-teal-500 to-cyan-600 p-3 rounded-xl shadow-lg mr-4">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-                                                            </svg>
-                                                        </div>
-                                                        <div>
-                                                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $balance->description }}</h4>
-                                                            @if($balance->is_default)
-                                                                <span class="inline-flex items-center px-3 py-1 text-xs font-medium bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-full shadow-sm">
-                                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                    Par défaut
-                                                                </span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <!-- Leave types grid -->
-                                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
-                                                        <!-- Congés annuels -->
-                                                        <div class="group/card relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-3 lg:p-4 rounded-xl border border-blue-200/50 dark:border-blue-700/50">
-                                                            <div class="flex items-center">
-                                                                <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div>
-                                                                    <p class="text-xs lg:text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">Congés annuels</p>
-                                                                    <p class="text-lg lg:text-2xl font-bold text-blue-900 dark:text-blue-100">{{ $balance->annual_leave_days }}</p>
-                                                                    <p class="text-xs text-blue-600 dark:text-blue-400">jours</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-
-                                                        @if($balance->maternity_leave_days)
-                                                        <!-- Congés maternité -->
-                                                        <div class="group/card relative bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 p-3 lg:p-4 rounded-xl border border-pink-200/50 dark:border-pink-700/50">
-                                                            <div class="flex items-center">
-                                                                <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div>
-                                                                    <p class="text-xs lg:text-sm font-medium text-pink-700 dark:text-pink-300 mb-1">Congés maternité</p>
-                                                                    <p class="text-lg lg:text-2xl font-bold text-pink-900 dark:text-pink-100">{{ $balance->maternity_leave_days }}</p>
-                                                                    <p class="text-xs text-pink-600 dark:text-pink-400">jours</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-
-                                                        @if($balance->paternity_leave_days)
-                                                        <!-- Congés paternité -->
-                                                        <div class="group/card relative bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 p-3 lg:p-4 rounded-xl border border-indigo-200/50 dark:border-indigo-700/50">
-                                                            <div class="flex items-center">
-                                                                <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div>
-                                                                    <p class="text-xs lg:text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-1">Congés paternité</p>
-                                                                    <p class="text-lg lg:text-2xl font-bold text-indigo-900 dark:text-indigo-100">{{ $balance->paternity_leave_days }}</p>
-                                                                    <p class="text-xs text-indigo-600 dark:text-indigo-400">jours</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-
-                                                        @if($balance->special_leave_days)
-                                                        <!-- Congés spéciaux -->
-                                                        <div class="group/card relative bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 p-3 lg:p-4 rounded-xl border border-teal-200/50 dark:border-teal-700/50">
-                                                            <div class="flex items-center">
-                                                                <div class="bg-gradient-to-br from-teal-500 to-teal-600 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4 group-hover/card:scale-110 transition-transform duration-300">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 lg:w-5 lg:h-5 text-white">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div>
-                                                                    <p class="text-xs lg:text-sm font-medium text-teal-700 dark:text-teal-300 mb-1">Congés spéciaux</p>
-                                                                    <p class="text-lg lg:text-2xl font-bold text-teal-900 dark:text-teal-100">{{ $balance->special_leave_days }}</p>
-                                                                    <p class="text-xs text-teal-600 dark:text-teal-400">jours</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-                                                    </div>
-                                                    
-                                                    <!-- Total summary -->
-                                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-700/50 p-3 lg:p-4 rounded-xl border border-gray-200/50 dark:border-gray-600/50">
-                                                        <div class="flex items-center justify-center">
-                                                            <div class="bg-gradient-to-br from-gray-600 to-gray-700 p-2 lg:p-3 rounded-lg shadow-lg mr-3 lg:mr-4">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 lg:w-6 lg:h-6 text-white">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l-1-3m1 3l-1-3m-16.5-3h9.75" />
-                                                                </svg>
-                                                            </div>
-                                                            <div class="text-center">
-                                                                <p class="text-xs lg:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total des congés</p>
-                                                                <p class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">{{ $balance->total_leave_days }}</p>
-                                                                <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400">jours par an</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <!-- Action buttons -->
-                                                <div class="flex flex-col gap-2 lg:gap-3 lg:ml-4 mt-3 lg:mt-0 justify-end lg:justify-start">
-                                                    <button type="button" onclick="editLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button" onclick="deleteLeaveBalance({{ $balance->id }})" class="group/btn flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg lg:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex-shrink-0">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 group-hover/btn:scale-110 transition-transform duration-300">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
+                        {{-- Types de congés --}}
+                        <div class="mt-8">
+                            <!-- En-tête moderne -->
+                            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
+                                <div class="px-6 py-4">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="bg-gradient-to-r from-purple-500 to-indigo-600 p-3 rounded-xl shadow-lg mr-2">
+                                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                                                    {{ __('Types de Congés') }}
+                                                </h2>
+                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de congés paramétrables</p>
                                             </div>
                                         </div>
-                                    @endforeach
+                                        <div class="flex items-center space-x-3">
+                                            <a href="{{ route('admin.special-leave-types.create') }}" 
+                                               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border border-transparent rounded-lg font-medium text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                                </svg>
+                                                Nouveau Type
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                            @else
-                                <div class="text-center py-8">
-                                    <i class="bx bx-calendar-x text-gray-400 text-4xl mb-2"></i>
-                                    <p class="text-gray-500 dark:text-gray-400">Aucun solde de congés défini</p>
-                                    <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Cliquez sur "Ajouter un solde" pour commencer</p>
+                            </div>
+
+                            <!-- Carte principale -->
+                            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-b-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                                <div class="p-8">
+                                    @if(isset($specialLeaveTypes) && $specialLeaveTypes->count() > 0)
+                                        <!-- Tableau des types de congés -->
+                                        <div class="overflow-hidden">
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                                    <thead class="bg-gray-50/80 dark:bg-gray-700/50">
+                                                        <tr>
+                                                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Nom du Type
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Durée
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Ancienneté
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Description
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Statut
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                                Actions
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                                        @foreach($specialLeaveTypes as $type)
+                                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <div class="flex items-center">
+                                                                        <div class="flex-shrink-0 h-10 w-10">
+                                                                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center">
+                                                                                <span class="text-white font-semibold text-sm">{{ substr($type->name, 0, 2) }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="ml-4">
+                                                                            <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                                                                {{ $type->name }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <div class="flex items-center">
+                                                                        <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                                        </svg>
+                                                                        <span class="text-sm text-gray-900 dark:text-white font-medium">
+                                                                            {{ $type->formatted_duration }}
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <div class="flex items-center">
+                                                                        <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                                                        </svg>
+                                                                        @if($type->seniority_months == 0)
+                                                                            <span class="text-sm text-green-600 dark:text-green-400 font-medium">
+                                                                                Aucune
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="text-sm text-gray-900 dark:text-white font-medium">
+                                                                                {{ $type->formatted_seniority }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </td>
+                                                                <td class="px-6 py-4">
+                                                                    <div class="text-sm text-gray-900 dark:text-white max-w-xs truncate" title="{{ $type->description }}">
+                                                                        {{ $type->description ?: 'Aucune description' }}
+                                                                    </div>
+                                                                </td>
+                                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                                    @if($type->is_active)
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                            Actif
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                            Inactif
+                                                                        </span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                    <div class="flex items-center justify-end space-x-2">
+                                                                        <!-- Bouton Voir -->
+                                                                        <a href="{{ route('admin.special-leave-types.show', $type) }}" 
+                                                                           title="Voir les détails"
+                                                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-all duration-200 hover:scale-110">
+                                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                                            </svg>
+                                                                        </a>
+
+                                                                        <!-- Bouton Modifier -->
+                                                                        @if($type->type !== 'système')
+                                                                            <a href="{{ route('admin.special-leave-types.edit', $type) }}" 
+                                                                               title="Modifier"
+                                                                               class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all duration-200 hover:scale-110">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                                </svg>
+                                                                            </a>
+                                                                        @else
+                                                                            <button type="button" 
+                                                                                    title="Type de congé système - Non modifiable"
+                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                                </svg>
+                                                                            </button>
+                                                                        @endif
+
+                                                                        <!-- Bouton Supprimer -->
+                                                                        @php
+                                                                            $canDelete = $type->type !== 'système';
+                                                                        @endphp
+                                                                        
+                                                                        @if($canDelete)
+                                                                            <button type="button" 
+                                                                                    title="Supprimer"
+                                                                                    onclick="openDeleteModal('{{ route('admin.special-leave-types.destroy', $type) }}', 'Êtes-vous sûr de vouloir supprimer ce type de congé ? Cette action ne peut pas être annulée.')"
+                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-all duration-200 hover:scale-110">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                                                </svg>
+                                                                            </button>
+                                                                        @else
+                                                                            <button type="button" 
+                                                                                    title="Type de congé système - Non supprimable"
+                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                                                </svg>
+                                                                            </button>
+                                                                        @endif
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <!-- État vide -->
+                                        <div class="text-center py-12">
+                                            <div class="mx-auto h-24 w-24 text-gray-400 dark:text-gray-500 mb-4">
+                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                                                Aucun type de congé spécial
+                                            </h3>
+                                            <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                                Commencez par créer votre premier type de congé spécial.
+                                            </p>
+                                            <a href="{{ route('admin.special-leave-types.create') }}" 
+                                               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border border-transparent rounded-lg font-medium text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                                </svg>
+                                                Créer un Type de Congé
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
-                        </div>
-
-                        {{-- Paramètre date limite de soumission d'une demande d'avance sur salaire --}}
-
-                        <!-- Inclusion du composant modal moderne -->
-                        <x-leave-balance-modal :company="$company" />
-
-                        <!-- Action buttons -->
-                        <div class="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4 mt-6 lg:mt-8">
-                            <a href="{{ route('admin.company.edit', $company->id) }}" class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-xl font-semibold text-white text-sm transition-colors duration-200 shadow-sm">
-                                <i class="bx bx-edit mr-1 lg:mr-2"></i> Modifier
-                            </a>
-                            
+                            </div>
                         </div>
 
                     @else
@@ -365,57 +483,7 @@
 </div>
 
     <script>
-        let leaveBalances = @json($leaveBalances);
-
-        function openLeaveBalanceModal() {
-            window.dispatchEvent(new CustomEvent('open-leave-balance-modal', {
-                detail: {
-                    leaveBalanceId: null
-                }
-            }));
-        }
-
-        function editLeaveBalance(id) {
-            const balance = leaveBalances.find(b => b.id === id);
-            if (!balance) return;
-
-            window.dispatchEvent(new CustomEvent('open-leave-balance-modal', {
-                detail: {
-                    leaveBalanceId: id,
-                    data: balance
-                }
-            }));
-        }
-
-        function deleteLeaveBalance(id) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer ce solde de congés ?')) {
-                return;
-            }
-
-            fetch(`{{ route('admin.company.leave-balances.destroy', '') }}/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
-                    showNotification(data.error || 'Erreur lors de la suppression', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Erreur lors de la suppression', 'error');
-            });
-        }
+        // JavaScript pour LeaveBalance supprimé - remplacé par SpecialLeaveType
 
         // Fonction globale pour les notifications
         window.showNotification = function(message, type = 'info') {
@@ -452,5 +520,24 @@
         function showNotification(message, type = 'info') {
             window.showNotification(message, type);
         }
+        
+        // Fonction pour ouvrir le modal de suppression
+        function openDeleteModal(url, message) {
+            // Mettre à jour le message du modal
+            const modal = document.querySelector('[x-data="deleteDialog()"]');
+            if (modal) {
+                const messageElement = modal.querySelector('p');
+                if (messageElement) {
+                    messageElement.textContent = message;
+                }
+                // Déclencher l'événement pour ouvrir le modal
+                window.dispatchEvent(new CustomEvent('delete-dialog', {
+                    detail: url
+                }));
+            }
+        }
     </script>
+
+    <!-- Modal de suppression -->
+    <x-modals.delete-dialog message="" />
 </x-app-layout>
