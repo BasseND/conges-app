@@ -89,7 +89,7 @@ class ProductionSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => User::ROLE_MANAGER,
                 'department_id' => $hrDept->id,
-                'employee_id' => 'HR002',
+                'employee_id' => 'HR003',
                 'email_verified_at' => now(),
             ]
         );
