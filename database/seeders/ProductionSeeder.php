@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Team;
 use App\Models\Leave;
 use App\Models\SpecialLeaveType;
+use App\Models\AttestationType;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +16,10 @@ class ProductionSeeder extends Seeder
 {
     public function run(): void
     {
+        // Types d'attestation
+        $this->command->info('Création des types d\'attestation...');
+        $this->call(AttestationTypeSeeder::class);
+        
         // Départements
         $this->command->info('Création des départements...');
         
