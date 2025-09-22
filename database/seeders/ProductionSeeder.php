@@ -52,7 +52,7 @@ class ProductionSeeder extends Seeder
         // Créer les managers d'abord
         $this->command->info('Création des utilisateurs...');
         
-        $webManager = User::firstOrCreate(
+        $webManager = User::updateOrCreate(
             ['email' => 'web.manager@example.com'],
             [
                 'first_name' => 'Web Team Manager',
@@ -66,7 +66,7 @@ class ProductionSeeder extends Seeder
             ]
         );
 
-        $infraManager = User::firstOrCreate(
+        $infraManager = User::updateOrCreate(
             ['email' => 'infra.manager@example.com'],
             [
                 'first_name' => 'Infrastructure Manager',
@@ -80,7 +80,7 @@ class ProductionSeeder extends Seeder
             ]
         );
 
-        $hrTeamManager = User::firstOrCreate(
+        $hrTeamManager = User::updateOrCreate(
             ['email' => 'hr.manager@example.com'],
             [
                 'first_name' => 'HR Team Manager',
@@ -94,7 +94,7 @@ class ProductionSeeder extends Seeder
             ]
         );
 
-        $financeManager = User::firstOrCreate(
+        $financeManager = User::updateOrCreate(
             ['email' => 'finance.manager@example.com'],
             [
                 'first_name' => 'Finance Manager',
@@ -134,7 +134,7 @@ class ProductionSeeder extends Seeder
         ]);
 
         // Admin utilisateur
-        $admin = User::firstOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'first_name' => 'Admin',
@@ -150,7 +150,7 @@ class ProductionSeeder extends Seeder
         );
 
         // HR Manager
-        $hrManager = User::firstOrCreate(
+        $hrManager = User::updateOrCreate(
             ['email' => 'hr@example.com'],
             [
                 'first_name' => 'HR',
@@ -166,7 +166,7 @@ class ProductionSeeder extends Seeder
         );
 
         // Chef de département IT
-        $itHead = User::firstOrCreate(
+        $itHead = User::updateOrCreate(
             ['email' => 'it.head@example.com'],
             [
                 'first_name' => 'IT Department Head',
@@ -182,7 +182,7 @@ class ProductionSeeder extends Seeder
         );
 
         // Employés
-        $employee1 = User::firstOrCreate(
+        $employee1 = User::updateOrCreate(
             ['email' => 'john@example.com'],
             [
                 'first_name' => 'John',
@@ -197,7 +197,7 @@ class ProductionSeeder extends Seeder
             ]
         );
 
-        $employee2 = User::firstOrCreate(
+        $employee2 = User::updateOrCreate(
             ['email' => 'jane@example.com'],
             [
                 'first_name' => 'Jane',
