@@ -136,7 +136,7 @@
         <div class="company-info">
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    @if($logo_entreprise)
+                    @if($logo_entreprise && file_exists(storage_path('app/public/' . $logo_entreprise)))
                         <td class="company-logo" style="width: 150px; vertical-align: top; padding-right: 15px;">
                             <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $logo_entreprise))) }}" alt="Logo {{ $entreprise }}" style="max-height: 60px; max-width: 150px; display: block;">
                         </td>
@@ -243,7 +243,7 @@
                     <!-- Espace pour signature employé si nécessaire -->
                 </td>
                 <td style="width: 50%; text-align: center; vertical-align: top;">
-                    @if($signature_drh ?? false)
+                    @if(isset($signature_drh) && $signature_drh && file_exists(storage_path('app/public/' . $signature_drh)))
                         <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $signature_drh))) }}" alt="Signature DRH" style="max-height: 100px; margin-bottom: 10px;">
                     @endif
                     <div style="border-top: 1px solid #000; width: 200px; margin: 0 auto 5px;"></div>
