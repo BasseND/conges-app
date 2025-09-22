@@ -93,6 +93,18 @@ Route::middleware('guest')->group(function () {
 
 // Routes protégées par l'authentification
 Route::middleware('auth')->group(function () {
+    // Vérification d'email
+    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
+                ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+                ->middleware(['signed', 'throttle:6,1'])
+                ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+                ->middleware('throttle:6,1')
+                ->name('verification.send');
+
     // Mot de passe et déconnexion
     Route::get('confirmable-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirmable');
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
