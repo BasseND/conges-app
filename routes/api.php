@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route de healthcheck pour Railway
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'service' => 'vaccancy-app'
+    ]);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
