@@ -181,7 +181,7 @@
                              </div>
 
                              <div class="space-y-2">
-                                 <x-input-label for="birth_date" :value="__('Date de naissance')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                 <x-input-label for="birth_date" :value="__('Date de naissance *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                  <div class="relative">
                                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@
                              </div>
 
                              <div class="space-y-2 md:col-span-2">
-                                 <x-input-label for="address" :value="__('Adresse')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                 <x-input-label for="address" :value="__('Adresse *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                  <div class="relative">
                                      <div class="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
                                          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -280,7 +280,7 @@
                                  
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                      <div class="space-y-2">
-                                         <x-input-label for="marital_status" :value="__('État civil')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-input-label for="marital_status" :value="__('État civil *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                          <select id="marital_status" name="marital_status" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                              <option value="">Sélectionner un état civil</option>
                                              @foreach(App\Models\User::getMaritalStatusOptions() as $value => $label)
@@ -310,7 +310,7 @@
                                      </div>
 
                                      <div class="space-y-2">
-                                         <x-input-label for="matricule" :value="__('Matricule')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-input-label for="matricule" :value="__('Matricule *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                          <input id="matricule" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="text" name="matricule" value="{{ old('matricule', $user->matricule) }}" placeholder="Matricule unique" />
                                          <x-input-error :messages="$errors->get('matricule')" class="mt-2" />
                                      </div>
@@ -324,7 +324,7 @@
                                      </div>
 
                                      <div class="space-y-2">
-                                         <x-input-label for="category" :value="__('Catégorie')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-input-label for="category" :value="__('Catégorie *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                          <select id="category" name="category" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                              <option value="">Sélectionner une catégorie</option>
                                              @foreach(App\Models\User::getCategoryOptions() as $value => $label)
@@ -479,7 +479,7 @@
 
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                      <div class="space-y-2">
-                                         <x-input-label for="entry_date" :value="__('Date d\'entrée du salarié')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
+                                         <x-input-label for="entry_date" :value="__('Date d\'entrée du salarié *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                          <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date)" />
                                          <x-input-error :messages="$errors->get('entry_date')" class="mt-2" />
                                      </div>

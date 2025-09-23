@@ -20,6 +20,13 @@ class ProfileUpdateRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            // Champs obligatoires
+            'birth_date' => ['required', 'date', 'before:today'],
+            'address' => ['required', 'string', 'max:500'],
+            'marital_status' => ['required', 'in:marié,célibataire,veuf'],
+            'matricule' => ['required', 'string', 'max:50', Rule::unique(User::class)->ignore($this->user()->id)],
+            'category' => ['required', 'in:cadre,agent_de_maitrise,employe,ouvrier'],
+            'entry_date' => ['required', 'date'],
         ];
     }
 }

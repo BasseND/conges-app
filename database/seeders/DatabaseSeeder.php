@@ -25,12 +25,14 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('production')) {
             $this->call([
                 ProductionSeeder::class,
-                PayrollSettingsSeeder::class,
+                //PayrollSettingsSeeder::class,
             ]);
         } else {
+            // Environnement de développement (local, testing, etc.)
             $this->call([
-                TestDataSeeder::class,
+                ProductionSeeder::class,
                 PayrollSettingsSeeder::class,
+                AttestationTypeSeeder::class,
             ]);
         }
     }

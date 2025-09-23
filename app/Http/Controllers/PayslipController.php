@@ -36,7 +36,7 @@ class PayslipController extends Controller
         
         $payslips = $query->orderBy('period_year', 'desc')
                          ->orderBy('period_month', 'desc')
-                         ->paginate(10);
+                         ->paginate(20);
         
         // Récupération des années et mois disponibles pour les filtres
         $years = Payslip::where('user_id', Auth::id())

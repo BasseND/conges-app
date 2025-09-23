@@ -26,14 +26,21 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
                 'Informatique',
                 'password123',
                 'non',
+                '1990-05-15',
+                '123 Rue de la Paix, Paris',
                 'marié',
-                'fonctionnaire',
                 '2',
+                'fonctionnaire',
                 'MAT001',
                 'Direction Générale',
                 'cadre',
                 'Section IT',
-                'Service Développement'
+                'Service Développement',
+                '2020-01-15',
+                '',
+                'Pierre Dupont',
+                '0123456788',
+                'Frère'
             ],
             [
                 'Marie',
@@ -46,14 +53,21 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
                 'Marketing',
                 'password123',
                 'oui',
+                '1985-12-03',
+                '456 Avenue des Champs, Lyon',
                 'célibataire',
-                'contractuel_cdi',
                 '0',
+                'contractuel_cdi',
                 'MAT002',
                 'Direction Marketing',
                 'agent_de_maitrise',
                 'Section Communication',
-                'Service Digital'
+                'Service Digital',
+                '2019-03-01',
+                '',
+                'Sophie Martin',
+                '0987654320',
+                'Mère'
             ]
         ];
     }
@@ -71,14 +85,21 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
             'departement',
             'mot_de_passe',
             'prestataire',
+            'date_naissance',
+            'adresse',
             'etat_civil',
-            'statut_professionnel',
             'nombre_enfants',
+            'statut_professionnel',
             'matricule',
             'affectation',
             'categorie',
             'section',
-            'service'
+            'service',
+            'date_entree',
+            'date_sortie',
+            'contact_urgence_nom',
+            'contact_urgence_telephone',
+            'contact_urgence_relation'
         ];
     }
 
@@ -119,14 +140,21 @@ class UsersTemplateExport implements FromArray, WithHeadings, WithStyles, WithCo
             'H' => 20, // departement
             'I' => 15, // mot_de_passe
             'J' => 12, // prestataire
-            'K' => 15, // etat_civil
-            'L' => 20, // statut_professionnel
-            'M' => 12, // nombre_enfants
-            'N' => 12, // matricule
-            'O' => 20, // affectation
-            'P' => 15, // categorie
-            'Q' => 15, // section
-            'R' => 20, // service
+            'K' => 15, // date_naissance
+            'L' => 30, // adresse
+            'M' => 15, // etat_civil
+            'N' => 12, // nombre_enfants
+            'O' => 20, // statut_professionnel
+            'P' => 12, // matricule
+            'Q' => 20, // affectation
+            'R' => 15, // categorie
+            'S' => 15, // section
+            'T' => 20, // service
+            'U' => 15, // date_entree
+            'V' => 15, // date_sortie
+            'W' => 20, // contact_urgence_nom
+            'X' => 18, // contact_urgence_telephone
+            'Y' => 15, // contact_urgence_relation
         ];
     }
 }

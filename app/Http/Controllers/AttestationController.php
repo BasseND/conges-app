@@ -32,7 +32,7 @@ class AttestationController extends Controller
             $query->where('attestation_type_id', $request->type);
         }
 
-        $requests = $query->paginate(10);
+        $requests = $query->paginate(20);
         
         $attestationTypes = AttestationType::active()->get();
 

@@ -28,6 +28,9 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_DEPARTMENT_HEAD = 'department_head';
     const ROLE_EMPLOYEE = 'employee';
     const ROLE_HR = 'hr';
+    const ROLE_HR_ADMIN = 'hr_admin';
+    const ROLE_LEAVE_VALIDATOR = 'leave_validator';
+    const ROLE_ATTESTATION_SIGNATORY = 'attestation_signatory';
     const ROLE_MANAGER = 'manager';
 
     // Constantes pour l'état civil

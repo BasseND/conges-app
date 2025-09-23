@@ -66,5 +66,13 @@ class Company extends Model
         return $this->hasMany(SpecialLeaveType::class);
     }
 
+    /**
+     * Get the contract types for the company.
+     */
+    public function contractTypes(): HasMany
+    {
+        return $this->hasMany(ContractType::class);
+    }
+
     // Relations LeaveBalance supprimées - remplacées par SpecialLeaveType
 }

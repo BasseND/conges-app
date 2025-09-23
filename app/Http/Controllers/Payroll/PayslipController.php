@@ -18,7 +18,7 @@ class PayslipController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $payslips = $user->payslips()->orderBy('period_end', 'desc')->paginate(10);
+        $payslips = $user->payslips()->orderBy('period_end', 'desc')->paginate(20);
         
         return view('payroll.payslips.index', compact('payslips'));
     }

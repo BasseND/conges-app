@@ -22,7 +22,7 @@ class SalaryAdvanceController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $salaryAdvances = $user->salaryAdvances()->orderBy('created_at', 'desc')->paginate(10);
+        $salaryAdvances = $user->salaryAdvances()->orderBy('created_at', 'desc')->paginate(20);
         
         return view('salary-advances.index', compact('salaryAdvances'));
     }

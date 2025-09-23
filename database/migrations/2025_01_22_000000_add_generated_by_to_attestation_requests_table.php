@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('attestation_requests', function (Blueprint $table) {
-            // Vérifier si la colonne n'existe pas déjà
-            if (!Schema::hasColumn('attestation_requests', 'generated_by')) {
-                $table->unsignedBigInteger('generated_by')->nullable()->after('processed_by');
-                $table->foreign('generated_by')->references('id')->on('users')->onDelete('set null');
-            }
-        });
+        // Vérifier si la table existe avant de la modifier
+        if (Schema::hasTable('attestation_requests')) {
+            Schema::table('attestation_requests', function (Blueprint $table) {
+                // Vérifier si la colonne n'existe pas déjà
+                if (!Schema::hasColumn('attestation_requests', 'generated_by')) {
+                    $table->unsignedBigInteger('generated_by')->nullable()->after('processed_by');
+                    $table->foreign('generated_by')->references('id')->on('users')->onDelete('set null');
+                }
+            });
+        }
     }
 
     /**
@@ -25,11 +28,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('attestation_requests', function (Blueprint $table) {
-            if (Schema::hasColumn('attestation_requests', 'generated_by')) {
-                $table->dropForeign(['generated_by']);
-                $table->dropColumn('generated_by');
-            }
-        });
+        // Vérifier si la table existe avant de la modifier
+        if (Schema::hasTable('attestation_requests')) {
+            Schema::table('attestation_requests', function (Blueprint $table) {
+                if (Schema::hasColumn('attestation_requests', 'generated_by')) {
+                    $table->dropForeign(['generated_by']);
+                    $table->dropColumn('generated_by');
+                }
+            });
+        }
     }
 };

@@ -60,15 +60,24 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'departement' => 'required|string',
             'mot_de_passe' => 'nullable|string|min:8',
             'prestataire' => 'nullable|in:oui,non,yes,no,1,0',
-            // Nouveaux champs
-            'etat_civil' => 'nullable|in:marié,célibataire,veuf,marie,celibataire',
-            'statut_professionnel' => 'nullable|in:fonctionnaire,contractuel_cdi,contractuel_cdd,contractuel,cdi,cdd',
+            // Champs personnels obligatoires
+            'date_naissance' => 'required|date|before:today',
+            'adresse' => 'required|string|max:500',
+            'etat_civil' => 'required|in:marié,célibataire,veuf,marie,celibataire',
             'nombre_enfants' => 'nullable|integer|min:0|max:20',
-            'matricule' => 'nullable|string|max:50|unique:users,matricule',
+            // Champs professionnels obligatoires
+            'statut_professionnel' => 'nullable|in:fonctionnaire,contractuel_cdi,contractuel_cdd,contractuel,cdi,cdd',
+            'matricule' => 'required|string|max:50|unique:users,matricule',
             'affectation' => 'nullable|string|max:255',
-            'categorie' => 'nullable|in:cadre,agent_de_maitrise,employe,ouvrier,agent_maitrise,employee',
+            'categorie' => 'required|in:cadre,agent_de_maitrise,employe,ouvrier,agent_maitrise,employee',
             'section' => 'nullable|string|max:255',
-            'service' => 'nullable|string|max:255'
+            'service' => 'nullable|string|max:255',
+            'date_entree' => 'required|date',
+            'date_sortie' => 'nullable|date|after_or_equal:date_entree',
+            // Contacts d'urgence
+            'contact_urgence_nom' => 'nullable|string|max:255',
+            'contact_urgence_telephone' => 'nullable|string|max:20',
+            'contact_urgence_relation' => 'nullable|string|max:100'
         ], [
             'prenom.required' => 'Le prénom est obligatoire',
             'nom.required' => 'Le nom est obligatoire',
@@ -82,18 +91,29 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'role.in' => 'Le rôle doit être: employee, manager, admin, hr ou department_head',
             'departement.required' => 'Le département est obligatoire',
             'mot_de_passe.min' => 'Le mot de passe doit contenir au moins 8 caractères',
-            // Messages pour les nouveaux champs
+            // Messages pour les champs personnels
+            'date_naissance.date' => 'La date de naissance doit être une date valide',
+            'date_naissance.before' => 'La date de naissance doit être antérieure à aujourd\'hui',
+            'adresse.max' => 'L\'adresse ne peut pas dépasser 500 caractères',
             'etat_civil.in' => 'L\'état civil doit être: marié, célibataire ou veuf',
-            'statut_professionnel.in' => 'Le statut professionnel doit être: fonctionnaire, contractuel_cdi ou contractuel_cdd',
             'nombre_enfants.integer' => 'Le nombre d\'enfants doit être un nombre entier',
             'nombre_enfants.min' => 'Le nombre d\'enfants ne peut pas être négatif',
             'nombre_enfants.max' => 'Le nombre d\'enfants ne peut pas dépasser 20',
+            // Messages pour les champs professionnels
+            'statut_professionnel.in' => 'Le statut professionnel doit être: fonctionnaire, contractuel_cdi ou contractuel_cdd',
             'matricule.unique' => 'Ce matricule existe déjà',
             'matricule.max' => 'Le matricule ne peut pas dépasser 50 caractères',
             'categorie.in' => 'La catégorie doit être: cadre, agent_de_maitrise, employe ou ouvrier',
             'affectation.max' => 'L\'affectation ne peut pas dépasser 255 caractères',
             'section.max' => 'La section ne peut pas dépasser 255 caractères',
-            'service.max' => 'Le service ne peut pas dépasser 255 caractères'
+            'service.max' => 'Le service ne peut pas dépasser 255 caractères',
+            'date_entree.date' => 'La date d\'entrée doit être une date valide',
+            'date_sortie.date' => 'La date de sortie doit être une date valide',
+            'date_sortie.after_or_equal' => 'La date de sortie doit être postérieure ou égale à la date d\'entrée',
+            // Messages pour les contacts d'urgence
+            'contact_urgence_nom.max' => 'Le nom du contact d\'urgence ne peut pas dépasser 255 caractères',
+            'contact_urgence_telephone.max' => 'Le téléphone du contact d\'urgence ne peut pas dépasser 20 caractères',
+            'contact_urgence_relation.max' => 'La relation du contact d\'urgence ne peut pas dépasser 100 caractères'
         ]);
 
         if ($validator->fails()) {
@@ -164,6 +184,36 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
         // Assigner le solde de congés du département s'il existe
         if ($department->leave_balance_id) {
             $userData['leave_balance_id'] = $department->leave_balance_id;
+        }
+
+        // Ajouter les dates si présentes
+        if (!empty($row['date_naissance'])) {
+            $userData['birth_date'] = $row['date_naissance'];
+        }
+        
+        if (!empty($row['adresse'])) {
+            $userData['address'] = trim($row['adresse']);
+        }
+        
+        if (!empty($row['date_entree'])) {
+            $userData['entry_date'] = $row['date_entree'];
+        }
+        
+        if (!empty($row['date_sortie'])) {
+            $userData['exit_date'] = $row['date_sortie'];
+        }
+        
+        // Ajouter les contacts d'urgence si présents
+        if (!empty($row['contact_urgence_nom'])) {
+            $userData['emergency_contact_name'] = trim($row['contact_urgence_nom']);
+        }
+        
+        if (!empty($row['contact_urgence_telephone'])) {
+            $userData['emergency_contact_phone'] = trim($row['contact_urgence_telephone']);
+        }
+        
+        if (!empty($row['contact_urgence_relation'])) {
+            $userData['emergency_contact_relationship'] = trim($row['contact_urgence_relation']);
         }
 
         $user = User::create($userData);

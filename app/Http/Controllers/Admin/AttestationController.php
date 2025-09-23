@@ -203,7 +203,7 @@ class AttestationController extends Controller
     {
         $attestationTypes = AttestationType::with(['creator', 'updater'])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(20);
 
         return view('admin.attestations.types.index', compact('attestationTypes'));
     }
