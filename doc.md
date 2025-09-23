@@ -30,3 +30,5 @@ https://uxwing.com/finance-icon/
 
 
 php artisan migrate:fresh --seed 
+
+"preDeployCommand": "php artisan migrate --force && php artisan db:seed --class=ProductionSeeder --force",
