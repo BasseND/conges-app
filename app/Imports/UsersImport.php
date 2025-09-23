@@ -24,9 +24,16 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
     protected $errors = [];
     protected $successCount = 0;
     protected $errorCount = 0;
+    protected $departmentCache = [];
+    protected $existingEmails = [];
+    protected $existingMatricules = [];
+    protected $lastEmployeeId = null;
 
     public function collection(Collection $rows)
     {
+        // Initialiser les caches pour optimiser les performances
+        $this->initializeCaches();
+        
         foreach ($rows as $index => $row) {
             try {
                 $this->validateRow($row, $index + 2); // +2 car ligne 1 = headers, index commence à 0
@@ -41,6 +48,26 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
                 $this->errorCount++;
                 Log::error('Erreur import utilisateur ligne ' . ($index + 2) . ': ' . $e->getMessage());
             }
+        }
+    }
+    
+    protected function initializeCaches()
+    {
+        // Cache des départements
+        $this->departmentCache = Department::all()->keyBy('name');
+        
+        // Cache des emails existants
+        $this->existingEmails = User::pluck('email')->flip()->toArray();
+        
+        // Cache des matricules existants
+        $this->existingMatricules = User::pluck('matricule')->flip()->toArray();
+        
+        // Dernier employee_id pour génération optimisée
+        $lastUser = User::orderBy('employee_id', 'desc')->first();
+        if ($lastUser && preg_match('/EMP(\d+)/', $lastUser->employee_id, $matches)) {
+            $this->lastEmployeeId = (int)$matches[1];
+        } else {
+            $this->lastEmployeeId = 0;
         }
     }
 
@@ -129,10 +156,19 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
         // Normaliser le rôle
         $role = $this->normalizeRole($row['role']);
         
-        // Trouver le département
-        $department = Department::where('name', 'like', '%' . trim($row['departement']) . '%')->first();
+        // Trouver le département en utilisant le cache
+        $departmentName = trim($row['departement']);
+        $department = $this->departmentCache->get($departmentName);
+        
         if (!$department) {
-            throw new \Exception('Département "' . $row['departement'] . '" introuvable');
+            // Recherche approximative si pas de correspondance exacte
+            $department = $this->departmentCache->first(function($dept) use ($departmentName) {
+                return stripos($dept->name, $departmentName) !== false;
+            });
+        }
+        
+        if (!$department) {
+            throw new \Exception('Département "' . $departmentName . '" introuvable');
         }
 
         // Vérifier s'il existe déjà un chef pour ce département
@@ -167,7 +203,7 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'position' => trim($row['poste']),
             'role' => $role,
             'department_id' => $department->id,
-            'employee_id' => $this->generateEmployeeId(),
+            'employee_id' => $this->generateOptimizedEmployeeId(),
             'is_prestataire' => $isPrestataire,
             'is_active' => true,
             // Nouveaux champs
@@ -332,15 +368,21 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
         
         return $employeeId;
     }
+    
+    protected function generateOptimizedEmployeeId()
+    {
+        $this->lastEmployeeId++;
+        return 'EMP' . str_pad($this->lastEmployeeId, 4, '0', STR_PAD_LEFT);
+    }
 
     public function batchSize(): int
     {
-        return 100;
+        return 50; // Réduire la taille des lots pour éviter les timeouts
     }
 
     public function chunkSize(): int
     {
-        return 100;
+        return 50; // Réduire la taille des chunks
     }
 
     public function getErrors()

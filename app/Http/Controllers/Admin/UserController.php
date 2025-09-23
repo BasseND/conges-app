@@ -16,6 +16,8 @@ use Illuminate\Validation\Validator;
 use App\Events\UserCreated;
 use App\Events\UserUpdated;
 use App\Imports\UsersImport;
+use App\Jobs\ProcessUsersImport;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -563,8 +565,22 @@ class UserController extends Controller
         ]);
 
         try {
+            $file = $request->file('file');
+            
+            // Vérifier la taille du fichier pour décider du mode de traitement
+            $fileSizeKB = $file->getSize() / 1024;
+            
+            if ($fileSizeKB > 500) { // Si le fichier fait plus de 500KB, traiter en arrière-plan
+                return $this->importInBackground($file);
+            }
+            
+            // Traitement synchrone pour les petits fichiers
+            // Augmenter les limites pour l'import
+            ini_set('max_execution_time', 300); // 5 minutes
+            ini_set('memory_limit', '512M');
+            
             $import = new UsersImport();
-            Excel::import($import, $request->file('file'));
+            Excel::import($import, $file);
 
             $successCount = $import->getSuccessCount();
             $errorCount = $import->getErrorCount();
@@ -583,6 +599,29 @@ class UserController extends Controller
             Log::error('Erreur lors de l\'import d\'utilisateurs: ' . $e->getMessage());
             return redirect()->route('admin.users.import')
                 ->with('error', 'Erreur lors de l\'import: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Traite l'import en arrière-plan pour les gros fichiers
+     */
+    protected function importInBackground($file)
+    {
+        try {
+            // Stocker le fichier temporairement
+            $fileName = 'imports/' . uniqid() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('imports', basename($fileName));
+            
+            // Lancer le job en arrière-plan
+            ProcessUsersImport::dispatch($filePath, auth()->id());
+            
+            return redirect()->route('admin.users.import')
+                ->with('info', 'Votre fichier est volumineux et sera traité en arrière-plan. Vous recevrez une notification une fois l\'import terminé. Consultez les logs pour suivre le progrès.');
+                
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du lancement de l\'import en arrière-plan: ' . $e->getMessage());
+            return redirect()->route('admin.users.import')
+                ->with('error', 'Erreur lors du lancement de l\'import: ' . $e->getMessage());
         }
     }
 
