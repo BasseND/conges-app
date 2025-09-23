@@ -250,6 +250,121 @@
                             </div>
                         </div>
 
+                        {{-- Types de contrats --}}
+                        <div class="mt-8">
+                            <!-- En-tête moderne -->
+                            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
+                                <div class="px-6 py-4">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="bg-gradient-to-r from-blue-500 to-cyan-600 p-3 rounded-xl shadow-lg mr-2">
+                                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                                                    {{ __('Types de Contrats') }}
+                                                </h2>
+                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de contrats personnalisés</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <button type="button" 
+                                                    onclick="openContractTypesModal()"
+                                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 border border-transparent rounded-lg font-medium text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                                </svg>
+                                                Gérer les Types
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Carte principale -->
+                            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-b-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                                <div class="p-8">
+                                    @if(isset($contractTypes) && $contractTypes->count() > 0)
+                                        <!-- Liste des types de contrats -->
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            @foreach($contractTypes as $contractType)
+                                                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700 hover:shadow-lg transition-all duration-200">
+                                                    <div class="flex items-start justify-between">
+                                                        <div class="flex-1">
+                                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                                                                {{ $contractType->name }}
+                                                            </h3>
+                                                            @if($contractType->system_name)
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 font-mono">
+                                                                    Nom système: {{ $contractType->system_name }}
+                                                                </p>
+                                                            @endif
+                                                            @if($contractType->description)
+                                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                                                    {{ $contractType->description }}
+                                                                </p>
+                                                            @endif
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    @if($contractType->is_active)
+                                                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                            Actif
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                            Inactif
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
+                                                                <button onclick="editContractType({{ $contractType->id }}, '{{ addslashes($contractType->name) }}', '{{ addslashes($contractType->system_name ?? '') }}', '{{ addslashes($contractType->description ?? '') }}', {{ $contractType->is_active ? 'true' : 'false' }})" 
+                                                                        class="ml-2 inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-blue-600 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors duration-200">
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                    </svg>
+                                                                    Modifier
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <!-- État vide -->
+                                        <div class="text-center py-12">
+                                            <div class="mx-auto h-24 w-24 text-gray-400 dark:text-gray-500 mb-4">
+                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                                                Aucun type de contrat
+                                            </h3>
+                                            <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                                Commencez par créer vos premiers types de contrats personnalisés.
+                                            </p>
+                                            <button type="button" 
+                                                    onclick="openContractTypesModal()"
+                                                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 border border-transparent rounded-lg font-medium text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                                </svg>
+                                                Créer des Types de Contrats
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Types de congés --}}
                         <div class="mt-8">
                             <!-- En-tête moderne -->
@@ -536,8 +651,383 @@
                 }));
             }
         }
+        
+        // Variables globales pour la gestion des types de contrats
+        let contractTypeIndex = 1;
+        
+        // Fonction pour ouvrir le modal des types de contrats
+        function openContractTypesModal() {
+            document.getElementById('contractTypesModal').classList.remove('hidden');
+            // Reset du formulaire
+            resetContractTypesForm();
+        }
+        
+        // Fonction pour fermer le modal des types de contrats
+        function closeContractTypesModal() {
+            document.getElementById('contractTypesModal').classList.add('hidden');
+        }
+        
+        // Fonction pour réinitialiser le formulaire
+        function resetContractTypesForm() {
+            const container = document.getElementById('contractTypesContainer');
+            // Garder seulement le premier élément
+            const firstItem = container.querySelector('.contract-type-item');
+            container.innerHTML = '';
+            container.appendChild(firstItem.cloneNode(true));
+            
+            // Réinitialiser les valeurs
+            const newItem = container.querySelector('.contract-type-item');
+            newItem.querySelector('input[type="text"]').value = '';
+            newItem.querySelector('textarea').value = '';
+            newItem.querySelector('input[type="checkbox"]').checked = true;
+            newItem.querySelector('.remove-btn').classList.add('hidden');
+            
+            contractTypeIndex = 1;
+            updateContractTypeIndexes();
+        }
+        
+        // Fonction pour ajouter un nouveau type de contrat
+        function addContractType() {
+            const container = document.getElementById('contractTypesContainer');
+            const template = container.querySelector('.contract-type-item');
+            const newItem = template.cloneNode(true);
+            
+            // Mettre à jour le titre
+            newItem.querySelector('h4').textContent = `Type de contrat #${contractTypeIndex + 1}`;
+            
+            // Vider les champs
+            newItem.querySelector('input[type="text"]').value = '';
+            newItem.querySelector('textarea').value = '';
+            newItem.querySelector('input[type="checkbox"]').checked = true;
+            
+            // Afficher le bouton de suppression
+            newItem.querySelector('.remove-btn').classList.remove('hidden');
+            
+            container.appendChild(newItem);
+            contractTypeIndex++;
+            
+            updateContractTypeIndexes();
+            updateRemoveButtons();
+        }
+        
+        // Fonction pour supprimer un type de contrat
+        function removeContractType(button) {
+            const item = button.closest('.contract-type-item');
+            item.remove();
+            updateContractTypeIndexes();
+            updateRemoveButtons();
+        }
+        
+        // Fonction pour mettre à jour les index des champs
+        function updateContractTypeIndexes() {
+            const items = document.querySelectorAll('.contract-type-item');
+            items.forEach((item, index) => {
+                // Mettre à jour le titre
+                item.querySelector('h4').textContent = `Type de contrat #${index + 1}`;
+                
+                // Mettre à jour les noms des champs
+                const nameInput = item.querySelector('input[type="text"]');
+                const descriptionTextarea = item.querySelector('textarea');
+                const activeCheckbox = item.querySelector('input[type="checkbox"]');
+                
+                nameInput.name = `contract_types[${index}][name]`;
+                descriptionTextarea.name = `contract_types[${index}][description]`;
+                activeCheckbox.name = `contract_types[${index}][is_active]`;
+            });
+        }
+        
+        // Fonction pour mettre à jour la visibilité des boutons de suppression
+        function updateRemoveButtons() {
+            const items = document.querySelectorAll('.contract-type-item');
+            items.forEach((item, index) => {
+                const removeBtn = item.querySelector('.remove-btn');
+                if (items.length === 1) {
+                    removeBtn.classList.add('hidden');
+                } else {
+                    removeBtn.classList.remove('hidden');
+                }
+            });
+        }
+        
+        // Gestion de la soumission du formulaire
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contractTypesForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validation basique
+            const nameInputs = document.querySelectorAll('input[name*="[name]"]');
+            let hasError = false;
+            
+            nameInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('border-red-500');
+                    hasError = true;
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+            
+            if (hasError) {
+                showNotification('Veuillez remplir tous les noms de types de contrats.', 'error');
+                return;
+            }
+            
+            // Soumission via AJAX
+            const formData = new FormData(this);
+            
+            fetch('{{ route("admin.company.contract-types.store") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    closeContractTypesModal();
+                    // Optionnel: recharger seulement la section des types de contrats
+                    // sans recharger toute la page
+                } else {
+                    showNotification(data.message || 'Une erreur est survenue.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Une erreur est survenue lors de l\'enregistrement.', 'error');
+            });
+                });
+            }
+        });
     </script>
+
+    <!-- Modal de gestion des types de contrats -->
+    <div id="contractTypesModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeContractTypesModal()"></div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <form id="contractTypesForm" method="POST">
+                    @csrf
+                    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
+                                    Gérer les Types de Contrats
+                                </h3>
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                        Ajoutez les types de contrats personnalisés pour votre entreprise. Vous pouvez ajouter plusieurs types en une seule fois.
+                                    </p>
+                                    
+                                    <!-- Container pour les types de contrats -->
+                                    <div id="contractTypesContainer" class="space-y-4">
+                                        <!-- Premier type de contrat -->
+                                        <div class="contract-type-item bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                                            <div class="flex items-start justify-between mb-3">
+                                                <h4 class="text-sm font-medium text-gray-900 dark:text-white">Type de contrat #1</h4>
+                                                <button type="button" onclick="removeContractType(this)" class="text-red-500 hover:text-red-700 hidden remove-btn">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="grid grid-cols-1 gap-4">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom du type *</label>
+                                                    <input type="text" name="contract_types[0][name]" required 
+                                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" 
+                                                           placeholder="Ex: CDI, CDD, Stage...">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                                                    <textarea name="contract_types[0][description]" rows="2" 
+                                                              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" 
+                                                              placeholder="Description optionnelle du type de contrat"></textarea>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <input type="checkbox" name="contract_types[0][is_active]" value="1" checked 
+                                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                    <label class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Type actif</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Bouton pour ajouter un nouveau type -->
+                                    <div class="mt-4">
+                                        <button type="button" onclick="addContractType()" 
+                                                class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                            </svg>
+                                            Ajouter un type
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit" 
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Enregistrer
+                        </button>
+                        <button type="button" onclick="closeContractTypesModal()" 
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal de suppression -->
     <x-modals.delete-dialog message="" />
+
+    <!-- Modal d'édition d'un type de contrat -->
+    <div id="editContractTypeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Modifier le type de contrat</h3>
+                    <button onclick="closeEditContractTypeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editContractTypeForm">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="editContractTypeId" name="contract_type_id">
+                    
+                    <div class="mb-4">
+                        <label for="editName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nom du type</label>
+                        <input type="text" id="editName" name="name" required
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="editSystemName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nom système</label>
+                        <input type="text" id="editSystemName" name="system_name" readonly
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                               placeholder="Généré automatiquement">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Le nom système ne peut pas être modifié après création</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="editDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                        <textarea id="editDescription" name="description" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="editIsActive" name="is_active" value="1"
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="editIsActive" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Type actif</label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeEditContractTypeModal()"
+                                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+                            Annuler
+                        </button>
+                        <button type="submit"
+                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Mettre à jour
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Fonction pour ouvrir le modal d'édition
+    function editContractType(id, name, systemName, description, isActive) {
+        document.getElementById('editContractTypeId').value = id;
+        document.getElementById('editName').value = name;
+        document.getElementById('editSystemName').value = systemName || '';
+        document.getElementById('editDescription').value = description || '';
+        document.getElementById('editIsActive').checked = isActive;
+        
+        document.getElementById('editContractTypeModal').classList.remove('hidden');
+    }
+
+    // Fonction pour fermer le modal d'édition
+    function closeEditContractTypeModal() {
+        document.getElementById('editContractTypeModal').classList.add('hidden');
+    }
+
+    // Gestion de la soumission du formulaire d'édition
+    document.addEventListener('DOMContentLoaded', function() {
+        const editForm = document.getElementById('editContractTypeForm');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const contractTypeId = document.getElementById('editContractTypeId').value;
+                const formData = new FormData(this);
+                
+                // Convertir FormData en objet JSON
+                 const data = {};
+                 formData.forEach((value, key) => {
+                     if (key !== '_token' && key !== '_method' && key !== 'contract_type_id' && key !== 'system_name') {
+                         data[key] = value;
+                     }
+                 });
+                
+                // Gérer la checkbox is_active
+                data.is_active = document.getElementById('editIsActive').checked;
+                
+                fetch(`/admin/company/contract-types/${contractTypeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message, 'success');
+                        closeEditContractTypeModal();
+                        // Recharger la page pour afficher les modifications
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showNotification(data.message || 'Une erreur est survenue', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Une erreur est survenue lors de la mise à jour', 'error');
+                });
+            });
+        }
+    });
+    </script>
 </x-app-layout>

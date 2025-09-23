@@ -84,18 +84,6 @@
                         </h2>
                     </div>
                     
-                    <div class="bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg p-4 border border-green-200 dark:border-green-700 mb-6">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <h4 class="text-sm font-semibold text-green-800 dark:text-green-200">Nouveauté - Champs étendus</h4>
-                        </div>
-                        <p class="text-sm text-green-700 dark:text-green-300">
-                            La fonctionnalité d'import a été mise à jour pour inclure de nouveaux champs : état civil, statut professionnel, nombre d'enfants, matricule, affectation, catégorie, section et service. Ces champs sont optionnels et permettent une gestion plus complète des profils utilisateurs.
-                        </p>
-                    </div>
-
                     <div class="space-y-6">
                         <div class="group/step flex items-start space-x-4 p-4 rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all duration-300">
                             <div class="relative">
@@ -203,6 +191,14 @@
                                                 <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
                                                 <span><strong>prestataire</strong> : oui/non (défaut: non)</span>
                                             </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>date_naissance</strong> : Date de naissance (YYYY-MM-DD)</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>adresse</strong> : Adresse complète</span>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -216,6 +212,18 @@
                                             <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
                                                 <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
                                                 <span><strong>nombre_enfants</strong> : Nombre d'enfants (0-20)</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>contact_urgence_nom</strong> : Nom du contact d'urgence</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>contact_urgence_telephone</strong> : Téléphone du contact</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>contact_urgence_relation</strong> : Relation (père/mère/frère/etc.)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -246,6 +254,14 @@
                                             <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
                                                 <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
                                                 <span><strong>service</strong> : Service de travail</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>date_entree</strong> : Date d'entrée (YYYY-MM-DD)</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                <span><strong>date_sortie</strong> : Date de sortie (YYYY-MM-DD)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -332,6 +348,74 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Pré-requis avant l'importation -->
+        <div class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 backdrop-blur-xl rounded-2xl shadow-xl border border-amber-200/50 dark:border-amber-700/50">
+            <div class="px-8 py-8">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="p-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-amber-700 dark:text-amber-400">
+                        Pré-requis avant l'importation
+                    </h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <p class="text-amber-800 dark:text-amber-300 text-lg font-medium mb-6">
+                        Avant de procéder à l'importation des utilisateurs, assurez-vous d'avoir complété les étapes suivantes :
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-amber-200/30 dark:border-amber-700/30">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                1
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-300 mb-2">
+                                    Remplir les informations de la société
+                                </h3>
+                                <p class="text-amber-700 dark:text-amber-400">
+                                    Configurez les informations de base de votre entreprise dans les paramètres système avant d'importer les utilisateurs.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-amber-200/30 dark:border-amber-700/30">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                2
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-300 mb-2">
+                                    Créer les entités (départements)
+                                </h3>
+                                <p class="text-amber-700 dark:text-amber-400">
+                                    Créez tous les départements nécessaires dans la section "Départements" avant d'importer les utilisateurs pour éviter les erreurs de référence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-amber-100/50 dark:bg-amber-900/30 rounded-xl border border-amber-300/50 dark:border-amber-600/50">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                            <span class="text-amber-700 dark:text-amber-300 font-medium">
+                                Important :
+                            </span>
+                        </div>
+                        <p class="text-amber-700 dark:text-amber-400 mt-2">
+                            Le non-respect de ces pré-requis peut entraîner des erreurs lors de l'importation et nécessiter une correction manuelle des données.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
         <!-- Erreurs d'import modernes -->
         @if(session('import_errors'))

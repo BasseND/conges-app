@@ -329,6 +329,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('company', [CompanyController::class, 'update'])->name('company.update');
         Route::delete('company/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');
         
+        // Gestion des types de contrats
+        Route::post('company/contract-types', [CompanyController::class, 'storeContractTypes'])->name('company.contract-types.store');
+        Route::put('company/contract-types/{contractType}', [CompanyController::class, 'updateContractType'])->name('company.contract-types.update');
+        
         // Routes pour les soldes de congés de la société
         // Routes supprimées - LeaveBalance remplacé par SpecialLeaveType
         

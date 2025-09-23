@@ -34,6 +34,11 @@ class UserController extends Controller
             });
         }
 
+        // Recherche par matricule
+        if ($request->filled('matricule')) {
+            $query->where('matricule', 'like', "%{$request->matricule}%");
+        }
+
         // Filtre par rôle
         if ($request->filled('role')) {
             $query->where('role', $request->role);
@@ -49,7 +54,7 @@ class UserController extends Controller
         $sortDirection = $request->input('direction', 'asc');
         $query->orderBy($sortField, $sortDirection);
 
-        $users = $query->paginate(10)->appends(request()->query());
+        $users = $query->paginate(20)->appends(request()->query());
         $departments = Department::all();
 
         return view('admin.users.index', compact('users', 'departments'));
@@ -73,8 +78,8 @@ class UserController extends Controller
                 'gender' => 'required|in:M,F',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'nullable|string|max:20',
-                'birth_date' => 'nullable|date|before:today',
-                'address' => 'nullable|string|max:500',
+                'birth_date' => 'required|date|before:today',
+                'address' => 'required|string|max:500',
                 'password' => 'required|string|min:8|confirmed',
                 'position' => 'required|string|max:255',
                 'role' => ['required', Rule::in([
@@ -88,16 +93,16 @@ class UserController extends Controller
                 'team_id' => 'nullable|exists:teams,id',
                 'leave_balance_id' => 'nullable|exists:leave_balances,id',
                 'is_prestataire' => 'nullable',
-                // Nouveaux champs
-                'marital_status' => ['nullable', Rule::in(array_keys(User::getMaritalStatusOptions()))],
+                // Nouveaux champs obligatoires
+                'marital_status' => ['required', Rule::in(array_keys(User::getMaritalStatusOptions()))],
                 'employment_status' => ['nullable', Rule::in(array_keys(User::getEmploymentStatusOptions()))],
                 'children_count' => 'nullable|integer|min:0|max:20',
-                'matricule' => 'nullable|string|max:50|unique:users,matricule',
+                'matricule' => 'required|string|max:50|unique:users,matricule',
                 'affectation' => 'nullable|string|max:255',
-                'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
+                'category' => ['required', Rule::in(array_keys(User::getCategoryOptions()))],
                 'section' => 'nullable|string|max:255',
                 'service' => 'nullable|string|max:255',
-                'entry_date' => 'nullable|date',
+                'entry_date' => 'required|date',
                 'exit_date' => 'nullable|date|after_or_equal:entry_date'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
@@ -117,8 +122,14 @@ class UserController extends Controller
                 'department_id.exists' => 'Le département sélectionné n\'existe pas.',
                 'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
                 'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
-                // Messages pour les nouveaux champs
+                'birth_date.required' => 'La date de naissance est obligatoire.',
+                'address.required' => 'L\'adresse est obligatoire.',
+                // Messages pour les nouveaux champs obligatoires
+                'marital_status.required' => 'L\'état civil est obligatoire.',
                 'marital_status.in' => 'L\'état civil sélectionné n\'est pas valide.',
+                'matricule.required' => 'Le matricule est obligatoire.',
+                'category.required' => 'La catégorie est obligatoire.',
+                'entry_date.required' => 'La date d\'entrée est obligatoire.',
                 'employment_status.in' => 'Le statut professionnel sélectionné n\'est pas valide.',
                 'children_count.integer' => 'Le nombre d\'enfants doit être un nombre entier.',
                 'children_count.min' => 'Le nombre d\'enfants ne peut pas être négatif.',
@@ -280,9 +291,13 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-
         $departments = Department::all();
         $teams = Team::all();
+        
+        // Récupérer les types de contrats depuis la base de données
+        $company = \App\Models\Company::first();
+        $contractTypes = $company ? $company->contractTypes()->active()->orderBy('name')->get() : collect();
+        
         // Charger les relations nécessaires
         $user->load([
             'department', 
@@ -294,7 +309,7 @@ class UserController extends Controller
             }
         ]);
 
-        return view('admin.users.show', compact('user', 'departments', 'teams'));
+        return view('admin.users.show', compact('user', 'departments', 'teams', 'contractTypes'));
     }
 
     public function update(Request $request, User $user)
@@ -305,8 +320,8 @@ class UserController extends Controller
             'gender' => 'required|in:M,F',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
-                'birth_date' => 'nullable|date|before:today',
-                'address' => 'nullable|string|max:500',
+                'birth_date' => 'required|date|before:today',
+                'address' => 'required|string|max:500',
                 'password' => 'nullable|string|min:8|confirmed',
             'position' => 'required|string|max:255',
             'role' => ['required', Rule::in([
@@ -323,16 +338,16 @@ class UserController extends Controller
             'paternity_leave_days' => 'nullable|integer|min:0',
             'special_leave_days' => 'nullable|integer|min:0',
             'is_prestataire' => 'nullable',
-            // Nouveaux champs
-            'marital_status' => ['nullable', Rule::in(array_keys(User::getMaritalStatusOptions()))],
+            // Nouveaux champs obligatoires
+            'marital_status' => ['required', Rule::in(array_keys(User::getMaritalStatusOptions()))],
             'employment_status' => ['nullable', Rule::in(array_keys(User::getEmploymentStatusOptions()))],
             'children_count' => 'nullable|integer|min:0|max:20',
-            'matricule' => ['nullable', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'matricule' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
             'affectation' => 'nullable|string|max:255',
-            'category' => ['nullable', Rule::in(array_keys(User::getCategoryOptions()))],
+            'category' => ['required', Rule::in(array_keys(User::getCategoryOptions()))],
             'section' => 'nullable|string|max:255',
             'service' => 'nullable|string|max:255',
-            'entry_date' => 'nullable|date',
+            'entry_date' => 'required|date',
             'exit_date' => 'nullable|date|after_or_equal:entry_date'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
@@ -349,8 +364,14 @@ class UserController extends Controller
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
             'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
             'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
-            // Messages pour les nouveaux champs
+            'birth_date.required' => 'La date de naissance est obligatoire.',
+            'address.required' => 'L\'adresse est obligatoire.',
+            // Messages pour les nouveaux champs obligatoires
+            'marital_status.required' => 'L\'état civil est obligatoire.',
             'marital_status.in' => 'Le statut matrimonial sélectionné n\'est pas valide.',
+            'matricule.required' => 'Le matricule est obligatoire.',
+            'category.required' => 'La catégorie est obligatoire.',
+            'entry_date.required' => 'La date d\'entrée est obligatoire.',
             'employment_status.in' => 'Le statut professionnel sélectionné n\'est pas valide.',
             'children_count.integer' => 'Le nombre d\'enfants doit être un nombre entier.',
             'children_count.min' => 'Le nombre d\'enfants ne peut pas être négatif.',

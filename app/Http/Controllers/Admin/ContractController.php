@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Models\ContractType;
 use App\Models\User;
 use App\Models\Company;
 use App\Services\NotificationService;
@@ -20,13 +21,16 @@ class ContractController extends Controller
     {
         $contracts = Contract::with(['user'])
             ->orderBy('date_fin', 'asc')
-            ->paginate(10);
+            ->paginate(20);
 
         // Récupérer la devise de l'entreprise
         $company = Company::first();
         $globalCompanyCurrency = $company ? $company->currency : '€';
+        
+        // Récupérer les types de contrats depuis la base de données
+        $contractTypes = $company ? $company->contractTypes()->active()->orderBy('name')->get() : collect();
 
-        return view('admin.contracts.index', compact('contracts', 'globalCompanyCurrency'));
+        return view('admin.contracts.index', compact('contracts', 'globalCompanyCurrency', 'contractTypes'));
     }
 
     /**

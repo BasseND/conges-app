@@ -27,3 +27,6 @@ type storage\logs\laravel.log | Select-Object -Last 100
 
 
 https://uxwing.com/finance-icon/
+
+
+php artisan migrate:fresh --seed 

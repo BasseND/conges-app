@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\ContractType;
 use App\Models\SpecialLeaveType;
 // LeaveBalance supprimé - remplacé par SpecialLeaveType
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -20,8 +22,9 @@ class CompanyController extends Controller
     {
         $company = Company::first();
         $specialLeaveTypes = SpecialLeaveType::orderBy('name')->get();
+        $contractTypes = $company ? $company->contractTypes()->orderBy('name')->get() : collect();
         // LeaveBalances supprimé - remplacé par SpecialLeaveType
-        return view('admin.company.show', compact('company', 'specialLeaveTypes'));
+        return view('admin.company.show', compact('company', 'specialLeaveTypes', 'contractTypes'));
     }
 
     /**
@@ -165,6 +168,167 @@ class CompanyController extends Controller
 
         return redirect()->route('admin.company.show')
             ->with('success', 'Les informations de la société ont été créées avec succès.');
+    }
+
+    /**
+     * Stocker les types de contrats pour la société
+     */
+    public function storeContractTypes(Request $request)
+    {
+        $company = Company::first();
+        
+        if (!$company) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Aucune société trouvée. Veuillez d\'abord créer les informations de la société.'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'contract_types' => 'required|array|min:1',
+            'contract_types.*.name' => 'required|string|max:255',
+            'contract_types.*.system_name' => 'nullable|string|max:255',
+            'contract_types.*.description' => 'nullable|string|max:1000',
+            'contract_types.*.is_active' => 'boolean',
+        ], [
+            'contract_types.required' => 'Au moins un type de contrat est requis.',
+            'contract_types.*.name.required' => 'Le nom du type de contrat est obligatoire.',
+            'contract_types.*.name.max' => 'Le nom du type de contrat ne peut pas dépasser 255 caractères.',
+            'contract_types.*.system_name.max' => 'Le nom système ne peut pas dépasser 255 caractères.',
+            'contract_types.*.description.max' => 'La description ne peut pas dépasser 1000 caractères.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreurs de validation.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $contractTypesData = $request->input('contract_types');
+            $createdCount = 0;
+
+            foreach ($contractTypesData as $contractTypeData) {
+                $name = trim($contractTypeData['name']);
+                
+                // Vérifier si un type avec le même nom existe déjà pour cette société
+                if (ContractType::nameExists($name, $company->id)) {
+                    continue; // Passer au suivant si le nom existe déjà
+                }
+                
+                // Générer ou utiliser le system_name fourni
+                $systemName = isset($contractTypeData['system_name']) && !empty(trim($contractTypeData['system_name']))
+                    ? trim($contractTypeData['system_name'])
+                    : ContractType::generateSystemName($name, $company->id);
+                
+                // Vérifier l'unicité du system_name
+                if (ContractType::systemNameExists($systemName, $company->id)) {
+                    $systemName = ContractType::generateSystemName($name, $company->id);
+                }
+
+                ContractType::create([
+                    'company_id' => $company->id,
+                    'name' => $name,
+                    'system_name' => $systemName,
+                    'description' => isset($contractTypeData['description']) ? trim($contractTypeData['description']) : null,
+                    'is_active' => isset($contractTypeData['is_active']) ? (bool)$contractTypeData['is_active'] : true,
+                ]);
+                $createdCount++;
+            }
+
+            DB::commit();
+
+            if ($createdCount === 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Aucun nouveau type de contrat n\'a été créé. Tous les types existent déjà.'
+                ]);
+            }
+
+            $message = $createdCount === 1 
+                ? '1 type de contrat a été créé avec succès.' 
+                : "{$createdCount} types de contrats ont été créés avec succès.";
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de l\'enregistrement des types de contrats.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Mettre à jour un type de contrat existant
+     */
+    public function updateContractType(Request $request, ContractType $contractType)
+    {
+        $company = Company::first();
+        
+        if (!$company || $contractType->company_id !== $company->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Type de contrat non trouvé ou non autorisé.'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'is_active' => 'boolean',
+        ], [
+            'name.required' => 'Le nom du type de contrat est obligatoire.',
+            'name.max' => 'Le nom du type de contrat ne peut pas dépasser 255 caractères.',
+            'description.max' => 'La description ne peut pas dépasser 1000 caractères.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreurs de validation.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $name = trim($request->input('name'));
+        
+        // Vérifier l'unicité du nom (exclure l'enregistrement actuel)
+        if (ContractType::nameExists($name, $company->id, $contractType->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Un type de contrat avec ce nom existe déjà.'
+            ], 422);
+        }
+
+        try {
+            $contractType->update([
+                'name' => $name,
+                'description' => $request->input('description'),
+                'is_active' => $request->boolean('is_active', true),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Le type de contrat a été mis à jour avec succès.',
+                'contract_type' => $contractType->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de la mise à jour du type de contrat.'
+            ], 500);
+        }
     }
 
     // Méthodes LeaveBalance supprimées - remplacées par SpecialLeaveType

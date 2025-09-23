@@ -80,16 +80,7 @@ class AttestationTypeSeeder extends Seeder
                 'requires_salary_info' => true,
                 'created_by' => $adminUser->id,
             ],
-            [
-                'name' => 'Attestation de formation',
-                'system_name' => 'attestation_de_formation',
-                'description' => 'Attestation confirmant la participation à une formation professionnelle',
-                'template_file' => 'attestation_formation',
-                'type' => 'custom',
-                'status' => 'active',
-                'requires_date_range' => true,
-                'created_by' => $adminUser->id,
-            ],
+            
             [
                 'name' => 'Attestation de fin de contrat',
                 'system_name' => 'attestation_fin_contrat',

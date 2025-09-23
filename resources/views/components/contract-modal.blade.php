@@ -1,4 +1,4 @@
-@props(['user' => null, 'globalCompanyCurrency' => '€'])
+@props(['user' => null, 'globalCompanyCurrency' => '€', 'contractTypes' => collect()])
 
 <!-- Modal d'ajout/modification de contrat -->
 <div x-data="{ 
@@ -210,11 +210,9 @@
                                 <template x-if="!isEditing">
                                     <select x-model="contractData.type" id="type" name="type" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" required>
                                         <option value="">Sélectionner un type</option>
-                                        <option value="CDI">CDI</option>
-                                        <option value="CDD">CDD</option>
-                                        <option value="Stage">Stage</option>
-                                        <option value="Alternance">Alternance</option>
-                                        <option value="Freelance">Freelance</option>
+                                        @foreach($contractTypes as $contractType)
+                                            <option value="{{ $contractType->name }}">{{ $contractType->name }}</option>
+                                        @endforeach
                                     </select>
                                 </template>
                                 <template x-if="isEditing">

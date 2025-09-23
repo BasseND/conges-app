@@ -36,6 +36,13 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // Champs obligatoires pour la base de données
+            'birth_date' => ['required', 'date', 'before:today'],
+            'address' => ['required', 'string', 'max:500'],
+            'marital_status' => ['required', 'in:marié,célibataire,veuf'],
+            'matricule' => ['required', 'string', 'max:50', 'unique:users,matricule'],
+            'category' => ['required', 'in:cadre,agent_de_maitrise,employe,ouvrier'],
+            'entry_date' => ['required', 'date'],
         ]);
 
         $user = User::create([
@@ -45,6 +52,13 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'employee_id' => 'EMP' . str_pad(User::count() + 1, 4, '0', STR_PAD_LEFT),
+            // Champs obligatoires
+            'birth_date' => $request->birth_date,
+            'address' => $request->address,
+            'marital_status' => $request->marital_status,
+            'matricule' => $request->matricule,
+            'category' => $request->category,
+            'entry_date' => $request->entry_date,
         ]);
 
         Auth::login($user);

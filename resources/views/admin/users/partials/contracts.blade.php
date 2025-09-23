@@ -26,7 +26,7 @@
     </div>
     
     <!-- Modal d'ajout/modification de contrat -->
-    <x-contract-modal :user="$user" :globalCompanyCurrency="$globalCompanyCurrency" />
+    <x-contract-modal :user="$user" :globalCompanyCurrency="$globalCompanyCurrency" :contractTypes="$contractTypes" />
     
 
     <!-- Affichage des contrats existants -->

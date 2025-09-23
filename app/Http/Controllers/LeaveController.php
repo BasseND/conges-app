@@ -28,7 +28,7 @@ class LeaveController extends Controller
         $leaves = Leave::with(['user.department', 'attachments'])
             ->where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(20);
 
         return view('leaves.index', compact('leaves'));
     }
@@ -386,7 +386,7 @@ class LeaveController extends Controller
             $query->where('end_date', '<=', $request->date_to);
         }
 
-        $leaves = $query->latest()->paginate(10);
+        $leaves = $query->latest()->paginate(20);
         
         // Conserver les paramètres de filtrage dans les liens de pagination
         $leaves->appends($request->only(['search', 'status', 'type', 'date_from', 'date_to']));

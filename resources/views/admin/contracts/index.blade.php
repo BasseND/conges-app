@@ -242,12 +242,9 @@
                                             <select x-model="typeFilter" @change="filterContracts()" 
                                                     class="block w-full px-4 py-3 border border-slate-300/60 dark:border-slate-600/60 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm appearance-none cursor-pointer">
                                                 <option value="">📋 Tous les types</option>
-                                                <option value="CDI">🏢 CDI</option>
-                                                <option value="CDD">📅 CDD</option>
-                                                <option value="Interim">⚡ Intérim</option>
-                                                <option value="Stage">🎓 Stage</option>
-                                                <option value="Alternance">🔄 Alternance</option>
-                                                <option value="Freelance">💼 Freelance</option>
+                                                @foreach($contractTypes as $contractType)
+                                                    <option value="{{ $contractType->name }}">{{ $contractType->name }}</option>
+                                                @endforeach
                                             </select>
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                                 <svg class="h-4 w-4 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">

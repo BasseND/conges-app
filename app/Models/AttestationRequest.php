@@ -20,6 +20,7 @@ class AttestationRequest extends Model
     const STATUS_PENDING = 'pending';
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
+    const STATUS_SIGNED = 'signed';
     const STATUS_GENERATED = 'generated';
     const STATUS_DRAFT = 'draft';
     const STATUS_SENT = 'sent';

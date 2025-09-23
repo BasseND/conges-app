@@ -41,14 +41,14 @@ class LeaveApprovalController extends Controller
         $user = Auth::user();
         
         $leaves = $user->isAdmin()
-            ? Leave::pending()->with(['user', 'approver'])->latest()->paginate(10)
+            ? Leave::pending()->with(['user', 'approver'])->latest()->paginate(20)
             : Leave::pending()
                 ->whereHas('user', function($query) use ($user) {
                     $query->where('department_id', $user->department_id);
                 })
                 ->with(['user', 'approver'])
                 ->latest()
-                ->paginate(10);
+                ->paginate(20);
 
         return view('leaves.pending', compact('leaves'));
     }
