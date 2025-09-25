@@ -20,6 +20,16 @@
                                 <p class="text-gray-600 dark:text-gray-400 mt-1">{{ __('Consultez l\'organigramme de l\'organisation') }}</p>
                             </div>
                         </div>
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ route('admin.departments.index') }}" 
+                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                Retour
+                            </a>
+                        </div>
+
                        
                     </div>
                 </div>
@@ -211,7 +221,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 60px;
+        gap: 20px;
         position: relative;
         width: 100%;
     }
@@ -221,7 +231,8 @@
         flex-direction: column;
         align-items: center;
         position: relative;
-        min-width: 200px;
+        min-width: 165px;
+        max-width: 300px;
     }
 
     .team-name {
