@@ -299,7 +299,15 @@
                     </div>
 
                     <!-- Formulaire d'upload -->
-                    <form action="{{ route('admin.users.import') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('admin.users.import') }}" method="POST" enctype="multipart/form-data" class="space-y-6" 
+                          x-data="{ loading: false }" 
+                          @submit="loading = true"
+                          @submit.prevent="
+                            loading = true;
+                            $el.submit();
+                            // Reset loading state after a timeout in case of error
+                            setTimeout(() => { loading = false; }, 30000);
+                          ">
                         @csrf
                         
                         <div>
@@ -337,8 +345,6 @@
                         </div>
 
                         <button type="submit" 
-                                x-data="{ loading: false }"
-                                @click="loading = true"
                                 :disabled="loading"
                                 class="group/submit relative overflow-hidden w-full flex justify-center py-4 px-6 border border-transparent rounded-2xl shadow-lg text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                             <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/submit:translate-x-full transition-transform duration-700"></div>

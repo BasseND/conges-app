@@ -125,6 +125,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Page d'aide
     Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
+    // Route pour l'organigramme des départements (accessible à tous les utilisateurs authentifiés)
+    Route::get('departments/{department}/organigramme', [DepartmentController::class, 'organigramme'])->name('departments.organigramme');
+
     // Routes pour les congés (accessibles à tous les utilisateurs authentifiés)
     Route::get('leaves', [LeaveController::class, 'index'])->name('leaves.index');
     Route::get('leaves/create', [LeaveController::class, 'create'])->name('leaves.create');

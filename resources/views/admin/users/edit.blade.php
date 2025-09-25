@@ -82,6 +82,11 @@
                 <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-8">
                     @csrf
                     @method('PUT')
+                    
+                    <!-- Champ caché pour company_id -->
+                    @if($company && $company->id)
+                        <input type="hidden" name="company_id" value="{{ $company->id }}">
+                    @endif
 
                      <!-- Informations personnelles -->
                      <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 border border-green-200 dark:border-green-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">

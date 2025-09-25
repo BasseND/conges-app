@@ -58,15 +58,17 @@ class UserController extends Controller
 
         $users = $query->paginate(20)->appends(request()->query());
         $departments = Department::all();
+        $company = \App\Models\Company::first();
 
-        return view('admin.users.index', compact('users', 'departments'));
+        return view('admin.users.index', compact('users', 'departments', 'company'));
     }
 
     public function create()
     {
         $departments = Department::all();
         $teams = Team::all();
-        return view('admin.users.create', compact('departments', 'teams'));
+        $company = \App\Models\Company::first();
+        return view('admin.users.create', compact('departments', 'teams', 'company'));
     }
 
     public function store(Request $request)
@@ -92,6 +94,7 @@ class UserController extends Controller
                     User::ROLE_DEPARTMENT_HEAD
                 ])],
                 'department_id' => 'required|exists:departments,id',
+                'company_id' => 'required|exists:companies,id',
                 'team_id' => 'nullable|exists:teams,id',
                 'leave_balance_id' => 'nullable|exists:leave_balances,id',
                 'is_prestataire' => 'nullable',
@@ -122,6 +125,8 @@ class UserController extends Controller
                 'role.in' => 'Le rôle sélectionné n\'est pas valide.',
                 'department_id.required' => 'Le département est obligatoire.',
                 'department_id.exists' => 'Le département sélectionné n\'existe pas.',
+                'company_id.required' => 'L\'entreprise est obligatoire.',
+                'company_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
                 'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.',
                 'leave_balance_id.exists' => 'Le solde de congés sélectionné n\'existe pas.',
                 'birth_date.required' => 'La date de naissance est obligatoire.',
@@ -223,6 +228,7 @@ class UserController extends Controller
                 User::ROLE_DEPARTMENT_HEAD
             ])],
             'department_id' => 'required|exists:departments,id',
+            'company_id' => 'required|exists:companies,id',
             'team_id' => 'nullable|exists:teams,id',
             'is_prestataire' => 'nullable'
         ], [
@@ -241,6 +247,8 @@ class UserController extends Controller
             'role.in' => 'Le rôle sélectionné n\'est pas valide.',
             'department_id.required' => 'Le département est obligatoire.',
             'department_id.exists' => 'Le département sélectionné n\'existe pas.',
+            'company_id.required' => 'L\'entreprise est obligatoire.',
+            'company_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
             'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.'
         ]);
 
@@ -287,8 +295,9 @@ class UserController extends Controller
     {
         $departments = Department::all();
         $teams = Team::all();
+        $company = \App\Models\Company::first();
     
-        return view('admin.users.edit', compact('user', 'departments', 'teams'));
+        return view('admin.users.edit', compact('user', 'departments', 'teams', 'company'));
     }
 
     public function show(User $user)
@@ -586,14 +595,22 @@ class UserController extends Controller
             $errorCount = $import->getErrorCount();
             $errors = $import->getErrors();
 
-            if ($errorCount > 0) {
-                return redirect()->route('admin.users.import')
+            // Toujours afficher un message, même s'il n'y a que des erreurs
+            if ($errorCount > 0 && $successCount > 0) {
+                return redirect()->route('admin.users.index')
                     ->with('warning', "Import terminé avec {$successCount} utilisateurs créés et {$errorCount} erreurs.")
                     ->with('import_errors', $errors);
+            } elseif ($errorCount > 0 && $successCount === 0) {
+                return redirect()->route('admin.users.import')
+                    ->with('error', "Aucun utilisateur n'a pu être importé. {$errorCount} erreurs détectées.")
+                    ->with('import_errors', $errors);
+            } elseif ($successCount > 0) {
+                return redirect()->route('admin.users.index')
+                    ->with('success', "{$successCount} utilisateurs ont été importés avec succès.");
+            } else {
+                return redirect()->route('admin.users.import')
+                    ->with('warning', "Aucun utilisateur n'a été traité. Vérifiez le format de votre fichier.");
             }
-
-            return redirect()->route('admin.users.index')
-                ->with('success', "{$successCount} utilisateurs ont été importés avec succès.");
 
         } catch (\Exception $e) {
             Log::error('Erreur lors de l\'import d\'utilisateurs: ' . $e->getMessage());

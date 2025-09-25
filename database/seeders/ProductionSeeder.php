@@ -16,6 +16,32 @@ class ProductionSeeder extends Seeder
 {
     public function run(): void
     {
+
+        // Société 
+        $this->command->info('Création de la société par défaut...');
+        
+        // Créer une société par défaut si elle n'existe pas
+        if (!\App\Models\Company::exists()) {
+            \App\Models\Company::create([
+                'name' => 'Mon Entreprise',
+                'director_name' => 'Directeur Général',
+                'hr_director_name' => 'Directeur RH',
+                'hr_signature' => null,
+                'logo' => null,
+                'website_url' => 'https://www.monentreprise.com',
+                'address' => '123 Rue de l\'Entreprise',
+                'city' => 'Ville',
+                'country' => 'Sénégal',
+                'postal_code' => '12345',
+                'registration_number' => '12345678901234',
+                'location' => 'Ville, Sénégal',
+                'contact_email' => 'contact@monentreprise.com',
+                'contact_phone' => '+221 523 45 67',
+                'currency' => 'XOF',
+                'salary_advance_deadline_day' => 25
+            ]);
+        }
+        
         // Départements
         $this->command->info('Création des départements...');
         
@@ -49,6 +75,7 @@ class ProductionSeeder extends Seeder
         $this->command->info('Création des utilisateurs...');
 
         // Créer un admin
+        $company = \App\Models\Company::first();
         User::create([
             'first_name' => 'Admin',
             'last_name' => 'Admin',
@@ -63,6 +90,7 @@ class ProductionSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'admin',
             'department_id' => Department::inRandomOrder()->first()->id,
+            'company_id' => $company->id,
             'employee_id' => 'ADM001'
         ]);
 

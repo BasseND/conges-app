@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Department;
 use App\Models\User;
 // use App\Models\LeaveBalance; // Supprimé - remplacé par SpecialLeaveType
@@ -25,18 +26,13 @@ class DepartmentController extends Controller
 
     public function create()
     {
+        $this->authorize('manage-departments');
+        
+        // Récupérer les chefs de département disponibles (non assignés)
         $departmentHeads = User::where('role', User::ROLE_DEPARTMENT_HEAD)
-            ->whereDoesntHave('department', function($query) {
-                $query->where('role', User::ROLE_DEPARTMENT_HEAD);
-            })
+            ->whereDoesntHave('departmentAsHead') // Utiliser la relation pour vérifier qu'ils ne sont pas déjà chef d'un département
             ->get();
-
-        // LeaveBalances supprimé - remplacé par SpecialLeaveType
-        // $leaveBalances = LeaveBalance::where('company_id', auth()->user()->company_id)
-        //     ->orderBy('is_default', 'desc')
-        //     ->orderBy('description')
-        //     ->get();
-
+            
         return view('admin.departments.create', compact('departmentHeads'));
     }
 
@@ -47,8 +43,16 @@ class DepartmentController extends Controller
             'code' => 'required|string|max:10|unique:departments',
             'description' => 'nullable|string|max:1000',
             'head_id' => 'nullable|exists:users,id',
-            'leave_balance_id' => 'nullable|exists:leave_balances,id'
         ]);
+
+        // Récupérer l'entreprise de manière robuste
+        $company = Company::first();
+        if (!$company) {
+            return redirect()->back()
+                ->withErrors(['company_id' => 'Aucune entreprise n\'est configurée dans le système.'])
+                ->withInput();
+        }
+        $validatedData['company_id'] = $company->id;
 
         $department = Department::create($validatedData);
 
@@ -68,7 +72,8 @@ class DepartmentController extends Controller
         $departmentHeads = User::where('role', User::ROLE_DEPARTMENT_HEAD)
             ->where(function($query) use ($department) {
                 $query->whereNull('department_id')
-                    ->orWhere('department_id', $department->id);
+                    ->orWhere('department_id', $department->id)
+                    ->orWhere('id', $department->head_id); // Inclure le chef actuel même s'il est assigné
             })
             ->get();
 
@@ -87,14 +92,34 @@ class DepartmentController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:departments,name,' . $department->id,
+            'code' => 'required|string|max:10|unique:departments,code,' . $department->id,
             'description' => 'nullable|string|max:1000',
             'head_id' => 'nullable|exists:users,id',
-            'leave_balance_id' => 'nullable|exists:leave_balances,id'
         ]);
-
+       
         try {
+            // Récupérer l'ancien chef de département
+            $oldHeadId = $department->head_id;
+            
+            // Mettre à jour le département
             $department->update($validated);
-            return redirect()->route('admin.departments.show', $department)
+            
+            // Gérer les changements de chef de département
+            if ($oldHeadId != $request->head_id) {
+                // Retirer l'ancien chef du département s'il existe
+                if ($oldHeadId) {
+                    User::where('id', $oldHeadId)
+                        ->update(['department_id' => null]);
+                }
+                
+                // Assigner le nouveau chef au département s'il est sélectionné
+                if ($request->filled('head_id')) {
+                    User::where('id', $request->head_id)
+                        ->update(['department_id' => $department->id]);
+                }
+            }
+            
+            return redirect()->route('admin.departments.index')
                 ->with('success', 'Département mis à jour avec succès.');
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur est survenue lors de la mise à jour du département.');
@@ -196,5 +221,80 @@ class DepartmentController extends Controller
         ];
 
         return Excel::download(new DepartmentsTemplateExport(), 'modele_import_departements.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
+    }
+
+    /**
+     * Affiche l'organigramme du département
+     */
+    public function organigramme(Department $department)
+    {
+        // Accessible à tous les utilisateurs authentifiés
+
+        // Charger toutes les relations nécessaires pour l'organigramme
+        $department->load([
+            'head',
+            'teams.manager',
+            'teams.members' => function ($query) {
+                $query->where('is_active', true);
+            },
+            'users' => function ($query) {
+                $query->where('is_active', true);
+            }
+        ]);
+
+        // Préparer les données pour l'organigramme
+        $organigrammeData = [
+            'department' => [
+                'id' => $department->id,
+                'name' => $department->name,
+                'head' => $department->head ? [
+                    'id' => $department->head->id,
+                    'name' => $department->head->first_name . ' ' . $department->head->last_name,
+                    'position' => $department->head->position ?? 'Chef de département',
+                    'email' => $department->head->email,
+                    'avatar' => $department->head->avatar ?? null
+                ] : null
+            ],
+            'teams' => $department->teams->map(function ($team) {
+                return [
+                    'id' => $team->id,
+                    'name' => $team->name,
+                    'manager' => $team->manager ? [
+                        'id' => $team->manager->id,
+                        'name' => $team->manager->first_name . ' ' . $team->manager->last_name,
+                        'position' => $team->manager->position ?? 'Manager',
+                        'email' => $team->manager->email,
+                        'avatar' => $team->manager->avatar ?? null
+                    ] : null,
+                    'members' => $team->members->map(function ($member) {
+                        return [
+                            'id' => $member->id,
+                            'name' => $member->first_name . ' ' . $member->last_name,
+                            'position' => $member->position ?? 'Employé',
+                            'email' => $member->email,
+                            'avatar' => $member->avatar ?? null
+                        ];
+                    })
+                ];
+            }),
+            'unassignedUsers' => $department->users->filter(function ($user) use ($department) {
+                // Utilisateurs qui ne sont ni chef de département ni dans une équipe
+                $isHead = $department->head_id === $user->id;
+                $isInTeam = $department->teams->flatMap->members->contains('id', $user->id);
+                $isManager = $department->teams->contains('manager_id', $user->id);
+                
+                return !$isHead && !$isInTeam && !$isManager;
+            })->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'position' => $user->position ?? 'Employé',
+                    'email' => $user->email,
+                    'avatar' => $user->avatar ?? null
+                ];
+            })->values()
+        ];
+
+        return view('admin.departments.organigramme', compact('department', 'organigrammeData'));
     }
 }

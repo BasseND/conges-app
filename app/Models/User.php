@@ -127,6 +127,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the department that the user heads.
+     */
+    public function departmentAsHead()
+    {
+        return $this->hasOne(Department::class, 'head_id');
+    }
+
+    /**
      * Get the company that the user belongs to.
      */
     public function company()

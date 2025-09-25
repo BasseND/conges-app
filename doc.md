@@ -29,6 +29,10 @@ type storage\logs\laravel.log | Select-Object -Last 100
 https://uxwing.com/finance-icon/
 
 
+// Affiche les logs de la tâche planifiée
+Get-Content storage\logs\laravel.log | Select-Object -Last 50 
+
+
 php artisan migrate:fresh --seed 
 
 "preDeployCommand": "php artisan migrate --force && php artisan db:seed --class=ProductionSeeder --force",

@@ -64,6 +64,11 @@
             <div class="md:bg-white dark:bg-gray-800 rounded-2xl overflow-hidden md:border border-gray-200 dark:border-gray-700">
                 <form method="POST" action="{{ route('admin.users.store') }}" class="md:p-8 space-y-8">
                         @csrf
+                        
+                        <!-- Champ caché pour company_id -->
+                        @if($company && $company->id)
+                            <input type="hidden" name="company_id" value="{{ $company->id }}">
+                        @endif
 
                         <!-- Block erreurs -->
                         <!-- @if ($errors->any())

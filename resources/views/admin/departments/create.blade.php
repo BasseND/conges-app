@@ -89,6 +89,9 @@
                                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
                             </div>
 
+                            <!-- Entreprise (champ caché) -->
+                            <input type="hidden" name="company_id" value="{{ old('company_id', 1) }}" />
+
                             <!-- Chef de département -->
                             <div class="space-y-2">
                                 <label for="head_id" class="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -116,25 +119,7 @@
                             </div>
 
                             <!-- Solde de congés par défaut -->
-                            <div class="space-y-2">
-                                <label for="leave_balance_id" class="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V6a2 2 0 012-2h4a2 2 0 012 2v1m-6 0h8m-8 0H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-2m-8 0V7a2 2 0 012-2h4a2 2 0 012 2v0"/>
-                                    </svg>
-                                    <span>{{ __('Solde de congés par défaut') }}</span>
-                                </label>
-                                {{-- Section LeaveBalance supprimée - remplacée par SpecialLeaveType --}}
-                                <div class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-600">
-                                    <p class="text-gray-600 dark:text-gray-300">Les types de congés sont maintenant gérés via les Types de Congés Spéciaux de l'entreprise.</p>
-                                </div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center space-x-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    <span>Ce solde sera appliqué par défaut à tous les nouveaux utilisateurs de cette entité. Si aucun n'est sélectionné, le solde par défaut de l'entreprise sera utilisé.</span>
-                                </p>
-                                <x-input-error :messages="$errors->get('leave_balance_id')" class="mt-2" />
-                            </div>
+                            
 
                     
 
