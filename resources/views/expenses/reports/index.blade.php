@@ -44,6 +44,20 @@
                         
                         <!-- Filtres modernisés -->
                         <div class="flex flex-wrap gap-4">
+                            <!-- Champ de recherche globale -->
+                            <div class="relative">
+                                <input type="text" 
+                                       name="search" 
+                                       id="search" 
+                                       value="{{ request('search') }}"
+                                       placeholder="Rechercher par nom, email ou matricule..."
+                                       class="bg-white/50 dark:bg-gray-700/50 border border-gray-200/50 dark:border-gray-600/50 rounded-xl px-4 py-3 pl-10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 backdrop-blur-sm transition-all duration-200 min-w-[280px]"/>
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                </div>
+                            </div>
                             <!-- Filtre par statut -->
                             <div class="relative">
                                 <select name="status" 
@@ -92,7 +106,7 @@
                                     </svg>
                                     Filtrer
                                 </button>
-                                @if(request()->hasAny(['status', 'date_from', 'date_to']))
+                                @if(request()->hasAny(['search', 'status', 'date_from', 'date_to']))
                                     <a href="{{ route('expense-reports.index') }}" 
                                        class="inline-flex items-center px-6 py-3 bg-gray-500/80 hover:bg-gray-600/80 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,13 +125,43 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <!-- En-tête du tableau -->
                 <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-b border-gray-200/50 dark:border-gray-600/50">
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2 bg-green-500/10 dark:bg-green-400/10 rounded-lg">
-                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-green-500/10 dark:bg-green-400/10 rounded-lg">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des notes de frais</h3>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des notes de frais</h3>
+                        
+                        <!-- Indicateurs de performance -->
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    Optimisé
+                                </span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ request('per_page', 50) }} par page
+                                </span>
+                                @if(request('search'))
+                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                        Recherche active
+                                    </span>
+                                @endif
+                            </div>
+                            @if($expenseReports->total() > 0)
+                                <div class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ $expenseReports->firstItem() }}-{{ $expenseReports->lastItem() }} sur {{ $expenseReports->total() }} notes de frais
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

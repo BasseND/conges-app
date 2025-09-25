@@ -198,6 +198,28 @@
                             </div>
                         </div>
                     </form>
+                    
+                    <!-- Sélecteur de pagination -->
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <form method="GET" action="{{ route('admin.salary-advances.index') }}" class="flex items-center gap-4">
+                            <!-- Conserver les filtres existants -->
+                            @foreach(request()->except(['per_page', 'page']) as $key => $value)
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endforeach
+                            
+                            <label class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                                Par page :
+                            </label>
+                            <select name="per_page" onchange="this.form.submit()" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
+                                <option value="25" {{ request('per_page', 50) == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ request('per_page', 50) == 50 ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ request('per_page', 50) == 100 ? 'selected' : '' }}>100</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -227,6 +249,33 @@
                             </div>
                         </div>
                     @else
+                        <!-- Indicateurs de performance et informations de pagination -->
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 mb-6 border border-blue-200 dark:border-blue-700">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex items-center space-x-6">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Optimisé</span>
+                                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-semibold rounded-full">
+                                            {{ request('per_page', 50) }} par page
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4"/>
+                                        </svg>
+                                        <span>
+                                            Affichage de {{ $salaryAdvances->firstItem() ?? 0 }} à {{ $salaryAdvances->lastItem() ?? 0 }} 
+                                            sur {{ $salaryAdvances->total() }} avances sur salaire
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    Page {{ $salaryAdvances->currentPage() }} sur {{ $salaryAdvances->lastPage() }}
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Vue Tableau -->
                         <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 overflow-hidden">
                             <div class="overflow-x-auto">

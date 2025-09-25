@@ -24,7 +24,13 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query()->with('department');
+        // Optimisation : Eager loading avec sélection des colonnes nécessaires
+        $query = User::query()
+            ->select([
+                'id', 'first_name', 'last_name', 'email', 'matricule', 
+                'role', 'department_id', 'is_active', 'gender', 'created_at'
+            ])
+            ->with(['department:id,name,code']);
 
         // Recherche par nom ou email
         if ($request->filled('search')) {
@@ -56,9 +62,15 @@ class UserController extends Controller
         $sortDirection = $request->input('direction', 'asc');
         $query->orderBy($sortField, $sortDirection);
 
-        $users = $query->paginate(20)->appends(request()->query());
-        $departments = Department::all();
-        $company = \App\Models\Company::first();
+        // Pagination optimisée : 50 utilisateurs par page au lieu de 20
+        $perPage = $request->input('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+        
+        $users = $query->paginate($perPage)->appends(request()->query());
+        
+        // Optimisation : Charger seulement les départements nécessaires pour les filtres
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
+        $company = \App\Models\Company::select('id', 'name')->first();
 
         return view('admin.users.index', compact('users', 'departments', 'company'));
     }

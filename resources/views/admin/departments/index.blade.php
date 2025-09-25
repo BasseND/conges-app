@@ -42,17 +42,85 @@
             <x-alert type="success" :message="session('success')" />
             <x-alert type="error" :message="session('error')" />
             
+            <!-- Filtres et sélecteur de pagination -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+                <form method="GET" action="{{ route('admin.departments.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Recherche -->
+                        <div>
+                            <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rechercher</label>
+                            <input type="text" 
+                                   id="search" 
+                                   name="search" 
+                                   value="{{ request('search') }}"
+                                   placeholder="Nom, code ou description..."
+                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                        </div>
+                        
+                        <!-- Sélecteur de pagination -->
+                        <div>
+                            <label for="per_page" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Par page</label>
+                            <select name="per_page" 
+                                    id="per_page"
+                                    onchange="this.form.submit()"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ request('per_page', 50) == 50 ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Boutons d'action -->
+                        <div class="flex items-end space-x-2">
+                            <button type="submit" 
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                                Filtrer
+                            </button>
+                            <a href="{{ route('admin.departments.index') }}" 
+                               class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200">
+                                Réinitialiser
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
             <!-- Tableau des départements modernisé -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <!-- En-tête du tableau -->
                 <div class="px-6 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
-                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des entités</h3>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des entités</h3>
+                        
+                        <!-- Indicateurs de performance -->
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    Optimisé
+                                </span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ request('per_page', 50) }} par page
+                                </span>
+                                <span class="text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ $departments->count() }} entité(s) affichée(s)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations sur l'optimisation -->
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        Eager loading activé • Pagination flexible • Recherche optimisée
                     </div>
                 </div>
 
@@ -158,7 +226,7 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $department->employees->count() }}</p>
+                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $department->users->count() }}</p>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">employé(s)</p>
                                             </div>
                                         </div>
@@ -233,6 +301,13 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+                @if($departments->hasPages())
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-600">
+                        <x-pagination :paginator="$departments" />
+                    </div>
+                @endif
             </div>
         </div>
     </div>

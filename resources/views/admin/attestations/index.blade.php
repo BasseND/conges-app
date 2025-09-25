@@ -185,7 +185,7 @@
                                 </label>
                                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom d'employé..." class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                             </div>
-                            
+
                             <div class="flex gap-3">
                                 <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,7 +213,24 @@
                             <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Demandes d'attestations</h3>
+                            <div class="flex flex-col">
+                                <div class="flex items-center space-x-3">
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Demandes d'attestations</h3>
+                                    <!-- Indicateur d'optimisation -->
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Optimisé ({{ request('per_page', 50) }}/page)
+                                    </span>
+                                </div>
+                                <!-- Informations de pagination -->
+                                @if($requests->total() > 0)
+                                    <span class="text-sm text-blue-600 dark:text-blue-400 font-medium mt-1">
+                                        {{ $requests->firstItem() }}-{{ $requests->lastItem() }} sur {{ $requests->total() }} attestations
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                         <div class="text-sm text-gray-500 dark:text-gray-400">
                             {{ $requests->total() }} demande(s) au total

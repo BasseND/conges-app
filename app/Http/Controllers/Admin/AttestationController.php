@@ -20,7 +20,16 @@ class AttestationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = AttestationRequest::with(['user.department', 'attestationType', 'processor'])
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+
+        $query = AttestationRequest::with([
+                'user:id,first_name,last_name,email,department_id',
+                'user.department:id,name',
+                'attestationType:id,name,type',
+                'processor:id,first_name,last_name'
+            ])
             ->orderBy('created_at', 'desc');
 
         // Filtres
@@ -43,8 +52,8 @@ class AttestationController extends Controller
             });
         }
 
-        $requests = $query->paginate(15);
-        $attestationTypes = AttestationType::all();
+        $requests = $query->paginate($perPage)->appends($request->query());
+        $attestationTypes = AttestationType::select('id', 'name')->get();
 
         // Calculer les statistiques
         $stats = [

@@ -18,9 +18,34 @@ use App\Exports\DepartmentsTemplateExport;
 
 class DepartmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::with('manager')->get();
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+        
+        // Eager loading sélectif avec colonnes spécifiques
+        $query = Department::query()
+            ->select(['id', 'name', 'code', 'description', 'head_id', 'created_at'])
+            ->with([
+                'manager:id,first_name,last_name,email,department_id',
+                'users:id,first_name,last_name,department_id'
+            ]);
+
+        // Recherche par nom ou code
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('code', 'like', "%{$searchTerm}%")
+                  ->orWhere('description', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        $departments = $query->orderBy('name')
+            ->paginate($perPage)
+            ->appends(request()->query());
+            
         return view('admin.departments.index', compact('departments'));
     }
 

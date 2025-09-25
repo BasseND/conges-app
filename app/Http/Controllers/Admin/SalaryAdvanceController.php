@@ -22,7 +22,16 @@ class SalaryAdvanceController extends Controller
      */
     public function index(Request $request)
     {
-        $query = SalaryAdvance::with(['user', 'user.department', 'approver']);
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+
+        // Eager loading sélectif avec colonnes spécifiques
+        $query = SalaryAdvance::with([
+            'user:id,first_name,last_name,email,employee_id,department_id',
+            'user.department:id,name',
+            'approver:id,first_name,last_name'
+        ]);
 
         // Recherche par nom d'employé
         if ($request->filled('search')) {
@@ -55,14 +64,15 @@ class SalaryAdvanceController extends Controller
             $query->where('request_date', '<=', $request->date_to);
         }
 
-        $salaryAdvances = $query->latest('request_date')->paginate(15);
-        
+        $salaryAdvances = $query->latest('request_date')->paginate($perPage);
+
         // Conserver les paramètres de filtrage dans les liens de pagination
-        $salaryAdvances->appends($request->only(['search', 'department', 'status', 'date_from', 'date_to']));
+        $salaryAdvances->appends($request->only(['search', 'department', 'status', 'date_from', 'date_to', 'per_page']));
 
-        $departments = Department::orderBy('name')->get();
+        // Optimiser la récupération des départements
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
 
-        // Calculer les statistiques
+        // Calculer les statistiques de manière optimisée
         $stats = [
             'total' => SalaryAdvance::count(),
             'pending' => SalaryAdvance::where('status', SalaryAdvance::STATUS_PENDING)->count(),
