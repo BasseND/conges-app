@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('processed_at')->nullable(); // Date de traitement
             $table->text('rejection_reason')->nullable(); // Raison du rejet
             $table->string('pdf_path')->nullable(); // Chemin vers le PDF généré
+            $table->foreignId('generated_by')->nullable()->constrained('users'); // Utilisateur qui génère le PDF
             $table->timestamp('generated_at')->nullable(); // Date de génération du PDF
             $table->timestamps();
         });

@@ -28,6 +28,7 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
     protected $existingEmails = [];
     protected $existingMatricules = [];
     protected $lastEmployeeId = null;
+    protected $departmentHeadsAssigned = []; // Track department heads assigned during this import
 
     public function collection(Collection $rows)
     {
@@ -173,13 +174,20 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
 
         // Vérifier s'il existe déjà un chef pour ce département
         if ($role === User::ROLE_DEPARTMENT_HEAD) {
+            // Vérifier s'il y a déjà un chef dans la base de données
             $existingHead = User::where('department_id', $department->id)
                 ->where('role', User::ROLE_DEPARTMENT_HEAD)
                 ->exists();
 
-            if ($existingHead) {
+            // Vérifier s'il y a déjà un chef assigné pendant cet import
+            $headAssignedInImport = in_array($department->id, $this->departmentHeadsAssigned);
+
+            if ($existingHead || $headAssignedInImport) {
                 throw new \Exception('Ce département a déjà un chef');
             }
+
+            // Marquer ce département comme ayant reçu un chef
+            $this->departmentHeadsAssigned[] = $department->id;
         }
 
         // Générer un mot de passe par défaut si non fourni
@@ -193,6 +201,12 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
         $employmentStatus = $this->normalizeEmploymentStatus($row['statut_professionnel'] ?? null);
         $category = $this->normalizeCategory($row['categorie'] ?? null);
         
+        // Récupérer la première entreprise disponible
+        $company = \App\Models\Company::first();
+        if (!$company) {
+            throw new \Exception('Aucune entreprise configurée. Veuillez d\'abord créer une entreprise.');
+        }
+
         $userData = [
             'first_name' => trim($row['prenom']),
             'last_name' => trim($row['nom']),
@@ -203,6 +217,7 @@ class UsersImport implements ToCollection, WithHeadingRow, WithBatchInserts, Wit
             'position' => trim($row['poste']),
             'role' => $role,
             'department_id' => $department->id,
+            'company_id' => $company->id,
             'employee_id' => $this->generateOptimizedEmployeeId(),
             'is_prestataire' => $isPrestataire,
             'is_active' => true,

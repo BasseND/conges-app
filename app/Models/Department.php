@@ -17,8 +17,7 @@ class Department extends Model
         'code',
         'description',
         'head_id',
-        'company_id',
-        'leave_balance_id'
+        'company_id'
     ];
 
     /**
