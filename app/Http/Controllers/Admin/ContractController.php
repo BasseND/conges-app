@@ -17,18 +17,38 @@ class ContractController extends Controller
     /**
      * Display a listing of all contracts.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $contracts = Contract::with(['user'])
-            ->orderBy('date_fin', 'asc')
-            ->paginate(20);
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
 
-        // Récupérer la devise de l'entreprise
-        $company = Company::first();
+        // Optimisation : Eager loading sélectif avec colonnes spécifiques
+        $contracts = Contract::with([
+                'user:id,first_name,last_name,email,department_id',
+                'user.department:id,name'
+            ])
+            ->select([
+                'id', 'user_id', 'type', 'date_debut', 'date_fin', 
+                'salaire_brut', 'tjm', 'statut', 'is_active', 'is_expired',
+                'contrat_file', 'created_at', 'updated_at'
+            ])
+            ->orderBy('date_fin', 'asc')
+            ->paginate($perPage)
+            ->appends($request->query());
+
+        // Récupérer la devise de l'entreprise (optimisé)
+        $company = Company::select('id', 'currency')->first();
         $globalCompanyCurrency = $company ? $company->currency : '€';
         
-        // Récupérer les types de contrats depuis la base de données
-        $contractTypes = $company ? $company->contractTypes()->active()->orderBy('name')->get() : collect();
+        // Récupérer les types de contrats depuis la base de données (optimisé)
+        $contractTypes = $company ? 
+            $company->contractTypes()
+                ->select('id', 'name')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get() : 
+            collect();
 
         return view('admin.contracts.index', compact('contracts', 'globalCompanyCurrency', 'contractTypes'));
     }

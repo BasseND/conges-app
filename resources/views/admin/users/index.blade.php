@@ -159,15 +159,35 @@
 
                 <!-- Tableau des utilisateurs modernisé -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <!-- En-tête du tableau -->
+                    <!-- En-tête du tableau avec indicateurs de performance -->
                     <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-b border-gray-200/50 dark:border-gray-600/50">
-                        <div class="flex items-center space-x-3">
-                            <div class="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
-                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                </svg>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
+                                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des utilisateurs</h3>
+                                    @if($users instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            Affichage de {{ $users->firstItem() ?? 0 }} à {{ $users->lastItem() ?? 0 }} sur {{ $users->total() }} utilisateurs
+                                        </p>
+                                    @endif
+                                </div>
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste des utilisateurs</h3>
+                            
+                            <!-- Indicateur de performance -->
+                            <div class="flex items-center space-x-2 text-sm">
+                                <div class="flex items-center px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                                    <span class="font-medium">Optimisé</span>
+                                </div>
+                                <div class="text-gray-500 dark:text-gray-400">
+                                    {{ request('per_page', 50) }} par page
+                                </div>
+                            </div>
                         </div>
                     </div>
 

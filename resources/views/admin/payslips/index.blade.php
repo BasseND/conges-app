@@ -47,6 +47,12 @@
                     <div class="mb-6">
                         <form method="GET" action="{{ route('admin.payslips.index') }}" class="flex flex-wrap gap-4">
                             <div class="w-full md:w-auto">
+                                <x-input-label for="search" :value="__('Rechercher')" />
+                                <x-text-input id="search" name="search" type="text" class="mt-1 block w-full" 
+                                    :value="request('search')" placeholder="Nom, prénom ou matricule..." />
+                            </div>
+
+                            <div class="w-full md:w-auto">
                                 <x-input-label for="month" :value="__('Mois')" />
                                 <select id="month" name="month" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
                                     <option value="">Tous les mois</option>
@@ -80,10 +86,22 @@
                                 </select>
                             </div>
 
-                            <div class="w-full md:w-auto flex items-end">
+                            <div class="w-full md:w-auto">
+                                <x-input-label for="per_page" :value="__('Par page')" />
+                                <select id="per_page" name="per_page" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full">
+                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('per_page', 50) == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+
+                            <div class="w-full md:w-auto flex items-end space-x-2">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                     {{ __('Filtrer') }}
                                 </button>
+                                <a href="{{ route('admin.payslips.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 dark:hover:bg-gray-700 focus:bg-gray-600 dark:focus:bg-gray-700 active:bg-gray-700 dark:active:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                    {{ __('Réinitialiser') }}
+                                </a>
                             </div>
                         </form>
                     </div>
@@ -105,6 +123,27 @@
                             </div>
                         </div>
                     @else
+                        <!-- Indicateurs de performance -->
+                        <div class="mb-4 flex flex-wrap items-center justify-between gap-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div class="flex items-center space-x-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Optimisé
+                                </span>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">
+                                    {{ request('per_page', 50) }} éléments par page
+                                </span>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">
+                                    {{ $payslips->total() }} fiches de paie au total
+                                </span>
+                            </div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                Eager loading • Pagination flexible • Recherche optimisée
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                                 <thead class="bg-gray-50 dark:bg-gray-700">

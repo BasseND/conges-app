@@ -20,10 +20,31 @@ class CompanyController extends Controller
      */
     public function show()
     {
-        $company = Company::first();
-        $specialLeaveTypes = SpecialLeaveType::orderBy('name')->get();
-        $contractTypes = $company ? $company->contractTypes()->orderBy('name')->get() : collect();
-        // LeaveBalances supprimé - remplacé par SpecialLeaveType
+        // Eager loading sélectif pour la société avec ses relations
+        $company = Company::with([
+            'contractTypes:id,company_id,name,description,is_active',
+            'specialLeaveTypes:id,company_id,name,description,is_active,type,duration_days,seniority_months'
+        ])->first();
+        
+        // Optimiser la récupération des types de congés spéciaux avec toutes les colonnes nécessaires
+        // Récupérer à la fois les types système (company_id = null) et les types spécifiques à la société
+        $specialLeaveTypes = $company ? 
+            SpecialLeaveType::where(function($query) use ($company) {
+                $query->whereNull('company_id') // Types système
+                      ->orWhere('company_id', $company->id); // Types spécifiques à la société
+            })
+            ->select('id', 'company_id', 'name', 'description', 'is_active', 'type', 'duration_days', 'seniority_months')
+            ->orderBy('name')
+            ->get() : 
+            SpecialLeaveType::select('id', 'company_id', 'name', 'description', 'is_active', 'type', 'duration_days', 'seniority_months')
+                ->orderBy('name')
+                ->get();
+        
+        // Optimiser la récupération des types de contrats
+        $contractTypes = $company ? 
+            $company->contractTypes()->select('id', 'company_id', 'name', 'description', 'is_active')->orderBy('name')->get() : 
+            collect();
+        
         return view('admin.company.show', compact('company', 'specialLeaveTypes', 'contractTypes'));
     }
 

@@ -27,7 +27,11 @@ class PayslipController extends Controller
     {
         $this->authorize('viewAny', Payslip::class);
         
-        $query = Payslip::with('user');
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+        
+        $query = Payslip::query();
         
         // Filtrer par mois
         if ($request->filled('month')) {
@@ -44,9 +48,26 @@ class PayslipController extends Controller
             $query->where('status', $request->status);
         }
         
+        // Recherche par nom d'employé ou matricule
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+        
+        // Eager loading sélectif avec colonnes spécifiques
+        $query->with([
+            'user:id,first_name,last_name,email,employee_id,department_id',
+            'user.department:id,name',
+            'contract:id,user_id,salaire_brut,date_debut,date_fin'
+        ]);
+        
         $payslips = $query->orderBy('period_year', 'desc')
             ->orderBy('period_month', 'desc')
-            ->paginate(15)
+            ->paginate($perPage)
             ->appends(request()->query());
         
         return view('admin.payslips.index', compact('payslips'));

@@ -18,6 +18,10 @@ class ExpenseReportController extends Controller
     {
         $user = Auth::user();
         
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+        
         // Initialiser la requête
         $query = ExpenseReport::query();
 
@@ -31,6 +35,17 @@ class ExpenseReportController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Recherche globale par nom d'employé, email ou matricule
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+
         // Filtre par date
         if ($request->filled('date_from')) {
             $query->whereDate('created_at', '>=', $request->date_from);
@@ -40,11 +55,15 @@ class ExpenseReportController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Ajouter les relations nécessaires
-        $query->with(['user', 'lines']);
+        // Eager loading sélectif avec colonnes spécifiques
+        $query->with([
+            'user:id,first_name,last_name,email,employee_id,department_id',
+            'user.department:id,name',
+            'lines:id,expense_report_id,description,amount,category,spent_on'
+        ]);
 
         $expenseReports = $query->orderBy('created_at', 'desc')
-            ->paginate(20)
+            ->paginate($perPage)
             ->appends(request()->query()); // Garde les paramètres de filtrage dans les liens de pagination
 
         return view('expenses.reports.index', compact('expenseReports'));
@@ -57,8 +76,7 @@ class ExpenseReportController extends Controller
 
     public function store(Request $request)
     {
-        \Log::info('Début de la création de la note de frais');
-        \Log::info('Données reçues:', $request->all());
+        
 
         try {
             $validated = $request->validate([
@@ -72,10 +90,9 @@ class ExpenseReportController extends Controller
                 'lines.*.receipt' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048'
             ]);
 
-            \Log::info('Validation passée avec succès');
 
             DB::beginTransaction();
-            \Log::info('Transaction démarrée');
+           
 
             // Créer la note de frais
             $reportData = [
@@ -84,19 +101,19 @@ class ExpenseReportController extends Controller
                 'status' => $request->action === 'submit' ? 'submitted' : 'draft',
                 'submitted_at' => $request->action === 'submit' ? now() : null,
             ];
-            \Log::info('Données de la note de frais:', $reportData);
+           
 
             $report = ExpenseReport::create($reportData);
-            \Log::info('Note de frais créée avec ID: ' . $report->id);
+           
 
             // Créer les lignes de frais
             $totalAmount = 0;
             foreach ($request->lines as $index => $line) {
-                \Log::info('Traitement de la ligne ' . $index, $line);
+                
                 
                 $receiptPath = null;
                 if (isset($line['receipt'])) {
-                    \Log::info('Fichier présent pour la ligne ' . $index);
+                   
                     if ($line['receipt']->isValid()) {
                         try {
                             $receiptPath = Storage::disk('public')->putFile(

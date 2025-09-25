@@ -106,12 +106,24 @@
                     
                     <form method="GET" action="{{ route('admin.hr-attestations.index') }}">
                         <div class="flex flex-wrap items-end gap-4">
+                            <!-- Recherche globale -->
+                            <div class="flex-1 min-w-[250px]">
+                                <label class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    Recherche
+                                </label>
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Nom, prénom, email ou matricule..." class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
+                            </div>
+                           
+                            
                             <div class="flex-1 min-w-[200px]">
                                 <label class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    Utilisateur
+                                    Utilisateur (ancien)
                                 </label>
                                 <input type="text" name="user_search" value="{{ request('user_search') }}" placeholder="Nom, prénom ou email..." class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                             </div>
@@ -238,9 +250,30 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                             <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Attestations RH</h3>
+                            <!-- Indicateurs de performance -->
+                            <div class="flex items-center space-x-2 ml-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    Optimisé
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ request('per_page', 50) }}/page
+                                </span>
+                            </div>
                         </div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ $attestations->total() }} attestation(s) au total
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $attestations->total() }} attestation(s) au total
+                            </div>
+                            <!-- Info optimisation -->
+                            <div class="hidden lg:flex items-center space-x-2 text-xs text-gray-400 dark:text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Eager loading • Pagination flexible • Recherche optimisée</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -31,11 +31,32 @@ class HrAttestationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = AttestationRequest::with(['user', 'attestationType', 'generator'])
+        // Pagination flexible
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+
+        // Eager loading sélectif avec colonnes spécifiques
+        $query = AttestationRequest::with([
+                'user:id,first_name,last_name,email,employee_id,department_id',
+                'user.department:id,name',
+                'attestationType:id,name,type',
+                'generator:id,first_name,last_name'
+            ])
             ->whereNotNull('generated_by')
             ->orderBy('created_at', 'desc');
 
-        // Filtres
+        // Recherche globale par nom d'employé ou matricule
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtres existants (compatibilité)
         if ($request->filled('user_search')) {
             $search = $request->user_search;
             $query->whereHas('user', function ($q) use ($search) {
@@ -65,7 +86,7 @@ class HrAttestationController extends Controller
             $query->whereDate('generated_at', '<=', $request->date_to);
         }
 
-        $attestations = $query->paginate(15);
+        $attestations = $query->paginate($perPage)->appends($request->query());
         $attestationTypes = AttestationType::whereIn('type', ['salary', 'employment', 'presence'])->get();
         $statuses = [
             'draft' => 'Brouillon',

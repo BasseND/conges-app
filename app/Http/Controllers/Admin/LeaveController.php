@@ -23,7 +23,12 @@ class LeaveController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Leave::with(['user', 'user.department']);
+        // Optimisation avec eager loading sélectif
+        $query = Leave::with([
+            'user:id,first_name,last_name,email,employee_id,department_id',
+            'user.department:id,name,code',
+            'specialLeaveType:id,name,system_name'
+        ]);
 
         // Recherche par nom d'employé
         if ($request->filled('search')) {
@@ -66,12 +71,17 @@ class LeaveController extends Controller
             $query->where('end_date', '<=', $request->date_to);
         }
 
-        $leaves = $query->latest()->paginate(20);
+        // Pagination optimisée avec options flexibles
+        $perPage = $request->get('per_page', 50);
+        $perPage = in_array($perPage, [25, 50, 100]) ? $perPage : 50;
+        
+        $leaves = $query->latest()->paginate($perPage);
         
         // Conserver les paramètres de filtrage dans les liens de pagination
-        $leaves->appends($request->only(['search', 'department', 'status', 'type', 'date_from', 'date_to']));
+        $leaves->appends($request->only(['search', 'department', 'status', 'type', 'date_from', 'date_to', 'per_page']));
 
-        $departments = Department::orderBy('name')->get();
+        // Optimisation pour les départements - charger seulement les colonnes nécessaires
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
 
         return view('admin.leaves.index', compact('leaves', 'departments'));
     }

@@ -324,15 +324,60 @@
 
                     </div>
 
+                    <!-- Sélecteur de pagination -->
+                    <div class="mb-6">
+                        <form method="GET" action="{{ route('admin.contracts.index') }}" class="flex items-center justify-end">
+                            @foreach(request()->except(['per_page', 'page']) as $key => $value)
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endforeach
+                            
+                            <div class="flex items-center space-x-3">
+                                <label class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                    </svg>
+                                    Par page
+                                </label>
+                                <select name="per_page" onchange="this.form.submit()" class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
+                                    <option value="25" {{ request('per_page', 50) == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('per_page', 50) == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('per_page', 50) == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
                     <!-- Tableau des contrats modernisé -->
                     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                         <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                </svg>
-                                Liste de tous les contrats
-                            </h3>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center space-x-3">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Liste de tous les contrats</h3>
+                                            <!-- Indicateur d'optimisation -->
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                </svg>
+                                                Optimisé ({{ request('per_page', 50) }}/page)
+                                            </span>
+                                        </div>
+                                        <!-- Informations de pagination -->
+                                        @if($contracts->total() > 0)
+                                            <span class="text-sm text-blue-600 dark:text-blue-400 font-medium mt-1">
+                                                {{ $contracts->firstItem() }}-{{ $contracts->lastItem() }} sur {{ $contracts->total() }} contrats
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $contracts->total() }} contrat(s) au total
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="overflow-x-auto">

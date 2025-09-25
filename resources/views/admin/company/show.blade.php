@@ -286,6 +286,7 @@
                             <!-- Carte principale -->
                             <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-b-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
                                 <div class="p-8">
+
                                     @if(isset($contractTypes) && $contractTypes->count() > 0)
                                         <!-- Liste des types de contrats -->
                                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
