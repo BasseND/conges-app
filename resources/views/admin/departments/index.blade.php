@@ -118,10 +118,7 @@
                         </div>
                     </div>
                     
-                    <!-- Informations sur l'optimisation -->
-                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        Eager loading activé • Pagination flexible • Recherche optimisée
-                    </div>
+                   
                 </div>
 
                 <div class="overflow-x-auto">
