@@ -95,7 +95,7 @@
                                                         @if($conversation->sender_id === auth()->id())
                                                             <span class="font-medium">Vous:</span>
                                                         @endif
-                                                        {{ Str::limit($conversation->content, 100) }}
+                                                        {{ Str::limit(strip_tags($conversation->content), 100) }}
                                                     </p>
                                                 </div>
                                             </div>

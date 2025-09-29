@@ -1568,7 +1568,7 @@
                                                     </svg>
                                                 </span>
                                             </a>
-                                        </li>
+                                         </li>
 
                                         <!-- Attestations -->
                                         <li class="item px-[43px] py-[11px]">
