@@ -193,12 +193,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routes pour la messagerie
     Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('messages/create', [MessageController::class, 'create'])->name('messages.create');
+    Route::get('messages/search/recipients', [MessageController::class, 'searchRecipients'])->name('messages.search.recipients');
     Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
     Route::get('messages/{user}', [MessageController::class, 'show'])->name('messages.show');
     Route::post('messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
     Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
     Route::post('messages/{message}/mark-read', [MessageController::class, 'markAsRead'])->name('messages.mark-read');
     Route::get('messages/unread/count', [MessageController::class, 'unreadCount'])->name('messages.unread-count');
+    Route::get('messages/attachments/{attachment}/download', [MessageController::class, 'downloadAttachment'])->name('messages.download-attachment');
 
     // Routes pour les attestations (côté employé)
     Route::prefix('attestations')->name('attestations.')->group(function () {

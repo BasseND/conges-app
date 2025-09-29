@@ -96,7 +96,7 @@
                           x-text="teamData?.teamMembers?.length || 0"></span>
                 </h4>
                 
-                <div class="space-y-3" x-show="teamData?.teamMembers?.length > 0">
+                <div class="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-800" x-show="teamData?.teamMembers?.length > 0">
                     <template x-for="member in teamData?.teamMembers || []" :key="member.id">
                         <div class="bg-white dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow duration-200">
                             <div class="flex items-center">

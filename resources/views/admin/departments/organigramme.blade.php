@@ -1,3 +1,4 @@
+@section('title', 'Organigramme - ' . $department->name)
 <x-app-layout>
   
     <div class="w-full">

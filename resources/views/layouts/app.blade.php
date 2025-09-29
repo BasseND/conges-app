@@ -24,6 +24,10 @@
          <!-- Script de langue francaise -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
+        <!-- Quill.js WYSIWYG Editor -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
         <!-- Scripts -->
         @vite([
            'resources/assets/css/slick.css',

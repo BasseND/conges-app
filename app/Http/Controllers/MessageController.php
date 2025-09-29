@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\MessageAttachment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class MessageController extends Controller
@@ -83,7 +85,7 @@ class MessageController extends Controller
         
         // Récupérer tous les messages entre les deux utilisateurs
         $messages = Message::conversation($currentUser->id, $user->id)
-            ->with(['sender', 'recipient'])
+            ->with(['sender', 'recipient', 'attachments'])
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -142,19 +144,25 @@ class MessageController extends Controller
     {
         // Gérer les deux formats : recipient_id (simple) et recipient_ids (multiple)
         if ($request->has('recipient_id')) {
-            $request->validate([
+            $validationRules = [
                 'recipient_id' => 'required|exists:users,id',
                 'subject' => 'required|string|max:255',
                 'content' => 'required|string|max:5000',
-            ]);
+                'attachments' => 'nullable|array|max:5',
+                'attachments.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,bmp,svg|max:10240', // 10MB max
+            ];
+            $request->validate($validationRules);
             $recipientIds = [$request->recipient_id];
         } else {
-            $request->validate([
+            $validationRules = [
                 'recipient_ids' => 'required|array|min:1',
                 'recipient_ids.*' => 'exists:users,id',
                 'subject' => 'required|string|max:255',
                 'content' => 'required|string|max:5000',
-            ]);
+                'attachments' => 'nullable|array|max:5',
+                'attachments.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,bmp,svg|max:10240', // 10MB max
+            ];
+            $request->validate($validationRules);
             $recipientIds = $request->recipient_ids;
         }
 
@@ -166,24 +174,65 @@ class MessageController extends Controller
             $this->authorize('sendMessageTo', [Message::class, $recipient]);
         }
 
+        // Traiter les fichiers uploadés
+        $uploadedFiles = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '_' . uniqid() . '.' . $extension;
+                $filePath = $file->storeAs('message_attachments', $fileName, 'public');
+                
+                $uploadedFiles[] = [
+                    'original_name' => $originalName,
+                    'file_name' => $fileName,
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                    'file_extension' => $extension,
+                ];
+            }
+        }
+
         // Créer un message pour chaque destinataire
         foreach ($recipientIds as $recipientId) {
-            Message::create([
+            $message = Message::create([
                 'sender_id' => $currentUser->id,
                 'recipient_id' => $recipientId,
                 'subject' => $request->subject,
                 'content' => $request->content,
             ]);
+
+            // Attacher les fichiers au message
+            foreach ($uploadedFiles as $fileData) {
+                MessageAttachment::create([
+                    'message_id' => $message->id,
+                    'original_name' => $fileData['original_name'],
+                    'file_name' => $fileData['file_name'],
+                    'file_path' => $fileData['file_path'],
+                    'mime_type' => $fileData['mime_type'],
+                    'file_size' => $fileData['file_size'],
+                    'file_extension' => $fileData['file_extension'],
+                ]);
+            }
         }
 
         // Rediriger vers la conversation avec le premier destinataire ou vers l'index
         if (count($recipientIds) === 1) {
             $recipient = User::findOrFail($recipientIds[0]);
+            $successMessage = 'Message envoyé avec succès.';
+            if (count($uploadedFiles) > 0) {
+                $successMessage .= ' ' . count($uploadedFiles) . ' fichier(s) joint(s).';
+            }
             return redirect()->route('messages.show', $recipient)
-                ->with('success', 'Message envoyé avec succès.');
+                ->with('success', $successMessage);
         } else {
+            $successMessage = 'Message envoyé à ' . count($recipientIds) . ' destinataire(s) avec succès.';
+            if (count($uploadedFiles) > 0) {
+                $successMessage .= ' ' . count($uploadedFiles) . ' fichier(s) joint(s).';
+            }
             return redirect()->route('messages.index')
-                ->with('success', 'Message envoyé à ' . count($recipientIds) . ' destinataire(s) avec succès.');
+                ->with('success', $successMessage);
         }
     }
 
@@ -197,6 +246,8 @@ class MessageController extends Controller
         
         $request->validate([
             'content' => 'required|string|max:5000',
+            'attachments' => 'nullable|array|max:5',
+            'attachments.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif,bmp,svg|max:10240', // 10MB max
         ]);
 
         $currentUser = Auth::user();
@@ -206,8 +257,28 @@ class MessageController extends Controller
             ? $message->recipient_id 
             : $message->sender_id;
 
+        // Traiter les fichiers uploadés
+        $uploadedFiles = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '_' . uniqid() . '.' . $extension;
+                $filePath = $file->storeAs('message_attachments', $fileName, 'public');
+                
+                $uploadedFiles[] = [
+                    'original_name' => $originalName,
+                    'file_name' => $fileName,
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                    'file_extension' => $extension,
+                ];
+            }
+        }
+
         // Créer la réponse
-        Message::create([
+        $replyMessage = Message::create([
             'sender_id' => $currentUser->id,
             'recipient_id' => $recipientId,
             'subject' => 'Re: ' . $message->subject,
@@ -215,10 +286,28 @@ class MessageController extends Controller
             'parent_id' => $message->getMainThread()->id,
         ]);
 
+        // Attacher les fichiers au message de réponse
+        foreach ($uploadedFiles as $fileData) {
+            MessageAttachment::create([
+                'message_id' => $replyMessage->id,
+                'original_name' => $fileData['original_name'],
+                'file_name' => $fileData['file_name'],
+                'file_path' => $fileData['file_path'],
+                'mime_type' => $fileData['mime_type'],
+                'file_size' => $fileData['file_size'],
+                'file_extension' => $fileData['file_extension'],
+            ]);
+        }
+
         $recipient = User::find($recipientId);
         
+        $successMessage = 'Réponse envoyée avec succès.';
+        if (count($uploadedFiles) > 0) {
+            $successMessage .= ' ' . count($uploadedFiles) . ' fichier(s) joint(s).';
+        }
+        
         return redirect()->route('messages.show', $recipient)
-            ->with('success', 'Réponse envoyée avec succès.');
+            ->with('success', $successMessage);
     }
 
     /**
@@ -246,6 +335,79 @@ class MessageController extends Controller
         }
         
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Rechercher des destinataires pour l'autocomplétion
+     */
+    public function searchRecipients(Request $request)
+    {
+        $query = $request->get('q', '');
+        $type = $request->get('type', 'employees'); // 'employees' ou 'hr'
+        
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+        
+        $currentUser = Auth::user();
+        $usersQuery = User::query();
+        
+        // Filtrer selon le type d'utilisateur connecté
+        if ($type === 'hr') {
+            // Rechercher parmi les RH (pour les employés)
+            $usersQuery->where('role', 'hr');
+        } else {
+            // Rechercher parmi tous les utilisateurs sauf les RH (pour les RH)
+            $usersQuery->where('role', '!=', 'hr');
+        }
+        
+        // Exclure l'utilisateur actuel
+        $usersQuery->where('id', '!=', $currentUser->id);
+        
+        // Recherche par nom, prénom ou email
+        $usersQuery->where(function($q) use ($query) {
+            $q->where('first_name', 'like', "%{$query}%")
+              ->orWhere('last_name', 'like', "%{$query}%")
+              ->orWhere('email', 'like', "%{$query}%");
+        });
+        
+        // Limiter les résultats
+        $users = $usersQuery->limit(10)->get();
+        
+        // Formater les résultats pour Choices.js
+        $results = $users->map(function($user) use ($type) {
+            $label = $user->first_name . ' ' . $user->last_name;
+            if ($type === 'hr') {
+                $label .= ' - RH';
+            }
+            $label .= ' (' . $user->email . ')';
+            
+            return [
+                'id' => $user->id,
+                'text' => $label
+            ];
+        });
+        
+        return response()->json($results);
+    }
+
+    /**
+     * Télécharger une pièce jointe
+     */
+    public function downloadAttachment(MessageAttachment $attachment)
+    {
+        // Vérifier que l'utilisateur peut accéder au message
+        $this->authorize('view', $attachment->message);
+        
+        // Vérifier que le fichier existe
+        if (!Storage::disk('public')->exists($attachment->file_path)) {
+            abort(404, 'Fichier non trouvé.');
+        }
+        
+        return Storage::disk('public')->download(
+            $attachment->file_path,
+            $attachment->original_name
+        );
     }
 
     /**
