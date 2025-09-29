@@ -19,6 +19,7 @@
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white"> {{ $user->first_name }} {{ $user->last_name }}</h1>
                                 <p class="text-gray-600 dark:text-gray-400 mt-1">{{ $user->email }}</p>
+                                <p class="text-gray-600 dark:text-gray-400 mt-1">{{ $user->phone }}</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-3">

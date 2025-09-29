@@ -18,12 +18,17 @@ class MessageController extends Controller
     /**
      * Afficher la liste des conversations
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         
-        // Récupérer toutes les conversations de l'utilisateur
-        $conversations = DB::table('messages as m1')
+        // Récupérer les paramètres de recherche et filtrage
+        $search = $request->get('search');
+        $status = $request->get('status');
+        $sort = $request->get('sort', 'date_desc');
+        
+        // Construire la requête de base
+        $query = DB::table('messages as m1')
             ->select(
                 'other_user.id as other_user_id',
                 'other_user.first_name',
@@ -61,12 +66,51 @@ class MessageController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('m1.sender_id', $user->id)
                       ->orWhere('m1.recipient_id', $user->id);
-            })
-            ->groupBy('other_user.id', 'other_user.first_name', 'other_user.last_name', 'other_user.email', 'm1.subject', 'm1.content', 'm1.created_at', 'm1.sender_id')
-            ->orderBy('last_message_date', 'desc')
-            ->get();
+            });
 
-        return view('messages.index', compact('conversations'));
+        // Appliquer la recherche si fournie
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('m1.subject', 'like', "%{$search}%")
+                  ->orWhere('m1.content', 'like', "%{$search}%")
+                  ->orWhere('other_user.first_name', 'like', "%{$search}%")
+                  ->orWhere('other_user.last_name', 'like', "%{$search}%")
+                  ->orWhere('other_user.email', 'like', "%{$search}%");
+            });
+        }
+
+        // Appliquer le filtrage par statut
+        if ($status === 'unread') {
+            $query->having('unread_count', '>', 0);
+        } elseif ($status === 'read') {
+            $query->having('unread_count', '=', 0);
+        }
+
+        // Grouper les résultats
+        $query->groupBy('other_user.id', 'other_user.first_name', 'other_user.last_name', 'other_user.email', 'm1.subject', 'm1.content', 'm1.created_at', 'm1.sender_id');
+
+        // Appliquer le tri
+        switch ($sort) {
+            case 'date_asc':
+                $query->orderBy('last_message_date', 'asc');
+                break;
+            case 'name_asc':
+                $query->orderBy('other_user.first_name', 'asc')
+                      ->orderBy('other_user.last_name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('other_user.first_name', 'desc')
+                      ->orderBy('other_user.last_name', 'desc');
+                break;
+            case 'date_desc':
+            default:
+                $query->orderBy('last_message_date', 'desc');
+                break;
+        }
+
+        $conversations = $query->get();
+
+        return view('messages.index', compact('conversations', 'search', 'status', 'sort'));
     }
 
     /**
