@@ -56,7 +56,8 @@ class SpecialLeaveTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|in:système,custom',
-            'duration_days' => 'required|integer|min:0|max:365',
+            'has_balance' => 'sometimes|boolean',
+            'duration_days' => [\Illuminate\Validation\Rule::requiredIf($request->boolean('has_balance')), 'integer', 'min:0', 'max:365'],
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
@@ -64,7 +65,7 @@ class SpecialLeaveTypeController extends Controller
             'name.required' => 'Le nom du type de congé est requis.',
             'type.required' => 'Le type est requis.',
             'type.in' => 'Le type doit être "système" ou "custom".',
-            'duration_days.required' => 'Le nombre de jours est requis.',
+            'duration_days.required' => 'Le nombre de jours est requis lorsque le solde est limité.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
             'seniority_months.min' => 'La condition d\'ancienneté doit être positive ou nulle.',
@@ -73,7 +74,13 @@ class SpecialLeaveTypeController extends Controller
 
         $validated['company_id'] = $company->id;
         $validated['is_active'] = $request->has('is_active');
+        $validated['has_balance'] = $request->boolean('has_balance');
         $validated['seniority_months'] = $validated['seniority_months'] ?? 0;
+
+        // Si le type est illimité (sans solde), forcer la durée à 0
+        if (!$validated['has_balance']) {
+            $validated['duration_days'] = 0;
+        }
 
         SpecialLeaveType::create($validated);
 
@@ -142,7 +149,8 @@ class SpecialLeaveTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|in:système,custom',
-            'duration_days' => 'required|integer|min:0|max:365',
+            'has_balance' => 'sometimes|boolean',
+            'duration_days' => [\Illuminate\Validation\Rule::requiredIf($request->boolean('has_balance')), 'integer', 'min:0', 'max:365'],
             'seniority_months' => 'nullable|integer|min:0|max:120',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean'
@@ -150,7 +158,7 @@ class SpecialLeaveTypeController extends Controller
             'name.required' => 'Le nom du type de congé est requis.',
             'type.required' => 'Le type est requis.',
             'type.in' => 'Le type doit être "système" ou "custom".',
-            'duration_days.required' => 'Le nombre de jours est requis.',
+            'duration_days.required' => 'Le nombre de jours est requis lorsque le solde est limité.',
             'duration_days.min' => 'Le nombre de jours doit être positif ou nul.',
             'duration_days.max' => 'Le nombre de jours ne peut pas dépasser 365.',
             'seniority_months.min' => 'La condition d\'ancienneté doit être positive ou nulle.',
@@ -159,7 +167,13 @@ class SpecialLeaveTypeController extends Controller
 
         $validated['company_id'] = $company->id;
         $validated['is_active'] = $request->has('is_active');
+        $validated['has_balance'] = $request->boolean('has_balance');
         $validated['seniority_months'] = $validated['seniority_months'] ?? 0;
+
+        // Si le type est illimité (sans solde), forcer la durée à 0
+        if (!$validated['has_balance']) {
+            $validated['duration_days'] = 0;
+        }
 
         $specialLeaveType = SpecialLeaveType::findOrFail($id);
         $specialLeaveType->update($validated);

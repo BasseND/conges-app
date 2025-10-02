@@ -2,26 +2,46 @@
 
 <x-app-layout>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- En-tête -->
+        <!-- En-tête moderne -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                        Ajustements Manuels
-                    </h1>
-                    <p class="mt-2 text-gray-600 dark:text-gray-400">
-                        Modifier les soldes de congés individuellement
-                    </p>
+                <div class="flex items-center space-x-4">
+                    <div class="p-3 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Ajustements Manuels</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Modifier les soldes de congés individuellement pour l'année {{ $year }}</p>
+                    </div>
                 </div>
-                <a href="{{ route('admin.leave-balances.dashboard') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Retour au Dashboard
-                </a>
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('admin.leave-balances.dashboard') }}"
+                       class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="{{ route('admin.leave-balances.index') }}"
+                       class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197" />
+                        </svg>
+                        Soldes
+                    </a>
+                    <a href="{{ route('admin.leave-balances.tools') }}"
+                       class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-xl hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Outils Admin
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -60,44 +80,64 @@
             
             <!-- Sélection utilisateur -->
             <div class="lg:col-span-1">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                        Sélectionner un Utilisateur
-                    </h3>
+                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Filtres de recherche</h3>
+                    </div>
 
                     <form method="GET" action="{{ route('admin.leave-balances.adjustments') }}" class="space-y-4">
                         <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Rechercher
+                            <label for="search" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                Recherche
                             </label>
                             <input type="text" id="search" name="search" value="{{ $search }}" 
                                    placeholder="Nom, email, matricule..."
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                   class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                         </div>
 
                         <div>
-                            <label for="year" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="year" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
                                 Année
                             </label>
                             <select id="year" name="year" 
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                                 @for($y = now()->year + 1; $y >= now()->year - 3; $y--)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                                 @endfor
                             </select>
                         </div>
-
-                        <button type="submit" 
-                                class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                            Rechercher
-                        </button>
+                        <div class="flex gap-3">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
+                                </svg>
+                                Rechercher
+                            </button>
+                            <a href="{{ route('admin.leave-balances.adjustments') }}" 
+                               class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white font-medium rounded-xl hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-700 dark:hover:to-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                Réinitialiser
+                            </a>
+                        </div>
                     </form>
 
                     @if($users->count() > 0)
                         <div class="mt-6 space-y-2 max-h-96 overflow-y-auto">
                             @foreach($users as $user)
                                 <a href="{{ route('admin.leave-balances.adjustments', ['user_id' => $user->id, 'year' => $year, 'search' => $search]) }}" 
-                                   class="block p-3 rounded-lg border {{ $selectedUser && $selectedUser->id == $user->id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700' }} transition-colors">
+                                   class="block p-3 rounded-lg border {{ $selectedUser && $selectedUser->id == $user->id ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700' }} transition-all">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-8 w-8">
                                             <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold">
@@ -123,7 +163,7 @@
             <!-- Ajustements -->
             <div class="lg:col-span-2">
                 @if($selectedUser)
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                    <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                         <div class="flex items-center justify-between mb-6">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -138,7 +178,7 @@
                         @if($balances->count() > 0)
                             <div class="space-y-6">
                                 @foreach($balances as $balance)
-                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white/60 dark:bg-gray-800/60">
                                         <div class="flex items-center justify-between mb-4">
                                             <div>
                                                 <h4 class="font-medium text-gray-900 dark:text-white">
@@ -164,7 +204,7 @@
                                                     Type d'ajustement
                                                 </label>
                                                 <select id="adjustment_type_{{ $balance->id }}" name="adjustment_type" required
-                                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                                        class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
                                                     <option value="add">Ajouter</option>
                                                     <option value="subtract">Soustraire</option>
                                                     <option value="set">Définir</option>
@@ -176,12 +216,15 @@
                                                     Nombre de jours
                                                 </label>
                                                 <input type="number" id="amount_{{ $balance->id }}" name="amount" step="0.5" min="0" required
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                                       class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
                                             </div>
 
                                             <div class="flex items-end">
                                                 <button type="submit" 
-                                                        class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                                        class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl text-sm">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                    </svg>
                                                     Ajuster
                                                 </button>
                                             </div>
@@ -227,9 +270,9 @@
                                         <input type="hidden" name="year" value="{{ $year }}">
                                         <input type="hidden" name="user_id" value="{{ $selectedUser->id }}">
                                         <button type="submit" 
-                                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                                                class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
                                             Initialiser les soldes
                                         </button>
@@ -241,7 +284,7 @@
 
                     <!-- Ajustement en lot -->
                     @if($balances->count() > 0)
-                        <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                        <div class="mt-8 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                                 Ajustement en Lot
                             </h3>
@@ -259,7 +302,7 @@
                                         Type d'ajustement
                                     </label>
                                     <select id="bulk_adjustment_type" name="adjustment_type" required
-                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                            class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
                                         <option value="add">Ajouter</option>
                                         <option value="subtract">Soustraire</option>
                                         <option value="multiply">Multiplier par</option>
@@ -271,7 +314,7 @@
                                         Valeur
                                     </label>
                                     <input type="number" id="bulk_amount" name="amount" step="0.1" min="0" required
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                           class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
                                 </div>
 
                                 <div>
@@ -279,12 +322,12 @@
                                         Raison
                                     </label>
                                     <input type="text" id="bulk_reason" name="reason" placeholder="Raison de l'ajustement"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                           class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
                                 </div>
 
                                 <div class="flex items-end">
                                     <button type="submit" 
-                                            class="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                            class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                                         Appliquer à Tous
                                     </button>
                                 </div>
@@ -292,7 +335,7 @@
                         </div>
                     @endif
                 @else
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                    <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                         <div class="text-center py-12">
                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>

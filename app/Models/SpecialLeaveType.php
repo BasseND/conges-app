@@ -183,7 +183,7 @@ class SpecialLeaveType extends Model
     public function getFormattedDurationAttribute()
     {
         if ($this->duration_days == 0) {
-            return 'Variable (0 à 10 jours)';
+            return 'Solde variable';
         }
         
         if ($this->duration_days >= 7 && $this->duration_days % 7 == 0) {

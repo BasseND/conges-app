@@ -3,26 +3,46 @@
 
 <x-app-layout>
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             
-            <!-- En-tête -->
+            <!-- En-tête moderne -->
             <div class="mb-8">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                            Outils d'Administration
-                        </h1>
-                        <p class="mt-2 text-gray-600 dark:text-gray-400">
-                            Initialisation et vérification des soldes de congés
-                        </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="p-3 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Outils d'Administration</h1>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Initialisation et vérification des soldes de congés</p>
+                        </div>
                     </div>
-                    <a href="{{ route('admin.leave-balances.dashboard') }}" 
-                    class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Retour au Dashboard
-                    </a>
+                    <div class="flex items-center space-x-3">
+                        <a href="{{ route('admin.leave-balances.dashboard') }}"
+                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="{{ route('admin.leave-balances.index') }}"
+                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197" />
+                            </svg>
+                            Soldes
+                        </a>
+                        <a href="{{ route('admin.leave-balances.adjustments') }}"
+                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium rounded-xl hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Ajustements
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -60,10 +80,10 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
                 <!-- Initialisation des soldes -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-center mb-6">
-                        <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
                             </svg>
                         </div>
@@ -77,7 +97,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.leave-balances.initialize') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('admin.leave-balances.initializeAll') }}" method="POST" class="space-y-4">
                         @csrf
                         
                         <div>
@@ -85,7 +105,7 @@
                                 Année à initialiser
                             </label>
                             <select id="init_year" name="year" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                                 @for($y = now()->year + 2; $y >= now()->year - 2; $y--)
                                     <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
                                 @endfor
@@ -97,7 +117,7 @@
                                 Département (optionnel)
                             </label>
                             <select id="department_id" name="department_id"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
                                 <option value="">Tous les départements</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -106,25 +126,25 @@
                         </div>
 
                         <div class="flex items-center">
-                            <input type="checkbox" id="force_reinit" name="force_reinit" value="1"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="force_reinit" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                            <input type="checkbox" id="force" name="force" value="1"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="force" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                                 Forcer la réinitialisation (écrase les soldes existants)
                             </label>
                         </div>
 
                         <button type="submit" 
-                                class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                                class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             Initialiser les Soldes
                         </button>
                     </form>
                 </div>
 
                 <!-- Vérification des soldes -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-center mb-6">
-                        <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
-                            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
@@ -146,7 +166,7 @@
                                 Année à vérifier
                             </label>
                             <select id="verify_year" name="year" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
                                 @for($y = now()->year + 1; $y >= now()->year - 3; $y--)
                                     <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
                                 @endfor
@@ -161,7 +181,7 @@
                             <div class="space-y-2">
                                 <div class="flex items-center">
                                     <input type="checkbox" id="check_missing" name="checks[]" value="missing" checked
-                                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                        class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
                                     <label for="check_missing" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                                         Soldes manquants
                                     </label>
@@ -169,7 +189,7 @@
                                 
                                 <div class="flex items-center">
                                     <input type="checkbox" id="check_negative" name="checks[]" value="negative" checked
-                                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                        class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
                                     <label for="check_negative" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                                         Soldes négatifs
                                     </label>
@@ -177,7 +197,7 @@
                                 
                                 <div class="flex items-center">
                                     <input type="checkbox" id="check_inconsistent" name="checks[]" value="inconsistent" checked
-                                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                        class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
                                     <label for="check_inconsistent" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                                         Données incohérentes
                                     </label>
@@ -186,17 +206,17 @@
                         </div>
 
                         <button type="submit" 
-                                class="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
+                                class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-medium rounded-xl hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             Lancer la Vérification
                         </button>
                     </form>
                 </div>
 
                 <!-- Recalcul des soldes -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-center mb-6">
-                        <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                            <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                             </svg>
                         </div>
@@ -218,7 +238,7 @@
                                 Année à recalculer
                             </label>
                             <select id="recalc_year" name="year" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200">
                                 @for($y = now()->year + 1; $y >= now()->year - 3; $y--)
                                     <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
                                 @endfor
@@ -230,7 +250,7 @@
                                 Utilisateur spécifique (optionnel)
                             </label>
                             <input type="text" id="recalc_user_id" name="user_id" placeholder="ID utilisateur ou matricule"
-                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200">
                         </div>
 
                         <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
@@ -247,17 +267,17 @@
                         </div>
 
                         <button type="submit" 
-                                class="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-colors">
+                                class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white font-medium rounded-xl hover:from-amber-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             Recalculer les Soldes
                         </button>
                     </form>
                 </div>
 
                 <!-- Export des données -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-center mb-6">
-                        <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
@@ -279,7 +299,7 @@
                                 Année à exporter
                             </label>
                             <select id="export_year" name="year" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
                                 @for($y = now()->year + 1; $y >= now()->year - 3; $y--)
                                     <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
                                 @endfor
@@ -291,7 +311,7 @@
                                 Département (optionnel)
                             </label>
                             <select id="export_department_id" name="department_id"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
                                 <option value="">Tous les départements</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -300,7 +320,7 @@
                         </div>
 
                         <button type="submit" 
-                                class="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                                class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-xl hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                             Exporter en Excel
                         </button>
                     </form>

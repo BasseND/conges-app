@@ -93,6 +93,10 @@ class LeaveController extends Controller
                     'required',
                     function ($attribute, $value, $fail) {
                         $user = auth()->user();
+                        if (!($user instanceof \App\Models\User)) {
+                            $fail('Utilisateur non authentifié ou type utilisateur invalide.');
+                            return;
+                        }
                         $userSeniorityMonths = $user->getSeniorityInMonths();
                         
                         // Système unifié : tous les congés utilisent SpecialLeaveType (format: special_X)

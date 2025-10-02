@@ -8,10 +8,14 @@ use App\Models\LeaveBalance;
 use App\Models\SpecialLeaveType;
 use App\Models\Department;
 use App\Models\LeaveBalanceAdjustment;
+use App\Models\Leave;
 use App\Services\LeaveBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LeaveBalancesExport;
+use Illuminate\Support\Str;
 
 class LeaveBalanceAdminController extends Controller
 {
@@ -128,23 +132,139 @@ class LeaveBalanceAdminController extends Controller
     }
 
     /**
+     * Recalculer les soldes à partir des congés approuvés
+     */
+    public function recalculate(Request $request)
+    {
+        $validated = $request->validate([
+            'year' => 'required|integer|min:2000|max:' . (now()->year + 5),
+            'user_id' => 'nullable|string', // peut être id numérique ou matricule
+        ]);
+
+        $year = (int) $validated['year'];
+        $userFilter = $validated['user_id'] ?? null;
+
+        try {
+            DB::beginTransaction();
+
+            // Déterminer les utilisateurs ciblés
+            $usersQuery = User::query()->where('is_active', true);
+            if (!empty($userFilter)) {
+                if (is_numeric($userFilter)) {
+                    $usersQuery->where('id', (int) $userFilter);
+                } else {
+                    $usersQuery->where('matricule', $userFilter);
+                }
+            }
+            $users = $usersQuery->get();
+
+            // Précharger les types avec solde
+            $leaveTypes = SpecialLeaveType::withBalance()->where('is_active', true)->get();
+
+            $processed = 0;
+            $createdBalances = 0;
+
+            foreach ($users as $user) {
+                foreach ($leaveTypes as $leaveType) {
+                    // Obtenir ou créer le solde pour l'année
+                    $balance = LeaveBalance::firstOrCreate(
+                        [
+                            'user_id' => $user->id,
+                            'special_leave_type_id' => $leaveType->id,
+                            'year' => $year,
+                        ],
+                        [
+                            'initial_balance' => $leaveType->duration_days ?? 0,
+                            'current_balance' => $leaveType->duration_days ?? 0,
+                            'used_balance' => 0,
+                            'adjustment_balance' => 0,
+                            'notes' => 'Solde créé lors du recalcul',
+                        ]
+                    );
+                    if ($balance->wasRecentlyCreated) {
+                        $createdBalances++;
+                    }
+
+                    // Calculer le total des jours approuvés pour ce type et cette année
+                    $approvedLeaves = Leave::where('user_id', $user->id)
+                        ->where('status', 'approved')
+                        ->whereYear('start_date', $year)
+                        ->where('special_leave_type_id', $leaveType->id)
+                        ->get();
+
+                    $usedDays = $approvedLeaves->sum('duration');
+
+                    // Mettre à jour les champs used_balance et current_balance (on conserve adjustment_balance)
+                    $balance->used_balance = (int) $usedDays;
+                    $balance->current_balance = (int) ($balance->initial_balance - $balance->used_balance + $balance->adjustment_balance);
+                    $balance->save();
+
+                    $processed++;
+                }
+            }
+
+            DB::commit();
+
+            $message = "Recalcul terminé pour l'année {$year}. Enregistrements traités: {$processed}. Nouveaux soldes: {$createdBalances}.";
+
+            if ($request->expectsJson() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'processed' => $processed,
+                    'created' => $createdBalances,
+                ]);
+            }
+
+            return redirect()->route('admin.leave-balances.tools')
+                ->with('success', $message);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erreur lors du recalcul des soldes', [
+                'error' => $e->getMessage(),
+                'year' => $year,
+                'user_filter' => $userFilter,
+            ]);
+
+            if ($request->expectsJson() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors du recalcul : ' . $e->getMessage(),
+                ], 500);
+            }
+
+            return redirect()->route('admin.leave-balances.tools')
+                ->with('error', 'Erreur lors du recalcul : ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Initialiser les soldes pour tous les utilisateurs
      */
     public function initializeAll(Request $request)
     {
         $request->validate([
             'year' => 'required|integer|min:2020|max:2030',
-            'force' => 'boolean'
+            'force' => 'boolean',
+            'department_id' => 'nullable|exists:departments,id'
         ]);
 
         $year = $request->year;
-        $force = $request->boolean('force');
+        // Accepter l'alias force_reinit en plus de force
+        $force = $request->boolean('force') || $request->boolean('force_reinit');
+        $departmentId = $request->get('department_id');
         $results = [];
 
         try {
             DB::beginTransaction();
 
-            $users = User::where('is_active', true)->get();
+            // Filtrer par département si fourni
+            $usersQuery = User::where('is_active', true);
+            if (!empty($departmentId)) {
+                $usersQuery->where('department_id', $departmentId);
+            }
+            $users = $usersQuery->get();
             
             foreach ($users as $user) {
                 $result = $this->leaveBalanceService->initializeUserBalances($user, $year, $force);
@@ -157,23 +277,39 @@ class LeaveBalanceAdminController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Initialisation terminée avec succès',
-                'results' => $results
-            ]);
+            // Contenu négocié: JSON pour requêtes AJAX/JSON, sinon redirection avec message
+            if ($request->expectsJson() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Initialisation terminée avec succès',
+                    'results' => $results
+                ]);
+            }
+
+            $initializedTotal = array_sum(array_column($results, 'initialized'));
+            $skippedTotal = array_sum(array_column($results, 'skipped'));
+
+            return redirect()->route('admin.leave-balances.initialize')
+                ->with('success', "Initialisation terminée avec succès : {$initializedTotal} soldes initialisés, {$skippedTotal} ignorés.");
 
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Erreur lors de l\'initialisation des soldes', [
                 'error' => $e->getMessage(),
-                'year' => $year
+                'year' => $year,
+                'department_id' => $departmentId,
+                'force' => $force
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de l\'initialisation : ' . $e->getMessage()
-            ], 500);
+            if ($request->expectsJson() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors de l\'initialisation : ' . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->route('admin.leave-balances.initialize')
+                ->with('error', 'Erreur lors de l\'initialisation : ' . $e->getMessage());
         }
     }
 
@@ -235,11 +371,22 @@ class LeaveBalanceAdminController extends Controller
             }
         }
 
-        return response()->json([
-            'success' => true,
-            'issues' => $issues,
-            'total_issues' => count($issues)
-        ]);
+        // JSON pour requêtes AJAX/JSON, sinon redirection avec message
+        if ($request->expectsJson() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'issues' => $issues,
+                'total_issues' => count($issues)
+            ]);
+        }
+
+        $issueCount = count($issues);
+        $message = $issueCount === 0
+            ? "Vérification terminée : aucune anomalie détectée pour l'année {$year}."
+            : "Vérification terminée : {$issueCount} anomalie(s) détectée(s) pour l'année {$year}.";
+
+        return redirect()->route('admin.leave-balances.tools')
+            ->with('success', $message);
     }
 
     /**
@@ -564,5 +711,46 @@ class LeaveBalanceAdminController extends Controller
             'total_current_days' => LeaveBalance::where('year', $year)->sum('current_balance'),
             'negative_balances' => LeaveBalance::where('year', $year)->where('current_balance', '<', 0)->count(),
         ];
+    }
+
+    /**
+     * Exporter les soldes de congés au format Excel
+     */
+    public function export(Request $request)
+    {
+        $validated = $request->validate([
+            'year' => 'required|integer|min:2000|max:2100',
+            'department_id' => 'nullable|exists:departments,id',
+        ]);
+
+        $year = (int) $validated['year'];
+        $departmentId = $validated['department_id'] ?? null;
+
+        $query = LeaveBalance::with(['user.department', 'specialLeaveType'])
+            ->where('year', $year);
+
+        if ($departmentId) {
+            $query->whereHas('user', function ($q) use ($departmentId) {
+                $q->where('department_id', $departmentId);
+            });
+        }
+
+        $balances = $query->get();
+
+        if ($balances->isEmpty()) {
+            return back()->with('error', "Aucun solde trouvé pour l'année {$year}" . ($departmentId ? ' dans le département sélectionné.' : '.'));
+        }
+
+        $departmentSlug = '';
+        if ($departmentId) {
+            $department = Department::find($departmentId);
+            if ($department) {
+                $departmentSlug = '_' . Str::slug($department->name);
+            }
+        }
+
+        $filename = "soldes_conges_{$year}{$departmentSlug}.xlsx";
+
+        return Excel::download(new LeaveBalancesExport($balances), $filename, \Maatwebsite\Excel\Excel::XLSX);
     }
 }

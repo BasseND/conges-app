@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class LeaveBalanceAdjustment extends Model
 {
@@ -44,7 +45,7 @@ class LeaveBalanceAdjustment extends Model
     /**
      * Get the user whose balance was adjusted.
      */
-    public function user(): BelongsTo
+    public function user(): HasOneThrough
     {
         return $this->hasOneThrough(
             User::class,

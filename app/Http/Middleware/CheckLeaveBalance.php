@@ -39,17 +39,19 @@ class CheckLeaveBalance
             if ($leave->specialLeaveType && $leave->specialLeaveType->hasBalance()) {
                 $year = $leave->start_date->year;
                 
-                // Vérifier si l'utilisateur a un solde suffisant
-                if (!$this->leaveBalanceService->hasSufficientBalance(
+                // Vérifier le solde via le service
+                $check = $this->leaveBalanceService->checkBalance(
                     $leave->user,
                     $leave->specialLeaveType,
                     $leave->duration_days,
                     $year
-                )) {
+                );
+
+                if (!$check['has_sufficient_balance']) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Solde de congé insuffisant pour approuver cette demande.',
-                        'balance_info' => $this->leaveBalanceService->getBalanceSummary($leave->user, $year)
+                        'message' => $check['message'] ?? 'Solde de congé insuffisant pour approuver cette demande.',
+                        'balance_info' => $this->leaveBalanceService->getUserBalanceSummary($leave->user, $year)
                     ], 422);
                 }
             }
