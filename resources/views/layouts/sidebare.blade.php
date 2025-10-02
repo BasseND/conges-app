@@ -309,6 +309,22 @@
                                             >Mes congés</a
                                         >
                                         </li>
+                                        @if (Auth::check() && auth()->user()->hasAdminAccess())
+                                        <li>
+                                        <a
+                                            href="{{ route('admin.leave-balances.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('admin.leave-balances.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Soldes de congés</a
+                                        >
+                                        </li>
+                                        <li>
+                                        <a
+                                            href="{{ route('admin.leave-balance-adjustments.index') }}"
+                                            class="sidebar-sublink {{ request()->routeIs('admin.leave-balance-adjustments.*') ? 'active' : '' }} text-md inline-block py-1.5 font-medium text-bgray-600 transition-all hover:text-bgray-800 dark:text-bgray-50 hover:dark:text-success-300"
+                                            >Ajustements de soldes</a
+                                        >
+                                        </li>
+                                        @endif
                                     
                                     </ul>
                                 </li>

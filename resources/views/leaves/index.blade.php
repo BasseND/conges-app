@@ -49,126 +49,46 @@
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Solde de congés</h3>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                        <!-- Congés annuels -->
-                        <div class="group overflow-hidden relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-800 dark:via-gray-750 dark:to-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 border border-blue-200/30 dark:border-gray-600/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-1">
-                           
-                            <!-- Animated Background Pattern -->
-                            <div class="absolute inset-0 opacity-5 dark:opacity-10">
-                                <div class="absolute top-0 left-0 w-32 h-32 bg-blue-400 rounded-full blur-3xl animate-pulse"></div>
-                                <div class="absolute bottom-0 right-0 w-24 h-24 bg-purple-400 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s;"></div>
-                            </div>
-
-                            <!-- Floating Icon -->
-                            <div class="flex justify-center items-center absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-xl sm:rounded-2xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        
-                            <div class="relative z-10">
-                                <!-- Header -->
-                                <div class="mb-6">
-                                    <h4 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400 mb-2">Congés Annuels</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Votre solde de congés pour cette année</p>
-                                </div>
-
-                                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
-                                    <!-- Stats Cards -->
-                                    <div class="flex-1 grid grid-cols-2 gap-2 sm:gap-4">
-                                        @php
-                                            $totalAnnualDays = Auth::check() ? auth()->user()->annual_leave_days : 0;
-                                            $remainingDays = Auth::check() ? auth()->user()->remaining_days : 0;
-                                            $usedDays = $totalAnnualDays - $remainingDays;
-                                        @endphp
-                                        
-                                        <!-- Remaining Days -->
-                                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{{ $remainingDays }}</div>
-                                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours restants</div>
-                                        </div>
-                                        
-                                        <!-- Used Days -->
-                                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                            <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ $usedDays }}</div>
-                                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours utilisés</div>
-                                        </div>
-                                        
-                                        <!-- Total Allocation -->
-                                        <div class="col-span-2 p-2 sm:p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 rounded-lg border border-blue-200/30 dark:border-blue-700/30">
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Allocation totale</span>
-                                                <span class="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">{{ $totalAnnualDays }} jours</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                        @if(isset($balanceSummary) && isset($balanceSummary['balances']))
+                            @foreach($balanceSummary['balances'] as $balance)
+                                @php
+                                    // Définir les couleurs selon le type de congé
+                                    $colors = [
+                                        'annual' => ['from' => 'blue', 'to' => 'purple'],
+                                        'maternity' => ['from' => 'pink', 'to' => 'rose'],
+                                        'paternity' => ['from' => 'cyan', 'to' => 'blue'],
+                                        'sick' => ['from' => 'red', 'to' => 'orange'],
+                                        'default' => ['from' => 'green', 'to' => 'emerald']
+                                    ];
                                     
-                                    <!-- Progress Circle -->
-                                    <div class="flex-shrink-0 flex justify-center lg:justify-end">
-                                        @php
-                                            $usagePercentage = $totalAnnualDays > 0 ? ($usedDays / $totalAnnualDays) * 100 : 0;
-                                            $circumference = 2 * 3.14159 * 45;
-                                            $offset = $circumference - ($usagePercentage / 100) * $circumference;
-                                        @endphp
-                                        <div class="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                                            <svg class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 transform -rotate-90" viewBox="0 0 100 100">
-                                                <!-- Background circle -->
-                                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" class="text-blue-200 dark:text-blue-800" />
-                                                <!-- Progress circle -->
-                                                <circle cx="50" cy="50" r="45" stroke="url(#annualGradient)" stroke-width="8" fill="none" 
-                                                        class="transition-all duration-1000 ease-out"
-                                                        stroke-dasharray="{{ $circumference }}"
-                                                        stroke-dashoffset="{{ $offset }}"
-                                                        stroke-linecap="round" />
-                                                <defs>
-                                                    <linearGradient id="annualGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                                                        <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                            <div class="absolute inset-0 flex items-center justify-center">
-                                                <div class="text-center">
-                                                    <div class="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600 dark:text-blue-400">{{ number_format($usagePercentage, 0) }}%</div>
-                                                    <div class="text-xs text-gray-500 dark:text-gray-400">utilisé</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    $leaveTypeKey = strtolower($balance['leave_type']['system_name'] ?? 'default');
+                                    $color = $colors[$leaveTypeKey] ?? $colors['default'];
+                                    
+                                    $usagePercentage = $balance['initial'] > 0 ? ($balance['used'] / $balance['initial']) * 100 : 0;
+                                    $circumference = 2 * 3.14159 * 45;
+                                    $offset = $circumference - ($usagePercentage / 100) * $circumference;
+                                @endphp
                                 
-                                <!-- Progress Description -->
-                                <div class="mt-3 sm:mt-4 text-center">
-                                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                                        <span class="font-medium text-blue-600 dark:text-blue-400">{{ $usedDays }} jours utilisés</span> sur {{ $totalAnnualDays }} 
-                                        ({{ number_format($usagePercentage, 1) }}% d'utilisation)
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        @if(Auth::check())
-                            @if(auth()->user()->gender === 'F')
-                                <!-- Congé Maternité -->
-                                <div class="group overflow-hidden relative bg-gradient-to-br from-pink-50 via-rose-50 to-red-50 dark:from-gray-800 dark:via-gray-750 dark:to-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 border border-pink-200/30 dark:border-gray-600/50 hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-500 hover:-translate-y-1">
-                                    
+                                <div class="group overflow-hidden relative bg-gradient-to-br from-{{ $color['from'] }}-50 via-{{ $color['from'] }}-50 to-{{ $color['to'] }}-50 dark:from-gray-800 dark:via-gray-750 dark:to-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 border border-{{ $color['from'] }}-200/30 dark:border-gray-600/50 hover:shadow-2xl hover:shadow-{{ $color['from'] }}-500/10 transition-all duration-500 hover:-translate-y-1">
+                                   
                                     <!-- Animated Background Pattern -->
                                     <div class="absolute inset-0 opacity-5 dark:opacity-10">
-                                        <div class="absolute top-0 left-0 w-32 h-32 bg-pink-400 rounded-full blur-3xl animate-pulse"></div>
-                                        <div class="absolute bottom-0 right-0 w-24 h-24 bg-rose-400 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s;"></div>
+                                        <div class="absolute top-0 left-0 w-32 h-32 bg-{{ $color['from'] }}-400 rounded-full blur-3xl animate-pulse"></div>
+                                        <div class="absolute bottom-0 right-0 w-24 h-24 bg-{{ $color['to'] }}-400 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s;"></div>
                                     </div>
 
                                     <!-- Floating Icon -->
-                                    <div class="flex justify-center items-center absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-pink-500 via-rose-500 to-red-600 rounded-xl sm:rounded-2xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                    <div class="flex justify-center items-center absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-{{ $color['from'] }}-500 via-{{ $color['from'] }}-500 to-{{ $color['to'] }}-600 rounded-xl sm:rounded-2xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
                                     </div>
                                 
                                     <div class="relative z-10">
                                         <!-- Header -->
                                         <div class="mb-6">
-                                            <h4 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent dark:from-pink-400 dark:to-rose-400 mb-2">Congé Maternité</h4>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Votre solde de congé maternité</p>
+                                            <h4 class="text-xl font-bold bg-gradient-to-r from-{{ $color['from'] }}-600 to-{{ $color['to'] }}-600 bg-clip-text text-transparent dark:from-{{ $color['from'] }}-400 dark:to-{{ $color['to'] }}-400 mb-2">{{ $balance['leave_type']['name'] }}</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Votre solde pour {{ $balance['year'] }}</p>
                                         </div>
 
                                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
@@ -176,51 +96,47 @@
                                             <div class="flex-1 grid grid-cols-2 gap-2 sm:gap-4">
                                                 <!-- Remaining Days -->
                                                 <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-pink-600 dark:text-pink-400 mb-1">{{ Auth::check() ? auth()->user()->remaining_maternity_days : 0 }}</div>
+                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-{{ $color['from'] }}-600 dark:text-{{ $color['from'] }}-400 mb-1">{{ $balance['current'] }}</div>
                                                     <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours restants</div>
                                                 </div>
                                                 
                                                 <!-- Used Days -->
                                                 <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                                    @php
-                                                        $totalMaternityDays = Auth::check() ? auth()->user()->maternity_leave_days : 0;
-                                                        $remainingMaternityDays = Auth::check() ? auth()->user()->remaining_maternity_days : 0;
-                                                        $usedMaternityDays = $totalMaternityDays - $remainingMaternityDays;
-                                                    @endphp
-                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-pink-600 dark:text-pink-400 mb-1">{{ $usedMaternityDays }}</div>
+                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-{{ $color['to'] }}-600 dark:text-{{ $color['to'] }}-400 mb-1">{{ $balance['used'] }}</div>
                                                     <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours utilisés</div>
                                                 </div>
                                                 
                                                 <!-- Total Allocation -->
-                                                <div class="col-span-2 p-2 sm:p-3 bg-gradient-to-r from-pink-500/10 to-rose-500/10 dark:from-pink-500/20 dark:to-rose-500/20 rounded-lg border border-pink-200/30 dark:border-pink-700/30">
+                                                <div class="col-span-2 p-2 sm:p-3 bg-gradient-to-r from-{{ $color['from'] }}-500/10 to-{{ $color['to'] }}-500/10 dark:from-{{ $color['from'] }}-500/20 dark:to-{{ $color['to'] }}-500/20 rounded-lg border border-{{ $color['from'] }}-200/30 dark:border-{{ $color['from'] }}-700/30">
                                                     <div class="flex items-center justify-between">
-                                                        <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Allocation totale</span>
-                                                        <span class="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">{{ $totalMaternityDays }} jours</span>
+                                                        <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Allocation initiale</span>
+                                                        <span class="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">{{ $balance['initial'] }} jours</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             
                                             <!-- Progress Circle -->
                                             <div class="flex-shrink-0 flex justify-center lg:justify-end">
-                                                @php
-                                                    $maternityPercentage = $totalMaternityDays > 0 ? ($usedMaternityDays / $totalMaternityDays) * 100 : 0;
-                                                    $maternityCircumference = 2 * 3.14159 * 45;
-                                                    $maternityOffset = $maternityCircumference - ($maternityPercentage / 100) * $maternityCircumference;
-                                                @endphp
                                                 <div class="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
                                                     <svg class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 transform -rotate-90" viewBox="0 0 100 100">
                                                         <!-- Background circle -->
-                                                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" class="text-pink-200 dark:text-pink-800" />
+                                                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" class="text-{{ $color['from'] }}-200 dark:text-{{ $color['from'] }}-800" />
                                                         <!-- Progress circle -->
-                                                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" 
-                                                                class="text-pink-500 dark:text-pink-400 transition-all duration-1000 ease-out"
-                                                                stroke-dasharray="{{ $maternityCircumference }}"
-                                                                stroke-dashoffset="{{ $maternityOffset }}"
+                                                        <circle cx="50" cy="50" r="45" stroke="url(#gradient{{ $loop->index }})" stroke-width="8" fill="none" 
+                                                                class="transition-all duration-1000 ease-out"
+                                                                stroke-dasharray="{{ $circumference }}"
+                                                                stroke-dashoffset="{{ $offset }}"
                                                                 stroke-linecap="round" />
+                                                        <defs>
+                                                            <linearGradient id="gradient{{ $loop->index }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" style="stop-color:rgb({{ $color['from'] === 'blue' ? '59 130 246' : ($color['from'] === 'pink' ? '236 72 153' : ($color['from'] === 'cyan' ? '6 182 212' : ($color['from'] === 'red' ? '239 68 68' : '34 197 94'))) }});stop-opacity:1" />
+                                                                <stop offset="100%" style="stop-color:rgb({{ $color['to'] === 'purple' ? '139 92 246' : ($color['to'] === 'rose' ? '244 63 94' : ($color['to'] === 'blue' ? '59 130 246' : ($color['to'] === 'orange' ? '249 115 22' : '16 185 129'))) }});stop-opacity:1" />
+                                                            </linearGradient>
+                                                        </defs>
                                                     </svg>
                                                     <div class="absolute inset-0 flex items-center justify-center">
                                                         <div class="text-center">
-                                                            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-pink-600 dark:text-pink-400">{{ number_format($maternityPercentage, 0) }}%</div>
+                                                            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-{{ $color['from'] }}-600 dark:text-{{ $color['from'] }}-400">{{ number_format($usagePercentage, 0) }}%</div>
                                                             <div class="text-xs text-gray-500 dark:text-gray-400">utilisé</div>
                                                         </div>
                                                     </div>
@@ -231,104 +147,27 @@
                                         <!-- Progress Description -->
                                         <div class="mt-3 sm:mt-4 text-center">
                                             <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium text-pink-600 dark:text-pink-400">{{ $usedMaternityDays }} jours utilisés</span> sur {{ $totalMaternityDays }} 
-                                                ({{ number_format($maternityPercentage, 1) }}% d'utilisation)
+                                                <span class="font-medium text-{{ $color['from'] }}-600 dark:text-{{ $color['from'] }}-400">{{ $balance['used'] }} jours utilisés</span> sur {{ $balance['initial'] }} 
+                                                ({{ number_format($usagePercentage, 1) }}% d'utilisation)
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                                <!-- Congé Paternité -->
-                                <div class="group overflow-hidden relative bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:via-gray-750 dark:to-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 border border-cyan-200/30 dark:border-gray-600/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-1">
-                                    
-                                    <!-- Animated Background Pattern -->
-                                    <div class="absolute inset-0 opacity-5 dark:opacity-10">
-                                        <div class="absolute top-0 left-0 w-32 h-32 bg-cyan-400 rounded-full blur-3xl animate-pulse"></div>
-                                        <div class="absolute bottom-0 right-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl animate-pulse" style="animation-delay: 1s;"></div>
-                                    </div>
-
-                                    <!-- Floating Icon -->
-                                    <div class="flex justify-center items-center absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-600 rounded-xl sm:rounded-2xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                    </div>
-                                
-                                    <div class="relative z-10">
-                                        <!-- Header -->
-                                        <div class="mb-6">
-                                            <h4 class="text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent dark:from-cyan-400 dark:to-blue-400 mb-2">Congé Paternité</h4>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Votre solde de congé paternité</p>
-                                        </div>
-
-                                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
-                                            <!-- Stats Cards -->
-                                            <div class="flex-1 grid grid-cols-2 gap-2 sm:gap-4">
-                                                <!-- Remaining Days -->
-                                                <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">{{ Auth::check() ? auth()->user()->remaining_paternity_days : 0 }}</div>
-                                                    <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours restants</div>
-                                                </div>
-                                                
-                                                <!-- Used Days -->
-                                                <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-2 sm:p-4 backdrop-blur-sm border border-white/20 dark:border-gray-700/20">
-                                                    @php
-                                                        $totalPaternityDays = Auth::check() ? auth()->user()->paternity_leave_days : 0;
-                                                        $remainingPaternityDays = Auth::check() ? auth()->user()->remaining_paternity_days : 0;
-                                                        $usedPaternityDays = $totalPaternityDays - $remainingPaternityDays;
-                                                    @endphp
-                                                    <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">{{ $usedPaternityDays }}</div>
-                                                    <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Jours utilisés</div>
-                                                </div>
-                                                
-                                                <!-- Total Allocation -->
-                                                <div class="col-span-2 p-2 sm:p-3 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 dark:from-cyan-500/20 dark:to-blue-500/20 rounded-lg border border-cyan-200/30 dark:border-cyan-700/30">
-                                                    <div class="flex items-center justify-between">
-                                                        <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Allocation totale</span>
-                                                        <span class="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">{{ $totalPaternityDays }} jours</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Progress Circle -->
-                                            <div class="flex-shrink-0 flex justify-center lg:justify-end">
-                                                @php
-                                                    $paternityPercentage = $totalPaternityDays > 0 ? ($usedPaternityDays / $totalPaternityDays) * 100 : 0;
-                                                    $paternityCircumference = 2 * 3.14159 * 45;
-                                                    $paternityOffset = $paternityCircumference - ($paternityPercentage / 100) * $paternityCircumference;
-                                                @endphp
-                                                <div class="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
-                                                    <svg class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 transform -rotate-90" viewBox="0 0 100 100">
-                                                        <!-- Background circle -->
-                                                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" class="text-cyan-200 dark:text-cyan-800" />
-                                                        <!-- Progress circle -->
-                                                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" 
-                                                                class="text-cyan-500 dark:text-cyan-400 transition-all duration-1000 ease-out"
-                                                                stroke-dasharray="{{ $paternityCircumference }}"
-                                                                stroke-dashoffset="{{ $paternityOffset }}"
-                                                                stroke-linecap="round" />
-                                                    </svg>
-                                                    <div class="absolute inset-0 flex items-center justify-center">
-                                                        <div class="text-center">
-                                                            <div class="text-lg sm:text-xl lg:text-2xl font-bold text-cyan-600 dark:text-cyan-400">{{ number_format($paternityPercentage, 0) }}%</div>
-                                                            <div class="text-xs text-gray-500 dark:text-gray-400">utilisé</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Progress Description -->
-                                        <div class="mt-3 sm:mt-4 text-center">
-                                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                                                <span class="font-medium text-cyan-600 dark:text-cyan-400">{{ $usedPaternityDays }} jours utilisés</span> sur {{ $totalPaternityDays }} 
-                                                ({{ number_format($paternityPercentage, 1) }}% d'utilisation)
-                                            </p>
-                                        </div>
-                                    </div>
+                            @endforeach
+                        @else
+                            <!-- Message si aucun solde n'est disponible -->
+                            <div class="col-span-full text-center py-8">
+                                <div class="text-gray-500 dark:text-gray-400">
+                                    <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <p class="text-lg font-medium">Aucun solde de congé disponible</p>
+                                    <p class="text-sm mt-1">Vos soldes de congés seront initialisés automatiquement.</p>
                                 </div>
-                            @endif
+                            </div>
                         @endif
+                        
+
                        
                     </div>
                 </div>

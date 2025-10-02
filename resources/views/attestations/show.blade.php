@@ -312,7 +312,7 @@
 
                                     @if($attestationRequest->generated_at)
                                         <li>
-                                            <div class="relative">
+                                            <div class="relative pb-6">
                                                 <div class="relative flex space-x-3">
                                                     <div>
                                                         <span class="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">

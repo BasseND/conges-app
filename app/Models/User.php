@@ -297,6 +297,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the leave balances for the user.
+     */
+    public function leaveBalances()
+    {
+        return $this->hasMany(LeaveBalance::class);
+    }
+
+    /**
      * Méthodes de vérification des rôles
      */
     public function isManager()

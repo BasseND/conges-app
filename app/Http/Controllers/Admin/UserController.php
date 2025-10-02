@@ -103,7 +103,8 @@ class UserController extends Controller
                     User::ROLE_MANAGER,
                     User::ROLE_ADMIN,
                     User::ROLE_HR,
-                    User::ROLE_DEPARTMENT_HEAD
+                    User::ROLE_DEPARTMENT_HEAD,
+                    User::ROLE_HR_ADMIN,
                 ])],
                 'department_id' => 'required|exists:departments,id',
                 'company_id' => 'required|exists:companies,id',
@@ -237,7 +238,8 @@ class UserController extends Controller
                 User::ROLE_MANAGER,
                 User::ROLE_ADMIN,
                 User::ROLE_HR,
-                User::ROLE_DEPARTMENT_HEAD
+                User::ROLE_DEPARTMENT_HEAD,
+                User::ROLE_HR_ADMIN,
             ])],
             'department_id' => 'required|exists:departments,id',
             'company_id' => 'required|exists:companies,id',
@@ -352,7 +354,8 @@ class UserController extends Controller
                 User::ROLE_MANAGER,
                 User::ROLE_ADMIN,
                 User::ROLE_HR,
-                User::ROLE_DEPARTMENT_HEAD
+                User::ROLE_DEPARTMENT_HEAD,
+                User::ROLE_HR_ADMIN,
             ])],
             'department_id' => 'required|exists:departments,id',
             'team_id' => 'nullable|exists:teams,id',

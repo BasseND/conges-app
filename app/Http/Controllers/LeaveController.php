@@ -17,9 +17,19 @@ use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Events\LeaveCreated;
 use App\Events\LeaveStatusUpdated;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Company;
+use App\Services\LeaveBalanceService;
 
 class LeaveController extends Controller
 {
+    protected $leaveBalanceService;
+
+    public function __construct(LeaveBalanceService $leaveBalanceService)
+    {
+        $this->leaveBalanceService = $leaveBalanceService;
+    }
+
     /**
      * Affiche la liste des congés de l'utilisateur connecté
      */
@@ -30,7 +40,10 @@ class LeaveController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('leaves.index', compact('leaves'));
+        // Récupérer les soldes de congés de l'utilisateur
+        $balanceSummary = $this->leaveBalanceService->getUserBalanceSummary(auth()->user());
+
+        return view('leaves.index', compact('leaves', 'balanceSummary'));
     }
 
     /**
@@ -454,8 +467,57 @@ class LeaveController extends Controller
     }
 
     /**
-     * Annule une demande de congé
+     * Annule une demande de congé approuvée
      */
+    public function cancel(Request $request, Leave $leave)
+    {
+        if (!auth()->user()->can('approve-leaves')) {
+            abort(403, 'Vous n\'avez pas l\'autorisation d\'annuler les demandes de congé.');
+        }
+
+        if ($leave->status !== 'approved') {
+            return back()->with('error', 'Seules les demandes approuvées peuvent être annulées.');
+        }
+
+        $validated = $request->validate([
+            'cancellation_reason' => 'required|string|max:500'
+        ]);
+
+        $oldStatus = $leave->status;
+        
+        // Utiliser le service LeaveBalanceService pour rembourser le solde
+        $leaveBalanceService = app(\App\Services\LeaveBalanceService::class);
+        
+        DB::beginTransaction();
+        try {
+            // Rembourser le solde si nécessaire
+            $leaveBalanceService->incrementBalance($leave);
+            
+            // Mettre à jour le statut du congé
+            $leave->update([
+                'status' => 'cancelled',
+                'cancelled_by' => auth()->id(),
+                'cancelled_at' => now(),
+                'cancellation_reason' => $validated['cancellation_reason']
+            ]);
+            
+            DB::commit();
+            
+            // Déclencher l'événement de mise à jour du statut
+            event(new LeaveStatusUpdated($leave, $oldStatus, 'cancelled'));
+
+            return redirect()->back()->with('success', 'La demande de congé a été annulée et le solde a été remboursé.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Erreur lors de l\'annulation du congé', [
+                'leave_id' => $leave->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            return back()->with('error', 'Une erreur est survenue lors de l\'annulation du congé.');
+        }
+    }
 
     public function destroy(Leave $leave)
     {
@@ -836,5 +898,105 @@ class LeaveController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur est survenue lors de la soumission de la demande.');
         }
+    }
+
+    /**
+     * Génère et télécharge le PDF d'une demande de congé approuvée
+     */
+    public function downloadPdf(Leave $leave)
+    {
+        $this->authorize('view', $leave);
+
+        // Vérifier que la demande est approuvée
+        if ($leave->status !== 'approved') {
+            return back()->with('error', 'Le PDF ne peut être généré que pour les demandes approuvées.');
+        }
+
+        try {
+            // Préparer les données pour le template
+            $data = $this->prepareTemplateData($leave);
+            
+            // Générer le PDF
+            $pdf = Pdf::loadView('templates.leaves.leave_approval', $data)
+                ->setPaper('a4', 'portrait')
+                ->setOptions([
+                    'defaultFont' => 'DejaVu Sans',
+                    'isRemoteEnabled' => true,
+                    'isHtml5ParserEnabled' => true,
+                    'isPhpEnabled' => true
+                ]);
+
+            // Nom du fichier
+            $filename = 'autorisation_conge_' . $leave->user->first_name . '_' . $leave->user->last_name . '_' . $leave->id . '.pdf';
+            
+            return $pdf->download($filename);
+            
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la génération du PDF de congé:', [
+                'leave_id' => $leave->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            return back()->with('error', 'Erreur lors de la génération du PDF: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Prépare les données pour le template PDF
+     */
+    private function prepareTemplateData(Leave $leave)
+    {
+        $user = $leave->user;
+        $company = Company::first(); // Récupérer les informations de l'entreprise
+        
+        // Déterminer qui a approuvé la demande
+        $approvedBy = $leave->approved_by ? 
+            \App\Models\User::find($leave->approved_by) : 
+            ($leave->processed_by ? \App\Models\User::find($leave->processed_by) : null);
+        
+        return [
+            // Informations de l'entreprise
+            'entreprise' => $company ? $company->name : 'Nom de l\'entreprise',
+            'adresse_entreprise' => $company ? $company->address : 'Adresse de l\'entreprise',
+            'code_postal_entreprise' => $company ? $company->postal_code : '00000',
+            'ville_entreprise' => $company ? $company->city : 'Ville',
+            'siret' => $company ? $company->siret : null,
+            'logo_entreprise' => $company ? $company->logo : null,
+            
+            // Informations RH
+            'hr_director_name' => $company && $company->hr_director_name ? $company->hr_director_name : 'Directeur RH',
+            'directeur_rh' => $company && $company->hr_director_name ? $company->hr_director_name : 'Directeur RH',
+            'hr_signature' => $company ? $company->hr_signature : null,
+            'generateur' => $approvedBy ? ($approvedBy->first_name . ' ' . $approvedBy->last_name) : 'Système',
+            
+            // Informations du document
+            'numero_demande' => 'CONGE-' . str_pad($leave->id, 6, '0', STR_PAD_LEFT),
+            'date_generation' => now()->format('d/m/Y'),
+            
+            // Informations de l'employé
+            'civilite' => $user->gender === 'M' ? 'Monsieur' : 'Madame',
+            'nom_complet' => $user->first_name . ' ' . $user->last_name,
+            'nom' => $user->last_name,
+            'prenom' => $user->first_name,
+            'email' => $user->email,
+            'poste' => $user->position ?? 'Non renseigné',
+            'departement' => $user->department ? $user->department->name : 'Non renseigné',
+            'matricule' => $user->employee_id ?? null,
+            
+            // Informations de la demande de congé
+            'type_conge' => $leave->specialLeaveType ? $leave->specialLeaveType->name : $leave->type,
+            'date_debut' => $leave->start_date->format('d/m/Y'),
+            'date_fin' => $leave->end_date->format('d/m/Y'),
+            'duree_jours' => $leave->duration,
+            'motif' => $leave->reason,
+            'date_soumission' => $leave->created_at->format('d/m/Y'),
+            
+            // Informations d'approbation
+            'statut' => 'Approuvé',
+            'approuve_par' => $approvedBy ? ($approvedBy->first_name . ' ' . $approvedBy->last_name) : 'Système',
+            'date_approbation' => $leave->approved_at ? $leave->approved_at->format('d/m/Y') : 
+                                 ($leave->processed_at ? $leave->processed_at->format('d/m/Y') : now()->format('d/m/Y')),
+            'commentaire_approbation' => $leave->rejection_reason ?? null, // Peut être utilisé pour des commentaires d'approbation
+        ];
     }
 }

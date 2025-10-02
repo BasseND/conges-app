@@ -34,7 +34,7 @@
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Type de congé -->
-                                <div class="space-y-1">
+                                <div class="space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -47,7 +47,7 @@
                                 </div>
 
                                 <!-- Période -->
-                                <div class="space-y-1">
+                                <div class="space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -65,7 +65,7 @@
                                 </div>
 
                                 <!-- Demandeur -->
-                                <div class="space-y-1">
+                                <div class="space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -78,7 +78,7 @@
                                 </div>
 
                                 <!-- Département -->
-                                <div class="space-y-1">
+                                <div class="space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
@@ -91,7 +91,7 @@
                                 </div>
 
                                 <!-- Statut -->
-                                <div class="space-y-1">
+                                <div class="space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -104,7 +104,7 @@
                                 </div>
 
                                 <!-- Motif de la demande -->
-                                <div class="md:col-span-2 space-y-1">
+                                <div class="md:col-span-2 space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
                                     <label class="text-sm font-medium text-cyan-700 dark:text-cyan-300 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -192,9 +192,9 @@
                             </a>
 
                             <!-- Actions -->
-                            @if(Auth::check() && (auth()->user()->can('update', $leave) || auth()->user()->can('approve-leaves')))
-                                <div class="">
-                                    <div class="flex flex-wrap gap-3">
+                            <div class="">
+                                <div class="flex flex-wrap gap-3">
+                                    @if(Auth::check() && (auth()->user()->can('update', $leave) || auth()->user()->can('approve-leaves')))
                                         @can('update', $leave)
                                             @if($leave->status === 'draft')
                                                 <a href="{{ route('leaves.edit', $leave) }}" 
@@ -232,13 +232,32 @@
                                                 Refuser
                                             </button>
                                         @endif
-                                    </div>
+                                    @endif
+                                    
+                                    @if($leave->status === 'approved')
+                                        <a href="{{ route('leaves.download-pdf', $leave) }}" 
+                                        class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                            </svg>
+                                            Télécharger PDF
+                                        </a>
+                                        
+                                        @if(Auth::check() && auth()->user()->can('approve-leaves'))
+                                            <button 
+                                                x-data="{ showCancelModal: false, cancelUrl: '{{ route('leaves.cancel', $leave) }}' }"
+                                                @click="showCancelModal = true"
+                                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                                Annuler le congé
+                                            </button>
+                                        @endif
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
                         </div>
-
-
-
                     </div>
 
 
@@ -254,6 +273,7 @@
     <x-modals.submit-leave message="Êtes-vous sûr de vouloir soumettre cette demande de congé ? Une fois soumise, elle ne pourra plus être modifiée." />
     <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
     <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
+    <x-modals.cancel-leave-approved />
     
 </x-app-layout>
 

@@ -19,7 +19,8 @@ class Leave extends Model
         'draft' => 'Brouillon',
         'pending' => 'En attente',
         'approved' => 'Approuvé',
-        'rejected' => 'Rejeté'
+        'rejected' => 'Rejeté',
+        'cancelled' => 'Annulé'
     ];
 
     // Les types de congés sont définis via le modèle SpecialLeaveType
@@ -36,13 +37,17 @@ class Leave extends Model
         'processed_by',
         'processed_at',
         'rejection_reason',
-        'approved_by'
+        'approved_by',
+        'cancelled_by',
+        'cancelled_at',
+        'cancellation_reason'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'processed_at' => 'datetime'
+        'processed_at' => 'datetime',
+        'cancelled_at' => 'datetime'
     ];
 
     /**
@@ -66,6 +71,11 @@ class Leave extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function canceller()
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
     }
 
     public function specialLeaveType()

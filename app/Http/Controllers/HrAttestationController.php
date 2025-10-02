@@ -431,7 +431,7 @@ class HrAttestationController extends Controller
             'signature_drh' => $company ? $company->hr_signature : null,
             
             // Données de l'employé - Variables exactes du template
-            'civilite' => $employee->gender === 'male' ? 'Monsieur' : 'Madame',
+            'civilite' => $employee->gender === 'M' ? 'Monsieur' : 'Madame',
             'nom' => $employee->first_name . ' ' . $employee->last_name, // Template utilise $nom pour nom complet
             'prenom' => $employee->first_name,
             'nom_complet' => $employee->first_name . ' ' . $employee->last_name,

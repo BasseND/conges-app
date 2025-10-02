@@ -446,6 +446,7 @@
                                              <option value="{{ App\Models\User::ROLE_HR }}" {{ old('role', $user->role) == App\Models\User::ROLE_HR ? 'selected' : '' }}>Ressources Humaines</option>
                                              @if(Auth::check() && auth()->user()->role === App\Models\User::ROLE_ADMIN)
                                                <option value="{{ App\Models\User::ROLE_ADMIN }}" {{ old('role', $user->role) == App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Administrateur</option>
+                                               <option value="{{ App\Models\User::ROLE_HR_ADMIN }}" {{ old('role', $user->role) == App\Models\User::ROLE_HR_ADMIN ? 'selected' : '' }}>DRH</option>
                                              @endif
                                              
                                          </select>
