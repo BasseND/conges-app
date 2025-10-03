@@ -145,7 +145,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // Relation LeaveBalance supprimée - remplacée par SpecialLeaveType
 
     /**
-     * Vérifie si l'utilisateur est un administrateur
+     * Vérifie si l'utilisateur est un Admin
      */
     public function isAdmin(): bool
     {
@@ -174,6 +174,34 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isHR(): bool
     {
         return $this->role === self::ROLE_HR;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est RH Admin
+     */
+    public function isHRAdmin(): bool
+    {
+        return $this->role === self::ROLE_HR_ADMIN;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est Manager
+     */
+    public function isManager(): bool
+    {
+        return $this->role === self::ROLE_MANAGER;
+    }
+    /**
+     * Vérifie si l'utilisateur a accès Admin
+     */
+    public function hasAdminAccess()
+    {
+        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_HR_ADMIN]);
+    }
+
+    public function hasHRAccess()
+    {
+        return in_array($this->role, [self::ROLE_HR, self::ROLE_HR_ADMIN]);
     }
     
     /**
@@ -304,18 +332,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(LeaveBalance::class);
     }
 
-    /**
-     * Méthodes de vérification des rôles
-     */
-    public function isManager()
-    {
-        return $this->role === self::ROLE_MANAGER;
-    }
+   
 
-    public function hasAdminAccess()
-    {
-        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_HR]);
-    }
+
 
     /**
      * Get all employees in the same department.
@@ -334,7 +353,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function canManageUserLeaves(User $user): bool
     {
         // Les admins et RH peuvent gérer tous les congés
-        if ($this->isAdmin() || $this->isHR()) {
+        if ($this->isAdmin() || $this->isHR() ) {
             return true;
         }
         
@@ -378,6 +397,7 @@ class User extends Authenticatable implements MustVerifyEmail
             self::ROLE_MANAGER => 'Manager',
             self::ROLE_ADMIN => 'Administrateur',
             self::ROLE_HR => 'RH',
+            self::ROLE_HR_ADMIN => 'RH Admin',
             self::ROLE_DEPARTMENT_HEAD => 'Chef de Département',
         ];
     }

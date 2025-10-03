@@ -17,9 +17,9 @@ use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Events\LeaveCreated;
 use App\Events\LeaveStatusUpdated;
+use App\Services\LeaveBalanceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Company;
-use App\Services\LeaveBalanceService;
 
 class LeaveController extends Controller
 {
@@ -426,16 +426,31 @@ class LeaveController extends Controller
 
         $oldStatus = $leave->status;
         
-        $leave->update([
-            'status' => 'approved',
-            'approved_by' => auth()->id(),
-            'approved_at' => now()
-        ]);
-        
-        // Déclencher l'événement de mise à jour du statut
-        event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
+        try {
+            DB::transaction(function () use ($leave, $oldStatus) {
+                $leave->update([
+                    'status' => 'approved',
+                    'approved_by' => auth()->id(),
+                    'approved_at' => now()
+                ]);
 
-        return redirect()->back()->with('success', 'La demande de congé a été approuvée.');
+                // Décrémenter le solde via le service si nécessaire
+                if ($leave->specialLeaveType && $leave->specialLeaveType->hasBalance()) {
+                    $leaveBalanceService = app(LeaveBalanceService::class);
+                    $decremented = $leaveBalanceService->decrementBalance($leave);
+                    if (!$decremented) {
+                        throw new \RuntimeException('Solde insuffisant pour approuver cette demande.');
+                    }
+                }
+
+                // Déclencher l'événement de mise à jour du statut
+                event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
+            });
+
+            return redirect()->back()->with('success', 'La demande de congé a été approuvée.');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**

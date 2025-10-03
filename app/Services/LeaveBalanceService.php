@@ -161,23 +161,24 @@ class LeaveBalanceService
         $year = $leave->start_date->year;
         $balance = $this->getOrCreateBalance($leave->user, $leave->specialLeaveType, $year);
 
-        if ($balance->current_balance < $leave->duration) {
+        // Utiliser la durée calculée en jours ouvrables
+        if ($balance->current_balance < $leave->duration_days) {
             Log::warning('Tentative de décrémentation avec solde insuffisant', [
                 'leave_id' => $leave->id,
                 'current_balance' => $balance->current_balance,
-                'required' => $leave->duration
+                'required' => $leave->duration_days
             ]);
             return false;
         }
 
         return DB::transaction(function () use ($balance, $leave) {
-            $balance->decrement('current_balance', $leave->duration);
-            $balance->increment('used_balance', $leave->duration);
+            $balance->decrement('current_balance', $leave->duration_days);
+            $balance->increment('used_balance', $leave->duration_days);
             
             Log::info('Solde décrémenté', [
                 'leave_id' => $leave->id,
                 'user_id' => $leave->user_id,
-                'duration' => $leave->duration,
+                'duration' => $leave->duration_days,
                 'new_balance' => $balance->fresh()->current_balance
             ]);
 
@@ -202,13 +203,13 @@ class LeaveBalanceService
         $balance = $this->getOrCreateBalance($leave->user, $leave->specialLeaveType, $year);
 
         return DB::transaction(function () use ($balance, $leave) {
-            $balance->increment('current_balance', $leave->duration);
-            $balance->decrement('used_balance', $leave->duration);
+            $balance->increment('current_balance', $leave->duration_days);
+            $balance->decrement('used_balance', $leave->duration_days);
             
             Log::info('Solde incrémenté (annulation)', [
                 'leave_id' => $leave->id,
                 'user_id' => $leave->user_id,
-                'duration' => $leave->duration,
+                'duration' => $leave->duration_days,
                 'new_balance' => $balance->fresh()->current_balance
             ]);
 
@@ -273,6 +274,7 @@ class LeaveBalanceService
                     
                 return [
                     'leave_type' => $balance->specialLeaveType->name,
+                    'year' => $balance->year,
                     'initial' => $balance->initial_balance,
                     'current' => $balance->current_balance,
                     'used' => $balance->used_balance,

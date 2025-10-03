@@ -61,7 +61,20 @@
                                         'default' => ['from' => 'green', 'to' => 'emerald']
                                     ];
                                     
-                                    $leaveTypeKey = strtolower($balance['leave_type']['system_name'] ?? 'default');
+                                    // leave_type est une chaîne venant du service -> normaliser vers une clé
+                                    $leaveTypeName = strtolower(is_array($balance['leave_type']) ? ($balance['leave_type']['name'] ?? '') : ($balance['leave_type'] ?? ''));
+                                    // Mapper quelques noms usuels vers clés connues
+                                    if (str_contains($leaveTypeName, 'annuel') || str_contains($leaveTypeName, 'annual')) {
+                                        $leaveTypeKey = 'annual';
+                                    } elseif (str_contains($leaveTypeName, 'matern') || str_contains($leaveTypeName, 'maternity')) {
+                                        $leaveTypeKey = 'maternity';
+                                    } elseif (str_contains($leaveTypeName, 'patern') || str_contains($leaveTypeName, 'paternity')) {
+                                        $leaveTypeKey = 'paternity';
+                                    } elseif (str_contains($leaveTypeName, 'maladie') || str_contains($leaveTypeName, 'sick')) {
+                                        $leaveTypeKey = 'sick';
+                                    } else {
+                                        $leaveTypeKey = 'default';
+                                    }
                                     $color = $colors[$leaveTypeKey] ?? $colors['default'];
                                     
                                     $usagePercentage = $balance['initial'] > 0 ? ($balance['used'] / $balance['initial']) * 100 : 0;
@@ -87,7 +100,7 @@
                                     <div class="relative z-10">
                                         <!-- Header -->
                                         <div class="mb-6">
-                                            <h4 class="text-xl font-bold bg-gradient-to-r from-{{ $color['from'] }}-600 to-{{ $color['to'] }}-600 bg-clip-text text-transparent dark:from-{{ $color['from'] }}-400 dark:to-{{ $color['to'] }}-400 mb-2">{{ $balance['leave_type']['name'] }}</h4>
+                                            <h4 class="text-xl font-bold bg-gradient-to-r from-{{ $color['from'] }}-600 to-{{ $color['to'] }}-600 bg-clip-text text-transparent dark:from-{{ $color['from'] }}-400 dark:to-{{ $color['to'] }}-400 mb-2">{{ is_array($balance['leave_type']) ? ($balance['leave_type']['name'] ?? '') : ($balance['leave_type'] ?? '') }}</h4>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Votre solde pour {{ $balance['year'] }}</p>
                                         </div>
 

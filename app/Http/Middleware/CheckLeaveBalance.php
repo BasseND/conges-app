@@ -25,7 +25,9 @@ class CheckLeaveBalance
     public function handle(Request $request, Closure $next): Response
     {
         // Ce middleware s'applique uniquement aux routes d'approbation de congés
-        if ($request->route()->getName() === 'leaves.approve') {
+        // Supporte les noms de routes préfixés (ex: manager.leaves.approve, head.leaves.approve, admin.leaves.approve)
+        $routeName = $request->route()->getName();
+        if ($routeName && \Illuminate\Support\Str::endsWith($routeName, 'leaves.approve')) {
             $leave = $request->route('leave');
             
             if (!$leave instanceof Leave) {

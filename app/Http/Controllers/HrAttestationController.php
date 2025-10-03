@@ -19,7 +19,7 @@ class HrAttestationController extends Controller
     {
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
-            if (!in_array(Auth::user()->role, ['admin', 'hr'])) {
+            if (!in_array(Auth::user()->role, ['admin', 'hr_admin', 'hr'])) {
                 abort(403, 'Accès non autorisé. Cette fonctionnalité est réservée aux RH.');
             }
             return $next($request);
