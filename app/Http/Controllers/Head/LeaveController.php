@@ -7,9 +7,11 @@ use App\Models\Leave;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Concerns\HandlesLeaveApproval;
 
 class LeaveController extends Controller
 {
+    use HandlesLeaveApproval;
     public function __construct()
     {
         $this->middleware('auth');
@@ -78,45 +80,18 @@ class LeaveController extends Controller
 
     public function approve(Leave $leave)
     {
-        if (!auth()->user()->canManageUserLeaves($leave->user)) {
-            abort(403, 'Vous n\'avez pas le droit de gérer les congés de cet employé.');
+        if ($this->approveLeave($leave)) {
+            return back()->with('success', 'La demande de congé a été approuvée.');
         }
-
-        if ($leave->status !== 'pending') {
-            return back()->with('error', 'Cette demande de congé a déjà été traitée.');
-        }
-
-        $leave->update([
-            'status' => 'approved',
-            'processed_by' => auth()->id(),
-            'processed_at' => now()
-        ]);
-
-        // Mettre à jour le solde de congés de l'employé
-        if ($leave->specialLeaveType && in_array($leave->specialLeaveType->system_name, ['annual', 'conge_annuel', 'congés_annuels'])) {
-            $leave->user->decrement('annual_leave_days', $leave->duration);
-        }
-
-        return back()->with('success', 'La demande de congé a été approuvée.');
+        return back()->withErrors(['error' => 'Échec de l\'approbation']);
     }
 
-    public function reject(Leave $leave)
+    public function reject(Request $request, Leave $leave)
     {
-        if (!auth()->user()->canManageUserLeaves($leave->user)) {
-            abort(403, 'Vous n\'avez pas le droit de gérer les congés de cet employé.');
+        if ($this->rejectLeave($request, $leave)) {
+            return back()->with('success', 'Demande de congé rejetée avec succès');
         }
-
-        if ($leave->status !== 'pending') {
-            return back()->with('error', 'Cette demande de congé a déjà été traitée.');
-        }
-
-        $leave->update([
-            'status' => 'rejected',
-            'processed_by' => auth()->id(),
-            'processed_at' => now()
-        ]);
-
-        return back()->with('success', 'La demande de congé a été rejetée.');
+        return back()->withErrors(['error' => 'Échec du rejet']);
     }
 
     /**

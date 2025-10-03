@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use App\Mail\LeaveStatusNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Events\LeaveStatusUpdated;
+use App\Services\LeaveBalanceService;
+use Illuminate\Support\Facades\DB;
 
 trait HandlesLeaveApproval
 {
@@ -34,40 +36,49 @@ trait HandlesLeaveApproval
             }
 
             $oldStatus = $leave->status;
-            
-            $leave->update([
-                'status' => 'approved',
-                'processed_by' => auth()->id(),
-                'processed_at' => now(),
-            ]);
-            
-            // Déclencher l'événement de mise à jour du statut
-            event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
 
-            // Créer une transaction de déduction pour le congé approuvé
-            if ($leave->specialLeaveType && in_array($leave->specialLeaveType->system_name, ['annual', 'maternity', 'paternity', 'special', 'sick', 'conge_annuel', 'maternite', 'paternite', 'maladie'])) {
-                LeaveTransaction::createTransaction(
-                    userId: $leave->user_id,
-                    leaveType: $leave->specialLeaveType->system_name,
-                    transactionType: 'deduction',
-                    amount: -$leave->duration, // Négatif car c'est une déduction
-                    leaveId: $leave->id,
-                    description: "Déduction pour congé approuvé (ID: {$leave->id})",
-                    metadata: [
-                        'leave_start_date' => $leave->start_date->format('Y-m-d'),
-                        'leave_end_date' => $leave->end_date->format('Y-m-d'),
-                        'leave_duration' => $leave->duration,
-                        'leave_type' => $leave->specialLeaveType->system_name
-                    ],
-                    createdBy: auth()->id()
-                );
-            }
+            return DB::transaction(function () use ($leave, $oldStatus) {
+                $leave->update([
+                    'status' => 'approved',
+                    'processed_by' => auth()->id(),
+                    'processed_at' => now(),
+                ]);
 
-            Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
+                // Décrémenter le solde via le service si le type a un solde limité
+                if ($leave->specialLeaveType && $leave->specialLeaveType->hasBalance()) {
+                    $leaveBalanceService = app(LeaveBalanceService::class);
+                    $decremented = $leaveBalanceService->decrementBalance($leave);
+                    if (!$decremented) {
+                        throw new \RuntimeException('Solde insuffisant pour décrémenter ce congé.');
+                    }
+                }
 
-            //Log::info('Approbation terminée avec succès', ['leave_id' => $leave->id]);
+                // Créer une transaction de déduction pour le congé approuvé
+                if ($leave->specialLeaveType && in_array($leave->specialLeaveType->system_name, ['annual', 'maternity', 'paternity', 'special', 'sick', 'conge_annuel', 'maternite', 'paternite', 'maladie'])) {
+                    LeaveTransaction::createTransaction(
+                        userId: $leave->user_id,
+                        leaveType: $leave->specialLeaveType->system_name,
+                        transactionType: 'deduction',
+                        amount: -$leave->duration_days, // Négatif car c'est une déduction
+                        leaveId: $leave->id,
+                        description: "Déduction pour congé approuvé (ID: {$leave->id})",
+                        metadata: [
+                            'leave_start_date' => $leave->start_date->format('Y-m-d'),
+                            'leave_end_date' => $leave->end_date->format('Y-m-d'),
+                            'leave_duration' => $leave->duration_days,
+                            'leave_type' => $leave->specialLeaveType->system_name
+                        ],
+                        createdBy: auth()->id()
+                    );
+                }
 
-            return true;
+                // Déclencher l'événement de mise à jour du statut
+                event(new LeaveStatusUpdated($leave, $oldStatus, 'approved'));
+
+                Mail::to($leave->user->email)->send(new LeaveStatusNotification($leave));
+
+                return true;
+            });
         } catch (\Exception $e) {
             Log::error('Erreur lors de l\'approbation', [
                 'leave_id' => $leave->id,

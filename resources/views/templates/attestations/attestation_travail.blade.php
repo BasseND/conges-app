@@ -34,7 +34,7 @@
         .company-info {
             margin-bottom: 30px;
             background: #f0fdf4;
-            padding: 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             border-left: 4px solid #059669;
         }
@@ -63,33 +63,36 @@
             color: #047857;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin: 30px 0;
+            margin: 10px 0;
+        }
+
+        .doc-date-number {
+            margin-bottom: 20px;
         }
         
         .attestation-number {
             font-size: 11px;
             color: #666;
-            margin-bottom: 20px;
         }
         
         .content {
-            margin: 30px 0;
+            margin: 20px 0;
             text-align: justify;
         }
         
         .employee-info {
             background: #f0f9ff;
-            padding: 20px;
+            padding: 10px 20px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 10px 0;
             border-left: 4px solid #0ea5e9;
         }
         
         .work-period {
             background: #fefce8;
-            padding: 20px;
+            padding: 10px 20px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 10px 0;
             border-left: 4px solid #eab308;
         }
         
@@ -100,7 +103,7 @@
         
         .signatures {
             width: 100%;
-            margin-top: 30px;
+            margin-top: 20px;
             page-break-inside: avoid;
         }
         
@@ -165,13 +168,21 @@
         </div>
     </div>
 
-    <div class="attestation-number">
-        N° {{ $numero_attestation }}
-    </div>
 
-    <div class="date-location">
-        {{ $ville_entreprise }}, le {{ $date_actuelle }}
-    </div>
+    <table class="doc-date-number" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td>
+                <div class="attestation-number">
+                    N° {{ $numero_attestation }}
+                </div>
+            </td>
+            <td>
+                <div class="date-location">
+                    {{ $ville_entreprise }}, le {{ $date_actuelle }}
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <div class="header header-border">
         <h1 class="attestation-title">Attestation de Travail</h1>
@@ -201,9 +212,7 @@
 
         <p>Cette attestation est délivrée à l'intéressé(e) pour servir et valoir ce que de droit.</p>
 
-        <div class="official-stamp">
-            <p><strong>Cachet et signature de l'entreprise</strong></p>
-        </div>
+        <p style="margin-top: 30px;">Fait le <strong>{{ $date_actuelle }}</strong></p>
     </div>
 
     <div class="signatures">
@@ -219,6 +228,7 @@
             Directeur des Ressources Humaines
         </p>
     </div>
+    
 
     <div class="footer">
         Document généré automatiquement le {{ $date_generation }} - {{ $entreprise }}

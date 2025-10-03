@@ -31,6 +31,14 @@ class LeaveTransaction extends Model
     ];
 
     /**
+     * Mutateur: normalise automatiquement le type de congé avant sauvegarde
+     */
+    public function setLeaveTypeAttribute($value): void
+    {
+        $this->attributes['leave_type'] = self::normalizeLeaveType((string)$value);
+    }
+
+    /**
      * Relation avec l'utilisateur
      */
     public function user(): BelongsTo
@@ -59,7 +67,7 @@ class LeaveTransaction extends Model
      */
     public function scopeForLeaveType($query, string $leaveType)
     {
-        return $query->where('leave_type', $leaveType);
+        return $query->where('leave_type', self::normalizeLeaveType($leaveType));
     }
 
     /**
@@ -91,14 +99,17 @@ class LeaveTransaction extends Model
         ?array $metadata = null,
         ?int $createdBy = null
     ): self {
+        // Normaliser le type de congé pour correspondre à l'ENUM de la table
+        $normalizedLeaveType = self::normalizeLeaveType($leaveType);
+
         // Calculer le solde avant la transaction
-        $balanceBefore = self::getCurrentBalance($userId, $leaveType);
+        $balanceBefore = self::getCurrentBalance($userId, $normalizedLeaveType);
         $balanceAfter = $balanceBefore + $amount;
 
         return self::create([
             'user_id' => $userId,
             'leave_id' => $leaveId,
-            'leave_type' => $leaveType,
+            'leave_type' => $normalizedLeaveType,
             'transaction_type' => $transactionType,
             'amount' => $amount,
             'balance_before' => $balanceBefore,
@@ -114,8 +125,10 @@ class LeaveTransaction extends Model
      */
     public static function getCurrentBalance(int $userId, string $leaveType): float
     {
+        $normalizedLeaveType = self::normalizeLeaveType($leaveType);
+
         $lastTransaction = self::where('user_id', $userId)
-            ->where('leave_type', $leaveType)
+            ->where('leave_type', $normalizedLeaveType)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -132,9 +145,32 @@ class LeaveTransaction extends Model
             ->orderBy('created_at', 'desc');
 
         if ($leaveType) {
-            $query->where('leave_type', $leaveType);
+            $normalizedLeaveType = self::normalizeLeaveType($leaveType);
+            $query->where('leave_type', $normalizedLeaveType);
         }
 
         return $query->get();
+    }
+
+    /**
+     * Normaliser les valeurs de type de congé pour l'ENUM de la table
+     */
+    protected static function normalizeLeaveType(string $leaveType): string
+    {
+        $map = [
+            'annual' => 'annual',
+            'sick' => 'sick',
+            'maternity' => 'maternity',
+            'paternity' => 'paternity',
+            'special' => 'special',
+            // Variantes FR
+            'conge_annuel' => 'annual',
+            'maladie' => 'sick',
+            'maternite' => 'maternity',
+            'paternite' => 'paternity',
+        ];
+
+        $key = strtolower(trim($leaveType));
+        return $map[$key] ?? 'special';
     }
 }

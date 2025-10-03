@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PayrollSettingController;
 use App\Http\Controllers\Admin\CompanyController;
 // LeaveBalanceController supprimé - remplacé par SpecialLeaveTypeController
 use App\Http\Controllers\Admin\SpecialLeaveTypeController;
+use App\Http\Controllers\Admin\LeaveBalanceAdminController;
 use App\Http\Controllers\Admin\SalaryAdvanceController as AdminSalaryAdvanceController;
 use App\Http\Controllers\HrAttestationController;
 use App\Http\Controllers\HelpController;
@@ -138,12 +139,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('leaves/{leave}/submit', [LeaveController::class, 'submit'])->name('leaves.submit');
     Route::delete('leaves/{leave}', [LeaveController::class, 'destroy'])->name('leaves.destroy');
     Route::get('leaves/download/{attachment}', [LeaveController::class, 'downloadAttachment'])->name('leaves.attachment.download');
+    Route::get('leaves/{leave}/download-pdf', [LeaveController::class, 'downloadPdf'])->name('leaves.download-pdf');
 
     // Routes pour l'approbation des congés (accessibles uniquement aux managers et admins)
     Route::middleware('role:manager,admin')->group(function () {
         Route::get('pending-leaves', [LeaveApprovalController::class, 'pending'])->name('leaves.pending');
-        Route::post('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/approve', [LeaveApprovalController::class, 'approve'])->middleware('check.leave.balance')->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [LeaveApprovalController::class, 'reject'])->name('leaves.reject');
+        Route::post('leaves/{leave}/cancel', [LeaveController::class, 'cancel'])->name('leaves.cancel');
     });
 
     // Routes pour les notes de frais
@@ -176,7 +179,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('salary-advances/{salaryAdvance}/cancel', [SalaryAdvanceController::class, 'cancel'])->name('salary-advances.cancel');
     
     // Routes pour les RH (approbation/rejet des avances sur salaire)
-    Route::middleware('role:hr,admin')->group(function () {
+    Route::middleware('role:hr,hr_admin,admin')->group(function () {
         Route::post('salary-advances/{salaryAdvance}/approve', [SalaryAdvanceController::class, 'approve'])->name('salary-advances.approve');
         Route::post('salary-advances/{salaryAdvance}/reject', [SalaryAdvanceController::class, 'reject'])->name('salary-advances.reject');
     });
@@ -216,7 +219,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:manager')->name('manager.')->prefix('manager')->group(function () {
         Route::get('leaves', [\App\Http\Controllers\Manager\LeaveController::class, 'index'])->name('leaves.index');
         Route::get('leaves/calendar-data', [\App\Http\Controllers\Manager\LeaveController::class, 'getCalendarData'])->name('leaves.calendar-data');
-        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Manager\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Manager\LeaveController::class, 'approve'])->middleware('check.leave.balance')->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Manager\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
@@ -224,12 +227,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:department_head')->name('head.')->prefix('head')->group(function () {
         Route::get('leaves', [\App\Http\Controllers\Head\LeaveController::class, 'index'])->name('leaves.index');
         Route::get('leaves/calendar-data', [\App\Http\Controllers\Head\LeaveController::class, 'getCalendarData'])->name('leaves.calendar-data');
-        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Head\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/approve', [\App\Http\Controllers\Head\LeaveController::class, 'approve'])->middleware('check.leave.balance')->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [\App\Http\Controllers\Head\LeaveController::class, 'reject'])->name('leaves.reject');
     });
 
     // Routes pour les administrateurs et RH
-    Route::middleware('role:admin,hr')->name('admin.')->prefix('admin')->group(function () {
+    Route::middleware('role:admin,hr_admin,hr')->name('admin.')->prefix('admin')->group(function () {
         // Statistiques
         Route::get('stats', [StatsController::class, 'index'])->name('stats.index');
 
@@ -237,7 +240,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('leaves', [AdminLeaveController::class, 'index'])->name('leaves.index');
         Route::get('leaves/calendar-data', [AdminLeaveController::class, 'getCalendarData'])->name('leaves.calendar-data');
         Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
-        Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->middleware('check.leave.balance')->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
         Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('admin.leaves.destroy');
 
@@ -315,6 +318,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Gestion des types de congés spéciaux
         Route::resource('special-leave-types', SpecialLeaveTypeController::class);
+
+        // Administration des soldes de congés
+        Route::prefix('leave-balances')->name('leave-balances.')->group(function () {
+            Route::get('/', [LeaveBalanceAdminController::class, 'index'])->name('index');
+            Route::get('/dashboard', [LeaveBalanceAdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('/tools', [LeaveBalanceAdminController::class, 'tools'])->name('tools');
+            Route::get('/adjustments', [LeaveBalanceAdminController::class, 'adjustments'])->name('adjustments');
+            
+            // Actions d'administration
+            Route::get('/initialize-form', [LeaveBalanceAdminController::class, 'initialize'])->name('initialize');
+            Route::post('/initialize', [LeaveBalanceAdminController::class, 'initializeAll'])->name('initializeAll');
+            Route::post('/verify', [LeaveBalanceAdminController::class, 'verify'])->name('verify');
+            Route::post('/recalculate', [LeaveBalanceAdminController::class, 'recalculate'])->name('recalculate');
+            Route::post('/export', [LeaveBalanceAdminController::class, 'export'])->name('export');
+            
+            // Ajustements
+            Route::post('/adjust', [LeaveBalanceAdminController::class, 'adjust'])->name('adjust');
+            Route::post('/bulk-adjust', [LeaveBalanceAdminController::class, 'bulkAdjust'])->name('bulk-adjust');
+        });
+
+        // Routes pour les ajustements de soldes de congés
+        Route::prefix('leave-balance-adjustments')->name('leave-balance-adjustments.')->group(function () {
+            Route::get('/', [LeaveBalanceAdminController::class, 'adjustments'])->name('index');
+        });
 
         // Gestion des avances sur salaire
         Route::prefix('salary-advances')->name('salary-advances.')->group(function () {

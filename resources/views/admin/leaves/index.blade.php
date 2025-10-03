@@ -385,40 +385,44 @@
                                 
 
                                     <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="flex space-x-2">
+                                            <a href="{{ route('leaves.show', ['leave' => $leave->id]) }}" 
+                                                class="inline-flex items-center px-4 sm:px-3 py-1 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
+                                                <svg class="w-3 h-3 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                </svg>
+                                                <span class="hidden sm:inline">Voir</span>
+                                            </a>
+
                                         @if($leave->status === 'pending' && Auth::check() && auth()->user()->canManageUserLeaves($leave->user))
-                                            <div class="flex space-x-2">
-                                                <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('leaves.approve', $leave) }}')" 
-                                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                            
+                                                <button title="Approuver" @click="$dispatch('approve-leave', '{{ route('admin.leaves.approve', $leave) }}')" 
+                                                    class="inline-flex items-center px-4 sm:px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                     </svg>
                                                     Approuver
                                                 </button>
-                                                <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('leaves.reject', $leave) }}')" 
-                                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                <button title="Rejeter" @click="$dispatch('reject-leave', '{{ route('admin.leaves.reject', $leave) }}')" 
+                                                    class="inline-flex items-center px-4 sm:px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                     </svg>
                                                     Rejeter
                                                 </button>
-                                            </div>
-                                        @else
-                                            @if($leave->status === 'approved')
-                                                <div class="inline-flex items-center px-3 py-2 text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 rounded-lg">
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                    </svg>
-                                                    Approuvé
-                                                </div>
-                                            @elseif($leave->status === 'rejected')
-                                                <div class="inline-flex items-center px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
-                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                    </svg>
-                                                    Rejeté
-                                                </div>
-                                            @endif
+                                            
+                                        @elseif($leave->status === 'approved' && Auth::check() && auth()->user()->can('approve-leaves'))
+                                            <button title="Annuler le congé"
+                                                @click="$dispatch('cancel-leave', '{{ route('leaves.cancel', $leave) }}')"
+                                                class="inline-flex items-center px-4 sm:px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                                <span class="hidden sm:inline">Annuler</span>
+                                            </button>
                                         @endif
+                                    </div>
                                     </td>
                                 </tr>
                             @empty
@@ -460,8 +464,9 @@
         </div>
     </div>
 
-    <x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
-    <x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
+<x-modals.approve-leave message="Êtes-vous sûr de vouloir approuver cette demande de congé ? Cette action déduira automatiquement les jours du solde de l'employé." />
+<x-modals.reject-leave message="Êtes-vous sûr de vouloir rejeter cette demande de congé ?" />
+<x-modals.cancel-leave message="Êtes-vous sûr de vouloir annuler ce congé approuvé ? Cette action remboursera le solde correspondant." />
 
     @push('styles')
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />

@@ -18,7 +18,7 @@ class StatsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'role:admin,hr']);
+        $this->middleware(['auth', 'role:admin,hr_admin,hr']);
     }
 
     public function index()

@@ -432,6 +432,7 @@
                                         <option value="{{ App\Models\User::ROLE_HR }}">Ressources Humaines</option>
                                         @if(Auth::check() && auth()->user()->role === App\Models\User::ROLE_ADMIN)
                                         <option value="{{ App\Models\User::ROLE_ADMIN }}">Administrateur</option>
+                                        <option value="{{ App\Models\User::ROLE_HR_ADMIN }}">DRH</option>
                                         @endif
                                     </select>
                                     <x-input-error :messages="$errors->get('role')" class="mt-2" />

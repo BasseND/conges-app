@@ -1,8 +1,8 @@
 @props(['message'])
 
-<div x-data="{ show: false, url: '', method: 'POST' }" 
+<div x-data="{ show: false, url: '' }" 
      x-show="show" 
-     @approve-leave.window="show = true; url = $event.detail; method = 'POST'"
+     @approve-leave.window="show = true; url = $event.detail"
      class="fixed z-50 inset-0 overflow-y-auto" 
      aria-labelledby="modal-title" 
      role="dialog" 
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <form x-bind:action="url" x-bind:method="method" class="inline-flex">
+                <form x-bind:action="url" method="POST" class="inline-flex">
                     @csrf
                     <button type="submit" 
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">

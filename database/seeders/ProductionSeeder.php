@@ -101,50 +101,54 @@ class ProductionSeeder extends Seeder
         
         // Congé annuel
         SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_annuel'],
             [  
-                'system_name' => 'conge_annuel',
                 'name' => 'Congé annuel',
                 'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 25,
                 'description' => 'Congé annuel standard pour tous les employés',
                 'is_active' => true,
+                'has_balance' => true, // Congé avec solde limité
             ]
         );
         
         // Congé maternité
         SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_maternite'],
             [   
-                'system_name' => 'conge_maternite',
                 'name' => 'Congé maternité',
                 'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 112, // 16 semaines
                 'description' => 'Congé maternité pour les employées enceintes',
                 'is_active' => true,
+                'has_balance' => false, // Congé illimité (selon la loi)
             ]
         );
         
         // Congé paternité
         SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_paternite'],
             [
-                'system_name' => 'conge_paternite',
                 'name' => 'Congé paternité',
                 'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 28, // 4 semaines
                 'description' => 'Congé paternité pour les nouveaux pères',
                 'is_active' => true,
+                'has_balance' => false, // Congé illimité (selon la loi)
             ]
         );
 
        
         // Congé maladie
         SpecialLeaveType::firstOrCreate(
+            ['system_name' => 'conge_maladie'],
             [
-                'system_name' => 'conge_maladie',
                 'name' => 'Congé maladie',
                 'type' => SpecialLeaveType::TYPE_SYSTEM,
                 'duration_days' => 30,
                 'description' => 'Congé maladie pour les employés malades',
                 'is_active' => true,
+                'has_balance' => true, // Congé avec solde limité
             ]
         );
         

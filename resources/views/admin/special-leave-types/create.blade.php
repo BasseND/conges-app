@@ -90,10 +90,36 @@
                             </p>
                         </div>
 
+                        <!-- Solde (has_balance) -->
+                        <div class="space-y-2">
+                            <!-- Valeur par défaut 0 si décoché -->
+                            <input type="hidden" name="has_balance" value="0">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                {{ __('Solde') }}
+                            </label>
+                            <div class="flex items-center space-x-3">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox"
+                                           name="has_balance"
+                                           id="has_balance"
+                                           value="1"
+                                           {{ old('has_balance', true) ? 'checked' : '' }}
+                                           class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                                    <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {{ __('Ce type de congé a un solde') }}
+                                    </span>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ __('Décochez pour les congés illimités ou sans solde. La durée sera cachée et définie à 0.') }}
+                            </p>
+                        </div>
+
 
 
                         <!-- Durée en jours -->
-                        <div class="space-y-2">
+                        <div id="duration_group" class="space-y-2 {{ old('has_balance', true) ? '' : 'hidden' }}">
                             <label for="duration_days" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                                 {{ __('Nombre de jours') }}
                                 <span class="text-red-500">*</span>
@@ -111,8 +137,7 @@
                                        min="0" 
                                        max="365"
                                        placeholder="Nombre de jours"
-                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                       required>
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200">
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ __('Nombre de jours accordés pour ce type de congé (0 à 365 jours)') }}
@@ -213,6 +238,36 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Script d'affichage conditionnel -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const hasBalance = document.getElementById('has_balance');
+                        const durationGroup = document.getElementById('duration_group');
+                        const durationInput = document.getElementById('duration_days');
+
+                        function toggleDuration() {
+                            if (hasBalance && hasBalance.checked) {
+                                durationGroup && durationGroup.classList.remove('hidden');
+                                if (durationInput) {
+                                    durationInput.required = true;
+                                    if (durationInput.value === '' || durationInput.value === '0') {
+                                        durationInput.value = '{{ old('duration_days', 25) }}';
+                                    }
+                                }
+                            } else {
+                                durationGroup && durationGroup.classList.add('hidden');
+                                if (durationInput) {
+                                    durationInput.required = false;
+                                    durationInput.value = '0';
+                                }
+                            }
+                        }
+
+                        toggleDuration();
+                        hasBalance && hasBalance.addEventListener('change', toggleDuration);
+                    });
+                </script>
 
                 <!-- Exemples de types de congés -->
                 <div class="mt-8 bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-700/50 p-6">

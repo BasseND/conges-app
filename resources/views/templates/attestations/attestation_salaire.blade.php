@@ -63,13 +63,16 @@
             color: #1e40af;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 20px 0;
+            margin: 15px 0;
+        }
+
+        .doc-date-number {
+            margin-bottom: 20px;
         }
         
         .attestation-number {
             font-size: 10px;
             color: #666;
-            margin-bottom: 15px;
         }
         
         .content {
@@ -154,13 +157,20 @@
         </div>
     </div>
 
-    <div class="attestation-number">
-        N° {{ $numero_attestation }}
-    </div>
-
-    <div class="date-location">
-        {{ $ville_entreprise }}, le {{ $date_actuelle }}
-    </div>
+    <table class="doc-date-number" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td>
+                <div class="attestation-number">
+                    N° {{ $numero_attestation }}
+                </div>
+            </td>
+            <td>
+                <div class="date-location">
+                    {{ $ville_entreprise }}, le {{ $date_actuelle }}
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <div class="header header-border">
         <h1 class="attestation-title">Attestation de Salaire</h1>
@@ -182,6 +192,8 @@
         </div>
 
         <p>En foi de quoi, la présente attestation est établie en bonne et due forme.</p>
+        
+        <p style="margin-top: 30px;">Fait le <strong>{{ $date_actuelle }}</strong></p>
     </div>
 
     <div class="signatures">

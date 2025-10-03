@@ -27,11 +27,13 @@ class SpecialLeaveType extends Model
         'seniority_months',
         'description',
         'is_active',
+        'has_balance',
         'company_id'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'has_balance' => 'boolean',
         'duration_days' => 'integer',
         'seniority_months' => 'integer',
         'type' => 'string'
@@ -112,6 +114,22 @@ class SpecialLeaveType extends Model
     }
 
     /**
+     * Scope pour les types avec solde
+     */
+    public function scopeWithBalance($query)
+    {
+        return $query->where('has_balance', true);
+    }
+
+    /**
+     * Scope pour les types illimités (sans solde)
+     */
+    public function scopeUnlimited($query)
+    {
+        return $query->where('has_balance', false);
+    }
+
+    /**
      * Vérifier si c'est un type système
      */
     public function isSystem()
@@ -128,6 +146,22 @@ class SpecialLeaveType extends Model
     }
 
     /**
+     * Vérifier si ce type de congé a un solde limité
+     */
+    public function hasBalance()
+    {
+        return $this->has_balance;
+    }
+
+    /**
+     * Vérifier si ce type de congé est illimité
+     */
+    public function isUnlimited()
+    {
+        return !$this->has_balance;
+    }
+
+    /**
      * Relation avec les congés
      */
     public function leaves()
@@ -136,12 +170,20 @@ class SpecialLeaveType extends Model
     }
 
     /**
+     * Relation avec les soldes de congés
+     */
+    public function leaveBalances()
+    {
+        return $this->hasMany(LeaveBalance::class);
+    }
+
+    /**
      * Obtenir la durée formatée
      */
     public function getFormattedDurationAttribute()
     {
         if ($this->duration_days == 0) {
-            return 'Variable (0 à 10 jours)';
+            return 'Solde variable';
         }
         
         if ($this->duration_days >= 7 && $this->duration_days % 7 == 0) {
