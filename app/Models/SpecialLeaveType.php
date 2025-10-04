@@ -10,7 +10,7 @@ class SpecialLeaveType extends Model
     use HasFactory;
 
     // Types de congés spéciaux
-    const TYPE_SYSTEM = 'système';
+    const TYPE_SYSTEM = 'systeme';
     const TYPE_CUSTOM = 'custom';
 
     // Types disponibles
@@ -66,7 +66,7 @@ class SpecialLeaveType extends Model
         // Validation du type avant sauvegarde
         static::saving(function ($specialLeaveType) {
             if (!in_array($specialLeaveType->type, self::AVAILABLE_TYPES)) {
-                throw new \InvalidArgumentException('Le type doit être "système" ou "custom"');
+                throw new \InvalidArgumentException('Le type doit être "systeme" ou "custom"');
             }
         });
     }

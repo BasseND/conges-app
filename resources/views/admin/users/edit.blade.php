@@ -473,7 +473,7 @@
                                          <select id="team_id" name="team_id" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                              <option value="">Sélectionner une équipe</option>
                                              @foreach($teams as $team)
-                                                 <option value="{{ $team->id }}" {{ $user->teams->contains($team->id) ? 'selected' : '' }}>
+                                                 <option value="{{ $team->id }}" {{ old('team_id', optional($user->teams->first())->id) == $team->id ? 'selected' : '' }}>
                                                      {{ $team->name }}
                                                  </option>
                                              @endforeach
@@ -486,13 +486,13 @@
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                      <div class="space-y-2">
                                          <x-input-label for="entry_date" :value="__('Date d\'entrée du salarié *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                         <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date)" />
+                                        <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date ? \Carbon\Carbon::parse($user->entry_date)->format('Y-m-d') : '')" />
                                          <x-input-error :messages="$errors->get('entry_date')" class="mt-2" />
                                      </div>
 
                                      <div class="space-y-2">
                                          <x-input-label for="exit_date" :value="__('Date de sortie du salarié')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                         <x-text-input id="exit_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="exit_date" :value="old('exit_date', $user->exit_date)" />
+                                         <x-text-input id="exit_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="exit_date" :value="old('exit_date', $user->exit_date ? \Carbon\Carbon::parse($user->exit_date)->format('Y-m-d') : '')" />
                                          <x-input-error :messages="$errors->get('exit_date')" class="mt-2" />
                                          <p class="text-xs text-gray-500 dark:text-gray-400">Laisser vide si le salarié est toujours en poste</p>
                                      </div>
@@ -529,15 +529,15 @@
                                                      </svg>
                                                  </div>
                                                  <div>
-                                                     <label for="is_contractor" class="text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer">
+                                                    <label for="is_prestataire" class="text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer">
                                                          {{ __('Prestataire') }}
                                                      </label>
                                                      <p class="text-xs text-gray-500 dark:text-gray-400">Utilisateur externe</p>
                                                  </div>
                                              </div>
                                              <label class="relative inline-flex items-center cursor-pointer">
-                                                 <input type="checkbox" id="is_contractor" name="is_contractor" value="1" {{ old('is_contractor', $user->is_contractor) ? 'checked' : '' }} class="sr-only peer">
-                                                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                                                <input type="checkbox" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire', $user->is_prestataire) ? 'checked' : '' }} class="sr-only peer">
+                                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
                                              </label>
                                          </div>
                                      </div>
@@ -712,8 +712,8 @@
         // Charger les données initiales si un département est déjà sélectionné
         if (departmentSelect.value) {
             console.log('Département pré-sélectionné:', departmentSelect.value);
-            // Passer l'ID de l'équipe actuelle pour la sélectionner
-            loadTeams(departmentSelect.value, {{ $user->team_id ?? 'null' }});
+            // Passer l'ID de l'équipe actuelle pour la sélectionner (respecte old('team_id'))
+            loadTeams(departmentSelect.value, {{ old('team_id', optional($user->teams->first())->id ?? 'null') }});
         }
     });
  </script>

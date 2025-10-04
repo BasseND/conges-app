@@ -266,7 +266,7 @@
                                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
                                                     {{ __('Types de Contrats') }}
                                                 </h2>
-                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de contrats personnalisés</p>
+                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de contrats que votre structure utilise.</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
@@ -505,28 +505,19 @@
                                                                             </svg>
                                                                         </a>
 
-                                                                        <!-- Bouton Modifier -->
-                                                                        @if($type->type !== 'système')
-                                                                            <a href="{{ route('admin.special-leave-types.edit', $type) }}" 
-                                                                               title="Modifier"
-                                                                               class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all duration-200 hover:scale-110">
-                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                                                </svg>
-                                                                            </a>
-                                                                        @else
-                                                                            <button type="button" 
-                                                                                    title="Type de congé système - Non modifiable"
-                                                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
-                                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                                                </svg>
-                                                                            </button>
-                                                                        @endif
+                                                                        <!-- Bouton Modifier (toujours visible) -->
+                                                                        <a href="{{ route('admin.special-leave-types.edit', $type) }}" 
+                                                                           title="Modifier"
+                                                                           class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all duration-200 hover:scale-110">
+                                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                                            </svg>
+                                                                        </a>
 
                                                                         <!-- Bouton Supprimer -->
                                                                         @php
-                                                                            $canDelete = $type->type !== 'système';
+                                                                            // Les types système ne sont pas supprimables
+                                                                            $canDelete = $type->type !== 'systeme';
                                                                         @endphp
                                                                         
                                                                         @if($canDelete)
@@ -796,8 +787,8 @@
                 if (data.success) {
                     showNotification(data.message, 'success');
                     closeContractTypesModal();
-                    // Optionnel: recharger seulement la section des types de contrats
-                    // sans recharger toute la page
+                    // Recharger la page pour afficher immédiatement les nouveaux types de contrats
+                    window.location.reload();
                 } else {
                     showNotification(data.message || 'Une erreur est survenue.', 'error');
                 }

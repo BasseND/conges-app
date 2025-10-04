@@ -29,24 +29,13 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                            @if($specialLeaveType->type !== 'système')
-                                <a href="{{ route('admin.special-leave-types.edit', $specialLeaveType) }}" 
-                                   class="inline-flex items-center justify-center px-3 sm:px-4 py-2 sm:py-3 bg-amber-600 hover:bg-amber-700 border border-transparent rounded-lg sm:rounded-xl font-medium text-sm text-white transition-colors duration-200 shadow-sm">
-                                    <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                    </svg>
-                                    <span class="hidden sm:inline">Modifier</span>
-                                </a>
-                            @else
-                                <button type="button" 
-                                        disabled
-                                        class="inline-flex items-center justify-center px-3 sm:px-4 py-2 sm:py-3 bg-gray-400 border border-transparent rounded-lg sm:rounded-xl font-medium text-sm text-white cursor-not-allowed opacity-60">
-                                    <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
-                                    </svg>
-                                    <span class="hidden sm:inline">Type système</span>
-                                </button>
-                            @endif
+                            <a href="{{ route('admin.special-leave-types.edit', $specialLeaveType) }}" 
+                               class="inline-flex items-center justify-center px-3 sm:px-4 py-2 sm:py-3 bg-amber-600 hover:bg-amber-700 border border-transparent rounded-lg sm:rounded-xl font-medium text-sm text-white transition-colors duration-200 shadow-sm">
+                                <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                                <span class="hidden sm:inline">Modifier</span>
+                            </a>
                             <a href="{{ route('admin.company.show') }}" 
                                class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-lg sm:rounded-xl font-medium sm:font-semibold text-sm sm:text-base text-white transition-colors duration-200 shadow-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -357,24 +346,13 @@
 
                 <!-- Actions rapides -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                    @if($specialLeaveType->type !== 'système')
-                        <a href="{{ route('admin.special-leave-types.edit', $specialLeaveType) }}" 
-                           class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 border border-transparent rounded-xl font-semibold text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                            </svg>
-                            {{ __('Modifier ce type') }}
-                        </a>
-                    @else
-                        <button type="button" 
-                                disabled
-                                class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gray-400 border border-transparent rounded-xl font-semibold text-sm text-white cursor-not-allowed opacity-60">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
-                            </svg>
-                            {{ __('Type système non modifiable') }}
-                        </button>
-                    @endif
+                    <a href="{{ route('admin.special-leave-types.edit', $specialLeaveType) }}" 
+                       class="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 border border-transparent rounded-xl font-semibold text-sm text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        {{ __('Modifier ce type') }}
+                    </a>
                     
                     <form action="{{ route('admin.special-leave-types.destroy', $specialLeaveType) }}" 
                           method="POST" 

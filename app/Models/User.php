@@ -108,6 +108,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'birth_date' => 'date',
         'entry_date' => 'date',
         'exit_date' => 'date',
+        'is_active' => 'boolean',
+        'is_prestataire' => 'boolean',
     ];
 
     /**

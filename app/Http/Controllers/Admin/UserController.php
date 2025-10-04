@@ -5,19 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Department;
-use App\Models\Contract;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\Validator;
 use App\Events\UserCreated;
 use App\Events\UserUpdated;
 use App\Imports\UsersImport;
 use App\Jobs\ProcessUsersImport;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -167,8 +164,10 @@ class UserController extends Controller
 
             Log::info('Validated data:', $validatedData);
 
-            // Traiter la valeur is_prestataire
-            $validatedData['is_prestataire'] = $request->has('is_prestataire');
+            // Persister explicitement le statut prestataire (checkbox non cochée => false)
+            $validatedData['is_prestataire'] = $request->boolean('is_prestataire');
+            // Persister explicitement l'état d'activation (checkbox non cochée => false)
+            $validatedData['is_active'] = $request->boolean('is_active');
             
             // Get team_id and remove it from validatedData
             $teamId = $request->filled('team_id') ? $validatedData['team_id'] : null;
@@ -198,12 +197,32 @@ class UserController extends Controller
                 }
             }
             
-            $user = User::create($validatedData);
+            // Créer l'utilisateur et, si nécessaire, assigner automatiquement le chef du département
+            $user = DB::transaction(function () use ($validatedData, $teamId) {
+                $createdUser = User::create($validatedData);
 
-            // Attach team if one was selected
-            if ($teamId) {
-                $user->teams()->attach($teamId);
-            }
+                // Attacher l'équipe si sélectionnée
+                if ($teamId) {
+                    $createdUser->teams()->attach($teamId);
+                }
+
+                // Si l'utilisateur est défini comme Chef de Département, mettre à jour le département concerné
+                if ($validatedData['role'] === User::ROLE_DEPARTMENT_HEAD && !empty($validatedData['department_id'])) {
+                    $dept = Department::find($validatedData['department_id']);
+                    if ($dept) {
+                        $previousHeadId = $dept->head_id;
+                        $dept->head_id = $createdUser->id;
+                        $dept->save();
+                        Log::info('Department head assigned on user creation', [
+                            'department_id' => $dept->id,
+                            'new_head_id' => $createdUser->id,
+                            'previous_head_id' => $previousHeadId,
+                        ]);
+                    }
+                }
+
+                return $createdUser;
+            });
             
             // Déclencher l'événement de création d'utilisateur
             event(new UserCreated($user));
@@ -222,88 +241,7 @@ class UserController extends Controller
         }
     }
 
-    public function storeOLD(Request $request)
-    {
-        Log::info('Request data:', $request->all());
-
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'nullable|string|max:20',
-            'password' => 'required|string|min:8|confirmed',
-            'position' => 'required|string|max:255',
-            'role' => ['required', Rule::in([
-                User::ROLE_EMPLOYEE,
-                User::ROLE_MANAGER,
-                User::ROLE_ADMIN,
-                User::ROLE_HR,
-                User::ROLE_DEPARTMENT_HEAD,
-                User::ROLE_HR_ADMIN,
-            ])],
-            'department_id' => 'required|exists:departments,id',
-            'company_id' => 'required|exists:companies,id',
-            'team_id' => 'nullable|exists:teams,id',
-            'is_prestataire' => 'nullable'
-        ], [
-            'first_name.required' => 'Le prénom est obligatoire.',
-            'last_name.required' => 'Le nom est obligatoire.',
-            'gender.required' => 'Le sexe est obligatoire.',
-            'gender.in' => 'Le sexe doit être Masculin ou Féminin.',
-            'email.required' => 'L\'adresse email est obligatoire.',
-            'email.email' => 'L\'adresse email doit être valide.',
-            'email.unique' => 'Cette adresse email est déjà utilisée.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
-            'position.required' => 'Le poste est obligatoire.',
-            'role.required' => 'Le rôle est obligatoire.',
-            'role.in' => 'Le rôle sélectionné n\'est pas valide.',
-            'department_id.required' => 'Le département est obligatoire.',
-            'department_id.exists' => 'Le département sélectionné n\'existe pas.',
-            'company_id.required' => 'L\'entreprise est obligatoire.',
-            'company_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
-            'team_id.exists' => 'L\'équipe sélectionnée n\'existe pas.'
-        ]);
-
-        Log::info('Validated data:', $validatedData);
-
-        // Traiter la valeur is_prestataire
-        $validatedData['is_prestataire'] = $request->has('is_prestataire');
-        
-        // Get team_id and remove it from validatedData
-        $teamId = $request->filled('team_id') ? $validatedData['team_id'] : null;
-        unset($validatedData['team_id']);
-
-        // Vérifier s'il existe déjà un chef pour ce département
-        if ($validatedData['role'] === User::ROLE_DEPARTMENT_HEAD) {
-            $existingHead = User::where('department_id', $validatedData['department_id'])
-                ->where('role', User::ROLE_DEPARTMENT_HEAD)
-                ->exists();
-
-            if ($existingHead) {
-                return back()
-                    ->withInput()
-                    ->withErrors(['role' => 'Ce département a déjà un chef.']);
-            }
-        }
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-        $validatedData['employee_id'] = $this->generateEmployeeId();
-        
-        $user = User::create($validatedData);
-
-        // Attach team if one was selected
-        if ($teamId) {
-            $user->teams()->attach($teamId);
-        }
-        
-        // Déclencher l'événement de création d'utilisateur
-        event(new UserCreated($user));
-
-        return redirect()->route('admin.users.index')
-            ->with('success', 'L\'utilisateur a été créé avec succès.');
-    }
+  
 
     public function edit(User $user)
     {
@@ -363,7 +301,7 @@ class UserController extends Controller
             'maternity_leave_days' => 'nullable|integer|min:0',
             'paternity_leave_days' => 'nullable|integer|min:0',
             'special_leave_days' => 'nullable|integer|min:0',
-            'is_prestataire' => 'nullable',
+           
             // Nouveaux champs obligatoires
             'marital_status' => ['required', Rule::in(array_keys(User::getMaritalStatusOptions()))],
             'employment_status' => ['nullable', Rule::in(array_keys(User::getEmploymentStatusOptions()))],
@@ -416,8 +354,15 @@ class UserController extends Controller
         // Sauvegarder les anciennes données
         $oldData = $user->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
 
-        // Traiter la valeur is_prestataire
-        $validatedData['is_prestataire'] = $request->has('is_prestataire');
+        // Traiter la valeur is_prestataire uniquement si présente dans la requête
+        // if ($request->has('is_prestataire')) {
+        //     $validatedData['is_prestataire'] = $request->boolean('is_prestataire');
+        // }
+
+        $validatedData['is_prestataire'] = $request->boolean('is_prestataire');
+
+        // Persister explicitement l'état d'activation (checkbox non cochée => false)
+        $validatedData['is_active'] = $request->boolean('is_active');
 
         // Get team_id and remove it from validatedData
         $teamId = $request->filled('team_id') ? $validatedData['team_id'] : null;
@@ -437,20 +382,93 @@ class UserController extends Controller
             }
         }
 
+        // Si l'utilisateur est déjà chef et qu'on le change de département,
+        // éviter d'écraser un chef existant sur le nouveau département
+        if (
+            ($validatedData['role'] ?? null) === User::ROLE_DEPARTMENT_HEAD &&
+            $user->role === User::ROLE_DEPARTMENT_HEAD &&
+            isset($validatedData['department_id']) &&
+            (int)$validatedData['department_id'] !== (int)$user->department_id
+        ) {
+            $existingHeadOnTarget = User::where('department_id', $validatedData['department_id'])
+                ->where('role', User::ROLE_DEPARTMENT_HEAD)
+                ->where('id', '!=', $user->id)
+                ->exists();
+
+            if ($existingHeadOnTarget) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['department_id' => 'Le département cible a déjà un chef.']);
+            }
+        }
+
         if (isset($validatedData['password'])) {
             $validatedData['password'] = Hash::make($validatedData['password']);
         } else {
             unset($validatedData['password']);
         }
 
-        $user->update($validatedData);
+        // Mise à jour atomique de l'utilisateur et gestion automatique du chef de département
+        DB::transaction(function () use ($user, $validatedData, $teamId, $oldData) {
+            $user->update($validatedData);
 
-        // Sync team
-        if ($teamId) {
-            $user->teams()->sync([$teamId]);
-        } else {
-            $user->teams()->detach();
-        }
+            // Synchroniser l'équipe
+            if ($teamId) {
+                $user->teams()->sync([$teamId]);
+            } else {
+                $user->teams()->detach();
+            }
+
+            // Réaffectation/Nettoyage du chef de département selon les changements
+            $newRole = $user->role;
+            $newDepartmentId = $user->department_id;
+            $oldRole = $oldData['role'] ?? null;
+            $oldDepartmentId = $oldData['department_id'] ?? null;
+
+            // Si l'utilisateur est (désormais) Chef de Département
+            if ($newRole === User::ROLE_DEPARTMENT_HEAD) {
+                // Si le département a changé et que l'ancien département pointait sur cet utilisateur, le nettoyer
+                if ($oldDepartmentId && $oldDepartmentId !== $newDepartmentId) {
+                    $oldDept = Department::find($oldDepartmentId);
+                    if ($oldDept && (int)$oldDept->head_id === (int)$user->id) {
+                        $oldDept->head_id = null;
+                        $oldDept->save();
+                        Log::info('Old department head cleared on user update', [
+                            'old_department_id' => $oldDept->id,
+                            'cleared_head_id' => $user->id,
+                        ]);
+                    }
+                }
+
+                // Assigner l'utilisateur comme chef du nouveau département
+                if ($newDepartmentId) {
+                    $newDept = Department::find($newDepartmentId);
+                    if ($newDept) {
+                        $previousHeadId = $newDept->head_id;
+                        $newDept->head_id = $user->id;
+                        $newDept->save();
+                        Log::info('Department head assigned on user update', [
+                            'department_id' => $newDept->id,
+                            'new_head_id' => $user->id,
+                            'previous_head_id' => $previousHeadId,
+                        ]);
+                    }
+                }
+            } else {
+                // Si l'utilisateur n'est plus Chef de Département, nettoyer la référence si nécessaire
+                if ($oldRole === User::ROLE_DEPARTMENT_HEAD && $oldDepartmentId) {
+                    $dept = Department::find($oldDepartmentId);
+                    if ($dept && (int)$dept->head_id === (int)$user->id) {
+                        $dept->head_id = null;
+                        $dept->save();
+                        Log::info('Department head cleared after role change', [
+                            'department_id' => $dept->id,
+                            'cleared_head_id' => $user->id,
+                        ]);
+                    }
+                }
+            }
+        });
         
         // Récupérer les nouvelles données
         $newData = $user->fresh()->only(['role', 'department_id', 'first_name', 'last_name', 'email']);
@@ -470,12 +488,6 @@ class UserController extends Controller
         }
     }
 
-    // public function destroy(User $user)
-    // {
-    //     $user->delete();
-    //     return redirect()->route('admin.users.index')
-    //         ->with('success', 'Utilisateur supprimé avec succès');
-    // }
 
     public function destroy(Request $request, User $user)
     {
