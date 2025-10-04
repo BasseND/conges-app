@@ -473,7 +473,7 @@
                                          <select id="team_id" name="team_id" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                              <option value="">Sélectionner une équipe</option>
                                              @foreach($teams as $team)
-                                                 <option value="{{ $team->id }}" {{ $user->teams->contains($team->id) ? 'selected' : '' }}>
+                                                 <option value="{{ $team->id }}" {{ old('team_id', optional($user->teams->first())->id) == $team->id ? 'selected' : '' }}>
                                                      {{ $team->name }}
                                                  </option>
                                              @endforeach
@@ -486,13 +486,13 @@
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                      <div class="space-y-2">
                                          <x-input-label for="entry_date" :value="__('Date d\'entrée du salarié *')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                         <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date)" />
+                                        <x-text-input id="entry_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="entry_date" :value="old('entry_date', $user->entry_date ? \Carbon\Carbon::parse($user->entry_date)->format('Y-m-d') : '')" />
                                          <x-input-error :messages="$errors->get('entry_date')" class="mt-2" />
                                      </div>
 
                                      <div class="space-y-2">
                                          <x-input-label for="exit_date" :value="__('Date de sortie du salarié')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
-                                         <x-text-input id="exit_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="exit_date" :value="old('exit_date', $user->exit_date)" />
+                                         <x-text-input id="exit_date" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500" type="date" name="exit_date" :value="old('exit_date', $user->exit_date ? \Carbon\Carbon::parse($user->exit_date)->format('Y-m-d') : '')" />
                                          <x-input-error :messages="$errors->get('exit_date')" class="mt-2" />
                                          <p class="text-xs text-gray-500 dark:text-gray-400">Laisser vide si le salarié est toujours en poste</p>
                                      </div>
@@ -712,8 +712,8 @@
         // Charger les données initiales si un département est déjà sélectionné
         if (departmentSelect.value) {
             console.log('Département pré-sélectionné:', departmentSelect.value);
-            // Passer l'ID de l'équipe actuelle pour la sélectionner
-            loadTeams(departmentSelect.value, {{ $user->team_id ?? 'null' }});
+            // Passer l'ID de l'équipe actuelle pour la sélectionner (respecte old('team_id'))
+            loadTeams(departmentSelect.value, {{ old('team_id', optional($user->teams->first())->id ?? 'null') }});
         }
     });
  </script>

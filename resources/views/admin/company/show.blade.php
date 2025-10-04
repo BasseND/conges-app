@@ -266,7 +266,7 @@
                                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
                                                     {{ __('Types de Contrats') }}
                                                 </h2>
-                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de contrats personnalisés</p>
+                                                <p class="text-gray-600 dark:text-gray-400 mt-1">Gérez les types de contrats que votre structure utilise.</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
@@ -796,8 +796,8 @@
                 if (data.success) {
                     showNotification(data.message, 'success');
                     closeContractTypesModal();
-                    // Optionnel: recharger seulement la section des types de contrats
-                    // sans recharger toute la page
+                    // Recharger la page pour afficher immédiatement les nouveaux types de contrats
+                    window.location.reload();
                 } else {
                     showNotification(data.message || 'Une erreur est survenue.', 'error');
                 }

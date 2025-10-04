@@ -37,15 +37,15 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('approve-leaves', function (User $user) {
-            return $user->isAdmin() || $user->isDepartmentHead();
+            return $user->isAdmin() || $user->isHRAdmin() || $user->isDepartmentHead();
         });
 
         Gate::define('manage-users', function (User $user) {
-            return $user->isAdmin();
+            return $user->isAdmin() || $user->isHRAdmin();
         });
 
         Gate::define('manage-departments', function (User $user) {
-            return $user->isAdmin();
+            return $user->isAdmin() || $user->isHRAdmin();
         });
     }
 }
