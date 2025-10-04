@@ -55,7 +55,7 @@ class SpecialLeaveTypeController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|in:système,custom',
+            'type' => 'required|string|in:systeme,custom',
             'has_balance' => 'sometimes|boolean',
             'duration_days' => [\Illuminate\Validation\Rule::requiredIf($request->boolean('has_balance')), 'integer', 'min:0', 'max:365'],
             'seniority_months' => 'nullable|integer|min:0|max:120',
@@ -105,13 +105,7 @@ class SpecialLeaveTypeController extends Controller
     public function edit($id)
     {
         $specialLeaveType = SpecialLeaveType::findOrFail($id);
-        
-        // Vérifier si c'est un type de congé système
-        if ($specialLeaveType->type === 'système') {
-            return redirect()->route('admin.special-leave-types.index')
-                ->with('error', 'Impossible de modifier un type de congé système.');
-        }
-        
+
         return view('admin.special-leave-types.edit', compact('specialLeaveType'));
     }
 
@@ -121,13 +115,7 @@ class SpecialLeaveTypeController extends Controller
     public function update(Request $request, $id)
     {
         $specialLeaveType = SpecialLeaveType::findOrFail($id);
-        
-        // Vérifier si c'est un type de congé système
-        if ($specialLeaveType->type === 'système') {
-            return redirect()->route('admin.special-leave-types.index')
-                ->with('error', 'Impossible de modifier un type de congé système.');
-        }
-        
+
         // Récupérer automatiquement l'ID de l'entreprise
         $company = \App\Models\Company::first();
         if (!$company) {
@@ -148,7 +136,7 @@ class SpecialLeaveTypeController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|in:système,custom',
+            'type' => 'required|string|in:systeme,custom',
             'has_balance' => 'sometimes|boolean',
             'duration_days' => [\Illuminate\Validation\Rule::requiredIf($request->boolean('has_balance')), 'integer', 'min:0', 'max:365'],
             'seniority_months' => 'nullable|integer|min:0|max:120',
@@ -202,7 +190,7 @@ class SpecialLeaveTypeController extends Controller
         }
         
         // Vérifier si c'est un type de congé système
-        if ($specialLeaveType->type === 'système') {
+        if ($specialLeaveType->type === 'systeme') {
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => false,
