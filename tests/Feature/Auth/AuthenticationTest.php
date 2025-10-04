@@ -52,4 +52,22 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/');
     }
+
+    public function test_inactive_users_can_not_authenticate_and_see_error_message(): void
+    {
+        $user = User::factory()->create([
+            'is_active' => false,
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertSessionHasErrors([
+            'email' => __('Votre compte est désactivé. Veuillez contacter l\'administrateur.'),
+        ]);
+    }
 }

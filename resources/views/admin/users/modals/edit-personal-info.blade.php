@@ -111,7 +111,8 @@
                      <div>
                          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Statut prestataire</label>
                          <div class="flex items-center space-x-3">
-                             <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" {{ old('is_prestataire', $user->is_prestataire ?? false) ? 'checked' : '' }} />
+                             <input type="hidden" name="is_prestataire" value="0">
+                             <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire', $user->is_prestataire ?? false) ? 'checked' : '' }} />
                              <label for="is_prestataire" class="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-300 dark:bg-gray-600 px-0.5 outline-gray-400 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500">
                                  <span class="sr-only">Activer le statut prestataire</span>
                              </label>

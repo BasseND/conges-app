@@ -41,6 +41,14 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Bloquer la connexion pour les comptes inactifs avec un message clair
+        $user = \App\Models\User::where('email', $this->input('email'))->first();
+        if ($user && !$user->is_active) {
+            throw ValidationException::withMessages([
+                'email' => __('Votre compte est désactivé. Veuillez contacter l\'administrateur.'),
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
