@@ -108,11 +108,11 @@
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sexe</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.gender || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.gender === 'M' ? 'Masculin' : (user?.gender === 'F' ? 'Féminin' : 'Non renseigné')"></p>
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">État civil</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.marital_status || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.formatted_marital_status || user?.marital_status || 'Non renseigné'"></p>
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date de naissance</label>
@@ -182,11 +182,11 @@
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Statut professionnel</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.employment_status || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.formatted_employment_status || user?.employment_status || 'Non renseigné'"></p>
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Catégorie</label>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.category || 'Non renseigné'"></p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="user?.formatted_category || user?.category || 'Non renseigné'"></p>
                     </div>
                     <div>
                         <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Affectation</label>

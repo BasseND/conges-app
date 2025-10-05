@@ -118,7 +118,11 @@ class UserController extends Controller
                 'section' => 'nullable|string|max:255',
                 'service' => 'nullable|string|max:255',
                 'entry_date' => 'required|date',
-                'exit_date' => 'nullable|date|after_or_equal:entry_date'
+                'exit_date' => 'nullable|date|after_or_equal:entry_date',
+                // Champs de contact d'urgence
+                'emergency_contact_name' => 'nullable|string|max:255',
+                'emergency_contact_phone' => 'nullable|string|max:20',
+                'emergency_contact_relationship' => 'nullable|string|max:255'
             ], [
                 'first_name.required' => 'Le prénom est obligatoire.',
                 'last_name.required' => 'Le nom est obligatoire.',
@@ -312,7 +316,11 @@ class UserController extends Controller
             'section' => 'nullable|string|max:255',
             'service' => 'nullable|string|max:255',
             'entry_date' => 'required|date',
-            'exit_date' => 'nullable|date|after_or_equal:entry_date'
+            'exit_date' => 'nullable|date|after_or_equal:entry_date',
+            // Champs de contact d'urgence
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_phone' => 'nullable|string|max:20',
+            'emergency_contact_relationship' => 'nullable|string|max:255'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Le nom est obligatoire.',
