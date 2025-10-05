@@ -484,8 +484,8 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400">L'utilisateur est-il un prestataire externe ?</p>
                                         </div>
                                         <div class="ml-4">
-            <input type="hidden" name="is_prestataire" value="0">
-            <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire') ? 'checked' : '' }} />
+            
+                                            <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire') ? 'checked' : '' }} />
                                             <label for="is_prestataire" class="relative flex h-7 w-12 cursor-pointer items-center rounded-full bg-gray-300 dark:bg-gray-600 px-0.5 outline-gray-400 transition-all duration-300 before:h-6 before:w-6 before:rounded-full before:bg-white before:shadow-md before:transition-transform before:duration-300 peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-600 peer-checked:before:translate-x-5 peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-green-400 hover:shadow-md">
                                                 <span class="sr-only">Toggle prestataire</span>
                                             </label>

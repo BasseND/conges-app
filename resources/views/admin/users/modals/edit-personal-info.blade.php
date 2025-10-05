@@ -107,18 +107,33 @@
                          <x-input-error class="mt-1" :messages="$errors->get('gender')" />
                      </div>
 
-                     <!-- Is prestataire -->
-                     <div>
-                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Statut prestataire</label>
-                         <div class="flex items-center space-x-3">
-                             <input type="hidden" name="is_prestataire" value="0">
-                             <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire', $user->is_prestataire ?? false) ? 'checked' : '' }} />
-                             <label for="is_prestataire" class="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-300 dark:bg-gray-600 px-0.5 outline-gray-400 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500">
-                                 <span class="sr-only">Activer le statut prestataire</span>
-                             </label>
-                             <span class="text-sm text-gray-600 dark:text-gray-400">L'utilisateur est un prestataire</span>
-                         </div>
-                     </div>
+                     
+
+                    <!-- Date de naissance -->
+                    <div>
+                        <label for="birth_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date de naissance</label>
+                        <input type="date" id="birth_date" name="birth_date" value="{{ old('birth_date', $user->birth_date ? $user->birth_date->format('Y-m-d') : '') }}" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                        <x-input-error class="mt-1" :messages="$errors->get('birth_date')" />
+                    </div>
+
+                    <!-- Adresse -->
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Adresse</label>
+                        <input type="text" id="address" name="address" value="{{ old('address', $user->address) }}" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                        <x-input-error class="mt-1" :messages="$errors->get('address')" />
+                    </div>
+
+                    <!-- État civil -->
+                    <div>
+                        <label for="marital_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">État civil</label>
+                        <select id="marital_status" name="marital_status" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                            <option value="">Sélectionner un état civil</option>
+                            <option value="marié" {{ old('marital_status', $user->marital_status) === 'marié' ? 'selected' : '' }}>Marié(e)</option>
+                            <option value="célibataire" {{ old('marital_status', $user->marital_status) === 'célibataire' ? 'selected' : '' }}>Célibataire</option>
+                            <option value="veuf" {{ old('marital_status', $user->marital_status) === 'veuf' ? 'selected' : '' }}>Veuf(ve)</option>
+                        </select>
+                        <x-input-error class="mt-1" :messages="$errors->get('marital_status')" />
+                    </div>
                 </div>
             </div>
 
@@ -174,6 +189,39 @@
                         </select>
                         <x-input-error class="mt-1" :messages="$errors->get('role')" />
                     </div>
+
+                    <!-- Matricule -->
+                    <div>
+                        <label for="matricule" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Matricule</label>
+                        <input type="text" id="matricule" name="matricule" value="{{ old('matricule', $user->matricule) }}" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                        <x-input-error class="mt-1" :messages="$errors->get('matricule')" />
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Catégorie</label>
+                        <select id="category" name="category" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                            <option value="">Sélectionner une catégorie</option>
+                            <option value="cadre" {{ old('category', $user->category) === 'cadre' ? 'selected' : '' }}>Cadre</option>
+                            <option value="agent_de_maitrise" {{ old('category', $user->category) === 'agent_de_maitrise' ? 'selected' : '' }}>Agent de maîtrise</option>
+                            <option value="employe" {{ old('category', $user->category) === 'employe' ? 'selected' : '' }}>Employé</option>
+                            <option value="ouvrier" {{ old('category', $user->category) === 'ouvrier' ? 'selected' : '' }}>Ouvrier</option>
+                        </select>
+                        <x-input-error class="mt-1" :messages="$errors->get('category')" />
+                    </div>
+
+                    <!-- Date d'entrée -->
+                    <div>
+                        <label for="entry_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date d'entrée</label>
+                        <input type="date" id="entry_date" name="entry_date" value="{{ old('entry_date', $user->entry_date ? $user->entry_date->format('Y-m-d') : '') }}" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200" required>
+                        <x-input-error class="mt-1" :messages="$errors->get('entry_date')" />
+                    </div>
+                    {{-- Date de sortie --}}
+                    <div>
+                        <label for="exit_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date de sortie</label>
+                        <input type="date" id="exit_date" name="exit_date" value="{{ old('exit_date', $user->exit_date ? $user->exit_date->format('Y-m-d') : '') }}" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200">
+                        <x-input-error class="mt-1" :messages="$errors->get('exit_date')" />
+                    </div>
                 </div>
             </div>
 
@@ -213,6 +261,71 @@
                             <option value="Autre" {{ $user->emergency_contact_relationship === 'Autre' ? 'selected' : '' }}>Autre</option>
                         </select>
                         <x-input-error class="mt-1" :messages="$errors->get('emergency_contact_relationship')" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prestataire et Statut -->
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 border border-purple-200 dark:border-purple-800 rounded-xl p-6 space-y-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                            {{ __('Statut et Type') }}
+                        </h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Configuration du statut de l'utilisateur</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 transition-colors duration-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                   <label for="is_prestataire" class="text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer">
+                                        {{ __('Prestataire') }}
+                                    </label>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Utilisateur externe</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                               <input type="checkbox" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire', $user->is_prestataire) ? 'checked' : '' }} class="sr-only peer">
+                               <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 transition-colors duration-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <label for="is_active" class="text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer">
+                                        {{ __('Compte actif') }}
+                                    </label>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Autoriser la connexion</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $user->is_active) ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
