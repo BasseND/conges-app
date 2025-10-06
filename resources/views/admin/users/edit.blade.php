@@ -472,11 +472,6 @@
                                          <x-input-label for="team_id" :value="__('Équipe')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                          <select id="team_id" name="team_id" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                              <option value="">Sélectionner une équipe</option>
-                                             @foreach($teams as $team)
-                                                 <option value="{{ $team->id }}" {{ old('team_id', optional($user->teams->first())->id) == $team->id ? 'selected' : '' }}>
-                                                     {{ $team->name }}
-                                                 </option>
-                                             @endforeach
                                          </select>
                                          <p class="text-xs text-gray-500 dark:text-gray-400">Équipe de travail (optionnel)</p>
                                          <x-input-error :messages="$errors->get('team_id')" class="mt-2" />

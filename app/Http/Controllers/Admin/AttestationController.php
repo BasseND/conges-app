@@ -270,9 +270,18 @@ class AttestationController extends Controller
     /**
      * Éditer un type d'attestation
      */
-    public function editType($id)
+    public function editType(Request $request, $id)
     {
         $attestationType = AttestationType::findOrFail($id);
+
+        // Répondre en JSON pour les appels AJAX utilisés par l'interface
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'type' => $attestationType
+            ]);
+        }
+
         return view('admin.attestations.types.edit', compact('attestationType'));
     }
 
@@ -340,6 +349,22 @@ class AttestationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Type d\'attestation supprimé avec succès.'
+        ]);
+    }
+
+    /**
+     * Afficher les détails d'un type d'attestation (réponse JSON pour la vue index)
+     */
+    public function showType(Request $request, $id)
+    {
+        $attestationType = AttestationType::withCount('attestationRequests')->findOrFail($id);
+
+        // Ajouter les attributs formatés attendus par la vue
+        $attestationType->setAppends(['formatted_type', 'formatted_status']);
+
+        return response()->json([
+            'success' => true,
+            'type' => $attestationType
         ]);
     }
 

@@ -60,6 +60,14 @@ class AttestationController extends Controller
     }
 
     /**
+     * Alias public pour les types disponibles (compatibilité des routes existantes)
+     */
+    public function getAvailableTypes()
+    {
+        return $this->getTypes();
+    }
+
+    /**
      * Enregistrer une nouvelle demande d'attestation
      */
     public function store(Request $request)

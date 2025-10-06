@@ -74,10 +74,12 @@ class UserController extends Controller
 
     public function create()
     {
-        $departments = Department::all();
-        $teams = Team::all();
-        $company = \App\Models\Company::first();
-        return view('admin.users.create', compact('departments', 'teams', 'company'));
+        // Charger uniquement les colonnes nécessaires pour les départements
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
+        // Charger les colonnes nécessaires pour l'entreprise
+        $company = \App\Models\Company::select('id', 'name')->first();
+        // Ne pas charger toutes les équipes ici, elles seront récupérées via AJAX selon le département
+        return view('admin.users.create', compact('departments', 'company'));
     }
 
     public function store(Request $request)
@@ -249,11 +251,13 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $departments = Department::all();
-        $teams = Team::all();
-        $company = \App\Models\Company::first();
-    
-        return view('admin.users.edit', compact('user', 'departments', 'teams', 'company'));
+        // Charger uniquement les colonnes nécessaires pour les départements
+        $departments = Department::select('id', 'name')->orderBy('name')->get();
+        // Charger les colonnes nécessaires pour l'entreprise
+        $company = \App\Models\Company::select('id', 'name')->first();
+
+        // Ne pas charger toutes les équipes ici, elles seront récupérées via AJAX selon le département
+        return view('admin.users.edit', compact('user', 'departments', 'company'));
     }
 
     public function show(User $user)

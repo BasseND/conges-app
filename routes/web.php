@@ -209,9 +209,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('attestations')->name('attestations.')->group(function () {
         Route::get('/', [\App\Http\Controllers\AttestationController::class, 'index'])->name('index');
         Route::post('/', [\App\Http\Controllers\AttestationController::class, 'store'])->name('store');
-        Route::get('/{attestationRequest}', [\App\Http\Controllers\AttestationController::class, 'show'])->name('show');
-        Route::get('/{attestationRequest}/download', [\App\Http\Controllers\AttestationController::class, 'download'])->name('download');
-        Route::delete('/{attestationRequest}/cancel', [\App\Http\Controllers\AttestationController::class, 'cancel'])->name('cancel');
+        Route::get('/{attestationRequest}', [\App\Http\Controllers\AttestationController::class, 'show'])->name('show')->whereNumber('attestationRequest');
+        Route::get('/{attestationRequest}/download', [\App\Http\Controllers\AttestationController::class, 'download'])->name('download')->whereNumber('attestationRequest');
+        Route::delete('/{attestationRequest}/cancel', [\App\Http\Controllers\AttestationController::class, 'cancel'])->name('cancel')->whereNumber('attestationRequest');
         Route::get('/types/available', [\App\Http\Controllers\AttestationController::class, 'getAvailableTypes'])->name('types.available');
     });
 
@@ -371,21 +371,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Routes pour les attestations
         Route::prefix('attestations')->name('attestations.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\AttestationController::class, 'index'])->name('index');
-            Route::get('/{attestationRequest}', [\App\Http\Controllers\Admin\AttestationController::class, 'show'])->name('show');
-            Route::post('/{attestationRequest}/approve', [\App\Http\Controllers\Admin\AttestationController::class, 'approve'])->name('approve');
-            Route::post('/{attestationRequest}/reject', [\App\Http\Controllers\Admin\AttestationController::class, 'reject'])->name('reject');
-            Route::get('/{attestationRequest}/generate-pdf', [\App\Http\Controllers\Admin\AttestationController::class, 'generatePdf'])->name('generate-pdf');
-            Route::get('/{attestationRequest}/download', [\App\Http\Controllers\Admin\AttestationController::class, 'download'])->name('download');
+            Route::get('/{attestationRequest}', [\App\Http\Controllers\Admin\AttestationController::class, 'show'])->name('show')->whereNumber('attestationRequest');
+            Route::post('/{attestationRequest}/approve', [\App\Http\Controllers\Admin\AttestationController::class, 'approve'])->name('approve')->whereNumber('attestationRequest');
+            Route::post('/{attestationRequest}/reject', [\App\Http\Controllers\Admin\AttestationController::class, 'reject'])->name('reject')->whereNumber('attestationRequest');
+            Route::get('/{attestationRequest}/generate-pdf', [\App\Http\Controllers\Admin\AttestationController::class, 'generatePdf'])->name('generate-pdf')->whereNumber('attestationRequest');
+            Route::get('/{attestationRequest}/download', [\App\Http\Controllers\Admin\AttestationController::class, 'download'])->name('download')->whereNumber('attestationRequest');
             Route::get('/stats', [\App\Http\Controllers\Admin\AttestationController::class, 'getStats'])->name('stats');
             
             // Routes pour les types d'attestations
             Route::prefix('types')->name('types.')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Admin\AttestationController::class, 'types'])->name('index');
                 Route::post('/', [\App\Http\Controllers\Admin\AttestationController::class, 'storeType'])->name('store');
-                Route::get('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'showType'])->name('show');
-                Route::get('/{attestationType}/edit', [\App\Http\Controllers\Admin\AttestationController::class, 'editType'])->name('edit');
-                Route::put('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'updateType'])->name('update');
-                Route::delete('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'destroyType'])->name('destroy');
+                Route::get('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'showType'])->name('show')->whereNumber('attestationType');
+                Route::get('/{attestationType}/edit', [\App\Http\Controllers\Admin\AttestationController::class, 'editType'])->name('edit')->whereNumber('attestationType');
+                Route::put('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'updateType'])->name('update')->whereNumber('attestationType');
+                Route::delete('/{attestationType}', [\App\Http\Controllers\Admin\AttestationController::class, 'destroyType'])->name('destroy')->whereNumber('attestationType');
             });
         });
 

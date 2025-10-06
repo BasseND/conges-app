@@ -454,9 +454,6 @@
                                     <x-input-label for="team_id" :value="__('Équipe')" class="text-sm font-medium text-gray-700 dark:text-gray-300" />
                                     <select id="team_id" name="team_id" class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
                                         <option value="">Sélectionner une équipe</option>
-                                        @foreach($teams as $team)
-                                            <option value="{{ $team->id }}" {{ old('team_id') == $team->id ? 'selected' : '' }}>{{ $team->name }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -484,7 +481,6 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400">L'utilisateur est-il un prestataire externe ?</p>
                                         </div>
                                         <div class="ml-4">
-            
                                             <input type="checkbox" class="peer sr-only opacity-0" id="is_prestataire" name="is_prestataire" value="1" {{ old('is_prestataire') ? 'checked' : '' }} />
                                             <label for="is_prestataire" class="relative flex h-7 w-12 cursor-pointer items-center rounded-full bg-gray-300 dark:bg-gray-600 px-0.5 outline-gray-400 transition-all duration-300 before:h-6 before:w-6 before:rounded-full before:bg-white before:shadow-md before:transition-transform before:duration-300 peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-600 peer-checked:before:translate-x-5 peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-green-400 hover:shadow-md">
                                                 <span class="sr-only">Toggle prestataire</span>
@@ -529,7 +525,7 @@
     <script>
         console.log('Script chargé');
         
-        function loadTeams(departmentId) {
+        function loadTeams(departmentId, selectedTeamId = null) {
             console.log('Chargement des équipes pour le département:', departmentId);
             
             if (!departmentId) {
@@ -569,8 +565,11 @@
                     teams.forEach(team => {
                         const option = document.createElement('option');
                         option.value = team.id;
-                        const managerName = team.manager ? team.manager.first_name : 'Aucun responsable';
+                        const managerName = team.manager ? `${team.manager.first_name} ${team.manager.last_name}` : 'Aucun responsable';
                         option.textContent = `${team.name} (Responsable: ${managerName})`;
+                        if (selectedTeamId && team.id == selectedTeamId) {
+                            option.selected = true;
+                        }
                         select.appendChild(option);
                     });
                     console.log('Liste des équipes mise à jour');
@@ -601,7 +600,8 @@
             // Charger les équipes si un département est déjà sélectionné
             if (departmentSelect.value) {
                 console.log('Département pré-sélectionné:', departmentSelect.value);
-                loadTeams(departmentSelect.value);
+                // Respecter old('team_id') si présent
+                loadTeams(departmentSelect.value, {{ json_encode(old('team_id')) ?? 'null' }});
             }
 
             // Mettre à jour le select position

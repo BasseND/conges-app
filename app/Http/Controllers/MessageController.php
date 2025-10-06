@@ -38,7 +38,8 @@ class MessageController extends Controller
                 'm1.content',
                 'm1.created_at as last_message_date',
                 'm1.sender_id',
-                DB::raw('COUNT(unread.id) as unread_count')
+                DB::raw('COUNT(DISTINCT unread.id) as unread_count'),
+                DB::raw('COUNT(DISTINCT ma.id) as attachment_count')
             )
             ->join(
                 DB::raw('(
@@ -62,6 +63,9 @@ class MessageController extends Controller
                 $join->on('unread.sender_id', '=', 'other_user.id')
                      ->where('unread.recipient_id', '=', $user->id)
                      ->where('unread.is_read', '=', false);
+            })
+            ->leftJoin('message_attachments as ma', function ($join) {
+                $join->on('ma.message_id', '=', 'm1.id');
             })
             ->where(function ($query) use ($user) {
                 $query->where('m1.sender_id', $user->id)
