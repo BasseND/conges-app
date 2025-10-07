@@ -152,6 +152,9 @@ class ProductionSeeder extends Seeder
             ]
         );
         
+        // Types d'attestation
+        $this->command->info('Création des types d\'attestation...');
+        $this->call(AttestationTypeSeeder::class);
        
     }
 }

@@ -35,4 +35,6 @@ Get-Content storage\logs\laravel.log | Select-Object -Last 50
 
 php artisan migrate:fresh --seed 
 
-"preDeployCommand": "php artisan migrate:fresh --force && php artisan db:seed --class=ProductionSeeder --force",
+"preDeployCommand": "php artisan migrate:fresh --force && php artisan db:seed --class=ProductionSeeder --force",   (OK)
+
+"preDeployCommand": "php artisan migrate:fresh --force && php artisan db:seed --class=Database\\Seeders\\ProductionSeeder --force",
