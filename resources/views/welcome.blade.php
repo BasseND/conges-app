@@ -20,7 +20,7 @@
                         Bienvenue sur votre Portail RH
                     </h1>
                     <p class="text-bgray-600 dark:text-darkblack-300 text-lg font-medium">
-                        Gérez vos congés et notes de frais en toute simplicité
+                        Pilotez vos congés, notes de frais, paie, attestations, messagerie et plus encore — tout-en-un
                     </p>
                     <!-- <p class="text-bgray-600 dark:text-bgray-50 text-sm font-medium">
                         Notre plateforme complète vous aide à gérer vos congés, notes de frais,
