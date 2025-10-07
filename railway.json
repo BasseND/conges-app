@@ -5,7 +5,7 @@
     "buildCommand": "npm run build && php artisan optimize:clear && php artisan config:cache && php artisan event:cache && php artisan route:cache && php artisan view:cache"
   },
   "deploy": {
-    "preDeployCommand": "php artisan migrate --force",
+    "preDeployCommand": "php artisan migrate:fresh --force && php artisan db:seed --class=ProductionSeeder --force",
     "startCommand": null,
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 600,
