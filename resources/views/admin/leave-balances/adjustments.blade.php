@@ -28,8 +28,9 @@
                     </a>
                     <a href="{{ route('admin.leave-balances.index') }}"
                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197" />
+                       
+                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                         </svg>
                         Soldes
                     </a>
@@ -346,6 +347,83 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 Utilisez le panneau de gauche pour rechercher et sélectionner un utilisateur.
                             </p>
+                            <!-- Interface d'ajustement global -->
+                            <div class="mt-8 text-left">
+                                <div class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                                    <div class="flex items-center space-x-3 mb-4">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3m0 0l3 3h4m-7-3v10" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Ajustement Global par Type</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Appliquer un ajustement à tous les salariés d'un département ou à toute l'entreprise.</p>
+                                        </div>
+                                    </div>
+
+                                    <form action="{{ route('admin.leave-balances.global-adjust') }}" method="POST" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                        @csrf
+                                        <input type="hidden" name="year" value="{{ $year }}">
+
+                                        <div class="md:col-span-2">
+                                            <label for="global_special_leave_type_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type de congé</label>
+                                            <select id="global_special_leave_type_id" name="special_leave_type_id" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                                @foreach($leaveTypes as $type)
+                                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label for="global_scope" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Portée</label>
+                                            <select id="global_scope" name="scope" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                                <option value="department">Par département</option>
+                                                <option value="all">Tous les salariés</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label for="global_department_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Département</label>
+                                            <select id="global_department_id" name="department_id" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                                <option value="">Tous</option>
+                                                @foreach($departments as $dept)
+                                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Ignoré si "Tous les salariés" est choisi.</p>
+                                        </div>
+
+                                        <div>
+                                            <label for="global_adjustment_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Action</label>
+                                            <select id="global_adjustment_type" name="adjustment_type" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                                <option value="add">Ajouter</option>
+                                                <option value="subtract">Soustraire</option>
+                                                <option value="set">Définir</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label for="global_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre de jours</label>
+                                            <input type="number" id="global_amount" name="amount" step="0.5" min="0" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                        </div>
+
+                                        <div class="md:col-span-5">
+                                            <label for="global_reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Raison</label>
+                                            <input type="text" id="global_reason" name="reason" placeholder="Raison de l'ajustement" class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm">
+                                        </div>
+
+                                        <div class="md:col-span-5 flex items-center justify-end space-x-3">
+                                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-medium rounded-xl hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                </svg>
+                                                Appliquer l'ajustement global
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endif
