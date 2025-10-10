@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -244,14 +245,33 @@ class AttestationController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur de validation.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
+        // Générer un system_name unique si non fourni
+        $systemName = $request->system_name;
+        if (!$systemName) {
+            $base = Str::slug($request->name, '_');
+            $systemName = $base;
+            $counter = 1;
+            while (AttestationType::where('system_name', $systemName)->exists()) {
+                $systemName = $base . '_' . $counter;
+                $counter++;
+            }
+        }
+
         AttestationType::create([
             'name' => $request->name,
-            'system_name' => $request->system_name,
+            'system_name' => $systemName,
             'description' => $request->description,
             'template_file' => $request->template_file,
             'type' => $request->type,
@@ -262,7 +282,13 @@ class AttestationController extends Controller
             'custom_fields_config' => $request->custom_fields_config,
             'created_by' => Auth::id()
         ]);
-
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Type d'attestation créé avec succès."
+            ]);
+        }
         return redirect()->route('admin.attestations.types')
             ->with('success', 'Type d\'attestation créé avec succès.');
     }
@@ -292,20 +318,21 @@ class AttestationController extends Controller
     {
         $attestationType = AttestationType::findOrFail($id);
 
+        // Ne permettre la modification que de: name, status, description
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:attestation_types,name,' . $id,
-            'system_name' => 'nullable|string|max:255|unique:attestation_types,system_name,' . $id,
             'description' => 'nullable|string|max:1000',
-            'template_file' => 'required|string|max:255',
-            'type' => 'required|in:salary,presence,employment,custom',
             'status' => 'required|in:active,inactive',
-            'requires_date_range' => 'boolean',
-            'requires_salary_info' => 'boolean',
-            'requires_custom_fields' => 'boolean',
-            'custom_fields_config' => 'nullable|array'
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur de validation.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -313,18 +340,17 @@ class AttestationController extends Controller
 
         $attestationType->update([
             'name' => $request->name,
-            'system_name' => $request->system_name,
             'description' => $request->description,
-            'template_file' => $request->template_file,
-            'type' => $request->type,
             'status' => $request->status,
-            'requires_date_range' => $request->boolean('requires_date_range'),
-            'requires_salary_info' => $request->boolean('requires_salary_info'),
-            'requires_custom_fields' => $request->boolean('requires_custom_fields'),
-            'custom_fields_config' => $request->custom_fields_config,
             'updated_by' => Auth::id()
         ]);
-
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Type d'attestation mis à jour avec succès."
+            ]);
+        }
         return redirect()->route('admin.attestations.types')
             ->with('success', 'Type d\'attestation mis à jour avec succès.');
     }

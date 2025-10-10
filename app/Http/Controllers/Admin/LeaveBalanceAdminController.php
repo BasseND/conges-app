@@ -428,9 +428,10 @@ class LeaveBalanceAdminController extends Controller
         }
 
         $leaveTypes = SpecialLeaveType::where('is_active', true)->get();
+        $departments = Department::orderBy('name')->get();
 
         return view('admin.leave-balances.adjustments', compact(
-            'users', 'selectedUser', 'balances', 'leaveTypes', 'year', 'search'
+            'users', 'selectedUser', 'balances', 'leaveTypes', 'departments', 'year', 'search'
         ));
     }
 
@@ -679,6 +680,101 @@ class LeaveBalanceAdminController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Erreur lors de l\'ajustement en lot: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Ajustement global d'un solde pour un type de congé
+     * - Cible: tous les utilisateurs actifs d'un département donné (ou tous)
+     * - Opération: add | subtract | set sur le solde courant via adjustment_balance
+     */
+    public function globalAdjust(Request $request)
+    {
+        $request->validate([
+            'special_leave_type_id' => 'required|exists:special_leave_types,id',
+            'year' => 'required|integer',
+            'department_id' => 'nullable|exists:departments,id',
+            'scope' => 'required|in:department,all',
+            'adjustment_type' => 'required|in:add,subtract,set',
+            'amount' => 'required|numeric',
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $leaveType = SpecialLeaveType::findOrFail($request->special_leave_type_id);
+
+            $usersQuery = User::where('is_active', true);
+            if ($request->scope === 'department' && $request->filled('department_id')) {
+                $usersQuery->where('department_id', $request->department_id);
+            }
+
+            $users = $usersQuery->get();
+
+            $processed = 0;
+            foreach ($users as $user) {
+                // Obtenir ou créer le solde
+                $balance = $this->leaveBalanceService->getOrCreateBalance($user, $leaveType, $request->year);
+
+                $previousCurrent = $balance->current_balance;
+                $previousAdjustment = $balance->adjustment_balance;
+
+                $delta = 0;
+                if ($request->adjustment_type === 'add') {
+                    $delta = $request->amount;
+                } elseif ($request->adjustment_type === 'subtract') {
+                    $delta = -$request->amount;
+                } elseif ($request->adjustment_type === 'set') {
+                    $targetCurrent = $request->amount;
+                    $baseWithoutAdjustment = $balance->initial_balance - $balance->used_balance;
+                    $newAdjustment = $targetCurrent - $baseWithoutAdjustment;
+                    $delta = $newAdjustment - $previousAdjustment;
+                }
+
+                $newAdjustmentTotal = $previousAdjustment + $delta;
+                $newCurrent = $balance->initial_balance - $balance->used_balance + $newAdjustmentTotal;
+
+                $note = ($balance->notes ? $balance->notes . "\n" : '') .
+                    now()->format('Y-m-d H:i') .
+                    " - Ajustement global: " . number_format($delta, 2) . " jours" .
+                    " (type: {$request->adjustment_type})." .
+                    ($request->reason ? " Raison: {$request->reason}" : '');
+
+                $balance->update([
+                    'adjustment_balance' => $newAdjustmentTotal,
+                    'current_balance' => $newCurrent,
+                    'notes' => $note,
+                ]);
+
+                LeaveBalanceAdjustment::create([
+                    'leave_balance_id' => $balance->id,
+                    'adjusted_by' => auth()->id(),
+                    'amount' => $delta,
+                    'reason' => $request->input('reason', 'Ajustement global'),
+                    'previous_balance' => $previousCurrent,
+                    'new_balance' => $newCurrent,
+                ]);
+
+                $processed++;
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.leave-balances.adjustments', ['year' => $request->year])
+                ->with('success', "Ajustement global effectué: {$processed} utilisateurs mis à jour.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Erreur lors de l'ajustement global", [
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ]);
+
+            return redirect()
+                ->back()
+                ->with('error', 'Erreur lors de l\'ajustement global: ' . $e->getMessage());
         }
     }
 

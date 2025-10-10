@@ -336,6 +336,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // Ajustements
             Route::post('/adjust', [LeaveBalanceAdminController::class, 'adjust'])->name('adjust');
             Route::post('/bulk-adjust', [LeaveBalanceAdminController::class, 'bulkAdjust'])->name('bulk-adjust');
+            // Ajustement global par type et département
+            Route::post('/global-adjust', [LeaveBalanceAdminController::class, 'globalAdjust'])->name('global-adjust');
         });
 
         // Routes pour les ajustements de soldes de congés
