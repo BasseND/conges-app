@@ -3,6 +3,8 @@ Pour voir les changements Tailwind, nous devons recompiler les assets CSS. Je va
 To restart Windsurf, please reload the window (Ctrl+Shift+P, then select "Reload Window").
 
 
+& 'C:\laragon\bin\php\php-8.3.26-nts-Win32-vs16-x64\php.exe' artisan serve --host=127.0.0.1 --port=8081 
+
 taskkill /f /im node.exe
 npm run dev
 
