@@ -55,35 +55,58 @@ class ProfileController extends Controller
             ->with('success', 'Votre mot de passe a été mis à jour avec succès.');
         } else {
             // Validation des données pour la mise à jour des informations personnelles
-            $validated = $request->validate([
-                'first_name' => ['required', 'string', 'max:255'],
-                'last_name' => ['required', 'string', 'max:255'],
-                'phone' => ['nullable', 'string', 'max:20'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
-            ]);
-
             $user = $request->user();
-            
+
+            // Accepter soit 'name', soit 'first_name' + 'last_name'
+            if ($request->has('name')) {
+                $validated = $request->validate([
+                    'name' => ['required', 'string', 'max:255'],
+                    'phone' => ['nullable', 'string', 'max:20'],
+                    'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+                ]);
+
+                // Découper 'name' en first_name et last_name
+                $parts = preg_split('/\s+/', trim($validated['name']));
+                $firstName = $parts ? array_shift($parts) : '';
+                $lastName = $parts ? implode(' ', $parts) : '';
+
+                $data = [
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'phone' => $validated['phone'] ?? null,
+                    'email' => $validated['email'],
+                ];
+            } else {
+                $validated = $request->validate([
+                    'first_name' => ['required', 'string', 'max:255'],
+                    'last_name' => ['required', 'string', 'max:255'],
+                    'phone' => ['nullable', 'string', 'max:20'],
+                    'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+                ]);
+
+                $data = $validated;
+            }
+
             // Vérifier si l'email a changé
-            if ($validated['email'] !== $user->email) {
+            if ($data['email'] !== $user->email) {
                 // Vérifier que l'email n'est pas déjà utilisé par un autre utilisateur
-                $emailValidator = Validator::make(['email' => $validated['email']], [
+                $emailValidator = Validator::make(['email' => $data['email']], [
                     'email' => 'unique:users,email,' . $user->id,
                 ]);
-                
+
                 if ($emailValidator->fails()) {
                     return back()->withErrors(['email' => 'Cet email est déjà utilisé.'])->withInput();
                 }
-                
+
                 $user->email_verified_at = null;
             }
-            
+
             // Mise à jour des informations de l'utilisateur
-            $user->fill($validated);
+            $user->fill($data);
             $user->save();
-            
+
             return redirect()->route('profile.show')
-            ->with('success', 'Les informations personnelles sont mises à jour avec succès.');
+                ->with('success', 'Les informations personnelles sont mises à jour avec succès.');
         }
     }
 
