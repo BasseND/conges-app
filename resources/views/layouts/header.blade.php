@@ -2,33 +2,18 @@
             <div
               class="relative flex h-[108px] w-full items-center justify-between bg-white px-10 dark:bg-darkblack-600 2xl:px-[76px]"
             >
-              <button
-                title="Ctrl+b"
-                type="button"
-                class="drawer-btn absolute left-0 top-auto rotate-180 transform"
-                @click="$store.drawer.toggle()"
-              >
-                <span>
-                  <svg
-                    width="16"
-                    height="40"
-                    viewBox="0 0 16 40"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0 10C0 4.47715 4.47715 0 10 0H16V40H10C4.47715 40 0 35.5228 0 30V10Z"
-                      fill="#22C55E"
-                    />
-                    <path
-                      d="M10 15L6 20.0049L10 25.0098"
-                      stroke="#ffffff"
-                      stroke-width="1.2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
+              
+
+              <button class="drawer-btn absolute left-0 top-auto rotate-180 transform  bg-[#22c55e] h-12 w-7 rounded-l-lg" 
+                  title="Ctrl+b"
+                  type="button"
+                  @click="$store.drawer.toggle()">
+                  <span>
+                    <svg class="h-6 w-6 text-white rotate-180 transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </span>
+                    
               </button>
               <!-- Société Infos -->
               <x-company-info />
