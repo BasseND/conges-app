@@ -19,34 +19,17 @@
         <a href="{{ route('welcome.index') }}">
             <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
         </a>
-        <button
-            type="button"
-            class="drawer-btn absolute right-0 top-auto"
-            title="Ctrl+b"
-            @click="$store.drawer.toggle()"
-        >
+        <button class="drawer-btn absolute right-0 top-auto  bg-gray-200 h-12 w-7 rounded-l-lg" title="Ctrl+b"
+            @click="$store.drawer.toggle()">
             <span>
-            <svg
-                width="16"
-                height="40"
-                viewBox="0 0 16 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                d="M0 10C0 4.47715 4.47715 0 10 0H16V40H10C4.47715 40 0 35.5228 0 30V10Z"
-                fill="#22C55E"
-                />
-                <path
-                d="M10 15L6 20.0049L10 25.0098"
-                stroke="#ffffff"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                />
-            </svg>
+              <svg  class="h-6 w-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+              
             </span>
+              
         </button>
+       
         </div>
         <div class="sidebar-body overflow-style-none relative z-30 h-screen w-full overflow-y-scroll pb-[200px] pl-[48px] pt-[14px]">
             <div class="nav-wrapper mb-[36px] pr-[50px]">

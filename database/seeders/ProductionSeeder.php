@@ -155,6 +155,10 @@ class ProductionSeeder extends Seeder
         // Types d'attestation
         $this->command->info('Création des types d\'attestation...');
         $this->call(AttestationTypeSeeder::class);
+
+        // Types de contrat
+        $this->command->info('Création des types de contrat...');
+        $this->call(ContractTypeSeeder::class);
        
     }
 }
